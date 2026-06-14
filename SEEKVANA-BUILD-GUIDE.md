@@ -769,8 +769,8 @@ Update this as you complete each phase:
 |---|---|---|
 | 1 | Project setup + dependencies | ✅ Done |
 | 2 | Design system (colors, fonts, dark mode) | ✅ Done |
-| 3 | Navigation bar | ⬜ Todo |
-| 4 | Homepage | ⬜ Todo |
+| 3 | Navigation bar | ✅ Done |
+| 4 | Homepage | ✅ Done |
 | 5 | Article/lesson page | ⬜ Todo |
 | 6 | Search modal | ⬜ Todo |
 | 7 | Deploy to Vercel | ⬜ Todo |

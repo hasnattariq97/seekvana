@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { SearchProvider } from "@/context/search-context";
+import { Navbar } from "@/components/layout/navbar";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -45,7 +47,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <SearchProvider>
+            <Navbar />
+            <main>{children}</main>
+          </SearchProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -1,0 +1,1247 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {
+    "hyperedges": [
+      {
+        "id": "design_system_implementation_chain",
+        "label": "Design System Token \u2192 Tailwind \u2192 Component Styling Chain",
+        "nodes": [
+          "seekvana_concept_color_tokens",
+          "seekvana_concept_tailwind_tokens",
+          "seekvana_build_guide_design_system"
+        ],
+        "relation": "implement",
+        "confidence": "INFERRED",
+        "confidence_score": 0.95,
+        "source_file": "SEEKVANA-BUILD-GUIDE.md"
+      },
+      {
+        "id": "article_page_feature_cluster",
+        "label": "Article Page: 3-Column Layout + Ad Slots + MDX Content + Framer Motion",
+        "nodes": [
+          "seekvana_concept_article_3col_layout",
+          "seekvana_concept_ad_slots",
+          "seekvana_concept_mdx_content",
+          "seekvana_concept_framer_motion"
+        ],
+        "relation": "participate_in",
+        "confidence": "EXTRACTED",
+        "confidence_score": 1.0,
+        "source_file": ".claude/commands/phase5.md"
+      },
+      {
+        "id": "seo_content_metadata_cluster",
+        "label": "SEO + MDX Frontmatter + Content Pillars all drive discoverability",
+        "nodes": [
+          "seekvana_build_guide_seo",
+          "seekvana_concept_mdx_frontmatter",
+          "seekvana_concept_content_pillars"
+        ],
+        "relation": "participate_in",
+        "confidence": "INFERRED",
+        "confidence_score": 0.85,
+        "source_file": "SEEKVANA-BUILD-GUIDE.md"
+      }
+    ]
+  },
+  "nodes": [
+    {
+      "label": "settings.json",
+      "file_type": "code",
+      "source_file": ".claude/settings.json",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "claude_settings",
+      "community": 5,
+      "norm_label": "settings.json"
+    },
+    {
+      "label": "permissions",
+      "file_type": "code",
+      "source_file": ".claude/settings.json",
+      "source_location": "L2",
+      "_origin": "ast",
+      "id": "claude_settings_permissions",
+      "community": 5,
+      "norm_label": "permissions"
+    },
+    {
+      "label": "allow",
+      "file_type": "code",
+      "source_file": ".claude/settings.json",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "claude_settings_permissions_allow",
+      "community": 5,
+      "norm_label": "allow"
+    },
+    {
+      "label": "deny",
+      "file_type": "code",
+      "source_file": ".claude/settings.json",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "claude_settings_permissions_deny",
+      "community": 5,
+      "norm_label": "deny"
+    },
+    {
+      "label": "Seekvana Claude Settings (Permissions)",
+      "file_type": "document",
+      "source_file": ".claude/settings.json",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_settings_permissions",
+      "community": 0,
+      "norm_label": "seekvana claude settings (permissions)"
+    },
+    {
+      "label": "Phase 2 \u2014 Design System Command",
+      "file_type": "document",
+      "source_file": ".claude/commands/phase2.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_phase2_design_system",
+      "community": 2,
+      "norm_label": "phase 2 \u2014 design system command"
+    },
+    {
+      "label": "Phase 3 \u2014 Navigation Bar Command",
+      "file_type": "document",
+      "source_file": ".claude/commands/phase3.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_phase3_navbar",
+      "community": 4,
+      "norm_label": "phase 3 \u2014 navigation bar command"
+    },
+    {
+      "label": "Phase 4 \u2014 Homepage Command",
+      "file_type": "document",
+      "source_file": ".claude/commands/phase4.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_phase4_homepage",
+      "community": 4,
+      "norm_label": "phase 4 \u2014 homepage command"
+    },
+    {
+      "label": "Phase 5 \u2014 Article Page Command",
+      "file_type": "document",
+      "source_file": ".claude/commands/phase5.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_phase5_article_page",
+      "community": 0,
+      "norm_label": "phase 5 \u2014 article page command"
+    },
+    {
+      "label": "Phase 6 \u2014 Search Modal Command",
+      "file_type": "document",
+      "source_file": ".claude/commands/phase6.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_phase6_search_modal",
+      "community": 3,
+      "norm_label": "phase 6 \u2014 search modal command"
+    },
+    {
+      "label": "Phase 7 \u2014 Pre-deploy Hardening Command",
+      "file_type": "document",
+      "source_file": ".claude/commands/phase7.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_phase7_predeploy",
+      "community": 1,
+      "norm_label": "phase 7 \u2014 pre-deploy hardening command"
+    },
+    {
+      "label": "Phase 8 \u2014 MDX Content System Command",
+      "file_type": "document",
+      "source_file": ".claude/commands/phase8.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_phase8_mdx_system",
+      "community": 0,
+      "norm_label": "phase 8 \u2014 mdx content system command"
+    },
+    {
+      "label": "Seekvana CLAUDE.md Project Overview",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_claude_project_overview",
+      "community": 0,
+      "norm_label": "seekvana claude.md project overview"
+    },
+    {
+      "label": "Seekvana Build Guide",
+      "file_type": "document",
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_build_guide",
+      "community": 1,
+      "norm_label": "seekvana build guide"
+    },
+    {
+      "label": "Seekvana Design System (Colors, Typography, Components)",
+      "file_type": "rationale",
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "PHASE 2 \u2014 DESIGN SYSTEM",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_build_guide_design_system",
+      "community": 2,
+      "norm_label": "seekvana design system (colors, typography, components)"
+    },
+    {
+      "label": "Seekvana Tech Stack",
+      "file_type": "rationale",
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "TECH STACK",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_build_guide_tech_stack",
+      "community": 3,
+      "norm_label": "seekvana tech stack"
+    },
+    {
+      "label": "Seekvana Information Architecture (URL structure, Pillars, Paths)",
+      "file_type": "rationale",
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "INFORMATION ARCHITECTURE",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_build_guide_ia",
+      "community": 4,
+      "norm_label": "seekvana information architecture (url structure, pillars, paths)"
+    },
+    {
+      "label": "Seekvana SEO Requirements",
+      "file_type": "rationale",
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "SEO REQUIREMENTS",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_build_guide_seo",
+      "community": 1,
+      "norm_label": "seekvana seo requirements"
+    },
+    {
+      "label": "Seekvana Monetization and Ad Slot Specs",
+      "file_type": "rationale",
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "MONETIZATION",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_build_guide_monetization",
+      "community": 1,
+      "norm_label": "seekvana monetization and ad slot specs"
+    },
+    {
+      "label": "Seekvana Brand Personality and Audience",
+      "file_type": "rationale",
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "PROJECT CONTEXT",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_build_guide_brand",
+      "community": 1,
+      "norm_label": "seekvana brand personality and audience"
+    },
+    {
+      "label": "Next.js 15 App Router",
+      "file_type": "concept",
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "TECH STACK",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_concept_nextjs_app_router",
+      "community": 3,
+      "norm_label": "next.js 15 app router"
+    },
+    {
+      "label": "MDX Content Pipeline",
+      "file_type": "concept",
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "TECH STACK",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_concept_mdx_content",
+      "community": 0,
+      "norm_label": "mdx content pipeline"
+    },
+    {
+      "label": "Tailwind CSS Custom Token Mapping",
+      "file_type": "concept",
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "DESIGN SYSTEM",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_concept_tailwind_tokens",
+      "community": 2,
+      "norm_label": "tailwind css custom token mapping"
+    },
+    {
+      "label": "Dark Mode via next-themes",
+      "file_type": "concept",
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "DESIGN SYSTEM / TECH STACK",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_concept_dark_mode",
+      "community": 2,
+      "norm_label": "dark mode via next-themes"
+    },
+    {
+      "label": "Framer Motion Animations",
+      "file_type": "concept",
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "DESIGN SYSTEM / Motion rules",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_concept_framer_motion",
+      "community": 3,
+      "norm_label": "framer motion animations"
+    },
+    {
+      "label": "Supabase (PostgreSQL Backend)",
+      "file_type": "concept",
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "TECH STACK",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_concept_supabase",
+      "community": 3,
+      "norm_label": "supabase (postgresql backend)"
+    },
+    {
+      "label": "Article 3-Column Layout (sidebar + content + TOC)",
+      "file_type": "concept",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_concept_article_3col_layout",
+      "community": 0,
+      "norm_label": "article 3-column layout (sidebar + content + toc)"
+    },
+    {
+      "label": "Ad Slot Placeholders (fixed-size, no layout shift)",
+      "file_type": "concept",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_concept_ad_slots",
+      "community": 0,
+      "norm_label": "ad slot placeholders (fixed-size, no layout shift)"
+    },
+    {
+      "label": "Font Role Assignments (Fraunces/Inter/Mono)",
+      "file_type": "concept",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_concept_font_roles",
+      "community": 2,
+      "norm_label": "font role assignments (fraunces/inter/mono)"
+    },
+    {
+      "label": "MDX Frontmatter Schema",
+      "file_type": "concept",
+      "source_file": "CLAUDE.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_concept_mdx_frontmatter",
+      "community": 0,
+      "norm_label": "mdx frontmatter schema"
+    },
+    {
+      "label": "9 Content Pillars",
+      "file_type": "concept",
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "INFORMATION ARCHITECTURE",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_concept_content_pillars",
+      "community": 4,
+      "norm_label": "9 content pillars"
+    },
+    {
+      "label": "5 Learning Paths",
+      "file_type": "concept",
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "INFORMATION ARCHITECTURE",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_concept_learning_paths",
+      "community": 4,
+      "norm_label": "5 learning paths"
+    },
+    {
+      "label": "CSS Color Token System (light + dark themes)",
+      "file_type": "concept",
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "DESIGN SYSTEM \u2014 Color tokens",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_concept_color_tokens",
+      "community": 2,
+      "norm_label": "css color token system (light + dark themes)"
+    },
+    {
+      "label": "Security Headers (CSP, HSTS, X-Frame-Options)",
+      "file_type": "concept",
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "PHASE 7",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_concept_security_headers",
+      "community": 1,
+      "norm_label": "security headers (csp, hsts, x-frame-options)"
+    },
+    {
+      "label": "Global Search Modal with Keyboard Navigation",
+      "file_type": "concept",
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "PHASE 6",
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "seekvana_concept_search_modal",
+      "community": 3,
+      "norm_label": "global search modal with keyboard navigation"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/settings.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "source": "claude_settings",
+      "target": "claude_settings_permissions",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/settings.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "claude_settings_permissions",
+      "target": "claude_settings_permissions_allow",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".claude/settings.json",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "claude_settings_permissions",
+      "target": "claude_settings_permissions_deny",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": ".claude/settings.json",
+      "source_location": null,
+      "weight": 0.75,
+      "source": "seekvana_settings_permissions",
+      "target": "seekvana_claude_project_overview"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase2.md",
+      "source_location": "line 1",
+      "weight": 1.0,
+      "source": "seekvana_phase2_design_system",
+      "target": "seekvana_build_guide"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase2.md",
+      "source_location": "line 3",
+      "weight": 1.0,
+      "source": "seekvana_phase2_design_system",
+      "target": "seekvana_claude_project_overview"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase2.md",
+      "source_location": "globals.css color token system",
+      "weight": 1.0,
+      "source": "seekvana_phase2_design_system",
+      "target": "seekvana_concept_color_tokens"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase2.md",
+      "source_location": "ThemeProvider and ThemeToggle",
+      "weight": 1.0,
+      "source": "seekvana_phase2_design_system",
+      "target": "seekvana_concept_dark_mode"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase2.md",
+      "source_location": "Google Fonts Fraunces/Inter/JetBrains Mono",
+      "weight": 1.0,
+      "source": "seekvana_phase2_design_system",
+      "target": "seekvana_concept_font_roles"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase2.md",
+      "source_location": "Supabase client at src/lib/supabase.ts",
+      "weight": 1.0,
+      "source": "seekvana_phase2_design_system",
+      "target": "seekvana_concept_supabase"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase2.md",
+      "source_location": "tailwind.config.ts update",
+      "weight": 1.0,
+      "source": "seekvana_phase2_design_system",
+      "target": "seekvana_concept_tailwind_tokens"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase3.md",
+      "source_location": "line 1",
+      "weight": 1.0,
+      "source": "seekvana_phase3_navbar",
+      "target": "seekvana_build_guide"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase3.md",
+      "source_location": "line 3",
+      "weight": 1.0,
+      "source": "seekvana_phase3_navbar",
+      "target": "seekvana_claude_project_overview"
+    },
+    {
+      "relation": "implements",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": ".claude/commands/phase3.md",
+      "source_location": "Library dropdown shows 9 pillars",
+      "weight": 0.85,
+      "source": "seekvana_phase3_navbar",
+      "target": "seekvana_concept_content_pillars"
+    },
+    {
+      "relation": "implements",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": ".claude/commands/phase3.md",
+      "source_location": "scroll-triggered border, dropdown animations",
+      "weight": 0.95,
+      "source": "seekvana_phase3_navbar",
+      "target": "seekvana_concept_framer_motion"
+    },
+    {
+      "relation": "implements",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": ".claude/commands/phase3.md",
+      "source_location": "Learning Paths dropdown",
+      "weight": 0.85,
+      "source": "seekvana_phase3_navbar",
+      "target": "seekvana_concept_learning_paths"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": ".claude/commands/phase3.md",
+      "source_location": "search icon triggers search modal state",
+      "weight": 0.85,
+      "source": "seekvana_phase3_navbar",
+      "target": "seekvana_concept_search_modal"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase4.md",
+      "source_location": "line 1",
+      "weight": 1.0,
+      "source": "seekvana_phase4_homepage",
+      "target": "seekvana_build_guide"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase4.md",
+      "source_location": "line 3",
+      "weight": 1.0,
+      "source": "seekvana_phase4_homepage",
+      "target": "seekvana_claude_project_overview"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase4.md",
+      "source_location": "pillars.tsx",
+      "weight": 1.0,
+      "source": "seekvana_phase4_homepage",
+      "target": "seekvana_concept_content_pillars"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase4.md",
+      "source_location": "learning-paths.tsx",
+      "weight": 1.0,
+      "source": "seekvana_phase4_homepage",
+      "target": "seekvana_concept_learning_paths"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase5.md",
+      "source_location": "line 1",
+      "weight": 1.0,
+      "source": "seekvana_phase5_article_page",
+      "target": "seekvana_build_guide"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase5.md",
+      "source_location": "line 3",
+      "weight": 1.0,
+      "source": "seekvana_phase5_article_page",
+      "target": "seekvana_claude_project_overview"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase5.md",
+      "source_location": "Ad slot placeholders",
+      "weight": 1.0,
+      "source": "seekvana_phase5_article_page",
+      "target": "seekvana_concept_ad_slots"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase5.md",
+      "source_location": "3-column layout",
+      "weight": 1.0,
+      "source": "seekvana_phase5_article_page",
+      "target": "seekvana_concept_article_3col_layout"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase5.md",
+      "source_location": "Reading progress bar (Framer Motion)",
+      "weight": 1.0,
+      "source": "seekvana_phase5_article_page",
+      "target": "seekvana_concept_framer_motion"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase5.md",
+      "source_location": "Sample article .mdx",
+      "weight": 1.0,
+      "source": "seekvana_phase5_article_page",
+      "target": "seekvana_concept_mdx_content"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase6.md",
+      "source_location": "line 1",
+      "weight": 1.0,
+      "source": "seekvana_phase6_search_modal",
+      "target": "seekvana_build_guide"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase6.md",
+      "source_location": "line 3",
+      "weight": 1.0,
+      "source": "seekvana_phase6_search_modal",
+      "target": "seekvana_claude_project_overview"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase6.md",
+      "source_location": "search-modal.tsx",
+      "weight": 1.0,
+      "source": "seekvana_phase6_search_modal",
+      "target": "seekvana_concept_search_modal"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase7.md",
+      "source_location": "line 1",
+      "weight": 1.0,
+      "source": "seekvana_phase7_predeploy",
+      "target": "seekvana_build_guide"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase7.md",
+      "source_location": "sitemap, robots, metadata",
+      "weight": 1.0,
+      "source": "seekvana_phase7_predeploy",
+      "target": "seekvana_build_guide_seo"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase7.md",
+      "source_location": "line 3",
+      "weight": 1.0,
+      "source": "seekvana_phase7_predeploy",
+      "target": "seekvana_claude_project_overview"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase7.md",
+      "source_location": "Security headers in next.config.ts",
+      "weight": 1.0,
+      "source": "seekvana_phase7_predeploy",
+      "target": "seekvana_concept_security_headers"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase8.md",
+      "source_location": "line 1",
+      "weight": 1.0,
+      "source": "seekvana_phase8_mdx_system",
+      "target": "seekvana_build_guide"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase8.md",
+      "source_location": "line 3",
+      "weight": 1.0,
+      "source": "seekvana_phase8_mdx_system",
+      "target": "seekvana_claude_project_overview"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase8.md",
+      "source_location": "src/lib/mdx.ts content pipeline",
+      "weight": 1.0,
+      "source": "seekvana_phase8_mdx_system",
+      "target": "seekvana_concept_mdx_content"
+    },
+    {
+      "relation": "implements",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase8.md",
+      "source_location": "5 real starter articles",
+      "weight": 1.0,
+      "source": "seekvana_phase8_mdx_system",
+      "target": "seekvana_concept_mdx_frontmatter"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "line 1",
+      "weight": 1.0,
+      "source": "seekvana_claude_project_overview",
+      "target": "seekvana_build_guide"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Ad slots section",
+      "weight": 1.0,
+      "source": "seekvana_claude_project_overview",
+      "target": "seekvana_concept_ad_slots"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Article pages have a fixed 3-column layout",
+      "weight": 1.0,
+      "source": "seekvana_claude_project_overview",
+      "target": "seekvana_concept_article_3col_layout"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Never hardcode hex values",
+      "weight": 1.0,
+      "source": "seekvana_claude_project_overview",
+      "target": "seekvana_concept_color_tokens"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "Fonts are assigned by role",
+      "weight": 1.0,
+      "source": "seekvana_claude_project_overview",
+      "target": "seekvana_concept_font_roles"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "CLAUDE.md",
+      "source_location": "MDX frontmatter section",
+      "weight": 1.0,
+      "source": "seekvana_claude_project_overview",
+      "target": "seekvana_concept_mdx_frontmatter"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "PROJECT CONTEXT",
+      "weight": 1.0,
+      "source": "seekvana_build_guide",
+      "target": "seekvana_build_guide_brand"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "PHASE 2",
+      "weight": 1.0,
+      "source": "seekvana_build_guide",
+      "target": "seekvana_build_guide_design_system"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "INFORMATION ARCHITECTURE",
+      "weight": 1.0,
+      "source": "seekvana_build_guide",
+      "target": "seekvana_build_guide_ia"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "MONETIZATION",
+      "weight": 1.0,
+      "source": "seekvana_build_guide",
+      "target": "seekvana_build_guide_monetization"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "SEO REQUIREMENTS",
+      "weight": 1.0,
+      "source": "seekvana_build_guide",
+      "target": "seekvana_build_guide_seo"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "TECH STACK",
+      "weight": 1.0,
+      "source": "seekvana_build_guide",
+      "target": "seekvana_build_guide_tech_stack"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "DESIGN SYSTEM \u2014 Color tokens",
+      "weight": 1.0,
+      "source": "seekvana_build_guide_design_system",
+      "target": "seekvana_concept_color_tokens"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "DESIGN SYSTEM \u2014 dark theme",
+      "weight": 1.0,
+      "source": "seekvana_build_guide_design_system",
+      "target": "seekvana_concept_dark_mode"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "DESIGN SYSTEM \u2014 Typography",
+      "weight": 1.0,
+      "source": "seekvana_build_guide_design_system",
+      "target": "seekvana_concept_font_roles"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "DESIGN SYSTEM \u2014 Motion rules",
+      "weight": 1.0,
+      "source": "seekvana_build_guide_design_system",
+      "target": "seekvana_concept_framer_motion"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "DESIGN SYSTEM \u2014 Tailwind class mapping",
+      "weight": 1.0,
+      "source": "seekvana_build_guide_design_system",
+      "target": "seekvana_concept_tailwind_tokens"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "TECH STACK",
+      "weight": 1.0,
+      "source": "seekvana_build_guide_tech_stack",
+      "target": "seekvana_concept_dark_mode"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "TECH STACK",
+      "weight": 1.0,
+      "source": "seekvana_build_guide_tech_stack",
+      "target": "seekvana_concept_framer_motion"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "TECH STACK",
+      "weight": 1.0,
+      "source": "seekvana_build_guide_tech_stack",
+      "target": "seekvana_concept_mdx_content"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "TECH STACK",
+      "weight": 1.0,
+      "source": "seekvana_build_guide_tech_stack",
+      "target": "seekvana_concept_nextjs_app_router"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "TECH STACK",
+      "weight": 1.0,
+      "source": "seekvana_build_guide_tech_stack",
+      "target": "seekvana_concept_supabase"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "INFORMATION ARCHITECTURE \u2014 9 pillars",
+      "weight": 1.0,
+      "source": "seekvana_build_guide_ia",
+      "target": "seekvana_concept_content_pillars"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "INFORMATION ARCHITECTURE \u2014 5 learning paths",
+      "weight": 1.0,
+      "source": "seekvana_build_guide_ia",
+      "target": "seekvana_concept_learning_paths"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "ai-tools pillar is affiliate revenue",
+      "weight": 0.75,
+      "source": "seekvana_build_guide_monetization",
+      "target": "seekvana_build_guide_ia"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "SEO \u2014 frontmatter standard for every article",
+      "weight": 0.85,
+      "source": "seekvana_build_guide_seo",
+      "target": "seekvana_concept_mdx_frontmatter"
+    },
+    {
+      "relation": "references",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "MONETIZATION \u2014 Ad slot specs",
+      "weight": 1.0,
+      "source": "seekvana_build_guide_monetization",
+      "target": "seekvana_concept_ad_slots"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "MDX content pipeline + frontmatter schema",
+      "weight": 0.95,
+      "source": "seekvana_concept_mdx_content",
+      "target": "seekvana_concept_mdx_frontmatter"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "DESIGN SYSTEM",
+      "weight": 0.95,
+      "source": "seekvana_concept_color_tokens",
+      "target": "seekvana_concept_tailwind_tokens"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "DESIGN SYSTEM \u2014 dark theme tokens",
+      "weight": 0.95,
+      "source": "seekvana_concept_dark_mode",
+      "target": "seekvana_concept_color_tokens"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "PHASE 6 \u2014 animate in/out with Framer Motion",
+      "weight": 0.85,
+      "source": "seekvana_concept_search_modal",
+      "target": "seekvana_concept_framer_motion"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "CLAUDE.md",
+      "source_location": "Article pages and ad slots",
+      "weight": 0.85,
+      "source": "seekvana_concept_article_3col_layout",
+      "target": "seekvana_concept_ad_slots"
+    },
+    {
+      "relation": "conceptually_related_to",
+      "confidence": "INFERRED",
+      "confidence_score": 0.75,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md",
+      "source_location": "Both are core IA structures",
+      "weight": 0.75,
+      "source": "seekvana_concept_content_pillars",
+      "target": "seekvana_concept_learning_paths"
+    }
+  ],
+  "hyperedges": [
+    {
+      "id": "design_system_implementation_chain",
+      "label": "Design System Token \u2192 Tailwind \u2192 Component Styling Chain",
+      "nodes": [
+        "seekvana_concept_color_tokens",
+        "seekvana_concept_tailwind_tokens",
+        "seekvana_build_guide_design_system"
+      ],
+      "relation": "implement",
+      "confidence": "INFERRED",
+      "confidence_score": 0.95,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md"
+    },
+    {
+      "id": "article_page_feature_cluster",
+      "label": "Article Page: 3-Column Layout + Ad Slots + MDX Content + Framer Motion",
+      "nodes": [
+        "seekvana_concept_article_3col_layout",
+        "seekvana_concept_ad_slots",
+        "seekvana_concept_mdx_content",
+        "seekvana_concept_framer_motion"
+      ],
+      "relation": "participate_in",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": ".claude/commands/phase5.md"
+    },
+    {
+      "id": "seo_content_metadata_cluster",
+      "label": "SEO + MDX Frontmatter + Content Pillars all drive discoverability",
+      "nodes": [
+        "seekvana_build_guide_seo",
+        "seekvana_concept_mdx_frontmatter",
+        "seekvana_concept_content_pillars"
+      ],
+      "relation": "participate_in",
+      "confidence": "INFERRED",
+      "confidence_score": 0.85,
+      "source_file": "SEEKVANA-BUILD-GUIDE.md"
+    }
+  ]
+}

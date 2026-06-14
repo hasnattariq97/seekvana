@@ -1,0 +1,52 @@
+{
+  "D:\\seekvana\\.claude\\settings.json": {
+    "mtime": 1781435515.2095034,
+    "ast_hash": "37a05e23776d922b09b59d5c6578366e",
+    "semantic_hash": "37a05e23776d922b09b59d5c6578366e"
+  },
+  "D:\\seekvana\\.claude\\commands\\phase2.md": {
+    "mtime": 1781435531.907575,
+    "ast_hash": "3467e30dbfc7a7146f2655d2f3ecc5f6",
+    "semantic_hash": "3467e30dbfc7a7146f2655d2f3ecc5f6"
+  },
+  "D:\\seekvana\\.claude\\commands\\phase3.md": {
+    "mtime": 1781435551.3283596,
+    "ast_hash": "95a306d4d141e091860cb125aef46dcb",
+    "semantic_hash": "95a306d4d141e091860cb125aef46dcb"
+  },
+  "D:\\seekvana\\.claude\\commands\\phase4.md": {
+    "mtime": 1781435560.7517788,
+    "ast_hash": "11eaa8ed9c6f7aae3c48d04bc898a773",
+    "semantic_hash": "11eaa8ed9c6f7aae3c48d04bc898a773"
+  },
+  "D:\\seekvana\\.claude\\commands\\phase5.md": {
+    "mtime": 1781435568.8385725,
+    "ast_hash": "78b8558249464562d595252717aa1178",
+    "semantic_hash": "78b8558249464562d595252717aa1178"
+  },
+  "D:\\seekvana\\.claude\\commands\\phase6.md": {
+    "mtime": 1781435576.7638395,
+    "ast_hash": "6316feb47d1f7af5c2aca0204c2e2e09",
+    "semantic_hash": "6316feb47d1f7af5c2aca0204c2e2e09"
+  },
+  "D:\\seekvana\\.claude\\commands\\phase7.md": {
+    "mtime": 1781435594.8161893,
+    "ast_hash": "60b3998ba596c0adb8eacd78beadd3a9",
+    "semantic_hash": "60b3998ba596c0adb8eacd78beadd3a9"
+  },
+  "D:\\seekvana\\.claude\\commands\\phase8.md": {
+    "mtime": 1781435604.6052861,
+    "ast_hash": "5442e37c370efa9e66f4c6d631e831a1",
+    "semantic_hash": "5442e37c370efa9e66f4c6d631e831a1"
+  },
+  "D:\\seekvana\\CLAUDE.md": {
+    "mtime": 1781435875.739678,
+    "ast_hash": "b0b8b72f1458c621af634821357efd0f",
+    "semantic_hash": "b0b8b72f1458c621af634821357efd0f"
+  },
+  "D:\\seekvana\\SEEKVANA-BUILD-GUIDE.md": {
+    "mtime": 1781435119.0945263,
+    "ast_hash": "b5f51a8b8ff7e46023ac8ddeecb1f71b",
+    "semantic_hash": "b5f51a8b8ff7e46023ac8ddeecb1f71b"
+  }
+}
