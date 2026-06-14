@@ -82,11 +82,9 @@ export function PillarSidebar({ pillar, currentSlug }: PillarSidebarProps) {
       {/* Mobile: Contents button that opens a Sheet — visible below lg */}
       <div className="lg:hidden mb-6">
         <Sheet>
-          <SheetTrigger asChild>
-            <button className="flex items-center gap-2 text-sm text-secondary border border-border rounded-lg px-4 py-2 hover:bg-surface-subtle transition-colors">
-              <BookOpen className="h-4 w-4" />
-              Contents
-            </button>
+          <SheetTrigger className="flex items-center gap-2 text-sm text-secondary border border-border rounded-lg px-4 py-2 hover:bg-surface-subtle transition-colors">
+            <BookOpen className="h-4 w-4" />
+            Contents
           </SheetTrigger>
           <SheetContent side="left" className="w-72 bg-surface p-6">
             <SheetHeader>
