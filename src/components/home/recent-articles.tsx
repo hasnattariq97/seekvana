@@ -165,7 +165,7 @@ export function RecentArticles() {
               <TabsTrigger
                 key={tab}
                 value={tab}
-                className="text-sm text-secondary rounded-none border-b-2 border-transparent data-active:text-accent data-active:border-accent hover:text-primary bg-transparent px-3 py-2"
+                className="text-sm text-secondary rounded-none hover:text-primary bg-transparent px-3 py-2 data-active:!text-accent data-active:after:!bg-accent"
               >
                 {tab}
               </TabsTrigger>
