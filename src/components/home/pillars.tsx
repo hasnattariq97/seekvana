@@ -12,11 +12,9 @@ import {
   FlaskConical,
   Shield,
   GraduationCap,
+  type LucideIcon,
 } from "lucide-react";
-import type { FC } from "react";
 import { cn } from "@/lib/utils";
-
-type LucideIcon = FC<{ size?: number; className?: string; "aria-hidden"?: boolean | "true" }>;
 
 interface Pillar {
   title: string;
