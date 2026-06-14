@@ -28,12 +28,12 @@
   --color-card-foreground:      var(--color-text-primary);
   --color-popover:              var(--color-surface);
   --color-popover-foreground:   var(--color-text-primary);
-  --color-primary-foreground:   #ffffff;
+  --color-primary-foreground:   var(--color-primary-foreground);
   --color-secondary-foreground: var(--color-text-primary);
   --color-muted:                var(--color-surface-subtle);
   --color-muted-foreground:     var(--color-text-secondary);
-  --color-accent-foreground:    #ffffff;
-  --color-destructive:          oklch(0.577 0.245 27.325);
+  --color-accent-foreground:    var(--color-accent-foreground);
+  --color-destructive:          var(--color-destructive);
   --color-input:                var(--color-border);
   --color-ring:                 var(--color-accent);
 
@@ -68,6 +68,9 @@
   --color-accent-soft:    #F6E4DB;
   --color-info:           #2F7D6B;
   --color-success:        #4E8A5B;
+  --color-primary-foreground:   #ffffff;
+  --color-accent-foreground:    #ffffff;
+  --color-destructive:          oklch(0.577 0.245 27.325);
 
   /* shadcn vars remapped to Seekvana tokens */
   --background:          var(--color-canvas);
