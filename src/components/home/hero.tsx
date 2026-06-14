@@ -62,7 +62,7 @@ export function Hero() {
               <button
                 key={chip}
                 onClick={openSearch}
-                className="bg-surface-subtle border border-border rounded-full text-sm text-secondary px-4 py-1.5 hover:text-accent hover:border-accent transition-colors"
+                className="bg-surface-subtle border border-border rounded-full text-sm text-secondary px-4 py-1.5 hover:text-accent hover:border-accent focus-visible:ring-2 focus-visible:ring-accent/30 focus-visible:outline-none transition-colors"
               >
                 {chip}
               </button>
@@ -74,13 +74,13 @@ export function Hero() {
         <motion.div {...fadeUp(0.32)} className="flex flex-col sm:flex-row gap-3">
           <Link
             href="/paths/ai-for-beginners"
-            className="bg-accent text-white rounded-lg px-6 py-3 font-medium hover:bg-accent-deep transition-colors"
+            className="bg-accent text-white rounded-lg px-6 py-3 font-medium hover:bg-accent-deep focus-visible:ring-2 focus-visible:ring-accent/30 focus-visible:ring-offset-2 focus-visible:outline-none transition-colors"
           >
             Start Learning →
           </Link>
           <Link
             href="/library"
-            className="border border-border text-primary rounded-lg px-6 py-3 font-medium hover:bg-surface-subtle transition-colors"
+            className="border border-border text-primary rounded-lg px-6 py-3 font-medium hover:bg-surface-subtle focus-visible:ring-2 focus-visible:ring-accent/30 focus-visible:ring-offset-2 focus-visible:outline-none transition-colors"
           >
             Explore Topics
           </Link>
