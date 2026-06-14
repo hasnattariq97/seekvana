@@ -51,7 +51,7 @@ export function Hero() {
         <motion.div {...fadeUp(0.24)} className="w-full max-w-lg space-y-3">
           <button
             onClick={openSearch}
-            className="flex items-center gap-3 w-full rounded-xl border border-border bg-surface px-4 py-3 text-left text-secondary hover:ring-2 hover:ring-accent/30 transition-all"
+            className="flex items-center gap-3 w-full rounded-xl border border-border bg-surface px-4 py-3 text-left text-secondary hover:ring-2 hover:ring-accent/30 focus-visible:ring-2 focus-visible:ring-accent/30 focus-visible:outline-none transition-all"
           >
             <Search size={18} className="shrink-0 text-secondary" />
             <span className="text-sm">What do you want to understand?</span>
