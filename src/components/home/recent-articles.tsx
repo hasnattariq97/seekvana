@@ -106,7 +106,7 @@ function ArticleGrid({ articles }: { articles: Article[] }) {
           className="bg-surface rounded-xl border border-border overflow-hidden hover:shadow-md transition-shadow"
         >
           {/* Placeholder image area */}
-          <div className={`h-40 ${article.bgClass}`} />
+          <div className={`h-40 ${article.bgClass}`} aria-hidden="true" />
 
           <div className="p-5">
             <div className="flex gap-2 flex-wrap">
@@ -157,12 +157,15 @@ export function RecentArticles() {
         </h2>
 
         <Tabs defaultValue="All">
-          <TabsList className="bg-surface-subtle mb-8 h-auto flex-wrap gap-1">
+          <TabsList
+            variant="line"
+            className="w-full justify-start border-b border-border mb-8 h-auto flex-wrap gap-0"
+          >
             {TABS.map((tab) => (
               <TabsTrigger
                 key={tab}
                 value={tab}
-                className="text-sm data-active:text-accent data-active:bg-surface"
+                className="text-sm text-secondary rounded-none border-b-2 border-transparent data-active:text-accent data-active:border-accent hover:text-primary bg-transparent px-3 py-2"
               >
                 {tab}
               </TabsTrigger>
