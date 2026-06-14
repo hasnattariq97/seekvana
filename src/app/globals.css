@@ -1,26 +1,132 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* ── Seekvana color utilities ─────────────────────────────────────────── */
+  /* These generate: bg-canvas, text-canvas, border-canvas, etc.            */
+  --color-canvas:         var(--color-canvas);
+  --color-surface:        var(--color-surface);
+  --color-surface-subtle: var(--color-surface-subtle);
+  --color-border:         var(--color-border);
+  --color-primary:        var(--color-text-primary);    /* text-primary, bg-primary */
+  --color-secondary:      var(--color-text-secondary);  /* text-secondary           */
+  --color-accent:         var(--color-accent);          /* text-accent, bg-accent = clay */
+  --color-accent-deep:    var(--color-accent-deep);
+  --color-accent-soft:    var(--color-accent-soft);
+  --color-info:           var(--color-info);
+  --color-success:        var(--color-success);
+
+  /* ── shadcn component compatibility ──────────────────────────────────── */
+  /* shadcn components reference --color-background, --color-foreground,   */
+  /* --color-card, etc. as Tailwind utilities internally.                   */
+  --color-background:           var(--color-canvas);
+  --color-foreground:           var(--color-text-primary);
+  --color-card:                 var(--color-surface);
+  --color-card-foreground:      var(--color-text-primary);
+  --color-popover:              var(--color-surface);
+  --color-popover-foreground:   var(--color-text-primary);
+  --color-primary-foreground:   #ffffff;
+  --color-secondary-foreground: var(--color-text-primary);
+  --color-muted:                var(--color-surface-subtle);
+  --color-muted-foreground:     var(--color-text-secondary);
+  --color-accent-foreground:    #ffffff;
+  --color-destructive:          oklch(0.577 0.245 27.325);
+  --color-input:                var(--color-border);
+  --color-ring:                 var(--color-accent);
+
+  /* ── Font utilities ───────────────────────────────────────────────────── */
+  /* Generates: font-fraunces, font-inter, font-mono, font-sans             */
+  --font-fraunces: var(--font-fraunces);
+  --font-inter:    var(--font-inter);
+  --font-mono:     var(--font-mono);
+  --font-sans:     var(--font-inter);  /* shadcn uses font-sans internally */
+
+  /* ── Border radius scale ─────────────────────────────────────────────── */
+  --radius-sm:  0.375rem;
+  --radius-md:  0.5rem;
+  --radius-lg:  0.75rem;
+  --radius-xl:  1rem;
+  --radius-2xl: 1.5rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ── Light theme ──────────────────────────────────────────────────────────── */
+:root {
+  --radius: 0.5rem;
+
+  /* Seekvana raw tokens */
+  --color-canvas:         #FAF8F3;
+  --color-surface:        #FFFFFF;
+  --color-surface-subtle: #F4F1EA;
+  --color-border:         #E6E1D7;
+  --color-text-primary:   #1C1B19;
+  --color-text-secondary: #6F6B62;
+  --color-accent:         #C9633F;
+  --color-accent-deep:    #A84E2E;
+  --color-accent-soft:    #F6E4DB;
+  --color-info:           #2F7D6B;
+  --color-success:        #4E8A5B;
+
+  /* shadcn vars remapped to Seekvana tokens */
+  --background:          var(--color-canvas);
+  --foreground:          var(--color-text-primary);
+  --card:                var(--color-surface);
+  --card-foreground:     var(--color-text-primary);
+  --popover:             var(--color-surface);
+  --popover-foreground:  var(--color-text-primary);
+  --primary:             var(--color-accent);
+  --primary-foreground:  #ffffff;
+  --secondary:           var(--color-surface-subtle);
+  --secondary-foreground: var(--color-text-primary);
+  --muted:               var(--color-surface-subtle);
+  --muted-foreground:    var(--color-text-secondary);
+  --accent:              var(--color-accent-soft);
+  --accent-foreground:   var(--color-accent);
+  --destructive:         oklch(0.577 0.245 27.325);
+  --border:              var(--color-border);
+  --input:               var(--color-border);
+  --ring:                var(--color-accent);
+}
+
+/* ── Dark theme ───────────────────────────────────────────────────────────── */
+.dark {
+  /* Seekvana dark tokens */
+  --color-canvas:         #181712;
+  --color-surface:        #211F1A;
+  --color-surface-subtle: #2A2823;
+  --color-border:         #38352E;
+  --color-text-primary:   #EFEBE1;
+  --color-text-secondary: #A39E92;
+  --color-accent:         #E0875F;
+  --color-accent-deep:    #C96B45;
+  --color-accent-soft:    #3A2A22;
+  --color-info:           #5FB39B;
+  --color-success:        #6BA876;
+
+  /* shadcn dark overrides */
+  --primary:             var(--color-accent);
+  --primary-foreground:  #ffffff;
+  --destructive:         oklch(0.704 0.191 22.216);
+}
+
+/* ── Base styles ──────────────────────────────────────────────────────────── */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    @apply bg-canvas text-primary antialiased;
+    font-family: var(--font-inter), system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-fraunces), Georgia, serif;
+  }
+
+  code, pre {
+    font-family: var(--font-mono), "Courier New", monospace;
+  }
 }
