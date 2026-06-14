@@ -771,7 +771,7 @@ Update this as you complete each phase:
 | 2 | Design system (colors, fonts, dark mode) | ✅ Done |
 | 3 | Navigation bar | ✅ Done |
 | 4 | Homepage | ✅ Done |
-| 5 | Article/lesson page | ⬜ Todo |
+| 5 | Article/lesson page | ✅ Done |
 | 6 | Search modal | ⬜ Todo |
 | 7 | Deploy to Vercel | ⬜ Todo |
 | 8 | MDX content system | ⬜ Todo |

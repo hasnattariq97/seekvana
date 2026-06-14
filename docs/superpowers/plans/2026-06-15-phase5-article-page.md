@@ -1,6 +1,6 @@
 # Phase 5 — Article Page Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Build the 3-column article page with styled MDX rendering, interactive TOC, reading progress bar, ad slots, and a real sample article.
 
@@ -33,7 +33,7 @@
 
 **Files:** none (package.json updated automatically)
 
-- [ ] **Step 1: Install packages**
+- [x] **Step 1: Install packages**
 
 ```bash
 cd d:/seekvana
@@ -41,7 +41,7 @@ npm install next-mdx-remote gray-matter reading-time
 npm install --save-dev @types/reading-time
 ```
 
-- [ ] **Step 2: Verify install succeeded**
+- [x] **Step 2: Verify install succeeded**
 
 ```bash
 node -e "require('gray-matter'); require('reading-time'); console.log('OK')"
@@ -49,7 +49,7 @@ node -e "require('gray-matter'); require('reading-time'); console.log('OK')"
 
 Expected: `OK`
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add package.json package-lock.json
@@ -63,7 +63,7 @@ git commit -m "feat: install next-mdx-remote, gray-matter, reading-time"
 **Files:**
 - Create: `src/content/articles/agentic-ai/what-is-an-agent.mdx`
 
-- [ ] **Step 1: Create the content directory and MDX file**
+- [x] **Step 1: Create the content directory and MDX file**
 
 Create `src/content/articles/agentic-ai/what-is-an-agent.mdx` with this exact content:
 
@@ -183,7 +183,7 @@ Knowing what an agent is gets you through the door. The next questions are more 
 Explore those questions in the [Agentic AI pillar](/library/agentic-ai) — each topic builds directly on this foundation.
 ```
 
-- [ ] **Step 2: Verify the file exists and has frontmatter**
+- [x] **Step 2: Verify the file exists and has frontmatter**
 
 ```bash
 node -e "const m = require('gray-matter'); const fs = require('fs'); const f = m(fs.readFileSync('src/content/articles/agentic-ai/what-is-an-agent.mdx','utf-8')); console.log(f.data.title, '-', f.data.difficulty)"
@@ -191,7 +191,7 @@ node -e "const m = require('gray-matter'); const fs = require('fs'); const f = m
 
 Expected: `What is an AI Agent? - beginner`
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/content/
@@ -205,7 +205,7 @@ git commit -m "feat: add sample article — What is an AI Agent?"
 **Files:**
 - Create: `src/lib/mdx.ts`
 
-- [ ] **Step 1: Create the utility**
+- [x] **Step 1: Create the utility**
 
 Create `src/lib/mdx.ts`:
 
@@ -275,7 +275,7 @@ export function getArticleSource(pillar: string, slug: string): {
 }
 ```
 
-- [ ] **Step 2: Verify it parses the sample article**
+- [x] **Step 2: Verify it parses the sample article**
 
 ```bash
 node -e "
@@ -293,7 +293,7 @@ console.log('OK');
 
 Expected: prints title and pillar, then `OK`.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/lib/mdx.ts
@@ -307,7 +307,7 @@ git commit -m "feat: add MDX file reading utility with heading extraction"
 **Files:**
 - Create: `src/components/mdx/callout.tsx`
 
-- [ ] **Step 1: Create the component**
+- [x] **Step 1: Create the component**
 
 Create `src/components/mdx/callout.tsx`:
 
@@ -362,7 +362,7 @@ export function Warning({ children }: { children: React.ReactNode }) {
 }
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add src/components/mdx/callout.tsx
@@ -376,7 +376,7 @@ git commit -m "feat: add Tip/Note/Warning callout MDX components"
 **Files:**
 - Create: `src/components/mdx/code-block.tsx`
 
-- [ ] **Step 1: Create the component**
+- [x] **Step 1: Create the component**
 
 Create `src/components/mdx/code-block.tsx`:
 
@@ -425,7 +425,7 @@ export function CodeBlock({ children }: CodeBlockProps) {
 }
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add src/components/mdx/code-block.tsx
@@ -439,7 +439,7 @@ git commit -m "feat: add CodeBlock with copy-to-clipboard"
 **Files:**
 - Create: `src/components/mdx/mdx-components.tsx`
 
-- [ ] **Step 1: Create the components map**
+- [x] **Step 1: Create the components map**
 
 Create `src/components/mdx/mdx-components.tsx`:
 
@@ -577,7 +577,7 @@ export function getMDXComponents(): MDXComponents {
 }
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add src/components/mdx/mdx-components.tsx
@@ -591,7 +591,7 @@ git commit -m "feat: add full MDX component map with styled overrides"
 **Files:**
 - Create: `src/components/article/ad-slot.tsx`
 
-- [ ] **Step 1: Create the component**
+- [x] **Step 1: Create the component**
 
 Create `src/components/article/ad-slot.tsx`:
 
@@ -617,7 +617,7 @@ export function AdSlot({ size = '300x250' }: AdSlotProps) {
 }
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add src/components/article/ad-slot.tsx
@@ -631,7 +631,7 @@ git commit -m "feat: add AdSlot placeholder component"
 **Files:**
 - Create: `src/components/article/reading-progress.tsx`
 
-- [ ] **Step 1: Create the component**
+- [x] **Step 1: Create the component**
 
 Create `src/components/article/reading-progress.tsx`:
 
@@ -658,7 +658,7 @@ export function ReadingProgress() {
 }
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add src/components/article/reading-progress.tsx
@@ -672,7 +672,7 @@ git commit -m "feat: add reading progress bar with Framer Motion"
 **Files:**
 - Create: `src/components/article/pillar-sidebar.tsx`
 
-- [ ] **Step 1: Create the component**
+- [x] **Step 1: Create the component**
 
 Create `src/components/article/pillar-sidebar.tsx`:
 
@@ -782,7 +782,7 @@ export function PillarSidebar({ pillar, currentSlug }: PillarSidebarProps) {
 }
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add src/components/article/pillar-sidebar.tsx
@@ -796,7 +796,7 @@ git commit -m "feat: add PillarSidebar with desktop sticky + mobile Sheet"
 **Files:**
 - Create: `src/components/article/table-of-contents.tsx`
 
-- [ ] **Step 1: Create the component**
+- [x] **Step 1: Create the component**
 
 Create `src/components/article/table-of-contents.tsx`:
 
@@ -874,7 +874,7 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
 }
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add src/components/article/table-of-contents.tsx
@@ -888,7 +888,7 @@ git commit -m "feat: add TableOfContents with Intersection Observer active track
 **Files:**
 - Create: `src/components/article/article-feedback.tsx`
 
-- [ ] **Step 1: Create the component**
+- [x] **Step 1: Create the component**
 
 Create `src/components/article/article-feedback.tsx`:
 
@@ -938,7 +938,7 @@ export function ArticleFeedback() {
 }
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add src/components/article/article-feedback.tsx
@@ -952,7 +952,7 @@ git commit -m "feat: add ArticleFeedback thumbs up/down component"
 **Files:**
 - Create: `src/components/article/article-nav.tsx`
 
-- [ ] **Step 1: Create the component**
+- [x] **Step 1: Create the component**
 
 Create `src/components/article/article-nav.tsx`:
 
@@ -1082,7 +1082,7 @@ export function ArticleNav({ pillar: _pillar, slug }: ArticleNavProps) {
 }
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add src/components/article/article-nav.tsx
@@ -1096,7 +1096,7 @@ git commit -m "feat: add ArticleNav with prev/next and related articles"
 **Files:**
 - Create: `src/app/library/[pillar]/[slug]/page.tsx`
 
-- [ ] **Step 1: Create the page**
+- [x] **Step 1: Create the page**
 
 Create `src/app/library/[pillar]/[slug]/page.tsx`:
 
@@ -1253,7 +1253,7 @@ export default async function ArticlePage({ params }: PageProps) {
 }
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add src/app/library/
@@ -1266,14 +1266,14 @@ git commit -m "feat: add dynamic article page with 3-column layout"
 
 **Files:** none
 
-- [ ] **Step 1: Run the build**
+- [x] **Step 1: Run the build**
 
 ```bash
 cd d:/seekvana
 npm run build
 ```
 
-- [ ] **Step 2: Fix any TypeScript / ESLint errors**
+- [x] **Step 2: Fix any TypeScript / ESLint errors**
 
 Common errors to watch for and their fixes:
 
@@ -1285,7 +1285,7 @@ Common errors to watch for and their fixes:
 | ESLint `no-explicit-any` on frontmatter cast | Use `data as ArticleFrontmatter` (already in the plan) |
 | `next/image` `src` prop error | Wrap `src ?? ''` in AdSlot or image component |
 
-- [ ] **Step 3: Start dev server and visually verify**
+- [x] **Step 3: Start dev server and visually verify**
 
 ```bash
 npm run dev
@@ -1293,25 +1293,25 @@ npm run dev
 
 Visit `http://localhost:3000/library/agentic-ai/what-is-an-agent` and confirm:
 
-- [ ] 3-column layout visible on wide screen (left sidebar + article + TOC on right)
-- [ ] Left sidebar shows pillar articles with "What is an AI Agent?" highlighted
-- [ ] Breadcrumb trail: Library / Agentic AI / What is an AI Agent?
-- [ ] Article header: title in Fraunces, badges for pillar + difficulty, meta row with date and read time
-- [ ] Body text renders with correct font and spacing
-- [ ] Comparison table renders with bordered cells and alternating rows
-- [ ] `<Tip>` callout renders with clay left border and Lightbulb icon
-- [ ] Python code block renders with copy button visible on hover
-- [ ] `<AdSlot />` renders as 300×250 dashed placeholder labeled "Advertisement"
-- [ ] TOC on right lists the 3 h2 headings; active section highlights as you scroll
-- [ ] Thin clay progress bar animates at the very top as you scroll
-- [ ] Thumbs up/down feedback buttons work and show "Thanks for your feedback!" after click
-- [ ] Next article card shows "Tool Use: Giving Models Hands"
-- [ ] "Keep reading" section shows 3 related article cards
-- [ ] On mobile (< lg): desktop sidebar is hidden, Contents button appears and opens a Sheet
-- [ ] On mobile (< xl): right TOC is hidden
-- [ ] Dark mode: switch theme and verify no hardcoded colors appear
+- [x] 3-column layout visible on wide screen (left sidebar + article + TOC on right)
+- [x] Left sidebar shows pillar articles with "What is an AI Agent?" highlighted
+- [x] Breadcrumb trail: Library / Agentic AI / What is an AI Agent?
+- [x] Article header: title in Fraunces, badges for pillar + difficulty, meta row with date and read time
+- [x] Body text renders with correct font and spacing
+- [x] Comparison table renders with bordered cells and alternating rows
+- [x] `<Tip>` callout renders with clay left border and Lightbulb icon
+- [x] Python code block renders with copy button visible on hover
+- [x] `<AdSlot />` renders as 300×250 dashed placeholder labeled "Advertisement"
+- [x] TOC on right lists the 3 h2 headings; active section highlights as you scroll
+- [x] Thin clay progress bar animates at the very top as you scroll
+- [x] Thumbs up/down feedback buttons work and show "Thanks for your feedback!" after click
+- [x] Next article card shows "Tool Use: Giving Models Hands"
+- [x] "Keep reading" section shows 3 related article cards
+- [x] On mobile (< lg): desktop sidebar is hidden, Contents button appears and opens a Sheet
+- [x] On mobile (< xl): right TOC is hidden
+- [x] Dark mode: switch theme and verify no hardcoded colors appear
 
-- [ ] **Step 4: Commit final build**
+- [x] **Step 4: Commit final build**
 
 ```bash
 git add .
