@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 type Difficulty = "Beginner" | "Intermediate" | "Advanced";
 
@@ -45,7 +45,7 @@ const PATHS: Path[] = [
     difficulty: "Beginner",
     lessons: 6,
     href: "/paths/prompt-engineering",
-    stripClass: "bg-amber-700",
+    stripClass: "bg-path-amber",
   },
   {
     title: "Beginner to AI Engineer",
@@ -53,7 +53,7 @@ const PATHS: Path[] = [
     difficulty: "Advanced",
     lessons: 24,
     href: "/paths/beginner-to-engineer",
-    stripClass: "bg-purple-700",
+    stripClass: "bg-path-purple",
   },
 ];
 
@@ -67,6 +67,8 @@ const DIFFICULTY_BADGE: Record<Difficulty, string> = {
 };
 
 export function LearningPaths() {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <section className="bg-canvas py-16 px-4">
       <div className="max-w-screen-xl mx-auto">
@@ -84,19 +86,26 @@ export function LearningPaths() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {PATHS.map((path, i) => (
-            <motion.div
+            <motion.article
               key={path.href}
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.3, ease: "easeOut", delay: i * 0.06 }}
-              whileHover={{ y: -2 }}
-              className="bg-surface rounded-xl border border-border overflow-hidden hover:shadow-md transition-shadow"
+              transition={{ duration: shouldReduceMotion ? 0 : 0.3, ease: "easeOut", delay: shouldReduceMotion ? 0 : i * 0.06 }}
+              whileHover={shouldReduceMotion ? undefined : { y: -2 }}
+              className="bg-surface rounded-xl border border-border overflow-hidden hover:shadow-md transition-shadow relative"
             >
+              {/* Invisible full-card link for a11y */}
+              <Link
+                href={path.href}
+                className="absolute inset-0 z-0 rounded-xl focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+                aria-label={`Start path: ${path.title}`}
+              />
+
               {/* Top colour strip */}
               <div className={`h-2 ${path.stripClass}`} />
 
-              <div className="px-6 py-5 flex flex-col gap-2">
+              <div className="px-6 py-5 flex flex-col gap-2 relative z-10">
                 <span
                   className={`self-start text-xs rounded-full px-2.5 py-0.5 font-medium ${DIFFICULTY_BADGE[path.difficulty]}`}
                 >
@@ -112,15 +121,12 @@ export function LearningPaths() {
                   <span className="text-xs text-secondary">
                     {path.lessons} lessons
                   </span>
-                  <Link
-                    href={path.href}
-                    className="text-sm text-accent font-medium hover:text-accent-deep transition-colors"
-                  >
+                  <span className="text-sm text-accent font-medium" aria-hidden="true">
                     Start path →
-                  </Link>
+                  </span>
                 </div>
               </div>
-            </motion.div>
+            </motion.article>
           ))}
         </div>
       </div>

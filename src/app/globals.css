@@ -18,6 +18,8 @@
   --color-accent-soft:    var(--color-accent-soft);
   --color-info:           var(--color-info);
   --color-success:        var(--color-success);
+  --color-path-amber:     var(--color-path-amber);
+  --color-path-purple:    var(--color-path-purple);
 
   /* ── shadcn component compatibility ──────────────────────────────────── */
   /* shadcn components reference --color-background, --color-foreground,   */
@@ -68,6 +70,8 @@
   --color-accent-soft:    #F6E4DB;
   --color-info:           #2F7D6B;
   --color-success:        #4E8A5B;
+  --color-path-amber:     #B45309;
+  --color-path-purple:    #7C3AED;
   --color-primary-foreground:   #ffffff;
   --color-accent-foreground:    #ffffff;
   --color-destructive:          oklch(0.577 0.245 27.325);
@@ -107,6 +111,8 @@
   --color-accent-soft:    #3A2A22;
   --color-info:           #5FB39B;
   --color-success:        #6BA876;
+  --color-path-amber:     #D97706;
+  --color-path-purple:    #9333EA;
 
   /* shadcn dark overrides */
   --primary:             var(--color-accent);
