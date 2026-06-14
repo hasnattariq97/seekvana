@@ -2,21 +2,26 @@
 
 import Link from "next/link";
 import { Search } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useSearch } from "@/context/search-context";
 
 const SEARCH_CHIPS = ["Agentic AI", "RAG", "Prompting", "Evals"] as const;
 
-function fadeUp(delay: number) {
-  return {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.4, ease: "easeOut" as const, delay },
-  };
-}
-
 export function Hero() {
+  const shouldReduceMotion = useReducedMotion();
   const { openSearch } = useSearch();
+
+  function fadeUp(delay: number) {
+    return {
+      initial: { opacity: shouldReduceMotion ? 1 : 0, y: shouldReduceMotion ? 0 : 20 },
+      animate: { opacity: 1, y: 0 },
+      transition: {
+        duration: shouldReduceMotion ? 0 : 0.4,
+        ease: "easeOut" as const,
+        delay: shouldReduceMotion ? 0 : delay,
+      },
+    };
+  }
 
   return (
     <section className="bg-canvas py-24 md:py-32 px-4">

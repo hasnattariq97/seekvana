@@ -67,7 +67,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-secondary hover:text-primary transition-colors"
+                    className="text-sm text-secondary hover:text-primary transition-colors focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:outline-none rounded"
                   >
                     {link.label}
                   </Link>
@@ -86,7 +86,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-secondary hover:text-primary transition-colors"
+                    className="text-sm text-secondary hover:text-primary transition-colors focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:outline-none rounded"
                   >
                     {link.label}
                   </Link>
@@ -105,7 +105,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-secondary hover:text-primary transition-colors"
+                    className="text-sm text-secondary hover:text-primary transition-colors focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:outline-none rounded"
                   >
                     {link.label}
                   </Link>
@@ -119,21 +119,21 @@ export function Footer() {
         <div className="border-t border-border mt-12 pt-6 flex flex-col sm:flex-row gap-3 items-center justify-center">
           <Link
             href="/privacy"
-            className="text-xs text-secondary hover:text-primary transition-colors"
+            className="text-xs text-secondary hover:text-primary transition-colors focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:outline-none rounded"
           >
             Privacy Policy
           </Link>
           <span className="text-secondary text-xs hidden sm:block" aria-hidden="true">·</span>
           <Link
             href="/terms"
-            className="text-xs text-secondary hover:text-primary transition-colors"
+            className="text-xs text-secondary hover:text-primary transition-colors focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:outline-none rounded"
           >
             Terms of Use
           </Link>
           <span className="text-secondary text-xs hidden sm:block" aria-hidden="true">·</span>
           <Link
             href="/contact"
-            className="text-xs text-secondary hover:text-primary transition-colors"
+            className="text-xs text-secondary hover:text-primary transition-colors focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:outline-none rounded"
           >
             Contact
           </Link>

@@ -103,12 +103,19 @@ function ArticleGrid({ articles }: { articles: Article[] }) {
             delay: shouldReduceMotion ? 0 : i * 0.08,
           }}
           whileHover={shouldReduceMotion ? undefined : { y: -2 }}
-          className="bg-surface rounded-xl border border-border overflow-hidden hover:shadow-md transition-shadow"
+          className="bg-surface rounded-xl border border-border overflow-hidden hover:shadow-md transition-shadow relative"
         >
+          {/* Full-card overlay link */}
+          <Link
+            href={article.href}
+            className="absolute inset-0 z-0 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none rounded-xl"
+            aria-label={`Read: ${article.title}`}
+          />
+
           {/* Placeholder image area */}
           <div className={`h-40 ${article.bgClass}`} aria-hidden="true" />
 
-          <div className="p-5">
+          <div className="p-5 relative z-10">
             <div className="flex gap-2 flex-wrap">
               <span className="bg-accent-soft text-accent text-xs rounded-full px-2.5 py-0.5 font-medium">
                 {article.category}
@@ -134,13 +141,9 @@ function ArticleGrid({ articles }: { articles: Article[] }) {
               </span>
             </div>
 
-            <Link
-              href={article.href}
-              className="block mt-3 text-sm text-accent font-medium hover:text-accent-deep transition-colors focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:outline-none rounded"
-              aria-label={`Read: ${article.title}`}
-            >
+            <span className="block mt-3 text-sm text-accent font-medium" aria-hidden="true">
               Read article →
-            </Link>
+            </span>
           </div>
         </motion.article>
       ))}
