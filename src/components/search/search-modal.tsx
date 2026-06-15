@@ -126,6 +126,7 @@ export function SearchModal() {
   const clearQuery = () => {
     setQuery('')
     setDebouncedQuery('')
+    setIsSearching(false)
     inputRef.current?.focus()
   }
 
