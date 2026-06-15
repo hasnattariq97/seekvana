@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { getArticlesByPillar } from '@/lib/mdx'
 
 interface NavArticle {
   title: string
@@ -16,77 +17,65 @@ interface ArticleNavProps {
   slug: string
 }
 
-const MOCK_ADJACENT: Record<
-  string,
-  { prev: NavArticle | null; next: NavArticle | null }
-> = {
-  'what-is-an-agent': {
-    prev: null,
-    next: {
-      title: 'Tool Use: Giving Models Hands',
-      slug: 'tool-use-explained',
-      pillar: 'agentic-ai',
-    },
-  },
-}
+export function ArticleNav({ pillar, slug }: ArticleNavProps) {
+  const all = getArticlesByPillar(pillar).sort(
+    (a, b) =>
+      new Date(a.frontmatter.publishedAt).getTime() -
+      new Date(b.frontmatter.publishedAt).getTime()
+  )
 
-const MOCK_RELATED: Record<string, RelatedArticle[]> = {
-  'what-is-an-agent': [
-    {
-      title: 'Tool Use: Giving Models Hands',
-      slug: 'tool-use-explained',
-      pillar: 'agentic-ai',
-      readTime: 12,
-    },
-    {
-      title: 'Memory in AI Agents',
-      slug: 'agent-memory',
-      pillar: 'agentic-ai',
-      readTime: 9,
-    },
-    {
-      title: 'RAG Without the Hype',
-      slug: 'rag-explained',
-      pillar: 'agentic-ai',
-      readTime: 10,
-    },
-  ],
-}
+  const idx = all.findIndex((a) => a.slug === slug)
+  const prevArticle = idx > 0 ? all[idx - 1] : null
+  const nextArticle = idx < all.length - 1 ? all[idx + 1] : null
 
-export function ArticleNav({ pillar: _pillar, slug }: ArticleNavProps) {
-  const adjacent = MOCK_ADJACENT[slug] ?? { prev: null, next: null }
-  const related = MOCK_RELATED[slug] ?? []
+  const prev: NavArticle | null = prevArticle
+    ? { title: prevArticle.frontmatter.title, slug: prevArticle.slug, pillar }
+    : null
+
+  const next: NavArticle | null = nextArticle
+    ? { title: nextArticle.frontmatter.title, slug: nextArticle.slug, pillar }
+    : null
+
+  const related: RelatedArticle[] = all
+    .filter((a) => a.slug !== slug)
+    .slice(0, 3)
+    .map((a) => ({
+      title: a.frontmatter.title,
+      slug: a.slug,
+      pillar,
+      readTime: a.frontmatter.readTime,
+    }))
 
   return (
     <div className="mt-12 space-y-10">
       {/* Prev / Next */}
       <div className="grid grid-cols-2 gap-4">
-        {adjacent.prev ? (
+        {prev ? (
           <Link
-            href={`/library/${adjacent.prev.pillar}/${adjacent.prev.slug}`}
+            href={`/library/${prev.pillar}/${prev.slug}`}
             className="group flex flex-col gap-2 p-5 rounded-xl border border-border hover:border-accent/40 hover:bg-surface-subtle transition-colors"
           >
             <span className="flex items-center gap-1 text-xs font-medium text-secondary">
               <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" /> Previous
             </span>
             <span className="font-fraunces text-base text-primary">
-              {adjacent.prev.title}
+              {prev.title}
             </span>
           </Link>
         ) : (
           <div />
         )}
 
-        {adjacent.next ? (
+        {next ? (
           <Link
-            href={`/library/${adjacent.next.pillar}/${adjacent.next.slug}`}
+            href={`/library/${next.pillar}/${next.slug}`}
             className="group flex flex-col gap-2 p-5 rounded-xl border border-border hover:border-accent/40 hover:bg-surface-subtle transition-colors text-right col-start-2"
           >
             <span className="flex items-center justify-end gap-1 text-xs font-medium text-secondary">
               Next <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </span>
             <span className="font-fraunces text-base text-primary">
-              {adjacent.next.title}
+              {next.title}
             </span>
           </Link>
         ) : (
