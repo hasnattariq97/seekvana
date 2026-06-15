@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { MDXRemote } from 'next-mdx-remote/rsc'
-import { getArticleSource, type ArticleFrontmatter } from '@/lib/mdx'
+import { getArticleSource, getAllArticles, getArticlesByPillar, type ArticleFrontmatter } from '@/lib/mdx'
 import { getMDXComponents } from '@/components/mdx/mdx-components'
 import { ReadingProgress } from '@/components/article/reading-progress'
 import { PillarSidebar } from '@/components/article/pillar-sidebar'
@@ -31,6 +31,13 @@ const DIFFICULTY_COLORS: Record<string, string> = {
   intermediate:
     'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200',
   advanced: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
+}
+
+export function generateStaticParams() {
+  return getAllArticles().map((a) => ({
+    pillar: a.pillar,
+    slug: a.slug,
+  }))
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -103,6 +110,10 @@ export default async function ArticlePage({ params }: PageProps) {
 
   const { source, frontmatter, headings } = articleData
   const pillarName = PILLAR_NAMES[pillar] ?? pillar
+  const pillarArticles = getArticlesByPillar(pillar).map((a) => ({
+    title: a.frontmatter.title,
+    slug: a.slug,
+  }))
   const difficultyClass =
     DIFFICULTY_COLORS[frontmatter.difficulty] ?? DIFFICULTY_COLORS.beginner
 
@@ -118,7 +129,7 @@ export default async function ArticlePage({ params }: PageProps) {
 
       <div className="max-w-7xl mx-auto px-4 py-12 flex gap-8 items-start">
         {/* Left sidebar */}
-        <PillarSidebar pillar={pillar} currentSlug={slug} />
+        <PillarSidebar pillar={pillar} currentSlug={slug} articles={pillarArticles} />
 
         {/* Center — article content */}
         <article className="flex-1 min-w-0">
