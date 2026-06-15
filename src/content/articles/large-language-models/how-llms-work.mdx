@@ -1,0 +1,66 @@
+---
+title: "How LLMs Actually Work"
+description: "Tokens, transformers, and the prediction loop — a clear technical explanation without the hand-waving."
+pillar: "large-language-models"
+slug: "how-llms-work"
+difficulty: "beginner"
+readTime: 9
+author: "Seekvana"
+publishedAt: "2026-02-05"
+tags: ["LLMs", "transformers", "tokens", "AI basics"]
+featured: false
+---
+
+Every large language model — GPT-4, Claude, Gemini — is doing one thing: predicting the next token. That's it. The remarkable thing is how much intelligence emerges from doing that one thing at enormous scale.
+
+Understanding how that prediction works explains why LLMs are brilliant at some things, unreliable at others, and why prompting them well is a skill worth developing.
+
+<AdSlot />
+
+## Tokens, Not Words
+
+LLMs don't read text the way humans do. They read **tokens** — chunks of characters that sit somewhere between letters and words. The word "understanding" might be a single token. "Seekvana" might be split into three: "Se", "ek", "vana". Common English words are usually one token; rare words, names, and code get broken into smaller pieces.
+
+Why does this matter? Three reasons:
+
+- **Cost** — API pricing is per token, so understanding token counts helps you estimate costs
+- **Context limits** — models have a maximum number of tokens they can process at once (their "context window")
+- **Surprising behaviour** — because "9.11" and "9.9" tokenise differently to how you'd expect, arithmetic that looks trivial can trip up a model
+
+A useful rule of thumb: 1 token ≈ 0.75 words in English. A 1,000-word article is roughly 1,300 tokens.
+
+## The Transformer Architecture
+
+Modern LLMs are all built on the **transformer**, introduced by Google in 2017. You don't need to know the maths to use LLMs effectively, but three ideas are worth understanding:
+
+**Attention** — for every token the model reads, attention lets it look across the entire context and decide which other tokens are most relevant to interpreting it. The word "it" in a long paragraph could refer to many things; attention figures out which one.
+
+**Layers** — transformers stack many attention layers on top of each other. Earlier layers capture simple patterns (grammar, named entities); deeper layers capture abstract relationships (tone, argument structure, intent). Most large models have 80–100+ layers.
+
+**Parameters** — each layer has millions of learned weights, adjusted during training to minimise prediction errors. A "70 billion parameter" model has 70 billion of these numbers. More parameters generally means more capacity to store patterns — but also more memory, slower inference, and higher cost.
+
+## Training vs Inference
+
+**Training** is when the model learns. It reads trillions of tokens of text from the internet, books, and code, and updates its parameters billions of times to get better at predicting each next token. Training a frontier model takes months and costs tens of millions of dollars in compute. You never pay for this — it happens once, at the lab.
+
+**Inference** is when you use the model. You send a prompt; the model generates one token at a time, each prediction conditioned on all previous tokens. This is what you're paying for with API usage. It's much cheaper than training, but can still add up at scale.
+
+<Note>
+"Fine-tuning" sits between the two: you take a pre-trained model and continue training it on a smaller, task-specific dataset. It adjusts the existing weights rather than learning from scratch — much cheaper than full training, but still not something you do casually.
+</Note>
+
+## Why Prediction Produces Intelligence
+
+It seems like predicting the next word should be trivial. But to predict the next token well across all of human text — fiction, code, legal documents, scientific papers, casual conversation — a model has to implicitly learn grammar, facts, reasoning patterns, writing styles, and cause-and-effect relationships.
+
+The model has never been explicitly taught any of these things. It learned them because they are useful for prediction.
+
+This is why LLMs can explain concepts, write code, translate languages, and summarise documents without any of those tasks being directly in their training objective. They are side effects of doing prediction well.
+
+## What This Means for How You Use Them
+
+Three practical takeaways:
+
+1. **They predict plausible next tokens, not true statements.** This is why they hallucinate — sometimes the most plausible continuation is a confident-sounding falsehood. Always verify factual claims against primary sources.
+2. **More context usually helps.** Because attention can see the whole context, adding relevant background to your prompt usually improves output quality.
+3. **They are not databases.** They don't look things up; they recall patterns from training. For up-to-date or private information, use retrieval-augmented generation (RAG) instead.

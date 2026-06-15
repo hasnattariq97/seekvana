@@ -1,0 +1,104 @@
+---
+title: "RAG Without the Hype: Retrieval That Actually Helps"
+description: "What retrieval-augmented generation is, why it exists, and a concrete example showing how to wire it up."
+pillar: "agentic-ai"
+slug: "rag-explained"
+difficulty: "beginner"
+readTime: 10
+author: "Seekvana"
+publishedAt: "2026-01-29"
+tags: ["RAG", "retrieval", "embeddings", "agentic AI", "LLMs"]
+featured: false
+---
+
+Language models have a knowledge problem. They know a lot — but only what was in their training data, only up to their training cutoff, and nothing about your private documents, your company's internal wiki, or last week's news.
+
+Retrieval-augmented generation (RAG) solves this by adding a retrieval step before generation: look up the most relevant documents, inject them into the context, then ask the model to answer using what it just read. The model stops relying on memorised facts and starts reasoning over provided evidence.
+
+<AdSlot />
+
+## Why RAG Exists
+
+Three problems push people toward RAG:
+
+**Knowledge cutoff** — LLMs are trained on data with a fixed end date. Anything that happened after that date is invisible to them. RAG lets you provide fresh information at query time instead of waiting for the next model release.
+
+**Private data** — your company's documentation, customer records, or internal knowledge base was not in the model's training data. RAG is the standard way to make a model useful over data it has never seen.
+
+**Hallucination reduction** — models sometimes confabulate facts they do not know. When you provide the source document, the model can answer from evidence rather than memory, which significantly improves factual reliability. Not perfectly — models can still misread documents — but meaningfully.
+
+## The Two-Step Process
+
+RAG has two phases that happen before the model generates a response:
+
+**1. Indexing (done once, or when documents change)**
+- Split your documents into chunks (typically 200–500 words each)
+- Convert each chunk to an **embedding** — a vector of numbers that represents its meaning
+- Store the chunks and their embeddings in a vector database
+
+**2. Retrieval (done at query time)**
+- Convert the user's query into an embedding using the same model
+- Find the chunks whose embeddings are closest to the query embedding (semantic similarity search)
+- Insert those chunks into the model's context window
+- Ask the model to answer the question based on the provided context
+
+```python
+import anthropic
+from some_vector_db import VectorDB  # e.g. Pinecone, Supabase, Chroma
+
+client = anthropic.Anthropic()
+db = VectorDB()
+
+def answer_with_rag(user_question: str) -> str:
+    # Step 1: retrieve the most relevant chunks
+    relevant_chunks = db.search(user_question, top_k=5)
+    context = "\n\n".join(chunk.text for chunk in relevant_chunks)
+
+    # Step 2: generate an answer using the retrieved context
+    response = client.messages.create(
+        model="claude-opus-4-8",
+        max_tokens=1024,
+        messages=[{
+            "role": "user",
+            "content": f"""Answer the question using only the provided context. 
+If the context does not contain the answer, say so.
+
+Context:
+{context}
+
+Question: {user_question}"""
+        }]
+    )
+    return response.content[0].text
+```
+
+<Note>
+The instruction "answer using only the provided context" is important. Without it, the model will blend retrieved content with its own training knowledge, making it harder to verify where answers came from.
+</Note>
+
+## RAG vs Fine-tuning
+
+Both RAG and fine-tuning can make a model more useful for a specific domain. They solve different problems:
+
+| | RAG | Fine-tuning |
+|---|---|---|
+| Best for | Factual Q&A over documents | Style, tone, task format |
+| Updates when data changes | Instantly | Requires retraining |
+| Cost | Low (retrieval + inference) | High (compute for training) |
+| Handles new documents | Yes | No |
+| Verifiable sources | Yes | No |
+
+The rule of thumb: if you want the model to *know* specific facts or answer from a document corpus, use RAG. If you want the model to *behave* differently — write in a particular style, follow a specific output format, stay in a certain persona — fine-tuning is the better tool.
+
+Many production systems use both: fine-tune for behaviour, RAG for knowledge.
+
+## Common Failure Modes
+
+RAG is not magic. The most common ways it goes wrong:
+
+- **Poor chunking** — chunks that are too short lose context; chunks that are too long dilute relevance signals. Experiment with chunk size per document type.
+- **Wrong embedding model** — the model used to embed chunks must be the same one used to embed queries. Mixing models produces nonsense similarity scores.
+- **Top-k too low** — retrieving only 1–2 chunks means the model often misses the answer. Start with 5 and tune from there.
+- **No source citation** — without asking the model to cite which chunk it used, you cannot verify its answers. Always ask for sources in production.
+
+RAG is the foundation most AI assistants, copilots, and document Q&A products are built on. Once you understand the basic loop, you can tune each part independently to improve quality.
