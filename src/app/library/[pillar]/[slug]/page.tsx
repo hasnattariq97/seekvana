@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         publishedTime: frontmatter.publishedAt,
         authors: [frontmatter.author],
         tags: frontmatter.tags,
-        images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+        images: [{ url: '/og-image.png', width: 1200, height: 630, alt: frontmatter.title }],
       },
       twitter: {
         card: 'summary_large_image',
@@ -86,6 +86,7 @@ function buildArticleJsonLd(
     },
     datePublished: frontmatter.publishedAt,
     url: `https://seekvana.com/library/${pillar}/${slug}`,
+    image: 'https://seekvana.com/og-image.png',
     keywords: frontmatter.tags.join(', '),
   }
 }

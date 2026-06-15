@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     title: "Seekvana — Learn AI, clearly",
     description:
       "Learn Agentic AI and all things AI — clear, well-sourced articles for everyone from beginners to advanced builders.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Seekvana — Learn AI, clearly" }],
   },
   twitter: {
     card: "summary_large_image",
