@@ -64,3 +64,9 @@ Three practical takeaways:
 1. **They predict plausible next tokens, not true statements.** This is why they hallucinate — sometimes the most plausible continuation is a confident-sounding falsehood. Always verify factual claims against primary sources.
 2. **More context usually helps.** Because attention can see the whole context, adding relevant background to your prompt usually improves output quality.
 3. **They are not databases.** They don't look things up; they recall patterns from training. For up-to-date or private information, use retrieval-augmented generation (RAG) instead.
+
+| Model size | Typical use case | Speed | Cost |
+|---|---|---|---|
+| Small (7B) | Simple tasks, local deployment | Fast | Low |
+| Medium (70B) | Most production tasks | Moderate | Moderate |
+| Large (400B+) | Complex reasoning, frontier tasks | Slow | High |
