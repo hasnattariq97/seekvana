@@ -39,10 +39,10 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
     <aside className="hidden xl:block w-56 shrink-0">
       <div className="sticky top-20 flex flex-col gap-6">
         <nav aria-label="Table of contents">
-          <p className="font-fraunces text-xs text-secondary uppercase tracking-widest mb-3">
+          <p className="font-inter text-xs font-semibold text-secondary mb-4">
             On this page
           </p>
-          <ul className="flex flex-col gap-1">
+          <ul className="flex flex-col gap-1 border-l border-border pl-3">
             {headings.map(({ id, text, level }) => (
               <li key={id} className={level === 3 ? 'ml-3' : ''}>
                 <a
@@ -51,10 +51,10 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
                     e.preventDefault()
                     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
                   }}
-                  className={`text-sm block py-1 transition-colors ${
+                  className={`text-sm block py-1 transition-colors duration-200 relative -ml-3 pl-3 border-l-2 ${
                     activeId === id
-                      ? 'text-accent font-medium'
-                      : 'text-secondary hover:text-primary'
+                      ? 'text-accent font-medium border-accent'
+                      : 'text-secondary hover:text-primary border-transparent'
                   }`}
                 >
                   {text}

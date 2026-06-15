@@ -23,12 +23,12 @@ import { cn } from "@/lib/utils";
 
 // ─── Nav data ─────────────────────────────────────────────────────────────────
 
-const LEARNING_PATHS = [
-  { label: "AI for Beginners",        href: "/paths/ai-for-beginners" },
-  { label: "Master Agentic AI",       href: "/paths/master-agentic-ai" },
-  { label: "Build Your First Agent",  href: "/paths/build-first-agent" },
-  { label: "Prompt Engineering",      href: "/paths/prompt-engineering" },
-  { label: "Beginner to AI Engineer", href: "/paths/beginner-to-engineer" },
+const LEARNING_PATHS_META = [
+  { label: "AI for Beginners",        href: "/paths/ai-for-beginners",     lessons: 8,  difficulty: "Beginner",     dotClass: "bg-accent" },
+  { label: "Master Agentic AI",       href: "/paths/master-agentic-ai",    lessons: 14, difficulty: "Intermediate", dotClass: "bg-info" },
+  { label: "Build Your First Agent",  href: "/paths/build-first-agent",    lessons: 10, difficulty: "Beginner",     dotClass: "bg-success" },
+  { label: "Prompt Engineering",      href: "/paths/prompt-engineering",   lessons: 6,  difficulty: "Beginner",     dotClass: "bg-path-amber" },
+  { label: "Beginner to AI Engineer", href: "/paths/beginner-to-engineer", lessons: 24, difficulty: "Advanced",     dotClass: "bg-path-purple" },
 ] as const;
 
 const PILLARS = [
@@ -88,23 +88,34 @@ function DesktopNav() {
             Learning Paths
           </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <motion.ul
+            <motion.div
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.15 }}
-              className="w-52 p-2 space-y-0.5"
+              className="w-72 p-2"
             >
-              {LEARNING_PATHS.map((path) => (
-                <li key={path.href}>
-                  <NavigationMenuLink
-                    href={path.href}
-                    className="block rounded-md px-3 py-2 text-sm text-primary hover:bg-surface-subtle hover:text-accent transition-colors"
-                  >
-                    {path.label}
-                  </NavigationMenuLink>
-                </li>
+              {LEARNING_PATHS_META.map((path) => (
+                <NavigationMenuLink
+                  key={path.href}
+                  href={path.href}
+                  className="flex items-start gap-3 rounded-lg px-3 py-2.5 hover:bg-surface-subtle transition-colors group"
+                >
+                  <span className={`w-2 h-2 rounded-full ${path.dotClass} mt-2 shrink-0`} />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-primary group-hover:text-accent transition-colors">{path.label}</p>
+                    <p className="text-xs text-secondary mt-0.5">{path.lessons} lessons · {path.difficulty}</p>
+                  </div>
+                </NavigationMenuLink>
               ))}
-            </motion.ul>
+              <div className="border-t border-border mt-1 pt-1">
+                <NavigationMenuLink
+                  href="/paths"
+                  className="block rounded-lg px-3 py-2 text-xs text-accent hover:bg-surface-subtle transition-colors font-medium"
+                >
+                  Browse all paths →
+                </NavigationMenuLink>
+              </div>
+            </motion.div>
           </NavigationMenuContent>
         </NavigationMenuItem>
 
@@ -125,12 +136,13 @@ function DesktopNav() {
                   key={pillar.href}
                   href={pillar.href}
                   className={cn(
-                    "block rounded-md px-3 py-2 text-sm hover:bg-surface-subtle transition-colors",
+                    "flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-surface-subtle transition-colors",
                     pillar.flagship
                       ? "text-accent font-medium"
                       : "text-primary"
                   )}
                 >
+                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${pillar.flagship ? "bg-accent" : "bg-border"}`} />
                   {pillar.label}
                 </NavigationMenuLink>
               ))}
@@ -173,23 +185,24 @@ function MobileNav({ onClose }: { onClose: () => void }) {
         </Link>
 
         <div className="pt-3 pb-1">
-          <p className="px-3 mb-1.5 text-xs font-medium text-secondary uppercase tracking-wider">
+          <p className="px-3 mb-1.5 text-xs font-semibold text-secondary">
             Learning Paths
           </p>
-          {LEARNING_PATHS.map((path) => (
+          {LEARNING_PATHS_META.map((path) => (
             <Link
               key={path.href}
               href={path.href}
               onClick={onClose}
-              className="block px-3 py-2 rounded-lg text-sm text-primary hover:bg-surface-subtle hover:text-accent transition-colors"
+              className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-primary hover:bg-surface-subtle hover:text-accent transition-colors"
             >
+              <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${path.dotClass}`} />
               {path.label}
             </Link>
           ))}
         </div>
 
         <div className="pt-3 pb-1">
-          <p className="px-3 mb-1.5 text-xs font-medium text-secondary uppercase tracking-wider">
+          <p className="px-3 mb-1.5 text-xs font-semibold text-secondary">
             Library
           </p>
           {PILLARS.map((pillar) => (

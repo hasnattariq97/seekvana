@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowRight, Search, X } from 'lucide-react'
+import { ArrowRight, BookOpen, Hash, Route, Search, X } from 'lucide-react'
 import { useSearch } from '@/context/search-context'
 import { SEARCH_DATA } from '@/lib/search-data'
 import type { SearchItem, SearchResults } from '@/lib/search-types'
@@ -30,16 +30,18 @@ function ResultGroup({
   selectedIndex,
   startIndex,
   onSelect,
+  icon: LucideIcon,
 }: {
   label: string
   items: SearchItem[]
   selectedIndex: number
   startIndex: number
   onSelect: (href: string) => void
+  icon: React.ComponentType<{ size?: number; className?: string }>
 }) {
   return (
     <div className="mb-1">
-      <p className="text-secondary text-xs uppercase tracking-wide px-3 py-2">
+      <p className="text-secondary text-xs font-semibold px-3 py-2">
         {label}
       </p>
       {items.map((item, i) => {
@@ -53,6 +55,7 @@ function ResultGroup({
               isSelected ? 'bg-accent-soft' : 'hover:bg-surface-subtle'
             }`}
           >
+            <LucideIcon size={14} className="text-secondary shrink-0 mt-0.5" />
             <span className="shrink-0 bg-accent-soft text-accent text-xs px-2 py-0.5 rounded font-medium mt-0.5">
               {item.category}
             </span>
@@ -162,9 +165,9 @@ export function SearchModal() {
           onClick={closeSearch}
         >
           <motion.div
-            initial={{ opacity: 0, scale: 0.97 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.97 }}
+            initial={{ opacity: 0, scale: 0.96, y: -8 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.96, y: -8 }}
             transition={{ duration: 0.2 }}
             className="max-w-2xl mx-auto mt-20 bg-surface rounded-2xl border border-border shadow-2xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
@@ -196,7 +199,7 @@ export function SearchModal() {
               {/* Empty state: popular search chips */}
               {isEmpty && (
                 <div className="p-5">
-                  <p className="text-secondary text-xs mb-3">Popular searches</p>
+                  <p className="text-secondary text-xs font-medium mb-3">Popular searches</p>
                   <div className="flex flex-wrap gap-2">
                     {['Agentic AI', 'RAG', 'Prompting', 'Fine-tuning', 'LLM'].map(
                       (term) => (
@@ -250,6 +253,7 @@ export function SearchModal() {
                       selectedIndex={selectedIndex}
                       startIndex={0}
                       onSelect={navigate}
+                      icon={Route}
                     />
                   )}
                   {results.articles.length > 0 && (
@@ -259,6 +263,7 @@ export function SearchModal() {
                       selectedIndex={selectedIndex}
                       startIndex={results.paths.length}
                       onSelect={navigate}
+                      icon={BookOpen}
                     />
                   )}
                   {results.glossary.length > 0 && (
@@ -268,10 +273,18 @@ export function SearchModal() {
                       selectedIndex={selectedIndex}
                       startIndex={results.paths.length + results.articles.length}
                       onSelect={navigate}
+                      icon={Hash}
                     />
                   )}
                 </div>
               )}
+            </div>
+
+            {/* Keyboard shortcut footer */}
+            <div className="border-t border-border px-5 py-2.5 flex items-center gap-4 text-xs text-secondary">
+              <span>↑↓ navigate</span>
+              <span>↵ open</span>
+              <span>esc close</span>
             </div>
           </motion.div>
         </motion.div>

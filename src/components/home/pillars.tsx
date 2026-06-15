@@ -96,9 +96,12 @@ export function Pillars() {
   return (
     <section className="bg-surface-subtle py-16 px-4">
       <div className="max-w-screen-xl mx-auto">
-        <h2 className="font-fraunces text-2xl text-primary mb-8">
+        <h2 className="font-fraunces text-2xl text-primary">
           Everything AI, in one place
         </h2>
+        <p className="font-inter text-sm text-secondary mt-1 mb-8">
+          Nine topic areas covering everything from AI basics to advanced agentic systems.
+        </p>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {PILLARS.map((pillar, i) => {
@@ -119,21 +122,44 @@ export function Pillars() {
                 <Link
                   href={pillar.href}
                   className={cn(
-                    "block bg-surface rounded-xl border p-5 hover:shadow-md transition-shadow h-full focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:outline-none",
+                    "group relative block bg-surface rounded-xl border p-5 transition-shadow h-full focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:outline-none",
                     pillar.flagship
-                      ? "border-accent border-2"
-                      : "border-border"
+                      ? "border-accent border-2 hover:shadow-lg"
+                      : "border-border hover:shadow-lg hover:bg-surface-subtle"
                   )}
                 >
-                  <Icon size={24} className="text-accent" aria-hidden="true" />
+                  {pillar.flagship && (
+                    <span className="absolute top-3 right-3 text-xs bg-accent text-white px-2 py-0.5 rounded-full font-medium">
+                      Flagship
+                    </span>
+                  )}
+
+                  <span
+                    className={cn(
+                      "inline-flex items-center justify-center w-10 h-10 rounded-xl",
+                      pillar.flagship
+                        ? "bg-accent text-white"
+                        : "bg-accent-soft text-accent"
+                    )}
+                  >
+                    <Icon size={20} aria-hidden="true" />
+                  </span>
+
                   <h3 className="font-fraunces text-base text-primary mt-3">
                     {pillar.title}
                   </h3>
                   <p className="font-inter text-sm text-secondary mt-1">
                     {pillar.description}
                   </p>
-                  <span className="block text-accent text-xs mt-3" aria-hidden="true">
-                    Explore →
+
+                  <span
+                    className="flex items-center gap-1 text-accent text-xs mt-3 font-medium"
+                    aria-hidden="true"
+                  >
+                    Explore{" "}
+                    <span className="transition-transform group-hover:translate-x-0.5">
+                      →
+                    </span>
                   </span>
                 </Link>
               </motion.div>

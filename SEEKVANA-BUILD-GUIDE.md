@@ -773,7 +773,7 @@ Update this as you complete each phase:
 | 4 | Homepage | ✅ Done |
 | 5 | Article/lesson page | ✅ Done |
 | 6 | Search modal | ✅ Done |
-| 7 | Deploy to Vercel | 🔶 Hardening done — deploy pending |
+| 7 | Deploy to Vercel | ✅ Done |
 | 8 | MDX content system | ⬜ Todo |
 
 ---

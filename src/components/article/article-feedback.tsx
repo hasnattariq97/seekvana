@@ -1,14 +1,16 @@
 'use client'
 
 import { useState } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 import { ThumbsUp, ThumbsDown } from 'lucide-react'
 
 export function ArticleFeedback() {
   const [vote, setVote] = useState<'up' | 'down' | null>(null)
+  const shouldReduceMotion = useReducedMotion()
 
   return (
-    <div className="flex flex-wrap items-center gap-4 py-6">
-      <span className="text-sm text-secondary font-medium">Was this helpful?</span>
+    <div className="bg-surface-subtle rounded-xl p-5 flex flex-wrap items-center gap-4">
+      <span className="text-sm text-primary font-medium">Was this article helpful?</span>
       <div className="flex gap-2">
         <button
           onClick={() => setVote('up')}
@@ -36,7 +38,13 @@ export function ArticleFeedback() {
         </button>
       </div>
       {vote && (
-        <span className="text-sm text-secondary">Thanks for your feedback!</span>
+        <motion.span
+          initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 4 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-sm text-secondary"
+        >
+          Thanks! This helps us improve Seekvana. 🙏
+        </motion.span>
       )}
     </div>
   )

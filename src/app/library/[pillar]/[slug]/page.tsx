@@ -116,7 +116,7 @@ export default async function ArticlePage({ params }: PageProps) {
       />
       <ReadingProgress />
 
-      <div className="max-w-7xl mx-auto px-4 py-10 flex gap-8 items-start">
+      <div className="max-w-7xl mx-auto px-4 py-12 flex gap-8 items-start">
         {/* Left sidebar */}
         <PillarSidebar pillar={pillar} currentSlug={slug} />
 
@@ -131,14 +131,14 @@ export default async function ArticlePage({ params }: PageProps) {
               <Link href="/library" className="hover:text-accent transition-colors">
                 Library
               </Link>
-              <span aria-hidden="true">/</span>
+              <svg className="w-3 h-3 text-border" viewBox="0 0 6 10" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M1 1l4 4-4 4"/></svg>
               <Link
                 href={`/library/${pillar}`}
                 className="hover:text-accent transition-colors"
               >
                 {pillarName}
               </Link>
-              <span aria-hidden="true">/</span>
+              <svg className="w-3 h-3 text-border" viewBox="0 0 6 10" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M1 1l4 4-4 4"/></svg>
               <span className="text-primary truncate max-w-[200px]">
                 {frontmatter.title}
               </span>
@@ -156,10 +156,10 @@ export default async function ArticlePage({ params }: PageProps) {
                   {frontmatter.difficulty}
                 </span>
               </div>
-              <h1 className="font-fraunces text-4xl text-primary leading-tight">
+              <h1 className="font-fraunces text-4xl md:text-5xl text-primary leading-tight text-balance">
                 {frontmatter.title}
               </h1>
-              <p className="text-lg text-secondary mt-3 leading-relaxed">
+              <p className="text-xl text-secondary mt-4 leading-relaxed border-l-2 border-accent-soft pl-4">
                 {frontmatter.description}
               </p>
               <div className="flex flex-wrap gap-x-4 gap-y-1 mt-4 text-sm text-secondary">
@@ -175,6 +175,7 @@ export default async function ArticlePage({ params }: PageProps) {
                 <span aria-hidden="true">·</span>
                 <span>{frontmatter.readTime} min read</span>
               </div>
+              <div className="mt-6 border-t border-border" />
             </header>
 
             {/* Article body */}

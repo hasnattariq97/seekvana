@@ -112,38 +112,34 @@ function ArticleGrid({ articles }: { articles: Article[] }) {
             aria-label={`Read: ${article.title}`}
           />
 
-          {/* Placeholder image area */}
-          <div className={`h-40 ${article.bgClass}`} aria-hidden="true" />
+          {/* Editorial image area with gradient overlay and category badge */}
+          <div className={`relative h-48 ${article.bgClass}`} aria-hidden="true">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+            <span className="absolute bottom-3 left-3 bg-accent-soft text-accent text-xs rounded-full px-2.5 py-0.5 font-medium backdrop-blur-sm">
+              {article.category}
+            </span>
+          </div>
 
           <div className="p-5 relative z-10">
-            <div className="flex gap-2 flex-wrap">
-              <span className="bg-accent-soft text-accent text-xs rounded-full px-2.5 py-0.5 font-medium">
-                {article.category}
-              </span>
-              <span
-                className={`text-xs rounded-full px-2.5 py-0.5 font-medium ${DIFFICULTY_BADGE[article.difficulty]}`}
-              >
-                {article.difficulty}
-              </span>
-            </div>
+            {/* Difficulty badge stands alone now that category is on the image */}
+            <span
+              className={`inline-block text-xs rounded-full px-2.5 py-0.5 font-medium ${DIFFICULTY_BADGE[article.difficulty]}`}
+            >
+              {article.difficulty}
+            </span>
 
-            <h3 className="font-fraunces text-base text-primary mt-2 leading-snug">
+            <h3 className="font-fraunces text-lg text-primary mt-2 leading-snug">
               {article.title}
             </h3>
             <p className="font-inter text-sm text-secondary mt-1 line-clamp-2">
               {article.excerpt}
             </p>
 
-            <div className="flex items-center justify-between mt-3">
+            <div className="flex items-center gap-3 mt-3">
+              <span className="text-xs text-secondary">{article.readTime} min read</span>
+              <span className="text-secondary text-xs">·</span>
               <span className="text-xs text-secondary">{article.author}</span>
-              <span className="text-xs text-secondary">
-                {article.readTime} min read
-              </span>
             </div>
-
-            <span className="block mt-3 text-sm text-accent font-medium" aria-hidden="true">
-              Read article →
-            </span>
           </div>
         </motion.article>
       ))}
@@ -155,9 +151,12 @@ export function RecentArticles() {
   return (
     <section className="bg-canvas py-16 px-4">
       <div className="max-w-screen-xl mx-auto">
-        <h2 className="font-fraunces text-2xl text-primary mb-8">
+        <h2 className="font-fraunces text-2xl text-primary">
           Fresh from the library
         </h2>
+        <p className="font-inter text-sm text-secondary mt-1 mb-6">
+          Recent articles across AI topics — updated regularly.
+        </p>
 
         <Tabs defaultValue="All">
           <TabsList
