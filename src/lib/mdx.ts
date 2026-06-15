@@ -61,3 +61,43 @@ export function getArticleSource(pillar: string, slug: string): {
     headings: extractHeadings(content),
   }
 }
+
+export interface ArticleMeta {
+  frontmatter: ArticleFrontmatter
+  pillar: string
+  slug: string
+}
+
+export function getAllArticles(): ArticleMeta[] {
+  const articlesDir = path.join(process.cwd(), 'src', 'content', 'articles')
+
+  if (!fs.existsSync(articlesDir)) return []
+
+  const pillars = fs
+    .readdirSync(articlesDir, { withFileTypes: true })
+    .filter((d) => d.isDirectory())
+    .map((d) => d.name)
+
+  const articles: ArticleMeta[] = []
+
+  for (const pillar of pillars) {
+    const pillarDir = path.join(articlesDir, pillar)
+    const files = fs
+      .readdirSync(pillarDir)
+      .filter((f) => f.endsWith('.mdx'))
+
+    for (const file of files) {
+      const slug = file.replace(/\.mdx$/, '')
+      const filePath = path.join(pillarDir, file)
+      const raw = fs.readFileSync(filePath, 'utf-8')
+      const { data } = matter(raw)
+      articles.push({ frontmatter: data as ArticleFrontmatter, pillar, slug })
+    }
+  }
+
+  return articles
+}
+
+export function getArticlesByPillar(pillar: string): ArticleMeta[] {
+  return getAllArticles().filter((a) => a.pillar === pillar)
+}
