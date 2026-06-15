@@ -25,9 +25,28 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Seekvana — Learn AI, clearly",
+  metadataBase: new URL("https://seekvana.com"),
+  title: {
+    default: "Seekvana — Learn AI, clearly",
+    template: "%s — Seekvana",
+  },
   description:
     "Learn Agentic AI and all things AI — clear, well-sourced articles for everyone from beginners to advanced builders.",
+  openGraph: {
+    type: "website",
+    siteName: "Seekvana",
+    title: "Seekvana — Learn AI, clearly",
+    description:
+      "Learn Agentic AI and all things AI — clear, well-sourced articles for everyone from beginners to advanced builders.",
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Seekvana — Learn AI, clearly",
+    description:
+      "Learn Agentic AI and all things AI — clear, well-sourced articles for everyone from beginners to advanced builders.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({
@@ -41,6 +60,14 @@ export default function RootLayout({
       className={`${fraunces.variable} ${inter.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className="bg-canvas min-h-screen antialiased">
         <ThemeProvider
           attribute="class"
