@@ -24,22 +24,21 @@ const FOOTER_LINKS = {
 
 function FooterLogo() {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-1.5">
       <svg
-        width="20"
-        height="20"
-        viewBox="0 0 20 20"
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
         fill="none"
         aria-hidden="true"
         className="text-accent"
       >
-        <circle cx="10" cy="10" r="7.5" stroke="currentColor" strokeWidth="1.5" />
-        <path d="M10 5 L12.5 9.5 L10 11.5 L7.5 9.5 Z" fill="currentColor" />
-        <circle cx="10" cy="10" r="1.5" fill="currentColor" />
+        <path d="M12 1.5 L10.5 10.5 L12 12 L13.5 10.5 Z" fill="currentColor" />
+        <path d="M12 22.5 L10.5 13.5 L12 12 L13.5 13.5 Z" fill="currentColor" fillOpacity="0.14" />
+        <path d="M22.5 12 L13.5 10.5 L12 12 L13.5 13.5 Z" fill="currentColor" fillOpacity="0.28" />
+        <path d="M1.5 12 L10.5 10.5 L12 12 L10.5 13.5 Z" fill="currentColor" fillOpacity="0.28" />
       </svg>
-      <span className="font-fraunces font-medium text-lg text-primary leading-none">
-        Seekvana
-      </span>
+      <span className="font-fraunces font-bold text-lg leading-none"><span className="text-primary">Seek</span><span className="text-accent">vana</span></span>
     </div>
   );
 }
