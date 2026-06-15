@@ -10,16 +10,6 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 
-const MOCK_PILLAR_ARTICLES: Record<string, { title: string; slug: string }[]> = {
-  'agentic-ai': [
-    { title: 'What is an AI Agent?', slug: 'what-is-an-agent' },
-    { title: 'Tool Use: Giving Models Hands', slug: 'tool-use-explained' },
-    { title: 'Memory in AI Agents', slug: 'agent-memory' },
-    { title: 'Planning and Reasoning', slug: 'agent-planning' },
-    { title: 'Multi-Agent Systems', slug: 'multi-agent-systems' },
-  ],
-}
-
 const PILLAR_NAMES: Record<string, string> = {
   'agentic-ai': 'Agentic AI',
   'ai-foundations': 'AI Foundations',
@@ -35,10 +25,10 @@ const PILLAR_NAMES: Record<string, string> = {
 interface PillarSidebarProps {
   pillar: string
   currentSlug: string
+  articles: { title: string; slug: string }[]
 }
 
-function SidebarContent({ pillar, currentSlug }: PillarSidebarProps) {
-  const articles = MOCK_PILLAR_ARTICLES[pillar] ?? []
+function SidebarContent({ pillar, currentSlug, articles }: PillarSidebarProps) {
   const pillarName = PILLAR_NAMES[pillar] ?? pillar
 
   return (
@@ -69,13 +59,13 @@ function SidebarContent({ pillar, currentSlug }: PillarSidebarProps) {
   )
 }
 
-export function PillarSidebar({ pillar, currentSlug }: PillarSidebarProps) {
+export function PillarSidebar({ pillar, currentSlug, articles }: PillarSidebarProps) {
   return (
     <>
       {/* Desktop sticky sidebar — hidden below lg */}
       <aside className="hidden lg:block w-64 shrink-0">
         <div className="sticky top-20 overflow-y-auto max-h-[calc(100vh-5rem)] pr-2">
-          <SidebarContent pillar={pillar} currentSlug={currentSlug} />
+          <SidebarContent pillar={pillar} currentSlug={currentSlug} articles={articles} />
         </div>
       </aside>
 
@@ -91,7 +81,7 @@ export function PillarSidebar({ pillar, currentSlug }: PillarSidebarProps) {
               <SheetTitle className="text-left font-fraunces">Contents</SheetTitle>
             </SheetHeader>
             <div className="mt-6">
-              <SidebarContent pillar={pillar} currentSlug={currentSlug} />
+              <SidebarContent pillar={pillar} currentSlug={currentSlug} articles={articles} />
             </div>
           </SheetContent>
         </Sheet>
