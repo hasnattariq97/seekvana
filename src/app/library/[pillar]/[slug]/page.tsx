@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { MDXRemote } from 'next-mdx-remote/rsc'
-import { getArticleSource } from '@/lib/mdx'
+import { getArticleSource, type ArticleFrontmatter } from '@/lib/mdx'
 import { getMDXComponents } from '@/components/mdx/mdx-components'
 import { ReadingProgress } from '@/components/article/reading-progress'
 import { PillarSidebar } from '@/components/article/pillar-sidebar'
@@ -37,12 +37,56 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { pillar, slug } = await params
   try {
     const { frontmatter } = getArticleSource(pillar, slug)
+    const url = `https://seekvana.com/library/${pillar}/${slug}`
     return {
-      title: `${frontmatter.title} — Seekvana`,
+      title: frontmatter.title,
       description: frontmatter.description,
+      alternates: { canonical: url },
+      openGraph: {
+        type: 'article',
+        url,
+        title: frontmatter.title,
+        description: frontmatter.description,
+        publishedTime: frontmatter.publishedAt,
+        authors: [frontmatter.author],
+        tags: frontmatter.tags,
+        images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: frontmatter.title,
+        description: frontmatter.description,
+        images: ['/og-image.png'],
+      },
     }
   } catch {
     return { title: 'Article — Seekvana' }
+  }
+}
+
+function buildArticleJsonLd(
+  frontmatter: ArticleFrontmatter,
+  pillar: string,
+  slug: string
+) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: frontmatter.title,
+    description: frontmatter.description,
+    author: {
+      '@type': 'Organization',
+      name: frontmatter.author,
+      url: 'https://seekvana.com',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Seekvana',
+      url: 'https://seekvana.com',
+    },
+    datePublished: frontmatter.publishedAt,
+    url: `https://seekvana.com/library/${pillar}/${slug}`,
+    keywords: frontmatter.tags.join(', '),
   }
 }
 
@@ -63,6 +107,12 @@ export default async function ArticlePage({ params }: PageProps) {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(buildArticleJsonLd(frontmatter, pillar, slug)),
+        }}
+      />
       <ReadingProgress />
 
       <div className="max-w-7xl mx-auto px-4 py-10 flex gap-8 items-start">
