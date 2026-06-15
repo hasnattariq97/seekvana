@@ -3,6 +3,7 @@ import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { SearchProvider } from "@/context/search-context";
 import { Navbar } from "@/components/layout/navbar";
+import { SearchModal } from "@/components/search/search-modal";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -50,6 +51,7 @@ export default function RootLayout({
           <SearchProvider>
             <Navbar />
             <main>{children}</main>
+            <SearchModal />
           </SearchProvider>
         </ThemeProvider>
       </body>
