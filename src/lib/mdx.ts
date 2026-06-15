@@ -101,3 +101,29 @@ export function getAllArticles(): ArticleMeta[] {
 export function getArticlesByPillar(pillar: string): ArticleMeta[] {
   return getAllArticles().filter((a) => a.pillar === pillar)
 }
+
+export function getFeaturedArticles(): ArticleMeta[] {
+  return getAllArticles().filter((a) => a.frontmatter.featured)
+}
+
+export interface PathDefinition {
+  slug: string
+  title: string
+  description: string
+  difficulty: 'beginner' | 'intermediate' | 'advanced'
+  lessonCount: number
+  href: string
+  colorClass: string
+}
+
+export function getAllPaths(): PathDefinition[] {
+  const pathsDir = path.join(process.cwd(), 'src', 'content', 'paths')
+  if (!fs.existsSync(pathsDir)) return []
+  return fs
+    .readdirSync(pathsDir)
+    .filter((f) => f.endsWith('.json'))
+    .map((f) => {
+      const raw = fs.readFileSync(path.join(pathsDir, f), 'utf-8')
+      return JSON.parse(raw) as PathDefinition
+    })
+}
