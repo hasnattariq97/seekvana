@@ -77,33 +77,29 @@ export function SearchModal() {
 
   const [query, setQuery] = useState('')
   const [debouncedQuery, setDebouncedQuery] = useState('')
-  const [isSearching, setIsSearching] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(-1)
 
-  // Debounce: show skeleton for 200ms then commit the query
+  // Derived: true while the debounce timer is pending (query typed but not yet committed)
+  const isSearching = Boolean(query.trim()) && query.trim() !== debouncedQuery.trim()
+
+  // Debounce: commit the query after 200ms idle, then reset selection
   useEffect(() => {
-    if (query) setIsSearching(true)
     const timer = setTimeout(() => {
       setDebouncedQuery(query)
-      setIsSearching(false)
+      setSelectedIndex(-1)
     }, 200)
     return () => clearTimeout(timer)
   }, [query])
 
-  // Reset selection when debounced query changes
-  useEffect(() => {
-    setSelectedIndex(-1)
-  }, [debouncedQuery])
-
   // Auto-focus input and reset state on open
   useEffect(() => {
     if (isSearchOpen) {
-      setQuery('')
-      setDebouncedQuery('')
-      setSelectedIndex(-1)
-      setIsSearching(false)
-      const timer = setTimeout(() => inputRef.current?.focus(), 50)
-      return () => clearTimeout(timer)
+      setTimeout(() => {
+        setQuery('')
+        setDebouncedQuery('')
+        setSelectedIndex(-1)
+        inputRef.current?.focus()
+      }, 0)
     }
   }, [isSearchOpen])
 
@@ -126,7 +122,6 @@ export function SearchModal() {
   const clearQuery = () => {
     setQuery('')
     setDebouncedQuery('')
-    setIsSearching(false)
     inputRef.current?.focus()
   }
 
