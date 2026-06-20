@@ -131,3 +131,43 @@ export function getAllPaths(): PathDefinition[] {
       return JSON.parse(raw) as PathDefinition
     })
 }
+
+export interface PathTopic {
+  id: string
+  title: string
+  articlePillar?: string
+  articleSlug?: string
+}
+
+export interface PathModule {
+  id: string
+  title: string
+  description: string
+  topics: PathTopic[]
+}
+
+export interface PathData extends PathDefinition {
+  modules: PathModule[]
+  nextPath?: {
+    title: string
+    slug: string
+    lessonCount: number
+    difficulty: 'beginner' | 'intermediate' | 'advanced'
+  }
+}
+
+export function getPathBySlug(slug: string): PathData | null {
+  const filePath = path.join(process.cwd(), 'src', 'content', 'paths', `${slug}.json`)
+  if (!fs.existsSync(filePath)) return null
+  const raw = fs.readFileSync(filePath, 'utf-8')
+  return JSON.parse(raw) as PathData
+}
+
+export function generatePathStaticParams(): { slug: string }[] {
+  const pathsDir = path.join(process.cwd(), 'src', 'content', 'paths')
+  if (!fs.existsSync(pathsDir)) return []
+  return fs
+    .readdirSync(pathsDir)
+    .filter((f) => f.endsWith('.json'))
+    .map((f) => ({ slug: f.replace(/\.json$/, '') }))
+}
