@@ -1,12 +1,14 @@
 // src/components/mdx/math.tsx
 import katex from 'katex'
+import type { ReactNode } from 'react'
 
 interface MathProps {
-  children: string
+  children: ReactNode
 }
 
 export function Math({ children }: MathProps) {
-  const html = katex.renderToString(children, {
+  const input = typeof children === 'string' ? children : String(children ?? '')
+  const html = katex.renderToString(input, {
     throwOnError: false,
     displayMode: false,
   })
@@ -19,7 +21,8 @@ export function Math({ children }: MathProps) {
 }
 
 export function MathBlock({ children }: MathProps) {
-  const html = katex.renderToString(children, {
+  const input = typeof children === 'string' ? children : String(children ?? '')
+  const html = katex.renderToString(input, {
     throwOnError: false,
     displayMode: true,
   })

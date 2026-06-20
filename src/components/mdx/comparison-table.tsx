@@ -4,7 +4,7 @@ interface ComparisonTableProps {
   highlight?: string
 }
 
-export function ComparisonTable({ columns, rows, highlight }: ComparisonTableProps) {
+export function ComparisonTable({ columns = [], rows = [], highlight }: ComparisonTableProps) {
   return (
     <div className="my-8 overflow-x-auto">
       <table className="w-full border-collapse text-sm">

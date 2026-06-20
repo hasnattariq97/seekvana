@@ -9,7 +9,7 @@ interface QuizProps {
   explanation: string
 }
 
-export function Quiz({ question, options, correct, explanation }: QuizProps) {
+export function Quiz({ question, options = [], correct, explanation }: QuizProps) {
   const [selected, setSelected] = useState<number | null>(null)
   const answered = selected !== null
 
