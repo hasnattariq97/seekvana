@@ -57,13 +57,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         publishedTime: frontmatter.publishedAt,
         authors: [frontmatter.author],
         tags: frontmatter.tags,
-        images: [{ url: '/og-image.png', width: 1200, height: 630, alt: frontmatter.title }],
+        images: [{
+          url: frontmatter.coverImage
+            ? `https://seekvana.com${frontmatter.coverImage}`
+            : 'https://seekvana.com/og-image.png',
+          width: 1200,
+          height: 630,
+          alt: frontmatter.title,
+        }],
       },
       twitter: {
         card: 'summary_large_image',
         title: frontmatter.title,
         description: frontmatter.description,
-        images: ['/og-image.png'],
+        images: [frontmatter.coverImage
+          ? `https://seekvana.com${frontmatter.coverImage}`
+          : 'https://seekvana.com/og-image.png'],
       },
     }
   } catch {
