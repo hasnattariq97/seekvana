@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { MDXRemote } from 'next-mdx-remote/rsc'
+import { createClient } from '@supabase/supabase-js'
 import { getArticleSource, getAllArticles, getArticlesByPillar, type ArticleFrontmatter } from '@/lib/mdx'
 import { getMDXComponents } from '@/components/mdx/mdx-components'
 import { ReadingProgress } from '@/components/article/reading-progress'
@@ -9,6 +10,8 @@ import { PillarSidebar } from '@/components/article/pillar-sidebar'
 import { TableOfContents } from '@/components/article/table-of-contents'
 import { ArticleFeedback } from '@/components/article/article-feedback'
 import { ArticleNav } from '@/components/article/article-nav'
+import type { CommentWithReplies } from '@/types/comments'
+import { ArticleComments } from '@/components/article/article-comments'
 
 interface PageProps {
   params: Promise<{ pillar: string; slug: string }>
@@ -118,6 +121,25 @@ export default async function ArticlePage({ params }: PageProps) {
   }
 
   const { source, frontmatter, headings } = articleData
+
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
+  const { data: rawComments } = await supabase
+    .from('comments')
+    .select('*')
+    .eq('article_id', `${pillar}/${slug}`)
+    .order('created_at', { ascending: false })
+
+  const allRows = rawComments ?? []
+  const topLevel = allRows.filter((c) => !c.parent_id)
+  const replies = allRows.filter((c) => c.parent_id)
+  const comments: CommentWithReplies[] = topLevel.map((c) => ({
+    ...c,
+    replies: replies.filter((r) => r.parent_id === c.id),
+  }))
+
   const pillarName = PILLAR_NAMES[pillar] ?? pillar
   const pillarArticles = getArticlesByPillar(pillar).map((a) => ({
     title: a.frontmatter.title,
@@ -223,6 +245,13 @@ export default async function ArticlePage({ params }: PageProps) {
             {/* Feedback */}
             <hr className="border-border my-8" />
             <ArticleFeedback />
+
+            {/* Comments */}
+            <hr className="border-border my-8" />
+            <ArticleComments
+              articleId={`${pillar}/${slug}`}
+              initialComments={comments}
+            />
 
             {/* Prev/Next + Related */}
             <ArticleNav pillar={pillar} slug={slug} />
