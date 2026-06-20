@@ -11,8 +11,8 @@ const PILLAR_SLUGS = [
   "agentic-ai",
   "building-with-ai",
   "ai-tools",
-  "use-cases",
-  "concepts-theory",
+  "ai-in-practice",
+  "prompt-engineering",
   "ethics-safety",
   "careers",
 ] as const;

@@ -14,8 +14,8 @@ const PILLAR_NAMES: Record<string, string> = {
   'large-language-models': 'Large Language Models',
   'building-with-ai': 'Building with AI',
   'ai-tools': 'AI Tools & Comparisons',
-  'use-cases': 'Use Cases & Workflows',
-  'concepts-theory': 'Concepts & Theory',
+  'ai-in-practice': 'AI in Practice',
+  'prompt-engineering': 'Prompt Engineering',
   'ethics-safety': 'Ethics, Safety & Governance',
   careers: 'Careers & Learning',
 }
@@ -26,8 +26,8 @@ const PILLAR_DESCRIPTIONS: Record<string, string> = {
   'large-language-models': 'Tokens, context windows, RAG, fine-tuning, and how LLMs actually think.',
   'building-with-ai': 'APIs, SDKs, evals, deployment, and cost management for builders.',
   'ai-tools': 'Reviews and comparisons of the best AI tools and platforms.',
-  'use-cases': 'Real workflows: writing, coding, research, and automation with AI.',
-  'concepts-theory': 'Transformers, embeddings, reinforcement learning — the mechanics under the hood.',
+  'ai-in-practice': 'Real workflows for writing, research, coding, and automation — no deep technical knowledge required.',
+  'prompt-engineering': 'Write prompts that get results. Techniques, patterns, and frameworks that actually work.',
   'ethics-safety': 'Responsible AI, alignment, risks, and governance.',
   careers: 'How to learn AI, career paths, roles, and building your portfolio.',
 }

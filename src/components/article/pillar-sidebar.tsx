@@ -16,8 +16,8 @@ const PILLAR_NAMES: Record<string, string> = {
   'large-language-models': 'Large Language Models',
   'building-with-ai': 'Building with AI',
   'ai-tools': 'AI Tools',
-  'use-cases': 'Use Cases',
-  'concepts-theory': 'Concepts & Theory',
+  'ai-in-practice': 'AI in Practice',
+  'prompt-engineering': 'Prompt Engineering',
   'ethics-safety': 'Ethics & Safety',
   careers: 'Careers',
 }

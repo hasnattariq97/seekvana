@@ -37,8 +37,8 @@ const PILLARS = [
   { label: "Agentic AI",             href: "/library/agentic-ai",            flagship: true  },
   { label: "Building with AI",       href: "/library/building-with-ai",      flagship: false },
   { label: "AI Tools & Comparisons", href: "/library/ai-tools",              flagship: false },
-  { label: "Use Cases",              href: "/library/use-cases",             flagship: false },
-  { label: "Concepts & Theory",      href: "/library/concepts-theory",       flagship: false },
+  { label: "AI in Practice",         href: "/library/ai-in-practice",        flagship: false },
+  { label: "Prompt Engineering",     href: "/library/prompt-engineering",    flagship: false },
   { label: "Ethics & Safety",        href: "/library/ethics-safety",         flagship: false },
   { label: "Careers",                href: "/library/careers",               flagship: false },
 ] as const;
