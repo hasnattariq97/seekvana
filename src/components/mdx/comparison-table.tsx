@@ -13,6 +13,7 @@ export function ComparisonTable({ columns, rows, highlight }: ComparisonTablePro
             {columns.map((col, i) => (
               <th
                 key={i}
+                scope="col"
                 className={`border border-border px-4 py-3 text-left font-semibold ${
                   highlight && col === highlight
                     ? 'bg-accent-soft text-accent'

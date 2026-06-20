@@ -38,6 +38,7 @@ export function Quiz({ question, options, correct, explanation }: QuizProps) {
               className={cls}
               onClick={() => !answered && setSelected(i)}
               disabled={answered}
+              aria-pressed={answered ? i === selected : undefined}
             >
               {answered && i === correct && (
                 <CheckCircle className="w-4 h-4 text-green-600 shrink-0" />
@@ -52,6 +53,7 @@ export function Quiz({ question, options, correct, explanation }: QuizProps) {
       </div>
       {answered && (
         <div
+          role="alert"
           className={`mt-4 p-4 rounded-lg text-sm ${
             selected === correct
               ? 'bg-green-50 dark:bg-green-950/30 text-green-800 dark:text-green-200'

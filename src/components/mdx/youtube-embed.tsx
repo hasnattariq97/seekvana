@@ -13,6 +13,7 @@ export function YouTubeEmbed({ id, title, caption }: YouTubeEmbedProps) {
           title={title}
           allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
+          sandbox="allow-scripts allow-same-origin allow-presentation"
           loading="lazy"
           className="absolute inset-0 w-full h-full"
         />
