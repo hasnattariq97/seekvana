@@ -16,6 +16,7 @@ import { Chart } from './chart'
 import { Math, MathBlock } from './math'
 import { CodePlayground } from './code-playground'
 import { DownloadButton } from './download-button'
+import { FAQ, FAQItem } from './faq'
 
 function slugify(text: string): string {
   return String(text)
@@ -158,5 +159,7 @@ export function getMDXComponents(): MDXComponents {
     MathBlock,
     CodePlayground,
     DownloadButton,
+    FAQ,
+    FAQItem,
   }
 }
