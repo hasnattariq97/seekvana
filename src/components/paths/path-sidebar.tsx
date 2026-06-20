@@ -31,7 +31,7 @@ export function PathSidebar({ path }: PathSidebarProps) {
           href="#modules"
           className="flex items-center justify-between w-full bg-accent hover:bg-accent-deep text-white rounded-[10px] px-4 py-3.5 text-[13.5px] font-semibold transition-colors duration-150 mb-5"
         >
-          <span>Start Module 00</span>
+          <span>Start Module 01</span>
           <ArrowRight size={15} strokeWidth={2} />
         </Link>
 

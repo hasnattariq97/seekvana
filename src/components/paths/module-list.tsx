@@ -24,7 +24,7 @@ export function ModuleList({ modules, totalTopics }: ModuleListProps) {
           <ModuleItem
             key={module.id}
             module={module}
-            defaultOpen={module.id === '00'}
+            defaultOpen={module.id === '01'}
           />
         ))}
       </div>

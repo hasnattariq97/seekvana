@@ -10,16 +10,16 @@ interface PathHeroProps {
 }
 
 const NODE_LABELS: Record<string, string> = {
-  '00': 'AI Landscape',
-  '01': 'Terminal',
-  '02': 'Dev Setup',
-  '03': 'GitHub',
-  '04': 'Python',
-  '05': 'Web Basics',
-  '06': 'Backend',
-  '07': 'AI Tools',
-  '08': 'Deploy',
-  '09': 'Live App',
+  '01': 'AI Landscape',
+  '02': 'Terminal',
+  '03': 'Dev Setup',
+  '04': 'GitHub',
+  '05': 'Python',
+  '06': 'Web Basics',
+  '07': 'Backend',
+  '08': 'AI Tools',
+  '09': 'Deploy',
+  '10': 'Live App',
 }
 
 export function PathHero({ path }: PathHeroProps) {
@@ -134,7 +134,7 @@ export function PathHero({ path }: PathHeroProps) {
           href="#modules"
           className="inline-flex items-center gap-2 bg-accent hover:bg-accent-deep text-white rounded-[10px] px-6 py-3.5 text-[15px] font-semibold transition-all duration-150 hover:-translate-y-px hover:shadow-[0_4px_12px_rgba(201,99,63,0.3)]"
         >
-          Start Module 00
+          Start Module 01
           <ArrowRight size={15} strokeWidth={2} />
         </Link>
         <Link
