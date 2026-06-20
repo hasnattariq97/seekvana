@@ -83,11 +83,11 @@ function ReplyForm({ articleId, parentId, onSuccess, onCancel }: ReplyFormProps)
           className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-primary placeholder:text-secondary focus:outline-none focus:ring-2 focus:ring-accent/30 transition resize-none"
         />
       </div>
-      {error && <p className="text-xs text-red-500">{error}</p>}
+      {error && <p className="text-xs text-red-600 dark:text-red-400">{error}</p>}
       <div className="flex items-center gap-3">
         <button
           type="submit"
-          disabled={isPending}
+          disabled={isPending || !name.trim() || body.trim().length < 10}
           className="bg-accent text-white rounded-lg px-4 py-1.5 text-sm font-medium hover:bg-accent-deep transition disabled:opacity-60"
         >
           {isPending ? 'Posting…' : 'Post reply'}
