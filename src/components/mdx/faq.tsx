@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useId } from 'react'
 import { useReducedMotion } from 'framer-motion'
 
 interface FAQProps {
@@ -32,6 +32,7 @@ export function FAQ({ children, heading = 'Common questions' }: FAQProps) {
 export function FAQItem({ question, children }: FAQItemProps) {
   const [open, setOpen] = useState(false)
   const shouldReduce = useReducedMotion()
+  const id = useId()
 
   return (
     <li
@@ -40,7 +41,9 @@ export function FAQItem({ question, children }: FAQItemProps) {
       }`}
     >
       <button
-        className="w-full flex items-start justify-between gap-4 px-4 py-5 text-left cursor-pointer bg-transparent border-none focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-2"
+        id={`faq-btn-${id}`}
+        aria-controls={`faq-panel-${id}`}
+        className="w-full flex items-start justify-between gap-4 px-4 py-5 text-left cursor-pointer bg-transparent border-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
       >
@@ -77,6 +80,9 @@ export function FAQItem({ question, children }: FAQItemProps) {
       </button>
 
       <div
+        id={`faq-panel-${id}`}
+        role="region"
+        aria-labelledby={`faq-btn-${id}`}
         style={{
           display: 'grid',
           gridTemplateRows: open ? '1fr' : '0fr',
