@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Layers, BookOpen, CheckCircle2, Clock3 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import type { PathData } from '@/lib/mdx'
 
@@ -122,16 +122,21 @@ export function PathHero({ path }: PathHeroProps) {
         </div>
       </div>
 
-      {/* Meta line */}
-      <p className="text-[13px] text-secondary mb-7 flex flex-wrap items-center gap-2">
-        <span>{path.modules.length} modules</span>
-        <span className="text-border">·</span>
-        <span>{path.lessonCount} topics</span>
-        <span className="text-border">·</span>
-        <span>{path.lessonCount} hands-on tasks</span>
-        <span className="text-border">·</span>
-        <span>3–5 hours total</span>
-      </p>
+      {/* Meta stats */}
+      <div className="flex flex-wrap gap-3 mb-8">
+        {[
+          { icon: Layers,        value: path.modules.length, label: 'modules' },
+          { icon: BookOpen,      value: path.lessonCount,    label: 'topics' },
+          { icon: CheckCircle2,  value: path.lessonCount,    label: 'tasks' },
+          { icon: Clock3,        value: '3–5 hrs',           label: 'total' },
+        ].map(({ icon: Icon, value, label }) => (
+          <div key={label} className="flex items-center gap-2 bg-surface border border-border rounded-lg px-3.5 py-2">
+            <Icon size={13} strokeWidth={1.8} className="text-accent shrink-0" />
+            <span className="text-[13px] font-semibold text-primary">{value}</span>
+            <span className="text-[12px] text-secondary">{label}</span>
+          </div>
+        ))}
+      </div>
 
       {/* CTAs */}
       <div className="flex items-center gap-3 flex-wrap">
