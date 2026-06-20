@@ -13,6 +13,9 @@ export interface ArticleFrontmatter {
   publishedAt: string
   tags: string[]
   featured: boolean
+  coverImage?: string
+  lessonModule?: string
+  lessonNumber?: string
 }
 
 export interface ArticleHeading {
