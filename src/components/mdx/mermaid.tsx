@@ -31,7 +31,7 @@ export function Mermaid({ children }: MermaidProps) {
       mermaid.render(idRef.current, children.trim()).then(({ svg: out }) => {
         if (active) setSvg(out)
       }).catch(() => {
-        if (active) setSvg('<p style="color:red">Diagram error — check Mermaid syntax</p>')
+        if (active) setSvg('<p style="color:var(--color-accent);font-size:14px;padding:8px">Diagram error — check Mermaid syntax</p>')
       })
     })
     return () => { active = false }
