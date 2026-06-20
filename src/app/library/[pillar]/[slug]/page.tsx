@@ -200,7 +200,7 @@ export default async function ArticlePage({ params }: PageProps) {
 
             {/* Article body */}
             <div>
-              <MDXRemote source={source} components={getMDXComponents()} />
+              <MDXRemote source={source} components={getMDXComponents()} options={{ blockJS: false }} />
             </div>
 
             {/* Feedback */}

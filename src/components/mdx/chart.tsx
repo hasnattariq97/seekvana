@@ -63,7 +63,7 @@ export function Chart({ title, data = [], unit, caption }: ChartProps) {
             {data.map((_, i) => (
               <Cell
                 key={i}
-                fill="#C9633F"
+                fill="var(--color-accent)"
                 fillOpacity={Math.max(0.5, 1 - i * 0.08)}
               />
             ))}
