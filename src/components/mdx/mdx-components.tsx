@@ -9,6 +9,7 @@ import { Steps, Step } from './steps'
 import { Mermaid } from './mermaid'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs'
 import { FileTree } from './file-tree'
+import { YouTubeEmbed } from './youtube-embed'
 
 function slugify(text: string): string {
   return String(text)
@@ -143,5 +144,6 @@ export function getMDXComponents(): MDXComponents {
     TabsTrigger,
     TabsContent,
     FileTree,
+    YouTubeEmbed,
   }
 }
