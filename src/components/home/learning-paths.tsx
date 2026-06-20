@@ -6,7 +6,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 type Difficulty = "Beginner" | "Intermediate" | "Advanced";
-type IllustrationKey = "sprout" | "network" | "rocket";
+type IllustrationKey = "compass" | "sprout" | "network" | "rocket";
 
 interface Path {
   badge: string;
@@ -20,6 +20,17 @@ interface Path {
 }
 
 const PATHS: Path[] = [
+  {
+    badge: "No experience needed",
+    title: "Getting Started",
+    description:
+      "Everything you need before you build anything — Terminal, Python, Git, APIs, and deployment, at your own pace. 10 modules, 101 hands-on topics.",
+    difficulty: "Beginner",
+    lessons: 101,
+    href: "/paths/getting-started",
+    panelBg: "bg-success",
+    illustration: "compass",
+  },
   {
     badge: "Start here",
     title: "Build Your First AI Agent",
@@ -58,6 +69,38 @@ const PATHS: Path[] = [
 const EXPO_EASE = [0.16, 1, 0.3, 1] as const;
 
 // ── Illustrations ───────────────────────────────────────────────────────────
+
+function CompassIllustration() {
+  return (
+    <svg viewBox="0 0 180 180" fill="none" aria-hidden="true" className="w-44 h-44">
+      {/* Outer ring */}
+      <circle cx="90" cy="90" r="76" stroke="white" strokeWidth="1.5" strokeOpacity="0.3" />
+      {/* Tick marks */}
+      {[0, 45, 90, 135, 180, 225, 270, 315].map((deg) => {
+        const r = Math.PI / 180
+        const x1 = 90 + 76 * Math.sin(deg * r)
+        const y1 = 90 - 76 * Math.cos(deg * r)
+        const x2 = 90 + 68 * Math.sin(deg * r)
+        const y2 = 90 - 68 * Math.cos(deg * r)
+        return <line key={deg} x1={x1} y1={y1} x2={x2} y2={y2} stroke="white" strokeWidth={deg % 90 === 0 ? 2 : 1} strokeOpacity={deg % 90 === 0 ? 0.6 : 0.3} strokeLinecap="round" />
+      })}
+      {/* N S E W labels */}
+      <text x="90" y="18" textAnchor="middle" fill="white" fillOpacity="0.85" fontSize="11" fontWeight="700" fontFamily="monospace">N</text>
+      <text x="90" y="170" textAnchor="middle" fill="white" fillOpacity="0.45" fontSize="9" fontFamily="monospace">S</text>
+      <text x="167" y="94" textAnchor="middle" fill="white" fillOpacity="0.45" fontSize="9" fontFamily="monospace">E</text>
+      <text x="13" y="94" textAnchor="middle" fill="white" fillOpacity="0.45" fontSize="9" fontFamily="monospace">W</text>
+      {/* Inner disc */}
+      <circle cx="90" cy="90" r="48" fill="white" fillOpacity="0.1" />
+      {/* North needle — white */}
+      <path d="M90 90 L84 112 L90 44 L96 112 Z" fill="white" fillOpacity="0.9" />
+      {/* South needle — dimmed */}
+      <path d="M90 90 L96 68 L90 136 L84 68 Z" fill="white" fillOpacity="0.25" />
+      {/* Centre pin */}
+      <circle cx="90" cy="90" r="6" fill="white" fillOpacity="0.95" />
+      <circle cx="90" cy="90" r="2.5" fill="white" fillOpacity="0.4" />
+    </svg>
+  )
+}
 
 function SproutIllustration() {
   return (
@@ -186,6 +229,7 @@ function RocketIllustration() {
 }
 
 const ILLUSTRATIONS: Record<IllustrationKey, React.ComponentType> = {
+  compass: CompassIllustration,
   sprout: SproutIllustration,
   network: NetworkIllustration,
   rocket: RocketIllustration,
