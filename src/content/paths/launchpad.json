@@ -1,0 +1,9 @@
+{
+  "slug": "launchpad",
+  "title": "Seekvana Launchpad",
+  "description": "From zero to AI-ready — terminal, Python, Git, APIs, and deployment from scratch. No experience needed.",
+  "difficulty": "beginner",
+  "lessonCount": 93,
+  "href": "/paths/launchpad",
+  "colorClass": "bg-purple-500"
+}
