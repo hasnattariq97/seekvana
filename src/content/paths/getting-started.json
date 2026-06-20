@@ -1,9 +1,9 @@
 {
-  "slug": "launchpad",
-  "title": "Seekvana Launchpad",
+  "slug": "getting-started",
+  "title": "Getting Started",
   "description": "From zero to AI-ready — terminal, Python, Git, APIs, and deployment from scratch. No experience needed.",
   "difficulty": "beginner",
   "lessonCount": 93,
-  "href": "/paths/launchpad",
+  "href": "/paths/getting-started",
   "colorClass": "bg-purple-500"
 }

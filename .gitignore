@@ -45,3 +45,6 @@ next-env.d.ts
 
 # claude code local settings
 .claude/settings.local.json
+
+# seomachine workspace (nested git repo — kept local, not committed)
+/seomachine/

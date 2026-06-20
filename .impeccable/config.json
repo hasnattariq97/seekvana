@@ -1,0 +1,14 @@
+{
+  "hook": {
+    "enabled": true,
+    "ignoreRules": [],
+    "ignoreFiles": [
+      "src/components/mdx/mdx-components.tsx"
+    ],
+    "ignoreValues": [],
+    "limits": {
+      "maxFindings": 5,
+      "maxChars": 8000
+    }
+  }
+}
