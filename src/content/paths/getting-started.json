@@ -3,7 +3,186 @@
   "title": "Getting Started",
   "description": "From zero to AI-ready — terminal, Python, Git, APIs, and deployment from scratch. No experience needed.",
   "difficulty": "beginner",
-  "lessonCount": 93,
+  "lessonCount": 101,
   "href": "/paths/getting-started",
-  "colorClass": "bg-purple-500"
+  "colorClass": "bg-purple-500",
+  "nextPath": {
+    "title": "Master Agentic AI",
+    "slug": "master-agentic-ai",
+    "lessonCount": 14,
+    "difficulty": "intermediate"
+  },
+  "modules": [
+    {
+      "id": "00",
+      "title": "The AI Landscape",
+      "description": "Orientation — understanding the world you're stepping into",
+      "topics": [
+        { "id": "00.01", "title": "What AI actually is — and what it is not", "articlePillar": "ai-foundations", "articleSlug": "what-is-ai" },
+        { "id": "00.02", "title": "ML → Deep Learning → LLMs → Generative AI → Agentic AI" },
+        { "id": "00.03", "title": "How large language models work — tokens, training, inference, no math" },
+        { "id": "00.04", "title": "The difference between a chatbot and an agent" },
+        { "id": "00.05", "title": "Key players: ChatGPT, Claude, Gemini, Grok — what makes each different" },
+        { "id": "00.06", "title": "Paid vs free tiers — what you actually need to get started" },
+        { "id": "00.07", "title": "AI applications you already use without knowing it" },
+        { "id": "00.08", "title": "How to think about AI as a collaborator, not a magic box" }
+      ]
+    },
+    {
+      "id": "01",
+      "title": "Terminal & Command Line",
+      "description": "The black box explained — commands that make everything work",
+      "topics": [
+        { "id": "01.01", "title": "What the terminal actually is and why developers use it" },
+        { "id": "01.02", "title": "PowerShell (Windows) vs Terminal (Mac/Linux) — setup and first look" },
+        { "id": "01.03", "title": "The 15 commands you'll use 90% of the time: cd, ls, mkdir, cp, mv, rm" },
+        { "id": "01.04", "title": "File paths: absolute vs relative — why this trips everyone up" },
+        { "id": "01.05", "title": "Package managers — what npm install and pip install actually do" },
+        { "id": "01.06", "title": "Environment variables — setting, reading, and understanding them" },
+        { "id": "01.07", "title": "Reading error messages — how to decode what went wrong" }
+      ]
+    },
+    {
+      "id": "02",
+      "title": "Your Developer Environment",
+      "description": "VS Code, Cursor, Node, Python, Git — every tool installed and verified",
+      "topics": [
+        { "id": "02.01", "title": "Installing VS Code and Cursor — your two editors" },
+        { "id": "02.02", "title": "Node.js and npm — installing and verifying" },
+        { "id": "02.03", "title": "Python 3 — installing and running your first script" },
+        { "id": "02.04", "title": "Git — installing and basic config" },
+        { "id": "02.05", "title": "API keys — what they are and how to keep them safe" },
+        { "id": "02.06", "title": ".env files — storing secrets the right way" },
+        { "id": "02.07", "title": "Setting up your Anthropic account and first API key" },
+        { "id": "02.08", "title": "Your first Claude API call in Python" },
+        { "id": "02.09", "title": "Claude Code — installing and first run" },
+        { "id": "02.10", "title": "Virtual environments — why they exist and how to use them" },
+        { "id": "02.11", "title": "Checklist — confirming everything is ready" }
+      ]
+    },
+    {
+      "id": "03",
+      "title": "GitHub & Version Control",
+      "description": "Save, share, and never lose your work again",
+      "topics": [
+        { "id": "03.01", "title": "What Git is and why it matters for AI projects" },
+        { "id": "03.02", "title": "The Git workflow: add, commit, push" },
+        { "id": "03.03", "title": "Branches — what they are and why you need them" },
+        { "id": "03.04", "title": "Pull requests — reviewing and merging changes" },
+        { "id": "03.05", "title": ".gitignore — keeping secrets and junk out of your repo" },
+        { "id": "03.06", "title": "Cloning an existing project" },
+        { "id": "03.07", "title": "Reading a codebase you didn't write" },
+        { "id": "03.08", "title": "Resolving merge conflicts without panic" },
+        { "id": "03.09", "title": "GitHub profile as a portfolio — what to show" },
+        { "id": "03.10", "title": "Pinning and describing your repos" },
+        { "id": "03.11", "title": "README files — writing one that actually helps" }
+      ]
+    },
+    {
+      "id": "04",
+      "title": "Python Without Fear",
+      "description": "Just enough Python to read and write real AI code",
+      "topics": [
+        { "id": "04.01", "title": "Variables, strings, numbers, and booleans" },
+        { "id": "04.02", "title": "Lists and dictionaries — the data structures you'll use most" },
+        { "id": "04.03", "title": "Functions — writing and calling them" },
+        { "id": "04.04", "title": "Loops and conditions" },
+        { "id": "04.05", "title": "Reading and writing files" },
+        { "id": "04.06", "title": "Making HTTP requests with the requests library" },
+        { "id": "04.07", "title": "Working with JSON — parsing API responses" },
+        { "id": "04.08", "title": "Using dotenv to load .env files" },
+        { "id": "04.09", "title": "pip and requirements.txt — managing dependencies" },
+        { "id": "04.10", "title": "Error handling — try/except without the drama" },
+        { "id": "04.11", "title": "Calling the Claude API — a working script" },
+        { "id": "04.12", "title": "Reading other people's Python — a practical approach" }
+      ]
+    },
+    {
+      "id": "05",
+      "title": "Web Basics",
+      "description": "HTML, CSS, JS, REST APIs — how the web works under the hood",
+      "topics": [
+        { "id": "05.01", "title": "What HTML actually does — structure vs presentation" },
+        { "id": "05.02", "title": "CSS in 10 minutes — what you need to know" },
+        { "id": "05.03", "title": "JavaScript basics — variables, functions, DOM" },
+        { "id": "05.04", "title": "What an API is and how REST works" },
+        { "id": "05.05", "title": "HTTP methods: GET, POST, PUT, DELETE" },
+        { "id": "05.06", "title": "Headers, status codes, and error handling" },
+        { "id": "05.07", "title": "Using DevTools to inspect network requests" },
+        { "id": "05.08", "title": "Calling an API from JavaScript with fetch()" },
+        { "id": "05.09", "title": "Frontend vs backend — what runs where" },
+        { "id": "05.10", "title": "Building a tiny webpage that calls an API" }
+      ]
+    },
+    {
+      "id": "06",
+      "title": "Backend, Databases & AI Architecture",
+      "description": "FastAPI, SQL, Supabase — where agents actually live",
+      "topics": [
+        { "id": "06.01", "title": "What a backend actually is — and why AI needs one" },
+        { "id": "06.02", "title": "FastAPI — your first Python API in 10 lines" },
+        { "id": "06.03", "title": "SQL basics — tables, rows, queries" },
+        { "id": "06.04", "title": "Supabase — setting up a free hosted Postgres database" },
+        { "id": "06.05", "title": "Connecting your Python script to Supabase" },
+        { "id": "06.06", "title": "The 3-layer AI app architecture — frontend, backend, model" },
+        { "id": "06.07", "title": "Storing conversation history in a database" },
+        { "id": "06.08", "title": "Authentication basics — users, tokens, sessions" }
+      ]
+    },
+    {
+      "id": "07",
+      "title": "AI Coding Tools Ecosystem",
+      "description": "Claude Code, Cursor, Windsurf, Copilot, Gemini CLI — your toolkit",
+      "topics": [
+        { "id": "07.01", "title": "The landscape of AI coding assistants in 2026" },
+        { "id": "07.02", "title": "Claude Code — agentic coding from your terminal" },
+        { "id": "07.03", "title": "Cursor — AI-native code editor deep dive" },
+        { "id": "07.04", "title": "Windsurf — Codeium's agentic editor" },
+        { "id": "07.05", "title": "GitHub Copilot — inline autocomplete and chat" },
+        { "id": "07.06", "title": "Gemini CLI — Google's terminal agent" },
+        { "id": "07.07", "title": "Cline and Aider — open-source agentic tools" },
+        { "id": "07.08", "title": "Bolt.new and Replit — browser-based builders" },
+        { "id": "07.09", "title": "Choosing the right tool for the job" },
+        { "id": "07.10", "title": "Prompt patterns that work across all tools" },
+        { "id": "07.11", "title": "Building your personal AI-assisted workflow" }
+      ]
+    },
+    {
+      "id": "08",
+      "title": "Deployment: Taking Your Work Live",
+      "description": "Vercel, Render, Supabase, DNS, domains, logs — ship it",
+      "topics": [
+        { "id": "08.01", "title": "What deployment means and why it matters" },
+        { "id": "08.02", "title": "Vercel — deploying a Next.js app in 2 minutes" },
+        { "id": "08.03", "title": "Render — deploying a Python FastAPI backend" },
+        { "id": "08.04", "title": "Environment variables in production — the right way" },
+        { "id": "08.05", "title": "Supabase in production — connection strings and limits" },
+        { "id": "08.06", "title": "Custom domains — buying, pointing, and verifying" },
+        { "id": "08.07", "title": "DNS explained — A records, CNAMEs, and TTL" },
+        { "id": "08.08", "title": "HTTPS — why it matters and how to get it free" },
+        { "id": "08.09", "title": "Logs — reading deployment and runtime logs" },
+        { "id": "08.10", "title": "Debugging production errors — the systematic approach" },
+        { "id": "08.11", "title": "Monitoring — knowing when something breaks" },
+        { "id": "08.12", "title": "Costs — keeping your cloud bill at $0" },
+        { "id": "08.13", "title": "CI/CD basics — auto-deploying on push" },
+        { "id": "08.14", "title": "Your deployment checklist before going live" }
+      ]
+    },
+    {
+      "id": "09",
+      "title": "Mini Projects",
+      "description": "Capstone: build and deploy a live Claude chat app with Supabase logging",
+      "topics": [
+        { "id": "09.01", "title": "Reviewing what you've built — the full picture" },
+        { "id": "09.02", "title": "Project 1: CLI tool that summarises a webpage using Claude" },
+        { "id": "09.03", "title": "Project 2: FastAPI endpoint that wraps the Claude API" },
+        { "id": "09.04", "title": "Project 3: A web UI that calls your FastAPI backend" },
+        { "id": "09.05", "title": "Adding Supabase to log every conversation" },
+        { "id": "09.06", "title": "Deploying the whole stack: frontend + backend + database" },
+        { "id": "09.07", "title": "Adding a custom domain to your live app" },
+        { "id": "09.08", "title": "Sharing your project — portfolio entry template" },
+        { "id": "09.09", "title": "What's next — your path into Agentic AI" }
+      ]
+    }
+  ]
 }
