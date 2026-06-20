@@ -3,6 +3,11 @@ import Image from 'next/image'
 import { Tip, Note, Warning } from './callout'
 import { CodeBlock } from './code-block'
 import { AdSlot } from '@/components/article/ad-slot'
+import { ArticleImage } from './article-image'
+import { Kbd } from './kbd'
+import { Steps, Step } from './steps'
+import { Mermaid } from './mermaid'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs'
 
 function slugify(text: string): string {
   return String(text)
@@ -127,5 +132,14 @@ export function getMDXComponents(): MDXComponents {
     Note,
     Warning,
     AdSlot,
+    ArticleImage,
+    Kbd,
+    Steps,
+    Step,
+    Mermaid,
+    Tabs,
+    TabsList,
+    TabsTrigger,
+    TabsContent,
   }
 }
