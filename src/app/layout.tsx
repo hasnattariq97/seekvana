@@ -5,6 +5,7 @@ import { SearchProvider } from "@/context/search-context";
 import { Navbar } from "@/components/layout/navbar";
 import { SearchModal } from "@/components/search/search-modal";
 import "./globals.css";
+import 'katex/dist/katex.min.css'
 
 const fraunces = Fraunces({
   subsets: ["latin"],

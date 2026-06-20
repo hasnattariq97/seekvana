@@ -13,6 +13,7 @@ import { YouTubeEmbed } from './youtube-embed'
 import { ComparisonTable } from './comparison-table'
 import { Quiz } from './quiz'
 import { Chart } from './chart'
+import { Math, MathBlock } from './math'
 
 function slugify(text: string): string {
   return String(text)
@@ -151,5 +152,7 @@ export function getMDXComponents(): MDXComponents {
     ComparisonTable,
     Quiz,
     Chart,
+    Math,
+    MathBlock,
   }
 }
