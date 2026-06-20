@@ -48,7 +48,7 @@ export function ArticleComments({ articleId, initialComments }: ArticleCommentsP
       }
       setComments((prev) => [
         {
-          id: crypto.randomUUID(),
+          id: result.id!,
           article_id: articleId,
           parent_id: null,
           name: name.trim(),

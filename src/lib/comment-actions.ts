@@ -28,16 +28,16 @@ export async function postComment(
   if (!b || b.length < 10) return { error: 'Comment must be at least 10 characters.' }
   if (b.length > 1000) return { error: 'Comment must be under 1000 characters.' }
 
-  const { error } = await supabase().from('comments').insert({
+  const { data, error } = await supabase().from('comments').insert({
     article_id: articleId,
     name: n,
     body: b,
     is_flagged: isFlagged(b),
-  })
+  }).select('id').single()
 
   if (error) return { error: 'Failed to post comment. Please try again.' }
   revalidatePath(`/library/${articleId}`)
-  return {}
+  return { id: data.id as string }
 }
 
 export async function postReply(
