@@ -14,6 +14,7 @@ import { ComparisonTable } from './comparison-table'
 import { Quiz } from './quiz'
 import { Chart } from './chart'
 import { Math, MathBlock } from './math'
+import { CodePlayground } from './code-playground'
 
 function slugify(text: string): string {
   return String(text)
@@ -154,5 +155,6 @@ export function getMDXComponents(): MDXComponents {
     Chart,
     Math,
     MathBlock,
+    CodePlayground,
   }
 }
