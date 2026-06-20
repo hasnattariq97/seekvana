@@ -21,7 +21,7 @@ export async function postComment(
   articleId: string,
   name: string,
   body: string
-): Promise<{ error?: string }> {
+): Promise<{ id?: string; error?: string }> {
   const n = name.trim()
   const b = body.trim()
   if (!n || n.length > 60) return { error: 'Name is required (max 60 characters).' }
