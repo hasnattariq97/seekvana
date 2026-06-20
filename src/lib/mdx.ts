@@ -16,6 +16,7 @@ export interface ArticleFrontmatter {
   coverImage?: string
   lessonModule?: string
   lessonNumber?: string
+  faqs?: Array<{ q: string; a: string }>
 }
 
 export interface ArticleHeading {
