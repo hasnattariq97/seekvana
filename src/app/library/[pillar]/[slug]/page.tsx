@@ -131,7 +131,24 @@ export default async function ArticlePage({ params }: PageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(buildArticleJsonLd(frontmatter, pillar, slug)),
+          __html: (() => {
+            const schemas: object[] = [buildArticleJsonLd(frontmatter, pillar, slug)]
+            if (frontmatter.faqs && frontmatter.faqs.length > 0) {
+              schemas.push({
+                '@context': 'https://schema.org',
+                '@type': 'FAQPage',
+                mainEntity: frontmatter.faqs.map(({ q, a }) => ({
+                  '@type': 'Question',
+                  name: q,
+                  acceptedAnswer: {
+                    '@type': 'Answer',
+                    text: a,
+                  },
+                })),
+              })
+            }
+            return JSON.stringify(schemas.length === 1 ? schemas[0] : schemas)
+          })(),
         }}
       />
       <ReadingProgress />
