@@ -11,6 +11,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs'
 import { FileTree } from './file-tree'
 import { YouTubeEmbed } from './youtube-embed'
 import { ComparisonTable } from './comparison-table'
+import { Quiz } from './quiz'
 
 function slugify(text: string): string {
   return String(text)
@@ -147,5 +148,6 @@ export function getMDXComponents(): MDXComponents {
     FileTree,
     YouTubeEmbed,
     ComparisonTable,
+    Quiz,
   }
 }
