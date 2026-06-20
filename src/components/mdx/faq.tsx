@@ -1,9 +1,11 @@
 'use client'
 
 import { useState } from 'react'
+import { useReducedMotion } from 'framer-motion'
 
 interface FAQProps {
   children: React.ReactNode
+  heading?: string
 }
 
 interface FAQItemProps {
@@ -11,14 +13,14 @@ interface FAQItemProps {
   children: React.ReactNode
 }
 
-export function FAQ({ children }: FAQProps) {
+export function FAQ({ children, heading = 'Common questions' }: FAQProps) {
   return (
     <section className="my-10" aria-label="Frequently asked questions">
       <p className="font-inter text-xs font-semibold tracking-widest uppercase text-accent mb-2">
         FAQ
       </p>
       <h2 className="font-fraunces text-2xl font-medium text-primary mb-8 scroll-mt-20">
-        Common questions
+        {heading}
       </h2>
       <ul className="border-t border-border" role="list">
         {children}
@@ -29,6 +31,7 @@ export function FAQ({ children }: FAQProps) {
 
 export function FAQItem({ question, children }: FAQItemProps) {
   const [open, setOpen] = useState(false)
+  const shouldReduce = useReducedMotion()
 
   return (
     <li
@@ -48,17 +51,22 @@ export function FAQItem({ question, children }: FAQItemProps) {
         >
           {question}
         </span>
-        <span aria-hidden="true" className="shrink-0 mt-0.5">
+        <span
+          aria-hidden="true"
+          className={`shrink-0 mt-0.5 transition-colors duration-150 ${
+            open ? 'text-accent-deep' : 'text-secondary'
+          }`}
+        >
           <svg
             width="20"
             height="20"
             viewBox="0 0 20 20"
             fill="none"
-            stroke={open ? 'var(--color-accent-deep)' : 'var(--color-text-secondary)'}
+            stroke="currentColor"
             strokeWidth="1.8"
             strokeLinecap="round"
             style={{
-              transition: 'transform 0.25s ease',
+              transition: shouldReduce ? undefined : 'transform 0.25s ease',
               transform: open ? 'rotate(45deg)' : 'rotate(0deg)',
             }}
           >
@@ -72,7 +80,7 @@ export function FAQItem({ question, children }: FAQItemProps) {
         style={{
           display: 'grid',
           gridTemplateRows: open ? '1fr' : '0fr',
-          transition: 'grid-template-rows 0.28s ease',
+          transition: shouldReduce ? undefined : 'grid-template-rows 0.28s ease',
         }}
       >
         <div style={{ overflow: 'hidden' }}>
