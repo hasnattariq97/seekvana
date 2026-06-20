@@ -1,4 +1,5 @@
 // src/components/mdx/math.tsx
+import { isValidElement } from 'react'
 import katex from 'katex'
 import type { ReactNode } from 'react'
 
@@ -6,8 +7,15 @@ interface MathProps {
   children: ReactNode
 }
 
+function extractText(node: ReactNode): string {
+  if (typeof node === 'string' || typeof node === 'number') return String(node)
+  if (Array.isArray(node)) return node.map(extractText).join('')
+  if (isValidElement(node)) return extractText((node.props as { children?: ReactNode }).children)
+  return ''
+}
+
 export function Math({ children }: MathProps) {
-  const input = typeof children === 'string' ? children : String(children ?? '')
+  const input = extractText(children)
   const html = katex.renderToString(input, {
     throwOnError: false,
     displayMode: false,
@@ -21,7 +29,7 @@ export function Math({ children }: MathProps) {
 }
 
 export function MathBlock({ children }: MathProps) {
-  const input = typeof children === 'string' ? children : String(children ?? '')
+  const input = extractText(children)
   const html = katex.renderToString(input, {
     throwOnError: false,
     displayMode: true,

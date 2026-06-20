@@ -1,13 +1,19 @@
+import { Children, isValidElement } from 'react'
 import type { ReactNode } from 'react'
 
 interface FileTreeProps {
   children: ReactNode
 }
 
+function extractText(node: ReactNode): string {
+  if (typeof node === 'string' || typeof node === 'number') return String(node)
+  if (Array.isArray(node)) return node.map(extractText).join('')
+  if (isValidElement(node)) return extractText((node.props as { children?: ReactNode }).children)
+  return ''
+}
+
 export function FileTree({ children }: FileTreeProps) {
-  const text = typeof children === 'string'
-    ? children.trim()
-    : String(children ?? '').trim()
+  const text = extractText(children).trim()
 
   return (
     <div className="my-8 bg-surface-subtle border border-border rounded-xl overflow-hidden">

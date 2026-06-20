@@ -1,0 +1,161 @@
+---
+title: "MDX Component Showcase"
+description: "A demo article showing every new MDX component — for visual testing only."
+pillar: "agentic-ai"
+slug: "mdx-component-showcase"
+difficulty: "beginner"
+readTime: 5
+author: "Seekvana"
+publishedAt: "2026-06-20"
+tags: ["demo", "components"]
+featured: false
+---
+
+This page demos every new MDX component. Scroll through to check layout, dark mode, and interactivity.
+
+## Callouts
+
+<Tip>**Tip callout** — background should be clay-soft with a left accent border.</Tip>
+
+<Note>**Note callout** — background should be teal-tinted with an info border.</Note>
+
+<Warning>**Warning callout** — background should be amber-tinted.</Warning>
+
+## Keyboard Shortcuts
+
+Use <Kbd>Ctrl</Kbd>+<Kbd>C</Kbd> to copy. On Mac: <Kbd>Cmd</Kbd>+<Kbd>C</Kbd>. Open terminal with <Kbd>Ctrl</Kbd>+<Kbd>`</Kbd>.
+
+## Steps
+
+<Steps>
+  <Step number={1} title="Install the SDK">
+    Open your terminal and run the install command.
+
+    ```bash
+    pip install anthropic
+    ```
+  </Step>
+  <Step number={2} title="Set your API key">
+    Add your key to a `.env` file. Never commit this to git.
+
+    ```bash
+    ANTHROPIC_API_KEY=sk-ant-...
+    ```
+  </Step>
+  <Step number={3} title="Send your first message">
+    The last step has no bottom border — check this visually.
+
+    ```python
+    client = anthropic.Anthropic()
+    print(client.messages.create(model="claude-sonnet-4-6", max_tokens=64, messages=[{"role":"user","content":"Hi!"}]).content[0].text)
+    ```
+  </Step>
+</Steps>
+
+## Tabs
+
+<Tabs defaultValue="python">
+  <TabsList>
+    <TabsTrigger value="python">Python</TabsTrigger>
+    <TabsTrigger value="typescript">TypeScript</TabsTrigger>
+    <TabsTrigger value="curl">cURL</TabsTrigger>
+  </TabsList>
+  <TabsContent value="python">
+    ```python
+    import anthropic
+    client = anthropic.Anthropic()
+    response = client.messages.create(model="claude-sonnet-4-6", max_tokens=256, messages=[{"role":"user","content":"What is an AI agent?"}])
+    print(response.content[0].text)
+    ```
+  </TabsContent>
+  <TabsContent value="typescript">
+    ```typescript
+    import Anthropic from "@anthropic-ai/sdk";
+    const client = new Anthropic();
+    const response = await client.messages.create({ model: "claude-sonnet-4-6", max_tokens: 256, messages: [{ role: "user", content: "What is an AI agent?" }] });
+    console.log(response.content[0].text);
+    ```
+  </TabsContent>
+  <TabsContent value="curl">
+    ```bash
+    curl https://api.anthropic.com/v1/messages \
+      -H "x-api-key: $ANTHROPIC_API_KEY" \
+      -H "anthropic-version: 2023-06-01" \
+      -H "content-type: application/json" \
+      -d '{"model":"claude-sonnet-4-6","max_tokens":256,"messages":[{"role":"user","content":"Hello"}]}'
+    ```
+  </TabsContent>
+</Tabs>
+
+## Mermaid Diagram
+
+<Mermaid>{`graph LR
+  A[Perceive] --> B[Plan]
+  B --> C[Act]
+  C --> D[Observe]
+  D --> A`}</Mermaid>
+
+## File Tree
+
+<FileTree>{`my-agent/
+├── .env
+├── agent.py
+├── tools/
+│   ├── search.py
+│   └── calculator.py
+└── requirements.txt`}</FileTree>
+
+## Comparison Table
+
+<ComparisonTable
+  columns={["Feature", "GPT-4o", "Claude Sonnet"]}
+  rows={[
+    ["Context window", "128k tokens", "200k tokens"],
+    ["Vision", "Yes", "Yes"],
+    ["Price per 1M input", "$5.00", "$3.00"],
+  ]}
+  highlight="Claude Sonnet"
+/>
+
+## Quiz
+
+<Quiz
+  question="What makes an AI agent different from a chatbot?"
+  options={["Bigger model", "Can take actions with tools", "Faster responses", "Python only"]}
+  correct={1}
+  explanation="An AI agent can perceive, plan, and act — using tools like search or code execution. A chatbot only generates text."
+/>
+
+## Chart
+
+<Chart
+  type="bar"
+  title="Context window sizes (thousands of tokens)"
+  data={[
+    { label: "GPT-4o", value: 128 },
+    { label: "Claude Sonnet", value: 200 },
+    { label: "Gemini 1.5 Pro", value: 1000 },
+  ]}
+  unit="k"
+  caption="As of mid-2025."
+/>
+
+## Math
+
+Inline: the softmax function is <Math>{"\\text{softmax}(z_i) = \\frac{e^{z_i}}{\\sum_j e^{z_j}}"}</Math>
+
+Block:
+
+<MathBlock>{"\\hat{y} = \\sigma\\left(\\sum_{i=1}^{n} w_i x_i + b\\right)"}</MathBlock>
+
+## Download Button
+
+<DownloadButton href="/files/agent-cheatsheet.pdf" label="Download Agent Cheatsheet" size="180 KB" />
+
+## YouTube Embed
+
+<YouTubeEmbed
+  id="sal78ACtGTc"
+  title="What are AI Agents? Explained simply"
+  caption="A visual explainer on how AI agents work."
+/>
