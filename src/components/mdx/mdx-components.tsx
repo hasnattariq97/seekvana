@@ -12,6 +12,7 @@ import { FileTree } from './file-tree'
 import { YouTubeEmbed } from './youtube-embed'
 import { ComparisonTable } from './comparison-table'
 import { Quiz } from './quiz'
+import { Chart } from './chart'
 
 function slugify(text: string): string {
   return String(text)
@@ -149,5 +150,6 @@ export function getMDXComponents(): MDXComponents {
     YouTubeEmbed,
     ComparisonTable,
     Quiz,
+    Chart,
   }
 }
