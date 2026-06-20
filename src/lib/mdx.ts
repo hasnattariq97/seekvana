@@ -147,6 +147,7 @@ export interface PathModule {
 }
 
 export interface PathData extends PathDefinition {
+  subtitle?: string
   modules: PathModule[]
   nextPath?: {
     title: string

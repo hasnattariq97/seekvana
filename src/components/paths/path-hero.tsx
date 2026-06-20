@@ -40,9 +40,14 @@ export function PathHero({ path }: PathHeroProps) {
       </div>
 
       {/* Title */}
-      <h1 className="font-fraunces text-[clamp(2.4rem,5.5vw,3.5rem)] font-bold text-primary leading-[1.08] tracking-tight mb-3.5 text-balance">
+      <h1 className="font-fraunces text-[clamp(2.4rem,5.5vw,3.5rem)] font-bold text-primary leading-[1.08] tracking-tight text-balance">
         {path.title}
       </h1>
+      {path.subtitle && (
+        <p className="font-fraunces text-[clamp(2rem,4.5vw,3rem)] italic text-accent leading-none mb-4">
+          {path.subtitle}
+        </p>
+      )}
       <p className="text-[17px] text-secondary max-w-[52ch] leading-relaxed mb-10">
         {path.description}
       </p>

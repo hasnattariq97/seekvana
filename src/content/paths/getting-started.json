@@ -1,6 +1,7 @@
 {
   "slug": "getting-started",
   "title": "Getting Started",
+  "subtitle": "from scratch",
   "description": "From zero to AI-ready — terminal, Python, Git, APIs, and deployment from scratch. No experience needed.",
   "difficulty": "beginner",
   "lessonCount": 101,
