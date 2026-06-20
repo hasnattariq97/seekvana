@@ -23,7 +23,7 @@ interface ChartProps {
   caption?: string
 }
 
-export function Chart({ title, data, unit, caption }: ChartProps) {
+export function Chart({ title, data = [], unit, caption }: ChartProps) {
   const formatted = data.map((d) => ({ ...d, name: d.label }))
 
   return (
