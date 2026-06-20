@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function PathPage({ params }: Props) {
   const { slug } = await params
   const path = getPathBySlug(slug)
-  if (!path) notFound()
+  if (!path || !path.modules) notFound()
 
   const totalTopics = path.modules.reduce((n, m) => n + m.topics.length, 0)
 
