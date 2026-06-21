@@ -19,14 +19,14 @@
       "title": "The AI Landscape",
       "description": "Orientation — understanding the world you're stepping into",
       "topics": [
-        { "id": "01.01", "title": "What AI actually is — and what it is not", "articlePillar": "ai-foundations", "articleSlug": "what-is-ai" },
-        { "id": "01.02", "title": "ML → Deep Learning → LLMs → Generative AI → Agentic AI" },
-        { "id": "01.03", "title": "How large language models work — tokens, training, inference, no math" },
-        { "id": "01.04", "title": "The difference between a chatbot and an agent" },
-        { "id": "01.05", "title": "Key players: ChatGPT, Claude, Gemini, Grok — what makes each different" },
-        { "id": "01.06", "title": "Paid vs free tiers — what you actually need to get started" },
-        { "id": "01.07", "title": "AI applications you already use without knowing it" },
-        { "id": "01.08", "title": "How to think about AI as a collaborator, not a magic box" }
+        { "id": "01.01", "title": "What AI Actually Is — and What It Is Not", "articlePillar": "ai-foundations", "articleSlug": "what-is-ai" },
+        { "id": "01.02", "title": "The AI Family Tree: From Machine Learning to Agentic AI", "articlePillar": "ai-foundations", "articleSlug": "ai-family-tree" },
+        { "id": "01.03", "title": "How Large Language Models Actually Work, No Math Required", "articlePillar": "large-language-models", "articleSlug": "how-llms-work" },
+        { "id": "01.04", "title": "Chatbot vs AI Agent: What's Actually the Difference?", "articlePillar": "agentic-ai", "articleSlug": "chatbot-vs-agent" },
+        { "id": "01.05", "title": "ChatGPT vs Claude vs Gemini vs Grok: What Makes Each One Different", "articlePillar": "ai-tools", "articleSlug": "chatgpt-vs-claude-vs-gemini" },
+        { "id": "01.06", "title": "Free AI Tools for Beginners: What You Actually Need", "articlePillar": "ai-foundations", "articleSlug": "free-ai-tools-to-start" },
+        { "id": "01.07", "title": "AI Tools You Already Use Every Day (And Probably Never Noticed)", "articlePillar": "ai-foundations", "articleSlug": "ai-tools-you-already-use" },
+        { "id": "01.08", "title": "How to Think About AI: A Beginner's Mindset Guide", "articlePillar": "ai-foundations", "articleSlug": "how-to-think-about-ai" }
       ]
     },
     {
