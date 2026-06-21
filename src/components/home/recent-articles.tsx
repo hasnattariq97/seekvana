@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   Tabs,
@@ -58,7 +59,14 @@ function ArticleGrid({ articles }: { articles: ArticleMeta[] }) {
             className="absolute inset-0 z-0 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none rounded-xl"
             aria-label={`Read: ${article.frontmatter.title}`}
           />
-          <div className={`relative h-48 ${CARD_BG[i % CARD_BG.length]}`} aria-hidden="true">
+          <div className="relative h-48 bg-surface-subtle overflow-hidden">
+            <Image
+              src={`/images/articles/${article.pillar}/${article.slug}/cover.webp`}
+              alt={article.frontmatter.title}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 33vw"
+            />
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
             <span className="absolute bottom-3 left-3 bg-accent-soft text-accent text-xs rounded-full px-2.5 py-0.5 font-medium backdrop-blur-sm capitalize">
               {article.pillar.replace(/-/g, ' ')}
