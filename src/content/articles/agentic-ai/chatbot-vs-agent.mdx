@@ -1,0 +1,142 @@
+---
+title: "Chatbot vs AI Agent: What's Actually the Difference?"
+description: "A chatbot answers your question and stops. An AI agent takes your goal and acts until it's done. Here's the clearest beginner explanation of both."
+pillar: "agentic-ai"
+slug: "chatbot-vs-agent"
+difficulty: "beginner"
+readTime: 8
+author: "Seekvana"
+publishedAt: "2026-06-20"
+tags: ["ai agents", "chatbots", "agentic ai", "ai for beginners"]
+featured: false
+lessonModule: "00"
+lessonNumber: "01.04"
+---
+
+<ArticleImage
+  src="/images/articles/agentic-ai/chatbot-vs-agent/cover.webp"
+  alt="Split illustration showing a chatbot speech bubble on the left and a robot hand checking off a task list on the right"
+  priority
+/>
+
+You've probably done this: you asked an AI to help with something, book a restaurant, research a product, organize your schedule, and instead of doing it, it gave you a to-do list of steps to follow yourself. That gap between getting instructions and getting results is the difference between a chatbot and an AI agent. In this lesson, you'll learn the one question that tells them apart, and why this distinction is the most important idea in AI right now.
+
+> **Key Takeaways**
+> - A chatbot responds to your prompt and stops. An AI agent pursues your goal and keeps working.
+> - The one-sentence test: does the system react to what you typed, or does it decide what to do next?
+> - Chatbots are reactive. Agents are goal-driven.
+> - Agents have tools; they can search the web, run code, send emails, and act in other systems.
+> - The line between the two is blurring fast, but the core distinction still holds.
+
+---
+
+## The test that always works
+
+Here is the question to ask about any AI system: **does it respond to your prompt, or does it pursue your goal?**
+
+If you type something and the system generates a reply, that's a chatbot. It read what you wrote, predicted the most useful response, and stopped. It's waiting for you to type again.
+
+An agent is different. You give it a goal, not a question, a *goal*, and it decides what steps to take, executes them, and hands you a result. It doesn't wait for you to direct each step. It figures out the path and walks it.
+
+That's the whole distinction. Every other difference people talk about — autonomy, tool use, memory, planning — flows from this one.
+
+<Note>
+  You've almost certainly used a chatbot before. You may never have used a true AI agent yet. That's changing fast; 2026 is the year agents are going from developer curiosity to everyday tool.
+</Note>
+
+## What does a chatbot actually do?
+
+**A chatbot answers your question and stops.**
+
+When you open ChatGPT and ask it something, here is what happens. It takes your message, runs it through a [large language model](/library/large-language-models/how-llms-work), and predicts the most likely useful response. Then it delivers that response, and waits for your next message.
+
+A chatbot is reactive. It does exactly what you asked and nothing more. You are the one deciding what to ask next. You are the one deciding what to do with the answer.
+
+This is genuinely useful for a huge range of tasks. Drafting an email, explaining a concept, summarizing a long document, brainstorming ideas, translating something, chatbots are fast and good at all of these. The right tool for the job when what you want is a *response*.
+
+The limitation shows up when you want *action* instead of a response. A chatbot will tell you how to book the cheapest flight to New York. It will not book the flight.
+
+You are still the actor. The chatbot is the advisor.
+
+## What does an AI agent do differently?
+
+**An agent takes your goal and decides what to do.**
+
+An AI agent has three things a chatbot does not: a goal, tools, and the ability to act without you directing every step.
+
+Give an agent a goal, "find me the cheapest flight to New York next Friday under $300", and it reasons through what needs to happen. It searches [flight databases](https://www.google.com/travel/flights), compares prices across platforms, checks baggage fees, and returns three ranked options with booking links.
+
+You didn't tell it to check Kayak first, then Google Flights, then filter for no checked bag fees. It reasoned through that sequence itself.
+
+This is what [tool use](/library/agentic-ai/tool-use-explained) means in practice. An agent has access to external systems — browsers, APIs, calendars, email, code runners — and it can reach into them to accomplish your goal.
+
+That capability is what chatbots lack. Chatbots are read-only. Agents can read, write, and act.
+
+<ArticleImage
+  src="/images/articles/agentic-ai/chatbot-vs-agent/chatbot-vs-agent-paths.webp"
+  alt="Two parallel paths: chatbot path shows you type, chatbot answers, you act; agent path shows you give a goal, agent plans, agent acts, you get a result"
+  caption="The chatbot path ends with you doing the work. The agent path ends with a result."
+/>
+
+## The same request, two different results
+
+The clearest way to see the difference is to run one request through both and watch what happens.
+
+**Your request:** "Book me the cheapest flight to New York next Friday under $300."
+
+| | Chatbot | AI Agent |
+|---|---|---|
+| **What it does** | Gives you a step-by-step list: "Go to Google Flights, set your dates, sort by price, check Kayak for comparison..." | Searches flight databases, compares prices across platforms, checks baggage fees, returns three ranked options |
+| **Who does the work** | You do | The agent does |
+| **What it responds to** | Your prompt | Your goal |
+| **When it stops** | After one message | After the goal is reached |
+
+The chatbot is not wrong. Those are good instructions. But you are still the one searching, comparing, and deciding. An agent removes those steps. You gave it the outcome you wanted; it figured out the path.
+
+That shift, from giving instructions to giving goals, is the practical difference you'll feel when working with real agents.
+
+## Is the line between chatbots and agents blurring?
+
+The line between chatbots and agents is blurring fast, and I think that's worth being honest about — especially now that every AI company calls everything an "agent."
+
+[ChatGPT](https://openai.com/chatgpt) with browsing enabled can search the web. Claude with computer use can operate your browser. Many tools that call themselves "chatbots" now have limited agent capabilities built in. The word "agent" is being applied to everything, which makes it easy to dismiss as marketing.
+
+But the core test still holds: **is this system responding to you, or is it working toward your goal?**
+
+When you can hand a system a desired outcome and walk away while it figures out how to get there, you're working with an agent. That capability, imperfect and still evolving, is what makes the [agentic AI](/library/agentic-ai/what-is-an-agent) wave matter. For the full picture of what agents are built from and how they work, the next step is our deep dive on what an AI agent actually is.
+
+---
+
+## Your Task
+
+<Steps>
+  <Step number={1} title="Spot the difference">
+    Give one real-world example of something you would use a chatbot for, and one real-world example of a task you would want an agent to handle. Think about your own work or daily life, not a hypothetical scenario.
+
+    Write them down. Keep them. By the end of this course, you will know exactly how to build the agent version.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 01.04. Next up: [ChatGPT vs Claude vs Gemini vs Grok — what makes each one different](/library/ai-tools/chatgpt-vs-claude-vs-gemini) →
+
+  This is part of the [Getting Started](/paths/getting-started) learning path.
+</Note>
+
+<FAQ>
+  <FAQItem question="Is ChatGPT a chatbot or an AI agent?">
+    In its default form, ChatGPT is a chatbot, it responds to your message and waits for the next one. You direct every step. However, ChatGPT with browsing, code interpreter, or computer use enabled starts behaving more like an agent because it can take actions beyond answering. The core test still applies: is it responding to your prompt, or pursuing your goal without you directing each step?
+  </FAQItem>
+
+  <FAQItem question="Can a chatbot ever be as useful as an agent?">
+    For many tasks, yes. If you need information, a draft, an explanation, or a brainstorm, a chatbot is fast and efficient. The gap only shows up with multi-step tasks that require taking action across multiple systems, researching, booking, coding, sending, where an agent does the work and a chatbot only describes it. The two tools solve different problems; neither replaces the other.
+  </FAQItem>
+
+  <FAQItem question="What tools can AI agents actually use?">
+    Agents can use any tool you give them access to: web browsers to search and fetch pages, APIs to call external services like Google Calendar or Slack, code interpreters to write and run programs, email systems, databases, and more. The tools define what the agent can actually do. An agent with no tools is effectively just a very sophisticated chatbot, the tools are what turn responses into actions.
+  </FAQItem>
+
+  <FAQItem question="Do I need to know how to code to use an AI agent?">
+    Not anymore, and this is changing fast. Many agent platforms in 2026 let you describe your goal through a simple interface and handle the execution without writing any code. Tools like Claude with computer use, various workflow automation platforms, and no-code agent builders are designed for non-technical users. Building a custom agent from scratch still requires coding. Using an existing one increasingly does not.
+  </FAQItem>
+</FAQ>
