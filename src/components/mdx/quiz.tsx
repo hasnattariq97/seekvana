@@ -4,12 +4,16 @@ import { CheckCircle, XCircle } from 'lucide-react'
 
 interface QuizProps {
   question: string
-  options: string[]
-  correct: number
+  options: string | string[]
+  correct: number | string
   explanation: string
 }
 
 export function Quiz({ question, options = [], correct, explanation }: QuizProps) {
+  const parsedOptions: string[] = Array.isArray(options)
+    ? options
+    : String(options).split('|||')
+  const parsedCorrect = typeof correct === 'string' ? parseInt(correct, 10) : correct
   const [selected, setSelected] = useState<number | null>(null)
   const answered = selected !== null
 
@@ -17,13 +21,13 @@ export function Quiz({ question, options = [], correct, explanation }: QuizProps
     <div className="my-8 bg-surface border border-border rounded-xl p-6">
       <p className="font-fraunces text-lg text-primary mb-4">{question}</p>
       <div className="space-y-2">
-        {options.map((option, i) => {
+        {parsedOptions.map((option, i) => {
           let cls =
             'w-full text-left px-4 py-3 rounded-lg border text-sm transition-colors flex items-center gap-2 '
           if (!answered) {
             cls +=
               'border-border bg-surface-subtle hover:border-accent hover:bg-accent-soft cursor-pointer text-primary'
-          } else if (i === correct) {
+          } else if (i === parsedCorrect) {
             cls +=
               'border-green-500 bg-green-50 dark:bg-green-950/30 text-primary cursor-default'
           } else if (i === selected) {
@@ -40,10 +44,10 @@ export function Quiz({ question, options = [], correct, explanation }: QuizProps
               disabled={answered}
               aria-pressed={answered ? i === selected : undefined}
             >
-              {answered && i === correct && (
+              {answered && i === parsedCorrect && (
                 <CheckCircle className="w-4 h-4 text-green-600 shrink-0" />
               )}
-              {answered && i === selected && i !== correct && (
+              {answered && i === selected && i !== parsedCorrect && (
                 <XCircle className="w-4 h-4 text-red-500 shrink-0" />
               )}
               {option}
@@ -55,12 +59,12 @@ export function Quiz({ question, options = [], correct, explanation }: QuizProps
         <div
           role="alert"
           className={`mt-4 p-4 rounded-lg text-sm ${
-            selected === correct
+            selected === parsedCorrect
               ? 'bg-green-50 dark:bg-green-950/30 text-green-800 dark:text-green-200'
               : 'bg-accent-soft text-primary'
           }`}
         >
-          <strong>{selected === correct ? 'Correct! ' : 'Not quite — '}</strong>
+          <strong>{selected === parsedCorrect ? 'Correct! ' : 'Not quite — '}</strong>
           {explanation}
         </div>
       )}
