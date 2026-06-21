@@ -5,6 +5,7 @@ import { MDXRemote } from 'next-mdx-remote/rsc'
 import remarkGfm from 'remark-gfm'
 import { createClient } from '@supabase/supabase-js'
 import { getArticleSource, getAllArticles, getArticlesByPillar, type ArticleFrontmatter } from '@/lib/mdx'
+import { getPillarName } from '@/lib/pillars'
 import { getMDXComponents } from '@/components/mdx/mdx-components'
 import { ReadingProgress } from '@/components/article/reading-progress'
 import { PillarSidebar } from '@/components/article/pillar-sidebar'
@@ -18,17 +19,6 @@ interface PageProps {
   params: Promise<{ pillar: string; slug: string }>
 }
 
-const PILLAR_NAMES: Record<string, string> = {
-  'agentic-ai': 'Agentic AI',
-  'ai-foundations': 'AI Foundations',
-  'large-language-models': 'Large Language Models',
-  'building-with-ai': 'Building with AI',
-  'ai-tools': 'AI Tools',
-  'use-cases': 'Use Cases',
-  'concepts-theory': 'Concepts & Theory',
-  'ethics-safety': 'Ethics & Safety',
-  careers: 'Careers',
-}
 
 const DIFFICULTY_COLORS: Record<string, string> = {
   beginner: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
@@ -141,7 +131,7 @@ export default async function ArticlePage({ params }: PageProps) {
     replies: replies.filter((r) => r.parent_id === c.id),
   }))
 
-  const pillarName = PILLAR_NAMES[pillar] ?? pillar
+  const pillarName = getPillarName(pillar)
   const pillarArticles = getArticlesByPillar(pillar).map((a) => ({
     title: a.frontmatter.title,
     slug: a.slug,

@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { Hero } from "@/components/home/hero";
 import { LearningPaths } from "@/components/home/learning-paths";
 import { Pillars } from "@/components/home/pillars";
-import { RecentArticles } from "@/components/home/recent-articles";
+import { RecentArticlesServer } from "@/components/home/recent-articles-server";
 import { Footer } from "@/components/layout/footer";
+import { getAllArticles, getAllPaths } from "@/lib/mdx";
 
 export const metadata: Metadata = {
   openGraph: {
@@ -16,12 +17,14 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
+  const articleCount = getAllArticles().length;
+  const pathCount = getAllPaths().length;
   return (
     <>
-      <Hero />
+      <Hero articleCount={articleCount} pathCount={pathCount} />
       <LearningPaths />
       <Pillars />
-      <RecentArticles />
+      <RecentArticlesServer />
       <Footer />
     </>
   );

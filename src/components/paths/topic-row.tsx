@@ -20,7 +20,7 @@ export function TopicRow({ topic }: TopicRowProps) {
       {hasArticle && (
         <Link
           href={`/library/${topic.articlePillar}/${topic.articleSlug}`}
-          className="inline-flex items-center gap-1 text-[10.5px] font-semibold text-accent bg-accent-soft rounded-md px-2 py-1 shrink-0 hover:bg-[#eec9b5] transition-colors duration-100"
+          className="inline-flex items-center gap-1 text-[10.5px] font-semibold text-accent bg-accent-soft rounded-md px-2 py-1 shrink-0 hover:bg-accent/20 transition-colors duration-100"
           onClick={(e) => e.stopPropagation()}
         >
           <ExternalLink size={9} strokeWidth={2.2} />

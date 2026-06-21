@@ -19,7 +19,7 @@ export function ModuleItem({ module, defaultOpen = false }: ModuleItemProps) {
       <button
         type="button"
         className={`w-full flex items-center gap-4 px-6 py-5 text-left transition-colors duration-150 ${
-          open ? 'bg-accent-soft hover:bg-[#f1d5c8]' : 'hover:bg-surface-subtle'
+          open ? 'bg-accent-soft hover:bg-accent-soft/70' : 'hover:bg-surface-subtle'
         }`}
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
@@ -45,7 +45,7 @@ export function ModuleItem({ module, defaultOpen = false }: ModuleItemProps) {
           <span
             className={`text-[11.5px] rounded-md px-2 py-1 border transition-colors duration-200 ${
               open
-                ? 'bg-[rgba(201,99,63,0.12)] border-[rgba(201,99,63,0.25)] text-accent-deep'
+                ? 'bg-accent-soft border-accent/25 text-accent-deep'
                 : 'bg-surface-subtle border-border text-secondary'
             }`}
           >

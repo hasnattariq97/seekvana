@@ -27,7 +27,7 @@ export function PathHero({ path }: PathHeroProps) {
     <header className="pb-14 border-b border-border mb-14">
       {/* Badges */}
       <div className="flex gap-2 flex-wrap mb-5">
-        <span className="inline-flex items-center gap-1.5 text-[11.5px] font-medium px-3 py-1 rounded-full border border-[#c3e6cd] bg-[#f0faf4] text-success">
+        <span className="inline-flex items-center gap-1.5 text-[11.5px] font-medium px-3 py-1 rounded-full border border-success/30 bg-success/10 text-success">
           <span className="w-1.5 h-1.5 rounded-full bg-current" />
           Beginner
         </span>
@@ -142,7 +142,7 @@ export function PathHero({ path }: PathHeroProps) {
       <div className="flex items-center gap-3 flex-wrap">
         <Link
           href="#modules"
-          className="inline-flex items-center gap-2 bg-accent hover:bg-accent-deep text-white rounded-[10px] px-6 py-3.5 text-[15px] font-semibold transition-all duration-150 hover:-translate-y-px hover:shadow-[0_4px_12px_rgba(201,99,63,0.3)]"
+          className="inline-flex items-center gap-2 bg-accent hover:bg-accent-deep text-white rounded-[10px] px-6 py-3.5 text-[15px] font-semibold transition-all duration-150 hover:-translate-y-px hover:shadow-[0_4px_12px_color-mix(in_srgb,var(--color-accent)_30%,transparent)]"
         >
           Start Module 01
           <ArrowRight size={15} strokeWidth={2} />

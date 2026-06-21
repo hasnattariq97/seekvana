@@ -9,7 +9,12 @@ const SEARCH_CHIPS = ["Agentic AI", "RAG", "Prompting", "Evals"] as const;
 
 const EXPO_EASE = [0.16, 1, 0.3, 1] as const;
 
-export function Hero() {
+interface HeroProps {
+  articleCount: number
+  pathCount: number
+}
+
+export function Hero({ articleCount, pathCount }: HeroProps) {
   const shouldReduceMotion = useReducedMotion();
   const { openSearch } = useSearch();
 
@@ -42,7 +47,7 @@ export function Hero() {
         <motion.div {...fadeUp(0)}>
           <span className="inline-flex items-center gap-2 bg-accent-soft text-accent text-sm rounded-full px-4 py-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-accent" aria-hidden="true" />
-            218 articles · 9 learning paths
+            {articleCount} article{articleCount !== 1 ? 's' : ''} · {pathCount} learning path{pathCount !== 1 ? 's' : ''}
           </span>
         </motion.div>
 

@@ -3,33 +3,10 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { getArticlesByPillar } from '@/lib/mdx'
+import { PILLARS, PILLAR_MAP } from '@/lib/pillars'
 
 interface PageProps {
   params: Promise<{ pillar: string }>
-}
-
-const PILLAR_NAMES: Record<string, string> = {
-  'agentic-ai': 'Agentic AI',
-  'ai-foundations': 'AI Foundations',
-  'large-language-models': 'Large Language Models',
-  'building-with-ai': 'Building with AI',
-  'ai-tools': 'AI Tools & Comparisons',
-  'ai-in-practice': 'AI in Practice',
-  'prompt-engineering': 'Prompt Engineering',
-  'ethics-safety': 'Ethics, Safety & Governance',
-  careers: 'Careers & Learning',
-}
-
-const PILLAR_DESCRIPTIONS: Record<string, string> = {
-  'agentic-ai': 'Agents, tool use, memory, planning, and multi-agent systems — the flagship pillar.',
-  'ai-foundations': "What AI is, how it works, and why it matters. Start here if you're new.",
-  'large-language-models': 'Tokens, context windows, RAG, fine-tuning, and how LLMs actually think.',
-  'building-with-ai': 'APIs, SDKs, evals, deployment, and cost management for builders.',
-  'ai-tools': 'Reviews and comparisons of the best AI tools and platforms.',
-  'ai-in-practice': 'Real workflows for writing, research, coding, and automation — no deep technical knowledge required.',
-  'prompt-engineering': 'Write prompts that get results. Techniques, patterns, and frameworks that actually work.',
-  'ethics-safety': 'Responsible AI, alignment, risks, and governance.',
-  careers: 'How to learn AI, career paths, roles, and building your portfolio.',
 }
 
 const DIFFICULTY_COLORS: Record<string, string> = {
@@ -39,20 +16,20 @@ const DIFFICULTY_COLORS: Record<string, string> = {
 }
 
 export function generateStaticParams() {
-  return Object.keys(PILLAR_NAMES).map((pillar) => ({ pillar }))
+  return PILLARS.map((p) => ({ pillar: p.slug }))
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { pillar } = await params
-  const name = PILLAR_NAMES[pillar]
-  if (!name) return { title: 'Seekvana' }
+  const meta = PILLAR_MAP[pillar]
+  if (!meta) return { title: 'Seekvana' }
   return {
-    title: `${name} — Seekvana`,
-    description: PILLAR_DESCRIPTIONS[pillar],
+    title: `${meta.name} — Seekvana`,
+    description: meta.description,
     alternates: { canonical: `https://seekvana.com/library/${pillar}` },
     openGraph: {
-      title: `${name} — Seekvana`,
-      description: PILLAR_DESCRIPTIONS[pillar],
+      title: `${meta.name} — Seekvana`,
+      description: meta.description,
       url: `https://seekvana.com/library/${pillar}`,
     },
   }
@@ -60,8 +37,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function PillarPage({ params }: PageProps) {
   const { pillar } = await params
-  const pillarName = PILLAR_NAMES[pillar]
-  if (!pillarName) notFound()
+  const pillarMeta = PILLAR_MAP[pillar]
+  if (!pillarMeta) notFound()
 
   const articles = getArticlesByPillar(pillar)
 
@@ -72,12 +49,12 @@ export default async function PillarPage({ params }: PageProps) {
           Library
         </Link>
         <svg className="w-3 h-3 text-border" viewBox="0 0 6 10" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M1 1l4 4-4 4"/></svg>
-        <span className="text-primary">{pillarName}</span>
+        <span className="text-primary">{pillarMeta.name}</span>
       </nav>
 
       <header className="mb-10">
-        <h1 className="font-fraunces text-4xl text-primary mb-3">{pillarName}</h1>
-        <p className="text-lg text-secondary max-w-2xl">{PILLAR_DESCRIPTIONS[pillar]}</p>
+        <h1 className="font-fraunces text-4xl text-primary mb-3">{pillarMeta.name}</h1>
+        <p className="text-lg text-secondary max-w-2xl">{pillarMeta.description}</p>
         <p className="text-sm text-secondary mt-3">
           {articles.length} article{articles.length !== 1 ? 's' : ''}
         </p>
