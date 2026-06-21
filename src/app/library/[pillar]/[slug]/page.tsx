@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { MDXRemote } from 'next-mdx-remote/rsc'
+import remarkGfm from 'remark-gfm'
 import { createClient } from '@supabase/supabase-js'
 import { getArticleSource, getAllArticles, getArticlesByPillar, type ArticleFrontmatter } from '@/lib/mdx'
 import { getMDXComponents } from '@/components/mdx/mdx-components'
@@ -239,7 +240,7 @@ export default async function ArticlePage({ params }: PageProps) {
 
             {/* Article body */}
             <div>
-              <MDXRemote source={source} components={getMDXComponents()} options={{ blockJS: false }} />
+              <MDXRemote source={source} components={getMDXComponents()} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
             </div>
 
             {/* Feedback */}
