@@ -53,11 +53,6 @@ The fix is simple: treat AI output like a first draft from a smart, fast, occasi
 
 ## Is AI really just autocomplete?
 
-<ArticleImage
-  src="/images/articles/ai-foundations/how-to-think-about-ai/collaboration-loop.webp"
-  alt="Four-step circular loop diagram showing: You direct, AI drafts, You review, You decide"
-/>
-
 The opposite mistake is just as limiting. Once people understand tokens and prediction, some conclude AI is "just autocomplete", a glorified spellchecker that can't do anything genuinely useful.
 
 That undersells it significantly.
@@ -88,6 +83,12 @@ Here's the mental model worth keeping. Four steps:
 3. **You review**, read critically, catch errors, identify what's missing
 4. **You decide**, you refine it and put your judgment behind the result
 
+<ArticleImage
+  src="/images/articles/ai-foundations/how-to-think-about-ai/collaboration-loop.webp"
+  alt="Four-step circular loop: You Direct, AI Drafts, You Review, You Decide"
+  caption="The collaboration loop — you hold every decision point, AI handles the middle."
+/>
+
 Notice who makes every important decision. You do. AI handles the time-consuming middle parts.
 
 The quality of this loop depends almost entirely on Step 1. Think of prompting like briefing a capable new hire who knows nothing about your situation. They're smart and fast, but they can only work with what you give them. Tell them the audience, the goal, the tone, the constraints, and the output gets dramatically better. Leave all of that out, and you'll get a generic response that misses the point.
@@ -116,41 +117,11 @@ You're ready.
 
 ## Quick Check
 
-<Quiz
-  question="You ask an AI for the publication date of a research paper. It gives you a confident, specific answer. What should you do?"
-  options={[
-    "Use it — the AI wouldn't make up a specific date",
-    "Verify it before using it anywhere important",
-    "Ask the AI the same question again to confirm",
-    "Ignore the answer — AI can't handle factual queries"
-  ]}
-  correct={1}
-  explanation="Specific facts like dates, names, and citations are exactly what AI hallucinates most convincingly. Confident delivery is not a signal of accuracy — always verify before using factual claims in anything that matters."
-/>
+<Quiz question="You ask an AI for the publication date of a research paper. It gives you a confident, specific answer. What should you do?" options={["Use it — the AI wouldn't make up a specific date", "Verify it before using it anywhere important", "Ask the AI the same question again to confirm", "Ignore the answer — AI can't handle factual queries"]} correct={1} explanation="Specific facts like dates, names, and citations are exactly what AI hallucinates most convincingly. Confident delivery is not a signal of accuracy — always verify before using factual claims in anything that matters." />
 
-<Quiz
-  question="You try AI once, give it a vague prompt, and get a generic useless response. What is the most likely cause?"
-  options={[
-    "The AI model isn't capable enough for your task",
-    "You need a paid subscription for better results",
-    "The prompt lacked context — AI can only work with what you give it",
-    "AI doesn't work well for creative or complex tasks"
-  ]}
-  correct={2}
-  explanation="The briefing is your responsibility. AI has no idea about your audience, tone, goal, or constraints unless you say so. A vague prompt produces a generic response every time — adding context is the single highest-leverage change you can make."
-/>
+<Quiz question="You try AI once, give it a vague prompt, and get a generic useless response. What is the most likely cause?" options={["The AI model isn't capable enough for your task", "You need a paid subscription for better results", "The prompt lacked context — AI can only work with what you give it", "AI doesn't work well for creative or complex tasks"]} correct={2} explanation="The briefing is your responsibility. AI has no idea about your audience, tone, goal, or constraints unless you say so. A vague prompt produces a generic response every time — adding context is the single highest-leverage change you can make." />
 
-<Quiz
-  question="Which of these is the best description of the collaboration loop?"
-  options={[
-    "AI decides → you review → you publish",
-    "You prompt → AI answers → done",
-    "You direct → AI drafts → you review → you decide",
-    "AI plans → AI drafts → AI refines → you approve"
-  ]}
-  correct={2}
-  explanation="You hold every decision point in the loop. AI handles the fast, time-consuming middle — drafting, generating, summarizing. Your judgment drives what goes in and what comes out. That's what makes it collaboration, not delegation."
-/>
+<Quiz question="Which of these is the best description of the collaboration loop?" options={["AI decides → you review → you publish", "You prompt → AI answers → done", "You direct → AI drafts → you review → you decide", "AI plans → AI drafts → AI refines → you approve"]} correct={2} explanation="You hold every decision point in the loop. AI handles the fast, time-consuming middle — drafting, generating, summarizing. Your judgment drives what goes in and what comes out. That's what makes it collaboration, not delegation." />
 
 <Note>
   Done? You've completed Lesson 01.08, and all of Module 01. Next up: [What is an AI Agent?](/library/agentic-ai/what-is-an-agent) →
