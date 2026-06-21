@@ -1,0 +1,199 @@
+---
+title: "The AI Family Tree: From Machine Learning to Agentic AI"
+description: "Types of artificial intelligence — explained clearly. Five generations, one mental model. Learn how ML, deep learning, LLMs, and agentic AI connect."
+pillar: "ai-foundations"
+slug: "ai-family-tree"
+difficulty: "beginner"
+readTime: 8
+author: "Seekvana"
+publishedAt: "2026-06-20"
+tags: ["types of artificial intelligence", "machine learning", "generative ai", "ai family tree", "agentic ai"]
+featured: false
+lessonModule: "00"
+lessonNumber: "01.02"
+---
+
+<ArticleImage
+  src="/images/articles/ai-foundations/ai-family-tree/cover.webp"
+  alt="The AI family tree — five generations from machine learning to agentic AI, illustrated as branches on a tree with clay accent on the newest tip"
+/>
+
+There are five types of artificial intelligence that matter right now — and most people don't realize they're all part of the same family. Machine learning, deep learning, generative AI, agentic AI: these terms get thrown around like they're completely separate things. They're not. Each one is a layer built on top of the previous one.
+
+In this lesson, you'll learn the five-generation AI family tree. By the end, you'll know exactly where every AI buzzword fits on the map — and why it exists.
+
+> **Key Takeaways**
+> - The AI family tree has five generations: Machine Learning → Deep Learning → Large Language Models → Generative AI → Agentic AI
+> - Each generation builds on the last — they're nested, not competing
+> - ChatGPT, Claude, and Gemini are Generative AI systems built on all four layers below them
+> - Agentic AI is the newest layer — AI that pursues goals and takes actions, not just answers questions
+
+---
+
+## The five-generation family tree
+
+Before we go level by level, here's the full picture. Each step builds directly on the one before it.
+
+<ArticleImage
+  src="/images/articles/ai-foundations/ai-family-tree/ai-family-tree-diagram.webp"
+  alt="Five-generation AI family tree diagram: Machine Learning → Deep Learning → Large Language Models → Generative AI → Agentic AI"
+/>
+
+<Mermaid>
+graph LR
+    ML["Machine Learning\n(1950s–present)"] --> DL["Deep Learning\n(2010s–present)"]
+    DL --> LLM["Large Language Models\n(2017–present)"]
+    LLM --> GenAI["Generative AI\n(2022–present)"]
+    GenAI --> AgAI["Agentic AI\n(2023–present)"]
+</Mermaid>
+
+Every AI system you hear about today lives somewhere on this chain. Your job in this lesson is to know what each level means — and why each one needed the level before it.
+
+---
+
+## Level 1 — Machine Learning: teaching computers to learn from examples
+
+**Machine learning** is the foundation the entire tree sits on.
+
+Before machine learning, if you wanted a computer to recognize spam emails, you had to write thousands of rules by hand: "if the subject contains 'FREE MONEY', mark as spam." That breaks down fast. Spammers change their wording. Rules multiply. The system collapses.
+
+Machine learning flips this. Instead of writing rules, you show the system thousands of examples — spam emails labeled "spam," real emails labeled "not spam" — and let it find the patterns itself.
+
+The result is a system that generalizes. It can spot spam it has never seen before, because it learned what spam looks like from examples rather than rules.
+
+<Note>
+  Machine learning is still everywhere you look: spam filters, Netflix recommendations, fraud detection, Google Search ranking. It doesn't need deep learning or language models to be useful.
+</Note>
+
+This was the first fundamental shift. Computers went from following rules humans wrote to finding rules in data.
+
+---
+
+## Level 2 — Deep Learning: pattern recognition at a much larger scale
+
+**Deep learning** is machine learning built on a specific architecture: neural networks — layers of interconnected mathematical functions — with many processing layers. If that sentence made your eyes glaze over, that's normal. We'll make it concrete in a moment.
+
+The word "deep" just refers to the number of layers. More layers means more capacity to find complex patterns — and crucially, the ability to handle messy inputs like photos, audio, and text.
+
+Classic machine learning works well on structured data — rows and columns of numbers. Deep learning unlocked everything messy. Face ID on your iPhone is a deep learning system. So is the voice recognition in Siri. So is the model that reads an MRI scan and flags possible tumors.
+
+The breakthrough came in the early 2010s, when graphics processing units got cheap enough to train these large networks on massive datasets. Once that happened, progress accelerated fast — and the path to language models opened up.
+
+---
+
+## Level 3 — Large Language Models: deep learning applied to language
+
+**Large language models (LLMs)** are a type of deep learning system trained on enormous amounts of text — effectively the written record of human knowledge.
+
+The key advance came in 2017 with a research paper called <a href="https://arxiv.org/abs/1706.03762" rel="noopener" target="_blank">"Attention Is All You Need"</a>. It introduced the **transformer** architecture, which could model the relationships between words across long sequences far more accurately than anything before it.
+
+Researchers trained transformers on books, websites, Wikipedia, code, and more. The result was a system that could predict the next word in a sequence with remarkable accuracy — remarkable enough that we still don't fully understand why it generalizes so well.
+
+One-sentence version: an LLM is a deep learning system that predicts the most likely next piece of text, over and over, until it decides to stop. That single capability — next-token prediction, done billions of times — is what powers every AI writing assistant, coding tool, and chatbot you'll use in this course.
+
+<Note>
+  The next lesson goes deeper — tokens, training, inference, and why these systems seem to understand things they technically can't. <a href="/library/large-language-models/how-llms-work">How LLMs Actually Work</a> covers it all, no math required.
+</Note>
+
+---
+
+## Level 4 — Generative AI: creating content, not just classifying it
+
+**Generative AI** is what you get when you apply large language models — and similar architectures — to the task of creating new content.
+
+Earlier AI systems were mostly classifiers: is this email spam or not? Is this image a cat or a dog? Generative AI produces something new: text, images, code, audio, video.
+
+ChatGPT, Claude, Gemini, DALL-E, Midjourney — all generative AI. They generate responses from scratch based on your input. If you've typed a question into Claude or asked ChatGPT to write something, you've used generative AI.
+
+The key distinction: earlier AI recognized patterns in existing content. Generative AI creates new content by learning the patterns so well it can extend them.
+
+---
+
+## Level 5 — Agentic AI: AI that acts, not just answers
+
+**Agentic AI** is the newest layer on the tree — and the one I find genuinely hard to stop reading about.
+
+Generative AI responds to your prompt and stops. Agentic AI pursues a goal.
+
+The practical difference: you give a chatbot a question and it gives you an answer. You give an agent an objective — "research the top competitors in this space and write a summary" — and it decides what steps to take, executes them (searching the web, reading pages, comparing data, drafting output), and hands you a finished result.
+
+Agents use tools: web search, code execution, file access, APIs. They can run for minutes without waiting for you to direct each step. Claude's computer use, GitHub Copilot Workspace, AutoGPT — all agentic systems.
+
+<Note>
+  Want to see what agents actually look like in practice? <a href="/library/agentic-ai/what-is-an-agent">What Is an AI Agent?</a> walks through how they work and what separates them from standard chatbots.
+</Note>
+
+This is where AI moves from "useful assistant" to "something that can actually do work."
+
+---
+
+## Why this map matters
+
+Most AI confusion comes from treating these terms as alternatives — when they describe different layers of the same stack.
+
+When a company says "we use machine learning," they could mean anything from a spam filter to a frontier AI agent. When someone says "we built an AI agent," they're describing a system that uses all five layers simultaneously.
+
+Knowing the family tree means you always have context. You hear any AI term and immediately know where it sits, what came before it, and what made it possible.
+
+That's the whole lesson: one map, five levels, everything connected.
+
+---
+
+## Test yourself
+
+Three scenarios. For each one, identify which level of the AI family tree it belongs to.
+
+<Quiz
+  question="Netflix decides what show to recommend you next. Which level of the family tree is doing this?"
+  options={["Machine Learning", "Deep Learning", "Generative AI", "Agentic AI"]}
+  correct={0}
+  explanation="Machine Learning. Netflix's recommendation engine learns patterns from your watch history and similar users' behaviour to predict what you'll enjoy next. No content generation, no language model — just pattern matching from data. Machine learning doesn't need any of the upper layers to be useful."
+/>
+
+<Quiz
+  question="DALL-E produces an original image from your text prompt. Which level is this?"
+  options={["Machine Learning", "Deep Learning", "Large Language Models", "Generative AI"]}
+  correct={3}
+  explanation="Generative AI. DALL-E creates something new from your prompt rather than classifying what already exists. It's also built on deep learning and machine learning underneath — but Generative AI is the right level to name, because that's the layer that describes what it does: generate."
+/>
+
+<Quiz
+  question="An AI reads your emails, finds a free slot, books a meeting with your client, and sends a confirmation — all while you're away from your desk. Which level?"
+  options={["Large Language Models", "Generative AI", "Deep Learning", "Agentic AI"]}
+  correct={3}
+  explanation="Agentic AI. It's pursuing a goal across multiple steps without you directing each one. A chatbot would answer a question about scheduling. An agent actually does the scheduling. That gap — between responding and acting — is the whole point of Level 5."
+/>
+
+<Note>
+  Done? You've completed Lesson 01.02. Next up: <a href="/library/large-language-models/how-llms-work">How LLMs Actually Work — no math required</a> →
+</Note>
+
+---
+
+*This is Lesson 01.02 of the <a href="/paths/getting-started">Getting Started path</a>. You came from <a href="/library/ai-foundations/what-is-ai">Lesson 01.01: What AI Actually Is</a>.*
+
+---
+
+## Frequently asked questions
+
+<FAQ>
+  <FAQItem question="What is the difference between machine learning and deep learning?">
+    Deep learning is a type of machine learning — not a separate thing. All deep learning is machine learning, but not all machine learning is deep learning. The difference is architecture: deep learning uses neural networks with many layers, which lets it handle messy inputs like images, audio, and text. Classic machine learning works best on structured data like rows and columns of numbers. Think of deep learning as machine learning with a more powerful engine under the hood.
+  </FAQItem>
+
+  <FAQItem question="What type of AI is ChatGPT?">
+    ChatGPT is all five types at once — that's exactly what the family tree shows. It's a machine learning system, built on deep learning, using a large language model architecture, deployed as generative AI. The newest versions of ChatGPT also have agentic capabilities (tools, web search, code execution). When someone asks "is ChatGPT machine learning or deep learning?" the answer is: both, plus three more layers on top.
+  </FAQItem>
+
+  <FAQItem question="What are the 4 types of artificial intelligence?">
+    The classic academic answer is: reactive machines, limited memory AI, theory of mind AI, and self-aware AI. That taxonomy describes AI by how much it can reason and adapt — and only the first two have been built so far. The five-generation tree in this article describes a different (and more practical) taxonomy: how each generation of technology was built. Both frameworks are valid; the generational tree is more useful for understanding the tools you actually use in 2026.
+  </FAQItem>
+
+  <FAQItem question="What is the difference between generative AI and agentic AI?">
+    Generative AI creates content — text, images, code, audio — in response to your prompt. Agentic AI pursues a goal autonomously, deciding what steps to take and executing them without you directing each one. The clearest way to tell them apart: generative AI responds once and stops; agentic AI keeps going until the job is done. ChatGPT answering a question is generative AI. ChatGPT searching the web, reading results, and writing a report while you go make coffee is agentic AI.
+  </FAQItem>
+
+  <FAQItem question="Does agentic AI replace generative AI?">
+    No — agentic AI is built on top of generative AI, not instead of it. An AI agent needs a language model to reason, plan, and produce outputs at each step. What changes is the wrapper around it: instead of responding to one prompt, the model is given a goal and a set of tools and runs a loop until it reaches a result. Generative AI is still doing the core work inside every agent.
+  </FAQItem>
+</FAQ>

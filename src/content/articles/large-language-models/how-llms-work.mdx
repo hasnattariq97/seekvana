@@ -1,72 +1,144 @@
 ---
-title: "How LLMs Actually Work"
-description: "Tokens, transformers, and the prediction loop — a clear technical explanation without the hand-waving."
+title: "How Large Language Models Actually Work, No Math Required"
+description: "Curious how ChatGPT or Claude actually works? This lesson explains tokens, training, and inference in plain English — no math, no jargon, just clarity."
 pillar: "large-language-models"
 slug: "how-llms-work"
 difficulty: "beginner"
-readTime: 9
+readTime: 8
 author: "Seekvana"
-publishedAt: "2026-02-05"
-tags: ["LLMs", "transformers", "tokens", "AI basics"]
+publishedAt: "2026-06-20"
+tags: ["how do llms work", "tokens in ai", "llm explained", "how does chatgpt work"]
 featured: false
+lessonModule: "00"
+lessonNumber: "01.03"
 ---
 
-Every large language model — GPT-4, Claude, Gemini — is doing one thing: predicting the next token. That's it. The remarkable thing is how much intelligence emerges from doing that one thing at enormous scale.
+<ArticleImage
+  src="/images/articles/large-language-models/how-llms-work/cover.webp"
+  alt="Editorial illustration of text breaking into token chunks floating above neural network shapes"
+  dimensions="1200x630"
+/>
 
-Understanding how that prediction works explains why LLMs are brilliant at some things, unreliable at others, and why prompting them well is a skill worth developing.
+You typed a question into ChatGPT or Claude. Two seconds later, something coherent appeared, an answer that felt almost like talking to someone who understood you. Here's what actually happened: a large language model predicted the most likely next word, billions of times in a row, until it stopped. In this lesson, you'll find out exactly how, no math, no computer science background required.
 
-<AdSlot />
+If you're not sure where LLMs fit in the broader AI landscape, the [AI family tree](/library/ai-foundations/ai-family-tree) lesson covers that first.
 
-## Tokens, Not Words
+> **Key Takeaways**
+> - LLMs don't read words, they read **tokens**, which are chunks of text smaller than a word
+> - Training means processing billions of words and learning to predict what comes next, not memorizing, not understanding
+> - When you send a message, the model predicts the most likely next token, one at a time, until it stops
+> - Whether an LLM truly "understands" is an open question, even researchers disagree
 
-LLMs don't read text the way humans do. They read **tokens** — chunks of characters that sit somewhere between letters and words. The word "understanding" might be a single token. "Seekvana" might be split into three: "Se", "ek", "vana". Common English words are usually one token; rare words, names, and code get broken into smaller pieces.
+---
 
-Why does this matter? Three reasons:
+## What's a token? (Not what you think)
 
-- **Cost** — API pricing is per token, so understanding token counts helps you estimate costs
-- **Context limits** — models have a maximum number of tokens they can process at once (their "context window")
-- **Surprising behaviour** — because "9.11" and "9.9" tokenise differently to how you'd expect, arithmetic that looks trivial can trip up a model
+Here's the thing about tokens, they're not words.
 
-A useful rule of thumb: 1 token ≈ 0.75 words in English. A 1,000-word article is roughly 1,300 tokens.
+When text enters a large language model, it doesn't see "Hello, how are you?" as four words. It sees something closer to six or seven pieces: `Hello` / `,` / ` how` / ` are` / ` you` / `?`. Each piece is a **token**, a chunk of text the model treats as one unit.
 
-## The Transformer Architecture
+This matters more than it first appears. Take the word "unhappiness." You see one word. The model sees three tokens: `un` / `happi` / `ness`. A short, common word like "cat" is usually one token. A rare technical word might get split into five or six.
 
-Modern LLMs are all built on the **transformer**, introduced by Google in 2017. You don't need to know the maths to use LLMs effectively, but three ideas are worth understanding:
+<ArticleImage
+  src="/images/articles/large-language-models/how-llms-work/tokens-diagram.webp"
+  alt="Diagram showing the word unhappiness splitting into three tokens: un, happi, ness"
+  dimensions="800x450"
+/>
 
-**Attention** — for every token the model reads, attention lets it look across the entire context and decide which other tokens are most relevant to interpreting it. The word "it" in a long paragraph could refer to many things; attention figures out which one.
+Why does this matter for you? Because everything in a language model, what it can read, remember, and generate, is measured in tokens, not words. When you see a model's "context window" listed as 200,000 tokens, that's closer to 150,000 words. Pricing, speed, and limits all trace back to token counts.
 
-**Layers** — transformers stack many attention layers on top of each other. Earlier layers capture simple patterns (grammar, named entities); deeper layers capture abstract relationships (tone, argument structure, intent). Most large models have 80–100+ layers.
+<Tip>
+  A practical rule of thumb: one token is roughly four characters, or about 0.75 words. So 1,000 words is approximately 1,333 tokens. This comes up constantly once you start working with AI tools.
+</Tip>
 
-**Parameters** — each layer has millions of learned weights, adjusted during training to minimise prediction errors. A "70 billion parameter" model has 70 billion of these numbers. More parameters generally means more capacity to store patterns — but also more memory, slower inference, and higher cost.
+## How does an LLM learn from text?
 
-## Training vs Inference
+If tokens are the alphabet of a language model, training is where it learns the language.
 
-**Training** is when the model learns. It reads trillions of tokens of text from the internet, books, and code, and updates its parameters billions of times to get better at predicting each next token. Training a frontier model takes months and costs tens of millions of dollars in compute. You never pay for this — it happens once, at the lab.
+Here's the most accurate, simple description: a large language model reads an enormous amount of text, books, websites, code, articles, conversations, and learns to predict what comes next.
 
-**Inference** is when you use the model. You send a prompt; the model generates one token at a time, each prediction conditioned on all previous tokens. This is what you're paying for with API usage. It's much cheaper than training, but can still add up at scale.
+Not memorize. Not understand. **Predict.**
+
+Think of it this way. Imagine you've read every mystery novel ever written. After enough of them, you could finish almost any sentence: "The detective walked into the dimly lit room and noticed the \_\_\_." You don't understand crime. You haven't memorized every book. You've just absorbed enough patterns to know what tends to follow what.
+
+That's training. The model adjusts billions of internal parameters, think of them as tiny dials, every time it makes a wrong prediction. Billions of corrections later, it gets very good at next-token prediction.
 
 <Note>
-"Fine-tuning" sits between the two: you take a pre-trained model and continue training it on a smaller, task-specific dataset. It adjusts the existing weights rather than learning from scratch — much cheaper than full training, but still not something you do casually.
+  The scale involved is genuinely hard to picture. [GPT-3](https://arxiv.org/abs/2005.14165) was trained on roughly 500 billion tokens. The model itself has 175 billion parameters. That scale, not any special magic, is what makes the behavior feel intelligent.
 </Note>
 
-## Why Prediction Produces Intelligence
+One more thing worth knowing: training is extraordinarily expensive and happens once. After training, the model's parameters are frozen. They don't change when you use it. The frozen result of training is what you're talking to.
 
-It seems like predicting the next word should be trivial. But to predict the next token well across all of human text — fiction, code, legal documents, scientific papers, casual conversation — a model has to implicitly learn grammar, facts, reasoning patterns, writing styles, and cause-and-effect relationships.
+## What happens when you type into ChatGPT?
 
-The model has never been explicitly taught any of these things. It learned them because they are useful for prediction.
+This is the part called **inference**, what happens every time you actually use the model.
 
-This is why LLMs can explain concepts, write code, translate languages, and summarise documents without any of those tasks being directly in their training objective. They are side effects of doing prediction well.
+When you type into ChatGPT or Claude, the inference process starts immediately. Say you type: "What's the best way to start learning guitar?"
 
-## What This Means for How You Use Them
+The model doesn't search a database. It doesn't retrieve a stored answer. It takes your entire message as context and asks one question: given everything I've learned and everything you just said, what is the most likely next token?
 
-Three practical takeaways:
+It picks one. Then it takes your message plus that token and asks again. Then again. It does this, potentially thousands of times per response, until it predicts a token that means "stop."
 
-1. **They predict plausible next tokens, not true statements.** This is why they hallucinate — sometimes the most plausible continuation is a confident-sounding falsehood. Always verify factual claims against primary sources.
-2. **More context usually helps.** Because attention can see the whole context, adding relevant background to your prompt usually improves output quality.
-3. **They are not databases.** They don't look things up; they recall patterns from training. For up-to-date or private information, use retrieval-augmented generation (RAG) instead.
+That's the whole mechanism. Token by token, one at a time, until done. Every response you've ever gotten from any LLM was built this way.
 
-| Model size | Typical use case | Speed | Cost |
-|---|---|---|---|
-| Small (7B) | Simple tasks, local deployment | Fast | Low |
-| Medium (70B) | Most production tasks | Moderate | Moderate |
-| Large (400B+) | Complex reasoning, frontier tasks | Slow | High |
+This is why LLMs can feel like they're thinking through a response step by step, in a sense, they are. Each token shapes what comes next. The response builds itself, each piece influenced by everything before it.
+
+It's also why they can be confidently wrong. If the most statistically likely next token is incorrect, the model still picks it. It has no way to check facts against the world. It only knows patterns.
+
+Some systems do add that capability, they can retrieve real information before generating a response. That's a technique called [RAG](/library/agentic-ai/rag-explained), and it's a separate lesson.
+
+## The question everyone eventually asks
+
+At some point, everyone who uses a language model asks the same thing: does it actually *understand* what it's saying?
+
+The honest answer: we don't fully know. I find this genuinely interesting, not as a hedge, but as the most accurate position available.
+
+What we can say is this, the model behaves as if it understands. It reasons through problems, catches contradictions, follows multi-step instructions, and adjusts its tone based on context. Whatever is happening inside, the outputs are often remarkable.
+
+What we can't say with confidence is whether something is happening beyond very sophisticated pattern matching. Whether there's anything it is like to be a language model, any experience at all, is a genuinely open question in AI research. Researchers actively disagree.
+
+Anyone who tells you confidently that LLMs definitely do or definitely don't understand is overreaching. The behavior is real. The mechanism is known. The nature of that mechanism is still debated.
+
+What comes after LLMs, giving them tools, memory, and the ability to act in the world, is where [AI agents](/library/agentic-ai/what-is-an-agent) come in. That's the next direction to explore after this course.
+
+For now, here's what's worth holding onto: LLMs predict. They do it brilliantly, at enormous scale, based on patterns learned from more text than any human could read in a thousand lifetimes. And that prediction, done well enough, produces something that feels remarkably like understanding.
+
+---
+
+## Your Task
+
+<Steps>
+  <Step number={1} title="Count your tokens">
+    Go to [claude.ai](https://claude.ai) or [chat.openai.com](https://chat.openai.com). Type any sentence, whatever comes to mind.
+
+    Try to estimate how many tokens it might be. Use the rule of thumb: roughly one token per four characters, or 0.75 tokens per word.
+
+    Then read the response. Notice what just happened: the model didn't retrieve that answer from anywhere. It predicted it, one token at a time, until it stopped.
+
+    That's the whole mechanism. You've now seen it in action.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 01.03. Next up: [Chatbot vs AI Agent — What's Actually the Difference](/library/agentic-ai/chatbot-vs-agent) →
+
+  This is part of the [Getting Started](/paths/getting-started) learning path.
+</Note>
+
+<FAQ>
+  <FAQItem question="Why doesn't ChatGPT remember me from last week?">
+    The base LLM is stateless — it starts fresh every session with no memory of previous conversations. What feels like memory in apps like Claude.ai or ChatGPT is the application layer storing your history and re-injecting it into the context window at the start of each new session. The model itself isn't recalling anything. It's reading your past messages the same way it reads your current one: as tokens in context.
+  </FAQItem>
+
+  <FAQItem question="If it's just predicting the next word, how can it write code and solve problems?">
+    Because predicting the next token in code or logic requires the model to have internalized the patterns of correct reasoning. After training on billions of lines of working code and millions of solved math problems, "what comes next" in a function means knowing what valid syntax, logical structure, and correct outputs look like. The mechanism is simple. The result of applying it at scale is not.
+  </FAQItem>
+
+  <FAQItem question="Why does ChatGPT give different answers to the same question every time?">
+    The model doesn't always select the single most likely next token — it samples from a probability distribution. This randomness is controlled by a setting called temperature. Higher temperature produces more varied, creative responses. Lower temperature locks the output closer to the statistically dominant prediction. This is why asking the same question twice rarely gives the exact same answer, and why setting temperature to zero gives you more deterministic, repeatable output.
+  </FAQItem>
+
+  <FAQItem question="Can you run an LLM on your own computer without the internet?">
+    Yes. Many open-weight models — Llama, Mistral, Phi — can run entirely on a personal laptop or desktop using tools like Ollama or LM Studio, with no internet connection after the initial download. ChatGPT and Claude are cloud-based services where the model lives on company servers. But the underlying technology is not locked to the cloud. Local models are typically smaller and less capable than frontier cloud models, but they run privately, offline, and for free.
+  </FAQItem>
+</FAQ>
