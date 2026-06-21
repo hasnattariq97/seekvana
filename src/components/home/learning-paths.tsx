@@ -31,39 +31,6 @@ const PATHS: Path[] = [
     panelBg: "bg-success",
     illustration: "compass",
   },
-  {
-    badge: "Start here",
-    title: "Build Your First AI Agent",
-    description:
-      "Ten lessons that take you from a single tool call to a working autonomous agent. No framework required — just clear fundamentals you'll actually retain.",
-    difficulty: "Beginner",
-    lessons: 10,
-    href: "/paths/build-first-agent",
-    panelBg: "bg-accent",
-    illustration: "sprout",
-  },
-  {
-    badge: "Most popular",
-    title: "Master Agentic AI",
-    description:
-      "The deepest path on the site. Memory, planning, multi-agent orchestration, and tool use — explained precisely, with no hand-waving.",
-    difficulty: "Intermediate",
-    lessons: 14,
-    href: "/paths/master-agentic-ai",
-    panelBg: "bg-info",
-    illustration: "network",
-  },
-  {
-    badge: "Advanced path",
-    title: "Beginner to AI Engineer",
-    description:
-      "The complete journey from understanding how AI works to shipping production-ready applications. Twenty-four lessons across the full stack.",
-    difficulty: "Advanced",
-    lessons: 24,
-    href: "/paths/beginner-to-engineer",
-    panelBg: "bg-path-purple",
-    illustration: "rocket",
-  },
 ];
 
 const EXPO_EASE = [0.16, 1, 0.3, 1] as const;

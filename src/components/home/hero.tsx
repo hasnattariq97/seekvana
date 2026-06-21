@@ -92,7 +92,7 @@ export function Hero() {
         {/* CTAs */}
         <motion.div {...fadeUp(0.32)} className="flex flex-col sm:flex-row gap-3">
           <Link
-            href="/paths/ai-for-beginners"
+            href="/paths/getting-started"
             className="bg-accent text-white rounded-lg px-8 py-3 font-medium hover:bg-accent-deep focus-visible:ring-2 focus-visible:ring-accent/30 focus-visible:ring-offset-2 focus-visible:outline-none transition-colors"
           >
             Start Learning →

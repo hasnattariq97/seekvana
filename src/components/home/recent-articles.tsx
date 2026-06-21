@@ -25,36 +25,36 @@ interface Article {
 
 const ARTICLES: Article[] = [
   {
-    title: "What makes an AI agent actually agentic?",
+    title: "What AI Actually Is — and What It Is Not",
+    excerpt:
+      "AI is not magic or a robot uprising. Here is what it actually is and why it matters now.",
+    category: "Agentic AI",
+    difficulty: "Beginner",
+    author: "Seekvana",
+    readTime: 7,
+    href: "/library/ai-foundations/what-is-ai",
+    bgClass: "bg-accent-soft",
+  },
+  {
+    title: "Chatbot vs AI Agent: What's Actually the Difference?",
     excerpt:
       "The line between a chatbot and an agent comes down to one thing — whether the model decides what happens next.",
     category: "Agentic AI",
     difficulty: "Beginner",
     author: "Seekvana",
     readTime: 8,
-    href: "/library/agentic-ai/what-is-an-agent",
-    bgClass: "bg-accent-soft",
-  },
-  {
-    title: "Tool use: giving models hands, not just a mouth",
-    excerpt:
-      "Function calling turns a language model from a talker into a doer — here's how it actually works.",
-    category: "Agentic AI",
-    difficulty: "Intermediate",
-    author: "Seekvana",
-    readTime: 12,
-    href: "/library/agentic-ai/tool-use-explained",
+    href: "/library/agentic-ai/chatbot-vs-agent",
     bgClass: "bg-info/20",
   },
   {
-    title: "RAG without the hype: retrieval that actually helps",
+    title: "How Large Language Models Actually Work",
     excerpt:
-      "Retrieval-augmented generation is simple in principle and finicky in practice — let's fix that.",
-    category: "RAG",
+      "Tokens, attention, and the transformer architecture explained without the jargon.",
+    category: "Agentic AI",
     difficulty: "Beginner",
     author: "Seekvana",
     readTime: 10,
-    href: "/library/large-language-models/rag-explained",
+    href: "/library/large-language-models/how-llms-work",
     bgClass: "bg-surface-subtle",
   },
 ];

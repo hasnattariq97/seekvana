@@ -1,9 +1,0 @@
-{
-  "slug": "build-first-agent",
-  "title": "Build Your First AI Agent",
-  "description": "Go from one tool call to a working autonomous agent.",
-  "difficulty": "beginner",
-  "lessonCount": 10,
-  "href": "/paths/build-first-agent",
-  "colorClass": "bg-success"
-}

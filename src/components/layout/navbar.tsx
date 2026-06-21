@@ -24,11 +24,7 @@ import { cn } from "@/lib/utils";
 // ─── Nav data ─────────────────────────────────────────────────────────────────
 
 const LEARNING_PATHS_META = [
-  { label: "AI for Beginners",        href: "/paths/ai-for-beginners",     lessons: 8,  difficulty: "Beginner",     dotClass: "bg-accent" },
-  { label: "Master Agentic AI",       href: "/paths/master-agentic-ai",    lessons: 14, difficulty: "Intermediate", dotClass: "bg-info" },
-  { label: "Build Your First Agent",  href: "/paths/build-first-agent",    lessons: 10, difficulty: "Beginner",     dotClass: "bg-success" },
-  { label: "Prompt Engineering",      href: "/paths/prompt-engineering",   lessons: 6,  difficulty: "Beginner",     dotClass: "bg-path-amber" },
-  { label: "Beginner to AI Engineer", href: "/paths/beginner-to-engineer", lessons: 24, difficulty: "Advanced",     dotClass: "bg-path-purple" },
+  { label: "Getting Started", href: "/paths/getting-started", lessons: 101, difficulty: "Beginner", dotClass: "bg-success" },
 ] as const;
 
 const PILLARS = [
@@ -234,7 +230,7 @@ function MobileNav({ onClose }: { onClose: () => void }) {
       {/* CTA */}
       <div className="p-4 border-t border-border">
         <Link
-          href="/paths/ai-for-beginners"
+          href="/paths/getting-started"
           onClick={onClose}
           className="flex w-full items-center justify-center bg-accent text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-accent-deep transition-colors"
         >
@@ -280,7 +276,7 @@ export function Navbar() {
 
           {/* Get started — desktop only */}
           <Link
-            href="/paths/ai-for-beginners"
+            href="/paths/getting-started"
             className="hidden md:inline-flex items-center bg-accent text-white rounded-lg px-4 py-2 text-sm font-medium hover:bg-accent-deep transition-colors"
           >
             Get started

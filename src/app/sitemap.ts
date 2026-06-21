@@ -55,31 +55,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     ...pillarEntries,
     {
-      url: `${BASE_URL}/paths/ai-for-beginners`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.7,
-    },
-    {
-      url: `${BASE_URL}/paths/master-agentic-ai`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.7,
-    },
-    {
-      url: `${BASE_URL}/paths/build-first-agent`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.7,
-    },
-    {
-      url: `${BASE_URL}/paths/prompt-engineering`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
-      priority: 0.7,
-    },
-    {
-      url: `${BASE_URL}/paths/beginner-to-engineer`,
+      url: `${BASE_URL}/paths/getting-started`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
       priority: 0.7,

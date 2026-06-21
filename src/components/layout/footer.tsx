@@ -4,9 +4,7 @@ import Link from "next/link";
 
 const FOOTER_LINKS = {
   learn: [
-    { label: "AI for Beginners", href: "/paths/ai-for-beginners" },
-    { label: "Master Agentic AI", href: "/paths/master-agentic-ai" },
-    { label: "Build Your First Agent", href: "/paths/build-first-agent" },
+    { label: "Getting Started", href: "/paths/getting-started" },
     { label: "All Paths", href: "/paths" },
   ],
   library: [
