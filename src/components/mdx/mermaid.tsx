@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useTheme } from 'next-themes'
 
 interface MermaidProps {
-  children: string
+  chart: string
 }
 
 // Light/dark palette values for Mermaid's JS API (CSS vars not supported there)
@@ -32,12 +32,13 @@ const THEME = {
   },
 }
 
-export function Mermaid({ children }: MermaidProps) {
+export function Mermaid({ chart }: MermaidProps) {
   const { resolvedTheme } = useTheme()
   const [svg, setSvg] = useState<string | null>(null)
   const idRef = useRef(`mermaid-${Math.random().toString(36).slice(2, 8)}`)
 
   useEffect(() => {
+    if (!chart) return
     let active = true
     setSvg(null)
 
@@ -70,7 +71,7 @@ export function Mermaid({ children }: MermaidProps) {
       })
 
       mermaid
-        .render(idRef.current, children.trim())
+        .render(idRef.current, chart.trim())
         .then(({ svg: out }) => { if (active) setSvg(out) })
         .catch(() => {
           if (active)
@@ -81,7 +82,7 @@ export function Mermaid({ children }: MermaidProps) {
     })
 
     return () => { active = false }
-  }, [children, resolvedTheme])
+  }, [chart, resolvedTheme])
 
   if (!svg) {
     return (

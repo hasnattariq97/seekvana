@@ -25,7 +25,10 @@ npm run lint     # ESLint
 
 **Article pages have a fixed 3-column layout**: left pillar sidebar + center content + right TOC. Never collapse or remove columns — only hide them at breakpoints.
 
-**MDX client components must use only string props.** `next-mdx-remote/rsc` silently drops arrays and numbers when serializing across the RSC boundary — they arrive as `undefined` in production (works fine in dev, breaks only in builds). Pass non-string data as delimited strings and parse inside the component. Example: `options="A|||B|||C"` split on `|||`, `correct="0"` with `parseInt`.
+**MDX client components must use only named string props — no children, no arrays, no numbers.** `next-mdx-remote/rsc` silently drops everything except string props when serializing across the RSC boundary. Works fine in dev, breaks in production builds. Rules:
+- Arrays → delimited string: `options="A|||B|||C"` (split on `|||` in component)
+- Numbers → string: `correct="1"` (parseInt in component)
+- Children → named prop: `<Mermaid chart="graph LR ..." />` not `<Mermaid>{...}</Mermaid>`
 
 ## MDX frontmatter (exact format required)
 
