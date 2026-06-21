@@ -138,4 +138,15 @@
   code, pre {
     font-family: var(--font-mono), "Courier New", monospace;
   }
+
+  /* Raw <a> tags in MDX (external links written as HTML) bypass the MDX component
+     renderer, so they need explicit styling here. */
+  article a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  article a:hover {
+    color: var(--color-accent-deep);
+  }
 }
