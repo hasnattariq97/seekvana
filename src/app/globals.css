@@ -141,7 +141,7 @@
 
   /* Raw <a> tags in MDX (external links written as HTML) bypass the MDX component
      renderer, so they need explicit styling here. */
-  article a {
+  .mdx-content a {
     color: var(--color-accent);
     text-decoration: underline;
     text-underline-offset: 2px;

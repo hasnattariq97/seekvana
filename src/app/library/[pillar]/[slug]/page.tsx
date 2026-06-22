@@ -229,7 +229,7 @@ export default async function ArticlePage({ params }: PageProps) {
             </header>
 
             {/* Article body */}
-            <div>
+            <div className="mdx-content">
               <MDXRemote source={source} components={getMDXComponents()} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
             </div>
 
