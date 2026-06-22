@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { getPathBySlug, generatePathStaticParams } from '@/lib/mdx'
+import { getPathBySlug, generatePathStaticParams, buildLessonArticleMap } from '@/lib/mdx'
 import { PathHero } from '@/components/paths/path-hero'
 import { ModuleList } from '@/components/paths/module-list'
 import { PathSidebar } from '@/components/paths/path-sidebar'
@@ -29,6 +29,22 @@ export default async function PathPage({ params }: Props) {
   const path = getPathBySlug(slug)
   if (!path || !path.modules) notFound()
 
+  const lessonMap = buildLessonArticleMap()
+
+  const enrichedModules = path.modules.map((module) => ({
+    ...module,
+    topics: module.topics.map((topic) => {
+      const match = lessonMap[topic.id]
+      if (!match) return topic
+      return {
+        ...topic,
+        title: match.title,
+        articlePillar: match.pillar,
+        articleSlug: match.slug,
+      }
+    }),
+  }))
+
   const totalTopics = path.modules.reduce((n, m) => n + m.topics.length, 0)
 
   return (
@@ -47,7 +63,7 @@ export default async function PathPage({ params }: Props) {
 
       {/* Two-column layout */}
       <div className="grid grid-cols-1 xl:grid-cols-[1fr_276px] gap-14 pb-24">
-        <ModuleList modules={path.modules} totalTopics={totalTopics} />
+        <ModuleList modules={enrichedModules} totalTopics={totalTopics} />
         <PathSidebar path={path} />
       </div>
     </div>

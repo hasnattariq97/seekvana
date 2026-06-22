@@ -164,6 +164,22 @@ export function getPathBySlug(slug: string): PathData | null {
   return JSON.parse(raw) as PathData
 }
 
+export function buildLessonArticleMap(): Record<string, { pillar: string; slug: string; title: string }> {
+  const articles = getAllArticles()
+  const map: Record<string, { pillar: string; slug: string; title: string }> = {}
+  for (const article of articles) {
+    const lessonNumber = article.frontmatter.lessonNumber
+    if (lessonNumber) {
+      map[lessonNumber] = {
+        pillar: article.pillar,
+        slug: article.slug,
+        title: article.frontmatter.title,
+      }
+    }
+  }
+  return map
+}
+
 export function generatePathStaticParams(): { slug: string }[] {
   const pathsDir = path.join(process.cwd(), 'src', 'content', 'paths')
   if (!fs.existsSync(pathsDir)) return []
