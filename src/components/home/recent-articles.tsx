@@ -52,46 +52,48 @@ function ArticleGrid({ articles }: { articles: ArticleMeta[] }) {
             delay: shouldReduceMotion ? 0 : (i % 3) * 0.08,
           }}
           whileHover={shouldReduceMotion ? undefined : { y: -2 }}
-          className="bg-surface rounded-xl border border-border overflow-hidden hover:shadow-md transition-shadow relative"
+          className="bg-surface rounded-xl border border-border overflow-hidden hover:shadow-md transition-all group"
         >
-          <Link
-            href={`/library/${article.pillar}/${article.slug}`}
-            className="absolute inset-0 z-0 focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none rounded-xl"
-            aria-label={`Read: ${article.frontmatter.title}`}
-          />
-          <div className="relative h-48 bg-surface-subtle overflow-hidden">
-            <Image
-              src={`/images/articles/${article.pillar}/${article.slug}/cover.webp`}
-              alt={article.frontmatter.title}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 33vw"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-            <span className="absolute bottom-3 left-3 bg-accent-soft text-accent text-xs rounded-full px-2.5 py-0.5 font-medium backdrop-blur-sm capitalize">
-              {article.pillar.replace(/-/g, ' ')}
-            </span>
-          </div>
-          <div className="p-5 relative z-10">
-            <span
-              className={`inline-block text-xs rounded-full px-2.5 py-0.5 font-medium capitalize ${
-                DIFFICULTY_BADGE[article.frontmatter.difficulty as Difficulty] ?? DIFFICULTY_BADGE.beginner
-              }`}
-            >
-              {article.frontmatter.difficulty}
-            </span>
-            <h3 className="font-fraunces text-lg text-primary mt-2 leading-snug">
-              {article.frontmatter.title}
-            </h3>
-            <p className="font-inter text-sm text-secondary mt-1 line-clamp-2">
-              {article.frontmatter.description}
-            </p>
-            <div className="flex items-center gap-3 mt-3">
-              <span className="text-xs text-secondary">{article.frontmatter.readTime} min read</span>
-              <span className="text-secondary text-xs">·</span>
-              <span className="text-xs text-secondary">{article.frontmatter.author}</span>
+          <Link href={`/library/${article.pillar}/${article.slug}`} className="block focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none">
+            <div className="relative h-48 bg-surface-subtle overflow-hidden">
+              <Image
+                src={`/images/articles/${article.pillar}/${article.slug}/cover.webp`}
+                alt={article.frontmatter.title}
+                fill
+                className="object-cover group-hover:scale-[1.02] transition-transform duration-300"
+                sizes="(max-width: 768px) 100vw, 33vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              <span className="absolute bottom-3 left-3 bg-accent-soft text-accent text-xs rounded-full px-2.5 py-0.5 font-medium backdrop-blur-sm capitalize">
+                {article.pillar.replace(/-/g, ' ')}
+              </span>
             </div>
-          </div>
+            <div className="p-5">
+              <span
+                className={`inline-block text-xs rounded-full px-2.5 py-0.5 font-medium capitalize ${
+                  DIFFICULTY_BADGE[article.frontmatter.difficulty as Difficulty] ?? DIFFICULTY_BADGE.beginner
+                }`}
+              >
+                {article.frontmatter.difficulty}
+              </span>
+              <h3 className="font-fraunces text-lg text-primary mt-2 leading-snug group-hover:text-accent transition-colors">
+                {article.frontmatter.title}
+              </h3>
+              <p className="font-inter text-sm text-secondary mt-1 line-clamp-2">
+                {article.frontmatter.description}
+              </p>
+              <div className="flex items-center justify-between mt-4 pt-3 border-t border-border">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-secondary">{article.frontmatter.readTime} min read</span>
+                  <span className="text-secondary text-xs">·</span>
+                  <span className="text-xs text-secondary">{article.frontmatter.author}</span>
+                </div>
+                <span className="text-xs font-medium text-accent group-hover:underline">
+                  Read article →
+                </span>
+              </div>
+            </div>
+          </Link>
         </motion.article>
       ))}
     </div>
