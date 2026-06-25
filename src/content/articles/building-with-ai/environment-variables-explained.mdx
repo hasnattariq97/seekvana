@@ -99,6 +99,7 @@ If that file ever reaches GitHub, even accidentally, GitHub's <a href="https://d
 <ArticleImage
   src="/images/articles/building-with-ai/environment-variables-explained/environment-variables-api-key-contrast.webp"
   alt="Split illustration showing a dangerous hardcoded API key in code on the left and a safe environment variable reference on the right"
+  caption="Left: API key hardcoded in source code — exposed if the file reaches GitHub. Right: code reads the key by name from the environment — the actual value never appears in the file."
 />
 
 However, an environment variable fixes this cleanly. Your code references the *name* (`API_KEY`), not the value. When the program runs, it looks up the value from the OS at that moment. The actual key never appears in your file.
