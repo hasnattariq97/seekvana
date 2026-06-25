@@ -71,7 +71,8 @@ Chat doesn't change your code. It only answers. That's the point, it's a safe pl
 
 <ArticleImage
   src="/images/articles/building-with-ai/install-cursor/cursor-three-modes.webp"
-  alt="Editorial flat illustration of three distinct UI panels — a chat bubble, a highlighted code block, and a multi-file task list — arranged horizontally"
+  alt="Three Cursor AI modes side by side: Chat mode for asking questions, Inline Edit mode for targeted code changes, and Composer/Agent mode for assigning goals"
+  caption="Cursor's three modes — Chat asks questions, Inline Edit changes a selection, and Composer/Agent takes on a whole goal."
 />
 
 ## What does Cursor's Inline edit do differently from Chat?
@@ -128,6 +129,36 @@ That sounds low — and when I first read it, I thought the same thing. Here's h
 For heavy users — people coding every day — the Pro plan is **$20/month** and removes request limits entirely. You can find the full breakdown on <a href="https://cursor.com/pricing" target="_blank" rel="noopener noreferrer">Cursor's pricing page</a>.
 
 If you're just starting out, the free trial is plenty of time to decide if Cursor is worth it. When you're ready to keep going, the [Getting Started path](/paths/getting-started) has everything you need next.
+
+---
+
+## How to install Cursor from the terminal
+
+If you already have a package manager installed, this is faster than downloading from the browser. Pick the one that matches your setup:
+
+**Windows — winget (built into Windows 10/11):**
+
+```bash
+winget install Cursor.Cursor
+```
+
+**Windows — Chocolatey:**
+
+```bash
+choco install cursor
+```
+
+**Mac — Homebrew:**
+
+```bash
+brew install --cask cursor
+```
+
+If none of those apply, download directly from <a href="https://cursor.com" target="_blank" rel="noopener noreferrer">cursor.com</a> and run the installer — it takes about 60 seconds.
+
+<Tip>
+  Not sure if winget is available? Open PowerShell and type `winget --version`. If you see a version number, you have it. If not, go to the Microsoft Store and install "App Installer" — that adds winget for free.
+</Tip>
 
 ---
 
