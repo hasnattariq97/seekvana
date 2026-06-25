@@ -47,6 +47,19 @@ featured: false
 ---
 ```
 
+**Images: cover has no caption; all inline images must have one.**
+- Cover image: `<ArticleImage src="..." alt="..." />` — no `caption` prop
+- Every other `<ArticleImage>`: must include `caption="One sentence describing what it shows."` — no exceptions
+
+**Tables must always have a bold title on the line above them.**
+```mdx
+**Table title here**
+
+| Col 1 | Col 2 |
+|---|---|
+```
+Never leave a table untitled.
+
 ## Ad slots (article pages)
 
 Three fixed-size placeholders — dimensions must never change (prevents layout shift):
