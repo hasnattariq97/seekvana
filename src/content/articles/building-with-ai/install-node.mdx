@@ -1,0 +1,131 @@
+---
+title: "How to Install Node.js for Beginners (Quick Guide)"
+description: "Node.js is why npm install commands exist. This beginner guide explains what it is, why you need it for AI tools, and how to install it in under 5 minutes."
+pillar: "building-with-ai"
+slug: "install-node"
+difficulty: "beginner"
+readTime: 5
+author: "Seekvana"
+publishedAt: "2026-06-20"
+tags: ["nodejs", "npm", "developer setup", "install nodejs", "beginner"]
+featured: false
+lessonModule: "03"
+lessonNumber: "03.03"
+---
+
+<ArticleImage
+  src="/images/articles/building-with-ai/install-node/install-node-cover.webp"
+  alt="Geometric flat illustration of a hexagonal shape representing Node.js on a warm cream background with clay accent colour"
+/>
+
+If you've been following AI tutorials and hitting `command not found: node`, this guide explains how to install Node.js for beginners and get it working in five minutes. You don't need to understand Node.js deeply, you just need it installed so `npm install` commands stop failing.
+
+> **Key Takeaways**
+> - Node.js is a program that lets JavaScript run on your computer instead of only inside a browser — it powers most AI developer tools and CLI utilities
+> - npm (the package manager) ships with Node.js, so installing Node.js also fixes `npm install` errors
+> - You install the LTS version from nodejs.org, one download, one installer, done
+
+---
+
+## What Is Node.js and Why Do You Need It?
+
+JavaScript was designed to run inside web browsers. That's it. When you open a website and it does something dynamic — a dropdown, a form, a button that changes color — that's JavaScript. Running inside your browser.
+
+For years, that was the only place JavaScript lived.
+
+Node.js changed that. Released in 2009, Node.js took the same JavaScript engine that runs inside Chrome and made it work as a standalone program on your computer. You don't need a browser. You just need a terminal.
+
+That shift turned JavaScript from a browser language into a general-purpose tool for building servers, command-line scripts, and developer utilities.
+
+**Why this matters for you:** Most AI CLI tools, build systems, and developer automation scripts are built with Node.js. When you install [Cursor](/library/building-with-ai/install-cursor) or follow an AI tutorial that asks you to run `npm install something`, that's Node.js powering what happens next.
+
+---
+
+## What Is npm and Why Does Every Tutorial Use It?
+
+npm stands for **Node Package Manager**. It's a tool that ships with Node.js, when you install Node, you get npm automatically.
+
+npm does one thing: it downloads and installs code packages that other developers have published. Think of packages as pre-built tools. Instead of writing complex code from scratch, a developer runs `npm install` followed by a package name, and that tool appears in their project instantly.
+
+Here's the thing: nearly every JavaScript-based AI tool, developer utility, and project template uses npm packages. When a tutorial says `npm install` and your terminal returns an error, it's because Node.js, and therefore npm, isn't installed on your computer yet.
+
+You don't need to understand npm deeply right now. You just need Node.js installed.
+
+<Tip>
+ npm comes bundled with Node.js. You don't install them separately. Install Node.js once and both are ready to use.
+</Tip>
+
+---
+
+## How to install Node.js
+
+Go to <a href="https://nodejs.org" target="_blank" rel="noopener noreferrer">nodejs.org</a>. You'll see two download buttons.
+
+**Choose the LTS version**, it's the button on the left.
+
+<Tip>
+ LTS stands for Long-Term Support. It means this version is stable, well-tested, and receives security updates for years. The other button ("Current") has newer features but is less stable. Always choose LTS unless a tutorial specifically requires a different version.
+</Tip>
+
+Download the installer for your operating system and run it. The installer handles everything, Node.js, npm, and the correct system settings. You don't need to change any options during installation; the defaults are correct.
+
+Once it's done, open your terminal and run:
+
+```bash
+node --version
+```
+
+You should see something like:
+
+```
+v22.x.x
+```
+
+If you see a version number, Node.js is installed and working. That's the whole lesson.
+
+### What if you see an error instead?
+
+If the terminal says `command not found: node` after installing, close the terminal completely and open a new one. The terminal reads your system's PATH settings when it opens, the installer updated those settings, but your existing terminal window doesn't know about them yet. Opening a fresh window fixes this almost every time.
+
+If you still get an error, revisit the [understanding PATH](/library/building-with-ai/understanding-path) lesson, it explains exactly what's happening and how to fix it.
+
+---
+
+## Your Task
+
+<Steps>
+ <Step number={1} title="Install Node.js and confirm it works">
+ Go to <a href="https://nodejs.org" target="_blank" rel="noopener noreferrer">nodejs.org</a>. Download the LTS version (the left button, LTS means Long-Term Support, which is the stable version). Install it.
+
+ Open your terminal and run:
+
+ ```bash
+ node --version
+ ```
+
+ You should see something like: `v22.x.x`
+
+ If you see a version number, Node.js is installed. You're done.
+ </Step>
+</Steps>
+
+<Note>
+ Done? You've completed Lesson 03.03. Next up: [Install Python, the language of AI tools →](/library/building-with-ai/install-python)
+
+ New to the Launchpad? Start from the beginning at the [Getting Started path](/paths/getting-started).
+</Note>
+
+<FAQ>
+ <FAQItem question="Is npm the same thing as Node.js?">
+ No, but they're installed together. Node.js is the runtime that lets JavaScript run on your computer. npm is the package manager that comes bundled with it. When you install Node.js from nodejs.org, npm is installed automatically. You never install them separately.
+ </FAQItem>
+ <FAQItem question="What does LTS mean in Node.js?">
+ LTS stands for Long-Term Support. It means that version of Node.js will receive security patches and bug fixes for several years, making it stable and reliable for real projects. The alternative, "Current", has the newest features but may have bugs. For beginners and most production use, LTS is always the right choice.
+ </FAQItem>
+ <FAQItem question="Do I need to know JavaScript to install and use Node.js?">
+ No. You're not learning Node.js as a programming language, you're installing it as infrastructure. The same way you don't need to understand how printers work to print a document, you don't need to understand Node.js to run `npm install` commands. Install it, confirm it works, and move on.
+ </FAQItem>
+ <FAQItem question="What version of Node.js should I install in 2026?">
+ Install the current LTS release, which is Node.js 22.x as of 2026. You'll know it's the LTS because it's the left button on nodejs.org and labeled "LTS, Recommended For Most Users." If a specific tutorial requires a different version, it will tell you explicitly, otherwise, always go with the latest LTS.
+ </FAQItem>
+</FAQ>
