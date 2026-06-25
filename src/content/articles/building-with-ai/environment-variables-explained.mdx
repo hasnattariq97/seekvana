@@ -1,0 +1,160 @@
+---
+title: "What Are Environment Variables?"
+description: "Environment variables store values like API keys so your code doesn't have to. Learn what they are, how to set one, and why every AI tutorial mentions them."
+pillar: "building-with-ai"
+slug: "environment-variables-explained"
+difficulty: "beginner"
+readTime: 6
+author: "Seekvana"
+publishedAt: "2026-06-20"
+tags: ["environment variables", "terminal", "api keys", "developer setup"]
+featured: false
+lessonModule: "02"
+lessonNumber: "02.06"
+---
+
+<ArticleImage
+  src="/images/articles/building-with-ai/environment-variables-explained/environment-variables-whiteboard.webp"
+  alt="Illustration of a whiteboard with key-value pairs that a computer character is reading from"
+/>
+
+An environment variable is a value your operating system stores so that any program can read it, without you pasting it into every file. That's why AI tutorials tell you to store your API key there instead of directly in your code.
+
+> **Key Takeaways**
+> - Environment variables are named values stored by your OS that any running program can read
+> - Setting one temporarily in the terminal takes one command: `export KEY=value` (Mac/Linux) or `$env:KEY=value` (Windows PowerShell)
+> - A session-only env var disappears when you close the terminal. `.env` files (coming in Module 03) are the permanent solution
+> - Never paste an API key directly into code. If it reaches GitHub, it can be auto-revoked within minutes
+
+---
+
+## What are environment variables and why do they exist
+
+You're following an AI tutorial and it says: "Store your API key as an environment variable." You stare at the screen. You just finished [setting up package managers](/library/building-with-ai/package-managers-explained), and now there's this. Nobody explains what it means. They just assume you know.
+
+Here's the clearest way to think about it.
+
+Imagine your computer has a whiteboard in a back room. Any program that knows to look for a variable name can walk back there and read its value off the board. You write `API_KEY=abc123` once. Every script or app that needs it reads the name `API_KEY`, not the value hardcoded somewhere, and gets the answer.
+
+That's an environment variable. A name paired with a value, stored by your operating system, readable by any program you run.
+
+<Note>
+ Environment variable names are written in ALL_CAPS by convention, like `API_KEY` or `DATABASE_URL`. It's not enforced, but you'll see it everywhere.
+</Note>
+
+The value can be anything: a secret key, a file path, a setting that changes between computers. The point is that the value lives *outside* your code files, in the OS, where programs can find it without it being written into the source.
+
+---
+
+## How to set an environment variable in your terminal
+
+Here's the important thing to know upfront: what you're about to set is **session-only**. It exists only while the current terminal window is open. Close it, and the variable is gone.
+
+That's fine for now. You're learning the concept. Module 03 covers the permanent solution (.env files).
+
+To set an environment variable, pick your operating system:
+
+**Windows PowerShell:**
+
+```powershell
+$env:MY_NAME='YourName'
+echo $env:MY_NAME
+```
+
+**Mac / Linux:**
+
+```bash
+export MY_NAME='YourName'
+echo $MY_NAME
+```
+
+Run those two lines. You should see your name printed back. That value is now available to any program you run in this terminal session.
+
+To read any existing environment variable by name, the pattern is the same:
+
+```powershell
+# Windows PowerShell
+echo $env:VARIABLE_NAME
+```
+
+```bash
+# Mac / Linux
+echo $VARIABLE_NAME
+```
+
+<Warning>
+ Close this terminal window and reopen it. Run `echo $MY_NAME` (or `echo $env:MY_NAME` on Windows) again, the variable is gone. That's expected. Session-only variables don't survive a terminal restart. The fix for this is coming in Module 03.
+</Warning>
+
+---
+
+## Why AI tutorials tell you to use env vars for API keys
+
+Here's the tempting thing to do when you get an API key: paste it directly into your Python file. It's faster. It works immediately. No extra steps.
+
+Here's why that's a problem — and it's one of the most common mistakes beginners make.
+
+If that file ever reaches GitHub, even accidentally, GitHub's <a href="https://docs.github.com/en/code-security/secret-scanning/about-secret-scanning" target="_blank" rel="noopener noreferrer">secret-scanning</a> detects the key within minutes. Most API providers automatically revoke compromised keys the moment they're spotted. Your project stops working without warning. You then have to generate a new key and update everything that used it.
+
+<ArticleImage
+  src="/images/articles/building-with-ai/environment-variables-explained/environment-variables-api-key-contrast.webp"
+  alt="Split illustration showing a dangerous hardcoded API key in code on the left and a safe environment variable reference on the right"
+/>
+
+However, an environment variable fixes this cleanly. Your code references the *name* (`API_KEY`), not the value. When the program runs, it looks up the value from the OS at that moment. The actual key never appears in your file.
+
+In Python, that looks like:
+
+```python
+import os
+api_key = os.getenv("API_KEY")
+```
+
+The string `"API_KEY"` is just a name. The real value stays in the environment, outside the file, out of version control.
+
+For projects with multiple files and team members, the cleaner solution is a `.env` file: a plain text file that stores your key-value pairs and is excluded from version control. That's exactly what you'll [set up in Module 03 when you create your first .env file](/library/building-with-ai/create-env-file).
+
+---
+
+## Your Task
+
+<Steps>
+ <Step number={1} title="Set and read your first environment variable">
+ In your terminal, run these commands one at a time.
+
+ **Windows PowerShell:**
+ ```powershell
+ $env:MY_NAME='YourName'
+ echo $env:MY_NAME
+ ```
+
+ **Mac / Linux:**
+ ```bash
+ export MY_NAME='YourName'
+ echo $MY_NAME
+ ```
+
+ You should see your name printed back. That value is now available to any program you run in this terminal session.
+
+ Now close the terminal and reopen it. Run the `echo` command again, notice the variable is gone. That's the session-only behavior in action. It's not a bug. It's just how temporary env vars work, and it's exactly why `.env` files exist.
+ </Step>
+</Steps>
+
+<Note>
+ Done? You've completed Lesson 02.06. Next up: [Reading Error Messages](/library/building-with-ai/reading-error-messages) →
+</Note>
+
+<FAQ>
+ <FAQItem question="What is an environment variable in simple terms?">
+ An environment variable is a named value stored by your operating system that any program running on that machine can read. Write `API_KEY=abc123` once in your environment, and any script that knows to look for `API_KEY` can use it, without that value ever being written directly into your code files.
+ </FAQItem>
+ <FAQItem question="Why can't I just paste my API key directly into my Python file?">
+ You can, and it works, but if that file ever reaches GitHub (even accidentally), the key is exposed. GitHub's secret-scanning detects it within minutes, and many API providers automatically revoke compromised keys. Using an environment variable keeps the key out of your source files entirely, so it can't accidentally leak.
+ </FAQItem>
+ <FAQItem question="Do environment variables get saved permanently when I set them in the terminal?">
+ No. Using `export MY_VAR=value` (Mac/Linux) or `$env:MY_VAR=value` (Windows PowerShell) only lasts for the current terminal session. Close the window and it's gone. For persistent storage across sessions and projects, you use a `.env` file, which you'll set up in Module 03.
+ </FAQItem>
+ <FAQItem question="Are environment variables the same as the system variables I see in Windows Settings?">
+ Related, but different. Windows has persistent "system environment variables" you can set through Control Panel → Advanced System Settings, and those stay permanently. When developers say "set an env var," they usually mean the session-based terminal approach or a `.env` file, not editing system settings, which affects every program on your machine.
+ </FAQItem>
+</FAQ>
