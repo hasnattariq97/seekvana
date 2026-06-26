@@ -1,0 +1,40 @@
+---
+term: "Claude Code"
+slug: "claude-code"
+shortDef: "Anthropic's official command-line tool that lets you use Claude to write, edit, and reason about code directly in your terminal."
+tags: ["claude code", "claude code beginner", "anthropic cli", "how to install claude code cli"]
+relatedTerms: ["cursor", "llm"]
+publishedAt: "2026-01-15"
+---
+
+## What Claude Code Is
+
+Claude Code is a command-line interface (CLI) tool made by Anthropic — the company that makes Claude. Instead of interacting with Claude through a chat window in a browser, Claude Code runs in your terminal alongside your actual code.
+
+The key difference from a web chat interface: Claude Code can read files in your project, write and edit code, run terminal commands, and understand your entire codebase as context. It's not just answering questions — it's participating directly in your development workflow.
+
+## CLI vs Editor Plugin
+
+Claude Code is a **CLI tool**, meaning you use it in a terminal window rather than inside a code editor. This is different from Cursor (an editor with AI built in) or GitHub Copilot (an editor plugin). All three use AI to help with code, but they integrate differently:
+
+- Claude Code — terminal-first, works alongside any editor
+- Cursor — an editor that is itself AI-powered
+- Copilot — a plugin inside an existing editor
+
+## What It Can Do
+
+- Read and understand your entire codebase
+- Write new files and edit existing ones
+- Run shell commands (with your permission)
+- Debug errors by reading stack traces and fixing the relevant files
+- Work through multi-step tasks autonomously in Agent mode
+
+## How to Install
+
+Install it via npm:
+
+```
+npm install -g @anthropic-ai/claude-code
+```
+
+Then authenticate with your Anthropic account. You'll need an Anthropic API key or a Claude.ai subscription that includes Claude Code access.

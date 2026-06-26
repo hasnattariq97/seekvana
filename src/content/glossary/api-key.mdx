@@ -1,0 +1,31 @@
+---
+term: "API Key"
+slug: "api-key"
+shortDef: "A secret string of characters that identifies your account when your code calls an external service like an AI model."
+tags: ["api key", "api keys", "api for beginners", "what is an api key", "security"]
+relatedTerms: ["environment-variable", "llm"]
+publishedAt: "2026-01-15"
+---
+
+## What an API Key Is
+
+When your code calls an AI service — like sending a message to Claude or GPT-4 — the provider needs to know who is making the request. API keys are how they do that. An API key is a long, randomly generated string (something like `sk-ant-api03-...`) that uniquely identifies your account.
+
+Every time your code makes a request, it sends this key along. The provider checks it, confirms it belongs to a valid account, and bills the usage to that account.
+
+## Why It Must Stay Secret
+
+Your API key is tied directly to your billing account. If someone else gets hold of it, they can make requests that you pay for — and with AI APIs, costs can rack up quickly. This is called **key theft**, and it's a real and common problem.
+
+The most common mistake beginners make is putting an API key directly in code and then pushing that code to a public GitHub repository. Automated bots scan GitHub for exposed keys and exploit them within minutes.
+
+## How to Store Keys Safely
+
+The correct approach is always to use a `.env` file:
+
+- Create a file called `.env` in your project root
+- Add your key: `OPENAI_API_KEY=sk-...`
+- Add `.env` to your `.gitignore` file so it never gets committed
+- In your code, read it with `process.env.OPENAI_API_KEY` (JavaScript) or `os.environ["OPENAI_API_KEY"]` (Python)
+
+If you ever accidentally expose a key, revoke it immediately from the provider's dashboard and generate a new one.

@@ -1,0 +1,33 @@
+---
+term: "Package Manager"
+slug: "package-manager"
+shortDef: "A tool that downloads, installs, and manages third-party code libraries so you don't have to do it manually."
+tags: ["package manager", "npm", "pip", "nodejs"]
+relatedTerms: ["node-js", "python"]
+publishedAt: "2026-01-15"
+---
+
+## What a Package Is
+
+Almost every real project uses code that someone else wrote — things like the OpenAI SDK, a date formatting library, or a web framework. These reusable chunks of code are called **packages** (or libraries or modules — the terms are often interchangeable).
+
+Writing everything from scratch would take forever. Package managers solve this by letting you install, update, and remove packages with a single command.
+
+## The Main Package Managers
+
+- **npm** (Node Package Manager) — the default package manager for JavaScript and Node.js. Run `npm install openai` to add the OpenAI library to your project.
+- **pip** — Python's package manager. Run `pip install openai` to install the same library for Python projects.
+- **yarn** and **pnpm** — alternatives to npm with some speed and reliability improvements; you'll see these in JavaScript projects too.
+
+## What Happens When You Install
+
+When you run `npm install openai`, the package manager:
+
+1. Looks up the package in its online registry
+2. Downloads it along with any packages it depends on
+3. Saves it to a local folder (`node_modules` for npm, `site-packages` for pip)
+4. Records the version in a lockfile so the project is reproducible
+
+## Why This Matters for AI Development
+
+Every AI SDK you'll ever use — OpenAI, Anthropic, LangChain, CrewAI — is installed via a package manager. Understanding `npm install` and `pip install` is a prerequisite for building anything with AI.

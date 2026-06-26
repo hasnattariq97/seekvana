@@ -1,0 +1,34 @@
+---
+term: "Prompt Engineering"
+slug: "prompt-engineering"
+shortDef: "The practice of crafting inputs to AI models to get better, more accurate, or more useful outputs."
+tags: ["prompt engineering", "prompting", "llm"]
+relatedTerms: ["prompt", "system-prompt", "llm"]
+publishedAt: "2026-01-15"
+---
+
+## What Prompt Engineering Is
+
+LLMs are remarkably sensitive to how you phrase your input. Ask the same question two different ways and you can get outputs that differ dramatically in quality, format, and accuracy. Prompt engineering is the discipline of figuring out how to phrase things to get the best results.
+
+It's less like programming and more like knowing how to brief a very capable but literal-minded colleague.
+
+## Why It Matters
+
+A poorly written prompt can produce vague, off-topic, or hallucinated outputs. A well-crafted one can coax remarkable results from the same model. Prompt engineering matters especially when:
+
+- You're building a product powered by an LLM and need consistent output
+- You're getting unhelpful or incorrect responses and want to fix them
+- You need outputs in a specific format (JSON, a table, a numbered list)
+
+## Key Techniques
+
+- **Role assignment** — "You are an expert data scientist with 10 years of experience" often improves technical responses
+- **Few-shot examples** — show the model 2–3 examples of what you want before your actual request; it learns the pattern
+- **Chain of thought** — "Think step by step before giving your answer" pushes the model to reason more carefully
+- **Output format specification** — "Respond in JSON with these exact fields" gives you structured, parseable output
+- **Context loading** — give the model relevant background information before asking your question
+
+## Is It a Real Skill?
+
+Yes — though the field is evolving. Newer models are better at guessing your intent even from imprecise prompts. But for production AI applications, careful prompt design remains one of the highest-leverage things a developer can do. A 10-minute prompt refinement can often eliminate the need for more expensive solutions like fine-tuning.

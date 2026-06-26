@@ -1,0 +1,38 @@
+---
+term: "System Prompt"
+slug: "system-prompt"
+shortDef: "Instructions given to an AI model before the conversation starts that define its role, tone, and constraints."
+tags: ["system prompt", "prompt engineering", "llm"]
+relatedTerms: ["prompt", "llm"]
+publishedAt: "2026-01-15"
+---
+
+## What a System Prompt Is
+
+When you use a product built on an LLM — a customer service chatbot, a writing assistant, a coding tool — there are usually instructions that come before your first message. These are the **system prompt**: text sent to the model by the developer, separate from anything you type.
+
+The system prompt shapes how the model behaves throughout the entire conversation. It's like a briefing you give someone before they start a job.
+
+## How It Differs From User Messages
+
+In the API, there are typically three types of messages:
+
+- **System** — set by the developer, invisible to the end user, sent before the conversation
+- **User** — what the person using the product types
+- **Assistant** — the model's responses
+
+The system prompt persists across the whole conversation. User messages are part of the ongoing back-and-forth.
+
+## What System Prompts Are Used For
+
+- **Role assignment** — "You are a helpful customer support agent for Acme Corp."
+- **Tone and style** — "Always respond in a friendly, concise tone. Avoid jargon."
+- **Constraints** — "Only answer questions about our product. Politely decline unrelated requests."
+- **Format requirements** — "Always respond in JSON with these fields: answer, confidence."
+- **Safety rules** — "Never give medical or legal advice."
+
+## An Example
+
+A coding assistant might have a system prompt like: "You are an expert JavaScript developer helping a beginner learn to code. Explain your reasoning step by step, use simple language, and always include working code examples."
+
+Every AI product you've interacted with almost certainly has a system prompt — you just don't see it.

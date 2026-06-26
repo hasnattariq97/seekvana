@@ -1,0 +1,40 @@
+---
+term: "PATH (Environment Variable)"
+slug: "path-variable"
+shortDef: "A list of directories your computer searches when you type a command — if Python or Git says 'command not found', PATH is usually why."
+tags: ["PATH variable", "command not found", "developer setup", "developer environment"]
+relatedTerms: ["environment-variable", "terminal", "command-line"]
+publishedAt: "2026-01-15"
+---
+
+## What PATH Is
+
+When you type `python` in your terminal, your computer doesn't search your entire hard drive for a program named "python." Instead, it looks through a specific list of folders — that list is the **PATH** environment variable.
+
+PATH is just a list of directory locations separated by colons (Mac/Linux) or semicolons (Windows). Your operating system checks each folder in order until it finds a matching program, or gives up with "command not found."
+
+## Why "Command Not Found" Happens
+
+When you install a program like Python or Git and then see `command not found` in the terminal, it almost always means the installer put the program's files somewhere that isn't in your PATH. The program is installed — your terminal just doesn't know where to look for it.
+
+Most modern installers handle this automatically, but sometimes they ask if you want to "add to PATH" — always say yes.
+
+## How to Check Your PATH
+
+On Mac/Linux:
+```
+echo $PATH
+```
+
+On Windows (PowerShell):
+```
+echo $env:PATH
+```
+
+This prints the full list of directories your system searches.
+
+## How to Fix a Missing PATH Entry
+
+If a tool isn't found after installation, the fix is usually to add the install location to your PATH. The exact steps depend on your operating system, but a quick search for "add Python to PATH on [your OS]" will give reliable instructions.
+
+Understanding PATH saves you from a lot of mysterious setup frustration when starting out with developer tools.

@@ -1,0 +1,47 @@
+---
+term: "Environment Variable"
+slug: "environment-variable"
+shortDef: "A named value stored outside your code — like an API key or database URL — that your program reads at runtime."
+tags: ["environment variables", "dotenv", "api keys", "developer setup"]
+relatedTerms: ["api-key", "path-variable"]
+publishedAt: "2026-01-15"
+---
+
+## What Environment Variables Are
+
+An environment variable is a key-value pair that lives outside your code but can be read by your program when it runs. Instead of writing your database password directly into your code, you store it as an environment variable and your code reads it from there.
+
+The name comes from the "environment" your program runs in — the context provided by the operating system before your code even starts.
+
+## The .env File
+
+In most projects, environment variables are stored in a file called `.env` in the project root. A typical `.env` looks like this:
+
+```
+OPENAI_API_KEY=sk-proj-abc123
+DATABASE_URL=postgresql://localhost:5432/mydb
+APP_ENV=development
+```
+
+The critical rule: **never commit your `.env` file to Git.** Add `.env` to your `.gitignore` and keep it local. Share a `.env.example` file (with placeholder values) so teammates know which variables are needed.
+
+## Reading Them in Code
+
+In JavaScript/Node.js, environment variables are available via `process.env`:
+
+```js
+const apiKey = process.env.OPENAI_API_KEY;
+```
+
+In Python, you use the `os` module:
+
+```python
+import os
+api_key = os.environ["OPENAI_API_KEY"]
+```
+
+Many projects use a library like `dotenv` to automatically load the `.env` file at startup.
+
+## The Golden Rule
+
+Secrets in code get leaked. Secrets in environment variables stay safe — as long as you never commit the `.env` file. This single habit prevents the majority of security incidents beginners encounter.

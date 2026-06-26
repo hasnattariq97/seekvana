@@ -1,0 +1,38 @@
+---
+term: "Git"
+slug: "git"
+shortDef: "The most widely used version control system — a tool that tracks changes to your files locally on your computer."
+tags: ["git", "git basics", "git for beginners", "version control"]
+relatedTerms: ["github", "version-control"]
+publishedAt: "2026-01-15"
+---
+
+## Git vs GitHub
+
+This distinction trips up almost everyone starting out. **Git** is a program you install on your computer. It runs locally and tracks changes to your files. **GitHub** is a website that stores those tracked changes in the cloud.
+
+You use Git to save your work. You use GitHub to share it, collaborate on it, or back it up remotely. Git can exist without GitHub — but GitHub requires Git to work.
+
+## The Core Loop
+
+Working with Git follows a simple repeating cycle:
+
+1. **Make changes** to your files in your editor
+2. **Stage the changes** you want to save: `git add filename` or `git add .` for everything
+3. **Commit** — save a snapshot with a message: `git commit -m "add login page"`
+
+That's it. Over time, your commits build up a complete history of every meaningful change you've made.
+
+## Why Every Developer Uses It
+
+Git solves real, painful problems:
+
+- Made a change that broke everything? `git revert` undoes it
+- Want to try a risky experiment? Create a branch so the main code stays safe
+- Working with others? Git merges everyone's changes together
+
+For AI development specifically, Git is how you track changes to your prompts, agent configs, and code. Sharing a project on GitHub means anyone can clone your exact setup.
+
+## Getting Started
+
+Install Git from git-scm.com. Then run `git init` inside any folder to start tracking it.

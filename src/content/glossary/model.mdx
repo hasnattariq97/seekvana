@@ -1,0 +1,35 @@
+---
+term: "Model"
+slug: "model"
+shortDef: "In AI, a model is a trained system that takes an input and produces an output — the core artifact produced by machine learning."
+tags: ["llm", "machine learning", "what is ai"]
+relatedTerms: ["llm", "machine-learning", "fine-tuning", "inference"]
+publishedAt: "2026-01-15"
+---
+
+## What a Model Is
+
+In machine learning, a **model** is the trained artifact that a learning algorithm produces. You feed data into a training process, that process adjusts millions (or billions) of numerical parameters, and what comes out is a model — a system that can take new inputs and produce useful outputs.
+
+A model is defined by two things: its **architecture** (the design of the neural network) and its **weights** (the specific numbers the training process learned). The weights are what make each model unique.
+
+## Model vs Product
+
+One of the most common confusions for beginners:
+
+- **GPT-4** is the model — a trained artifact created by OpenAI
+- **ChatGPT** is the product — a chat interface OpenAI built on top of GPT-4
+
+Similarly, **Claude** is Anthropic's model; **Claude.ai** is the product. The model is the AI itself. The product is the user-facing application built around it.
+
+When you call an AI API from your code, you're calling the model directly — without the product wrapper.
+
+## Model Sizes and Tradeoffs
+
+Models come in many sizes, typically measured in **parameters** (the numerical weights). Bigger models are generally more capable but also:
+
+- **Slower** to generate responses
+- **More expensive** to run (higher API costs)
+- **Require more compute** to host
+
+This is why AI providers offer model families — smaller, faster, cheaper models for simple tasks and large, powerful models for complex reasoning. Choosing the right model size for a task is one of the key engineering decisions in building AI applications.

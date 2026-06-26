@@ -1,0 +1,31 @@
+---
+term: "Parameter"
+slug: "parameter"
+shortDef: "A number inside a neural network that is adjusted during training — '7 billion parameters' means the model has 7 billion such numbers."
+tags: ["machine learning", "llm", "how do llms work"]
+relatedTerms: ["model", "neural-network", "fine-tuning"]
+publishedAt: "2026-01-15"
+---
+
+## What Parameters Are
+
+A neural network is built from layers of mathematical operations. The inputs to those operations are your data — a sentence, an image, a prompt. But the operations themselves contain **parameters**: numerical values (called weights and biases) that determine what the network does with the input.
+
+During training, these parameters are adjusted repeatedly — millions of times — until the network's outputs match the correct answers in the training data. The final set of parameter values is what makes a trained model.
+
+When someone says a model has "7 billion parameters," they mean the network contains 7 billion individual numbers that were all tuned during training.
+
+## Why Count Matters
+
+Parameter count is the most commonly cited measure of model size. Broadly speaking:
+
+- **More parameters** → greater capacity to learn complex patterns → generally more capable on hard tasks
+- **Fewer parameters** → faster inference, lower cost, easier to run locally
+
+GPT-3 had 175 billion parameters. More recent models like Llama 3 come in sizes from 8 billion to 70 billion, allowing developers to choose based on their capability vs. cost tradeoff.
+
+Larger isn't always better for a given task. A 7B model can outperform a 70B model on narrow, well-defined tasks — especially after fine-tuning.
+
+## Parameter-Efficient Fine-Tuning
+
+Updating all parameters when fine-tuning a large model is expensive. Techniques like **LoRA** (Low-Rank Adaptation) update only a small fraction of parameters, dramatically reducing the compute required while preserving most of the fine-tuning benefit. This is why fine-tuning large models has become more accessible.

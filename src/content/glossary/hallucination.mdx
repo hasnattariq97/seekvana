@@ -1,0 +1,29 @@
+---
+term: "Hallucination"
+slug: "hallucination"
+shortDef: "When an AI model generates text that sounds confident and plausible but is factually wrong or completely made up."
+tags: ["hallucination", "llm", "ai basics"]
+relatedTerms: ["llm", "rag", "prompt"]
+publishedAt: "2026-01-15"
+---
+
+## What Hallucination Means
+
+AI hallucination is when a language model produces information that is factually incorrect — but states it with the same confidence it uses for true information. The model doesn't "know" it's wrong. It generates text based on patterns, not facts, so it can produce plausible-sounding nonsense without any indication that it's doing so.
+
+Classic examples: a model that invents a non-existent court case with real-sounding names and citations, or confidently states a historical date that's off by decades.
+
+## Why It Happens
+
+LLMs don't retrieve facts from a database. They predict what text should come next based on patterns learned during training. This makes them excellent at producing fluent, contextually appropriate responses — but it also means they can "fill in" details that feel right without those details being real.
+
+The model has no internal flag that says "I don't know this." It just generates the most statistically likely continuation of the text.
+
+## How to Reduce Hallucination
+
+- **RAG (Retrieval-Augmented Generation)** — give the model relevant documents to reference, so it's grounding answers in real source material rather than training patterns alone
+- **Ask for citations** — prompting the model to cite sources makes hallucinated facts harder to hide
+- **Set expectations** — telling the model "say 'I don't know' if you're not sure" can help, though not reliably
+- **Verify important outputs** — always check facts you intend to act on, especially for medical, legal, or financial questions
+
+Hallucination is a known limitation of current LLMs, not a bug that will be patched. Treating AI outputs as drafts to verify — rather than facts to trust — is the right mindset.

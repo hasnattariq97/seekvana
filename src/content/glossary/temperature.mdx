@@ -1,0 +1,31 @@
+---
+term: "Temperature"
+slug: "temperature"
+shortDef: "A setting that controls how random or creative an AI model's outputs are — low temperature is more predictable, high is more creative."
+tags: ["temperature", "llm", "prompt engineering"]
+relatedTerms: ["llm", "prompt", "inference"]
+publishedAt: "2026-01-15"
+---
+
+## What Temperature Controls
+
+When a language model generates the next word in a response, it assigns probabilities to thousands of possible options. Temperature determines how it picks from that distribution.
+
+- **Low temperature (near 0)** — the model almost always picks the highest-probability option. Outputs are consistent, predictable, and focused.
+- **High temperature (1 or above)** — the model samples more freely from lower-probability options too. Outputs become more varied, surprising, and sometimes unexpected.
+
+## The Scale in Practice
+
+Most AI APIs accept a temperature between 0 and 2. The sweet spots:
+
+- **0–0.3** — use for factual Q&A, data extraction, coding tasks, anything where you want the most likely correct answer consistently
+- **0.5–0.8** — a good default for most writing and conversational tasks; creative but still coherent
+- **1.0+** — use for brainstorming, creative writing, generating diverse ideas; accepts that some outputs will be off
+
+At temperature 0, the model is deterministic — give it the same prompt twice and you'll get the same response. At high temperatures, the same prompt produces noticeably different results each run.
+
+## A Practical Example
+
+Ask a model "What is the capital of France?" at temperature 0 and temperature 1. At 0: "Paris" every time. At 1: probably still "Paris," but occasionally it might go on tangents or add unexpected framing — because the model is sampling more loosely.
+
+For most AI app development, starting with a temperature of 0.7 and adjusting based on whether outputs feel too repetitive or too unpredictable is a reasonable approach.

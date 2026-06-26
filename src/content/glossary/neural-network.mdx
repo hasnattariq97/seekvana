@@ -1,0 +1,34 @@
+---
+term: "Neural Network"
+slug: "neural-network"
+shortDef: "A computational system loosely inspired by the brain — layers of interconnected nodes that learn patterns from data."
+tags: ["machine learning", "how do llms work", "artificial intelligence definition"]
+relatedTerms: ["machine-learning", "transformer", "llm"]
+publishedAt: "2026-01-15"
+---
+
+## What a Neural Network Is
+
+A neural network is a type of machine learning model made up of layers of simple mathematical units called **nodes** (or neurons). These nodes pass values to each other, with each connection having a **weight** that determines how much influence one node has on the next.
+
+The name comes from a loose analogy to biological brains, where neurons fire signals to each other. The mathematical reality is simpler — it's matrix multiplication all the way down — but the analogy helps with intuition.
+
+## How the Layers Work
+
+A typical neural network has three kinds of layers:
+
+- **Input layer** — receives the raw data (pixels in an image, tokens in text)
+- **Hidden layers** — one or more intermediate layers that learn increasingly abstract representations of the data
+- **Output layer** — produces the final result (a label, a probability, the next token)
+
+"Deep learning" simply means neural networks with many hidden layers — "deep" refers to the depth of the network. More layers allow the network to learn more complex patterns.
+
+## How Training Works
+
+During training, the network makes predictions and compares them to correct answers. When it's wrong, an algorithm called **backpropagation** adjusts the weights slightly to reduce the error. After millions of examples and billions of these tiny adjustments, the weights settle into values that produce accurate predictions.
+
+This is what "a trained model" means — a network whose weights have been optimized through training.
+
+## Connection to LLMs
+
+Large Language Models are neural networks — specifically, they use the **transformer** architecture, which is a particular design of neural network optimized for processing sequences of text. The "large" in LLM refers to having hundreds of billions of parameters (weights).
