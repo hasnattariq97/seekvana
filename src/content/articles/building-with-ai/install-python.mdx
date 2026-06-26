@@ -1,0 +1,188 @@
+---
+title: "How to Install Python for Beginners (Windows & Mac)"
+description: "Learn how to install Python 3 on Windows or Mac in minutes. Covers the PATH checkbox trap, Python 2 vs 3 confusion, and how to confirm Python is working."
+pillar: "building-with-ai"
+slug: "install-python"
+difficulty: "beginner"
+readTime: 6
+author: "Seekvana"
+publishedAt: "2026-06-20"
+tags: ["install python", "python for beginners", "python setup", "python 3"]
+featured: false
+lessonModule: "03"
+lessonNumber: "03.04"
+---
+
+<ArticleImage
+ src="/images/articles/building-with-ai/install-python/cover.webp"
+ alt="Clean geometric snake illustration representing Python programming language on a warm cream background"
+/>
+
+In this lesson, you'll install Python on your computer, the programming language that powers most AI tools, scripts, and APIs you'll use throughout this course. By the end, you'll have Python 3 installed and confirmed working in your terminal.
+
+> **Key Takeaways**
+> - Python 2 is dead. Always install Python 3, the current version is Python 3.12 or newer.
+> - Windows users must tick "Add Python to PATH" during installation or the terminal won't find Python.
+> - After installing, run `python --version` (or `python3 --version` on Mac) to confirm it worked.
+
+---
+
+## Why Python is the language of AI
+
+You've probably seen Python mentioned everywhere in AI tutorials. That's not an accident.
+
+Python became the default language for AI and machine learning because it's readable, widely supported, and has an enormous ecosystem of libraries, tools like NumPy, Pandas, and the Hugging Face `transformers` library that do the heavy lifting so you don't have to write everything from scratch.
+
+You don't need to know Python deeply to get started. But you do need it installed, because nearly every AI tool, API script, and automation you'll build in this course runs on Python. If you haven't installed [Node.js](/library/building-with-ai/install-node) yet, do that first, then come back here.
+
+## Python 2 vs Python 3, the one thing you need to know
+
+Here's where beginners get tripped up.
+
+There are two major versions of Python: Python 2 and Python 3. **Python 2 was <a href="https://www.python.org/doc/sunset-python-2/" target="_blank" rel="noopener noreferrer">officially retired in 2020</a>.** It no longer receives updates, security patches, or support from the community. If you install Python 2, scripts written for Python 3 will break, and you'll spend hours confused about why.
+
+Install Python 3. Always. The current stable release is Python 3.12.x, that's the one you want.
+
+**Python 2 vs Python 3 at a glance**
+
+| | Python 2 | Python 3 |
+|---|---|---|
+| Status | Retired (2020) | Active — install this |
+| `print` syntax | `print "hello"` | `print("hello")` |
+| AI library support | None | Full |
+| Should you install it? | No | Yes |
+
+<Note>
+ If you search online and see a tutorial using `print "hello"` (without parentheses), that's Python 2 syntax. Modern Python 3 uses `print("hello")`. It's a small difference that signals how old the content is.
+</Note>
+
+## How to install Python on Windows
+
+Windows is where most beginners run into trouble, specifically because of one checkbox during installation that's easy to miss. I've watched more beginners hit this wall than any other install problem — it's almost always this one checkbox.
+
+**Step 1: Download Python**
+
+Go to <a href="https://python.org/downloads" target="_blank" rel="noopener noreferrer">python.org/downloads</a>. You'll see a large yellow button that says "Download Python 3.x.x", click it. This downloads the Windows installer.
+
+**Step 2: Run the installer, and tick the PATH checkbox**
+
+This is the critical moment. When the installer opens, you'll see a screen with two options at the bottom:
+
+- Install Now
+- Customize installation
+
+Before you click either one, look at the **bottom of that screen** for a checkbox that says **"Add Python to PATH"**. Tick it.
+
+<ArticleImage
+ src="/images/articles/building-with-ai/install-python/windows-path-checkbox.webp"
+ alt="Python Windows installer dialog with the Add Python to PATH checkbox highlighted"
+ caption="The PATH checkbox is at the bottom of the first installer screen. Tick it before clicking Install Now, missing it is the most common beginner mistake on Windows."
+/>
+
+If you skip this checkbox, your terminal won't know where Python is installed. You'll type `python` and get an error saying the command isn't found. The fix is to reinstall, so get it right the first time.
+
+Once you've ticked the checkbox, click **Install Now**. The installer handles everything else.
+
+## How to install Python on Mac
+
+Mac installation is more straightforward, no PATH trap to worry about.
+
+Go to <a href="https://python.org/downloads" target="_blank" rel="noopener noreferrer">python.org/downloads</a> and click the yellow download button. This gives you a `.pkg` installer file.
+
+Open it and follow the prompts. Click Continue, agree to the license, and click Install. That's it.
+
+One thing to know: older Macs come with Python 2 pre-installed. After you install Python 3, your terminal may still respond to `python` with Python 2. Don't worry about this, just use `python3` instead of `python` when running commands, and you'll always be on Python 3.
+
+## Confirming Python is installed
+
+Once installation is complete, open your terminal and run:
+
+```bash
+python --version
+```
+
+On Mac, try:
+
+```bash
+python3 --version
+```
+
+You should see something like:
+
+```
+Python 3.12.3
+```
+
+If you see a version number starting with 3, you're done. Python is installed and working.
+
+<Warning>
+ If you see `Python 2.x.x` instead of `Python 3.x.x`, your terminal is still pointing to the old Python 2 installation. On Mac, use `python3 --version`, that will show the Python 3 you just installed. On Windows, reinstall Python 3 and make sure the PATH checkbox is ticked.
+</Warning>
+
+## What's next — Python for AI
+
+Installing Python is just the beginning. In **Module 04 — Python for AI**, you'll learn how to actually use it: variables, functions, making API calls, reading JSON responses, and eventually sending your first request to Claude's API. Everything you just installed is the foundation for that.
+
+New to the course? Start with the [Getting Started path](/paths/getting-started) to see where this lesson fits.
+
+---
+
+## Your Task
+
+<Steps>
+ <Step number={1} title="Install Python via terminal (Windows)">
+ Open your terminal and run:
+
+ ```bash
+ winget install Python.Python.3
+ ```
+
+ `winget` is built into Windows 10 and Windows 11 — no extra setup needed. Wait for it to finish, then run:
+
+ ```bash
+ python --version
+ ```
+
+ You should see: `Python 3.x.x`. If you do, you're done.
+ </Step>
+ <Step number={2} title="Install Python via terminal (Mac)">
+ Mac uses Homebrew as its package manager. If you have it installed, run:
+
+ ```bash
+ brew install python3
+ ```
+
+ Once it finishes, confirm with:
+
+ ```bash
+ python3 --version
+ ```
+
+ You should see: `Python 3.x.x`. If you don't have Homebrew yet, install it first by running:
+
+ ```bash
+ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+ ```
+
+ Then re-run `brew install python3`.
+ </Step>
+</Steps>
+
+<Note>
+ Done? You've completed Lesson 03.04. Next up: [Install Git, version control for your projects](/library/building-with-ai/install-git) →
+</Note>
+
+<FAQ>
+ <FAQItem question="Do I need to know Python to use AI tools?">
+ Not at first. Many AI tools, including Claude Code, Cursor, and most no-code builders, work without you writing a single line of Python. But as you build more, you'll encounter scripts that need Python to run. Installing it now means you won't hit a wall later when you need it.
+ </FAQItem>
+ <FAQItem question="What's the difference between Python and pip?">
+ Python is the programming language, the thing that runs your code. Pip is Python's package manager, the tool you use to install Python libraries like `requests` or `openai`. You install Python first, and pip comes bundled with it automatically. You'll use pip in a later lesson.
+ </FAQItem>
+ <FAQItem question="I installed Python but the terminal still says 'command not found' on Windows">
+ This almost always means you missed the "Add Python to PATH" checkbox during installation. The fix: uninstall Python from Windows Settings, reinstall from python.org, and this time tick the PATH checkbox before clicking Install Now. Once you reinstall with that checkbox ticked, the terminal will find Python.
+ </FAQItem>
+ <FAQItem question="Can I have both Python 2 and Python 3 installed at the same time?">
+ Yes, and Macs often ship this way by default, Python 2 is pre-installed and Python 3 is what you add yourself. That's why Mac users run `python3` rather than `python` in the terminal. It's not a problem; it's just how Mac handles the coexistence. Always use `python3` explicitly on Mac to make sure you're running the right version.
+ </FAQItem>
+</FAQ>
