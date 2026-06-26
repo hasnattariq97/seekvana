@@ -1,0 +1,35 @@
+---
+term: "Tool Use"
+slug: "tool-use"
+shortDef: "The ability of an AI model to call external functions — like searching the web, running code, or querying a database — during a conversation."
+tags: ["tool use", "function calling", "agent", "agentic ai"]
+relatedTerms: ["agent", "llm"]
+publishedAt: "2026-01-15"
+---
+
+## Why Tool Use Matters
+
+On their own, LLMs are text-in, text-out systems. They cannot browse the internet, run calculations precisely, read a file, or send an email. They are extraordinarily good at language and reasoning — but they have no hands.
+
+Tool use (also called function calling) gives them hands.
+
+## How It Works
+
+1. You define a set of tools — functions the model is allowed to call — by describing them in plain language and specifying their parameters.
+2. When the model decides it needs to use a tool, it outputs a structured request instead of a direct answer: "call `search_web` with query = 'latest AI news'".
+3. Your application executes the actual function and feeds the result back to the model.
+4. The model incorporates the result and continues its response — or decides to call another tool.
+
+The model never executes code directly. It requests; your system executes.
+
+## Common Tools in the Wild
+
+- **Web search** — retrieve up-to-date information
+- **Code interpreter** — run Python, do math, process data
+- **Database queries** — look up customer records, product inventory
+- **Calendar and email** — schedule meetings, send messages
+- **File read/write** — read a document, save outputs
+
+## Tool Use is the Bridge to Agency
+
+A model with tool use can accomplish multi-step tasks in the real world. This is why tool use is the foundational capability that separates a basic chatbot from a true AI agent. More tools means more real-world reach — and more responsibility for the developer to define what the model is allowed to touch.

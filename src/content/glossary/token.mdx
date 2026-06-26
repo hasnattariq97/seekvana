@@ -1,0 +1,34 @@
+---
+term: "Token"
+slug: "token"
+shortDef: "The basic unit an LLM reads and writes — roughly a word or part of a word, depending on the tokenizer."
+tags: ["token", "tokenization", "llm"]
+relatedTerms: ["llm", "context-window"]
+publishedAt: "2026-01-15"
+---
+
+## What Is a Token?
+
+LLMs do not read text the way humans do — word by word or letter by letter. Instead, they read tokens, which are chunks of text produced by a process called tokenization. A token can be a whole word, a syllable, punctuation, a space, or even a single character.
+
+A simple rule of thumb: **1 token ≈ 0.75 words** in English. So 100 words is roughly 133 tokens.
+
+## Tokenization in Practice
+
+The tokenizer splits input text before it reaches the model. For example:
+
+- "hello" → 1 token
+- "unbelievable" → 3 tokens: `un` + `believ` + `able`
+- "GPT-4" → 3 tokens: `G` + `PT` + `-4`
+
+Languages other than English often use more tokens per word because the vocabulary was built primarily from English text.
+
+## Why Tokens Matter
+
+Tokens are the currency of LLMs in two important ways:
+
+**Context limits** — Every model has a maximum context window measured in tokens. Once your conversation or document exceeds that limit, the model cannot read the earlier parts.
+
+**Pricing** — API providers charge per token — typically split between input tokens (what you send) and output tokens (what the model generates). A longer prompt costs more; a verbose response costs more.
+
+Understanding tokens helps you write more efficient prompts, estimate costs, and avoid hitting limits unexpectedly. Most providers offer a tokenizer tool so you can count tokens before sending a request.

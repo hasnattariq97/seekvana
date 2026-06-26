@@ -1,0 +1,34 @@
+---
+term: "RAG (Retrieval-Augmented Generation)"
+slug: "rag"
+shortDef: "A technique that gives an LLM access to external documents at query time so its answers are grounded in up-to-date or private information."
+tags: ["rag", "retrieval", "retrieval-augmented generation"]
+relatedTerms: ["llm", "embedding", "context-window"]
+publishedAt: "2026-01-15"
+---
+
+## The Problem RAG Solves
+
+LLMs are trained on data with a cutoff date. Ask one about last week's news and it will either make something up or admit it does not know. Worse, it has never seen your company's internal documents, your codebase, or any private data.
+
+RAG (Retrieval-Augmented Generation) fixes both problems without retraining the model.
+
+## How RAG Works
+
+The process has three steps:
+
+1. **Retrieve** — When a question arrives, a search system finds the most relevant documents or passages from an external knowledge base (a database, a PDF library, a website).
+2. **Augment** — Those retrieved passages are inserted into the model's context window alongside the original question.
+3. **Generate** — The LLM answers using both its trained knowledge and the freshly retrieved context.
+
+Think of it like an open-book exam. The model is still doing the reasoning; RAG just hands it the right pages to reference.
+
+## A Simple Example
+
+You ask: "What is our refund policy?"
+
+Without RAG, the LLM guesses. With RAG, it retrieves your actual policy document and quotes it accurately.
+
+## Why RAG Beats Fine-tuning for Knowledge Updates
+
+Fine-tuning bakes knowledge into the model permanently — expensive and slow to update. RAG keeps knowledge in a separate store you can update any time, instantly. For frequently changing information, RAG is almost always the right choice.

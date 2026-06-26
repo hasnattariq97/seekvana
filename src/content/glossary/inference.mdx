@@ -1,0 +1,35 @@
+---
+term: "Inference"
+slug: "inference"
+shortDef: "Running a trained AI model to generate an output — what happens every time you send a message to an AI."
+tags: ["inference", "llm", "model"]
+relatedTerms: ["llm", "fine-tuning", "token"]
+publishedAt: "2026-01-15"
+---
+
+## Training vs. Inference
+
+Building an AI model involves two distinct phases that are easy to confuse.
+
+**Training** is when the model learns — processing billions of examples, adjusting billions of parameters, over days or weeks on expensive hardware. It happens once (or occasionally, when you want to update the model).
+
+**Inference** is when the trained model runs — taking your input and generating an output. It happens every single time you send a message, every API call, every auto-complete suggestion. Inference is what you interact with.
+
+## Why Inference Cost Matters
+
+Unlike training (a one-time expense), inference happens constantly at scale. Every user, every request, every token generated costs compute time and money. This is why AI API providers charge per token — they are billing you for inference compute.
+
+For businesses running millions of requests per day, inference cost becomes a major factor in model choice. A smaller, faster model that handles a task well can be dramatically cheaper than a frontier model — even if the frontier model is technically "better."
+
+## Latency vs. Throughput
+
+Two key metrics in inference:
+
+- **Latency** — how long a single response takes to start arriving (important for real-time chat)
+- **Throughput** — how many requests can be processed simultaneously (important for batch jobs)
+
+There is often a tradeoff: optimizing for one can hurt the other.
+
+## Inference Providers
+
+You rarely run inference yourself. Instead, you call an inference provider — OpenAI, Anthropic, Google, or specialist providers like Together AI, Fireworks, or Groq. These companies run the hardware and charge per token. Choosing the right provider involves balancing cost, speed, reliability, and model quality.

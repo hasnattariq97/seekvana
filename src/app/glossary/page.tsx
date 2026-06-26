@@ -1,31 +1,64 @@
 import Link from 'next/link'
+import { getAllGlossaryTerms } from '@/lib/mdx'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'AI Glossary — Seekvana',
-  description: 'Plain-language definitions for AI terms — from tokens and embeddings to agentic workflows.',
+  description: 'Clear definitions of AI terms — from LLMs to agents, embeddings to fine-tuning.',
   alternates: { canonical: 'https://seekvana.com/glossary' },
 }
 
-export default function GlossaryPage() {
+export default async function GlossaryPage() {
+  const terms = await getAllGlossaryTerms()
+
   return (
-    <div className="max-w-screen-xl mx-auto px-4 py-12">
+    <main className="max-w-4xl mx-auto px-4 py-12">
+      {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm text-secondary mb-8" aria-label="Breadcrumb">
         <Link href="/" className="hover:text-accent transition-colors">Home</Link>
-        <svg className="w-3 h-3 text-border" viewBox="0 0 6 10" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M1 1l4 4-4 4"/></svg>
+        <span>/</span>
         <span className="text-primary">Glossary</span>
       </nav>
-      <h1 className="font-fraunces text-4xl text-primary mb-4">AI Glossary</h1>
-      <p className="text-lg text-secondary max-w-2xl mb-12">
-        Plain-language definitions for the terms that matter — no jargon, no assumptions.
-      </p>
-      <div className="bg-surface border border-border rounded-xl p-10 text-center max-w-lg mx-auto">
-        <p className="font-fraunces text-xl text-primary mb-2">Coming soon</p>
-        <p className="text-sm text-secondary">
-          The full glossary is being built. Start with our{' '}
-          <Link href="/library/ai-foundations" className="text-accent hover:underline">AI Foundations</Link> articles while you wait.
+
+      {/* Header */}
+      <div>
+        <h1 className="font-fraunces text-4xl text-primary">AI Glossary</h1>
+        <p className="text-lg text-secondary mt-2 max-w-2xl">
+          Clear definitions of essential AI terms — updated as the field evolves.
+        </p>
+        <span className="bg-accent-soft text-accent text-sm rounded-full px-3 py-1 mt-4 inline-block">
+          {terms.length} terms
+        </span>
+      </div>
+
+      {/* Term grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-10">
+        {terms.map(({ frontmatter, slug }) => (
+          <Link
+            key={slug}
+            href={`/glossary/${slug}`}
+            className="bg-surface rounded-xl border border-border p-5 hover:-translate-y-1 hover:shadow-md hover:border-accent/40 transition-all group block focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none"
+          >
+            <p className="font-fraunces text-lg text-primary group-hover:text-accent transition-colors">
+              {frontmatter.term}
+            </p>
+            <p className="text-sm text-secondary mt-1 leading-relaxed line-clamp-2">
+              {frontmatter.shortDef}
+            </p>
+            <span className="text-xs text-accent font-medium mt-3 block">
+              Read definition →
+            </span>
+          </Link>
+        ))}
+      </div>
+
+      {/* Bottom CTA */}
+      <div className="mt-16 text-center border-t border-border pt-10">
+        <p className="text-secondary text-sm">Missing a term?</p>
+        <p className="text-xs text-secondary mt-1">
+          The glossary grows with the library. New terms added regularly.
         </p>
       </div>
-    </div>
+    </main>
   )
 }

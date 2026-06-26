@@ -1,0 +1,36 @@
+---
+term: "Embedding"
+slug: "embedding"
+shortDef: "A list of numbers that captures the meaning of a word, sentence, or document so that similar meanings land close together in space."
+tags: ["embedding", "vector", "semantic search"]
+relatedTerms: ["rag", "llm"]
+publishedAt: "2026-01-15"
+---
+
+## Why Text Needs to Become Numbers
+
+Computers cannot compare meanings — they can only compare numbers. "Dog" and "puppy" look completely different as strings of characters, but they mean nearly the same thing. An embedding model solves this by converting text into a long list of numbers (a vector) that encodes meaning rather than spelling.
+
+The result: "dog" and "puppy" end up as very similar vectors. "Dog" and "carburetor" end up far apart. Meaning becomes measurable distance.
+
+## How Embeddings Are Created
+
+An embedding model (a smaller, specialized neural network) reads your text and outputs a vector — typically 768 to 3072 numbers long. These numbers are not hand-crafted; the model learned them by training on massive amounts of text until similar passages produced similar vectors.
+
+Popular embedding models include OpenAI's `text-embedding-3-small`, Cohere Embed, and open-source options like `bge-m3`.
+
+## The Similarity Search
+
+Once you have embeddings, you can find the most relevant documents to any query in milliseconds:
+
+1. Embed the query
+2. Compare it to every stored document embedding using cosine similarity (a mathematical measure of direction)
+3. Return the closest matches
+
+This is called **semantic search** — it finds relevant content even when the exact words do not match.
+
+## Where You See Embeddings
+
+- **RAG pipelines** — retrieve the right documents to feed an LLM
+- **Recommendation engines** — find similar articles or products
+- **Duplicate detection** — identify near-identical content at scale

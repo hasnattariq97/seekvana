@@ -188,3 +188,42 @@ export function generatePathStaticParams(): { slug: string }[] {
     .filter((f) => f.endsWith('.json'))
     .map((f) => ({ slug: f.replace(/\.json$/, '') }))
 }
+
+export interface GlossaryFrontmatter {
+  term: string
+  slug: string
+  shortDef: string
+  tags: string[]
+  relatedTerms: string[]
+  publishedAt: string
+}
+
+export interface GlossaryMeta {
+  frontmatter: GlossaryFrontmatter
+  slug: string
+}
+
+export function getAllGlossaryTerms(): GlossaryMeta[] {
+  const dir = path.join(process.cwd(), 'src', 'content', 'glossary')
+  if (!fs.existsSync(dir)) return []
+  return fs
+    .readdirSync(dir)
+    .filter((f) => f.endsWith('.mdx'))
+    .map((f) => {
+      const slug = f.replace(/\.mdx$/, '')
+      const raw = fs.readFileSync(path.join(dir, f), 'utf-8')
+      const { data } = matter(raw)
+      return { frontmatter: data as GlossaryFrontmatter, slug }
+    })
+    .sort((a, b) => a.frontmatter.term.localeCompare(b.frontmatter.term))
+}
+
+export function getGlossaryBySlug(slug: string): {
+  source: string
+  frontmatter: GlossaryFrontmatter
+} {
+  const filePath = path.join(process.cwd(), 'src', 'content', 'glossary', `${slug}.mdx`)
+  const raw = fs.readFileSync(filePath, 'utf-8')
+  const { data, content } = matter(raw)
+  return { source: content, frontmatter: data as GlossaryFrontmatter }
+}

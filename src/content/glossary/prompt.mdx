@@ -1,0 +1,38 @@
+---
+term: "Prompt"
+slug: "prompt"
+shortDef: "The input text you give to an AI model — instructions, context, examples, and questions combined."
+tags: ["prompt", "prompting", "prompt engineering"]
+relatedTerms: ["llm", "context-window", "fine-tuning"]
+publishedAt: "2026-01-15"
+---
+
+## What Is a Prompt?
+
+A prompt is everything you send to an AI model before it generates a response. It can be as simple as a single question or as complex as a multi-thousand-word document containing a role description, detailed instructions, background context, worked examples, and the actual task.
+
+The model sees nothing except what is in the prompt — which is why what you put in, and how you structure it, matters enormously.
+
+## Anatomy of a Prompt
+
+Most API calls to an LLM have three parts:
+
+- **System message** — sets the model's role, persona, and ground rules ("You are a helpful customer support agent for Acme Corp. Be concise and friendly.")
+- **User message** — the actual request or question
+- **Examples (few-shot)** — optional worked examples that show the model the pattern you want it to follow
+
+Together these form a structured input that shapes the model's entire response.
+
+## Why Prompts Matter So Much
+
+LLMs are sensitive to phrasing. Asking "Summarize this" versus "Summarize this in three bullet points for a non-technical executive" can produce dramatically different outputs. A vague prompt invites vague answers; a specific prompt tends to produce specific, useful ones.
+
+## Prompt Engineering as a Skill
+
+Prompt engineering is the practice of designing, testing, and iterating on prompts to get reliable, high-quality outputs from AI models. It includes techniques like:
+
+- **Chain-of-thought** — asking the model to reason step by step before answering
+- **Few-shot prompting** — providing examples of good inputs and outputs
+- **Role assignment** — giving the model a persona to adopt
+
+It is a learnable skill that pays off quickly, even for non-developers.

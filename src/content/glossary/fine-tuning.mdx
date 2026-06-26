@@ -1,0 +1,38 @@
+---
+term: "Fine-tuning"
+slug: "fine-tuning"
+shortDef: "Additional training of a pre-trained model on a smaller, task-specific dataset to improve its performance on that task."
+tags: ["fine-tuning", "training", "llm"]
+relatedTerms: ["llm", "prompt"]
+publishedAt: "2026-01-15"
+---
+
+## The Graduate School Analogy
+
+Think of a pre-trained LLM as someone who completed a broad university education — they know a little about everything. Fine-tuning is like sending them to a specialized graduate program. They come out much sharper in a specific domain without losing their general knowledge.
+
+The base model already understands language and reasoning. Fine-tuning adjusts its behavior for your particular use case using your examples.
+
+## How Fine-tuning Works
+
+You provide a dataset of input-output pairs — for example, thousands of customer support conversations done well. The model trains on these examples, updating its parameters to produce outputs that look more like your target style, tone, or domain.
+
+Fine-tuning does not replace the model's general capabilities; it steers them.
+
+## When to Fine-tune
+
+Fine-tuning makes sense when:
+
+- You need a consistent **tone or style** that prompting alone cannot reliably produce
+- You are running **millions of requests** and want to use a smaller, cheaper model trained on your task
+- You have **proprietary labeled data** that captures expertise not in the base model
+
+## Fine-tuning vs. RAG vs. Prompting
+
+| Approach | Best for | Cost |
+|---|---|---|
+| Prompting | Quick iteration, flexible tasks | Lowest |
+| RAG | Up-to-date or private knowledge | Medium |
+| Fine-tuning | Consistent style, high-volume tasks | Highest upfront |
+
+Most teams start with prompting, add RAG for knowledge, and reach for fine-tuning only when the first two are not enough.
