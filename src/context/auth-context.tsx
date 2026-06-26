@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import type { User } from '@supabase/supabase-js'
 
-type AuthContextValue = {
+export type AuthContextValue = {
   user: User | null
   loading: boolean
   isAuthModalOpen: boolean
