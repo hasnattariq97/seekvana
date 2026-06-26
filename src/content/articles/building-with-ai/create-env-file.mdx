@@ -1,0 +1,175 @@
+---
+title: "How to Create a .env File to Store Your API Keys Safely"
+description: "A .env file stores your API keys outside your code so they stay secret. Learn how to create one, what format to use, and why .gitignore is essential."
+pillar: "building-with-ai"
+slug: "create-env-file"
+difficulty: "beginner"
+readTime: 7
+author: "Seekvana"
+publishedAt: "2026-06-20"
+tags: ["developer environment", "api keys", "dotenv", "security", "beginners"]
+featured: false
+lessonModule: "03"
+lessonNumber: "03.08"
+---
+
+<ArticleImage
+  src="/images/articles/building-with-ai/create-env-file/create-env-file-cover.webp"
+  alt="A padlocked file icon on a warm cream background representing safe API key storage in a .env file"
+/>
+
+You just copied your Anthropic API key. Now what? If you paste it directly into your code, you've got a working app, and a security problem waiting to happen. This lesson shows you the right way to store it: in a `.env` file.
+
+By the end, you'll know what a `.env` file is, how to create one, and the one habit that keeps your key safe when you share or publish code.
+
+> **Key Takeaways**
+> - A `.env` file is a plain text file that stores secrets like API keys separately from your code
+> - The format is simple: `ANTHROPIC_API_KEY=your-key-here`, one secret per line
+> - You must add `.env` to a `.gitignore` file before pushing code anywhere, this is the most important step
+> - The file works with any language; python-dotenv and similar libraries are just conveniences for loading it automatically
+
+---
+
+## What a .env File Actually Does
+
+Think of a `.env` file as a sticky note on the back of your laptop. Your project's instructions, the actual code, live somewhere you can share. The sticky note with your secrets lives on the back, where no one else sees it.
+
+Technically, a `.env` file is a plain text file that stores **key-value pairs**: a name for each secret, an equals sign, and the value. These loaded values are called **environment variables** — they exist in your program's environment while it runs, without the secrets ever being written inside the code itself.
+
+That separation is the whole point. You can share your code, push it to GitHub, or show it to a friend, and as long as you haven't included the `.env` file, your keys stay private.
+
+<Note>
+ The dot at the start of `.env` is not decorative. On Mac and Linux, files that begin with a dot are hidden by default, they're treated as system or config files. It's a convention that says "this belongs to the project, not the app."
+</Note>
+
+<ArticleImage
+  src="/images/articles/building-with-ai/create-env-file/create-env-file-how-it-works.webp"
+  alt="Split view showing a code editor calling os.getenv() on the left connected by an arrow to a .env file with a key-value pair on the right"
+  caption="Your code reads the key from the .env file at runtime — the secret never lives inside the code itself."
+/>
+
+---
+
+## How to Create Your First .env File
+
+Creating a `.env` file takes about 30 seconds. Here's exactly how to do it.
+
+**Step 1: Create a project folder.** Open your terminal and run:
+
+```bash
+mkdir my-first-project
+cd my-first-project
+```
+
+**Step 2: Create the file.** In VS Code, go to File > New File. When it asks for the name, type `.env` exactly, including the dot. Hit Enter. That's your file.
+
+**Step 3: Add your key.** Inside the file, type:
+
+```
+ANTHROPIC_API_KEY=your-key-here
+```
+
+Replace `your-key-here` with the actual key you generated in the [previous lesson on API keys](/library/building-with-ai/what-is-an-api-key). A few rules:
+- No spaces around the `=` sign
+- No quotes around the value (unless the value itself contains spaces)
+- One secret per line
+
+Your `.env` file now looks like this:
+
+```
+ANTHROPIC_API_KEY=sk-ant-api03-...
+```
+
+<Warning>
+ **Windows users:** Windows hides file extensions by default. If you create a text file and name it `.env`, it may silently become `.env.txt`, and nothing will work. Always create `.env` files from inside VS Code using File > New File, then type `.env` as the filename. VS Code handles this correctly.
+</Warning>
+
+---
+
+## Why You Must Add .env to .gitignore
+
+This is the most important habit in this entire lesson. Read it twice.
+
+Bots continuously scan public GitHub repositories for exposed API keys — tools like <a href="https://trufflesecurity.com/blog/anyone-can-access-deleted-and-private-repo-data-github" target="_blank" rel="noopener noreferrer">TruffleHog</a> do this automatically. In documented cases, developers pushed code and received automated security alerts within minutes, because the key was live long enough for a scanner to find it. If your key gets into the wrong hands, someone else can use your account and run up charges. Storing API keys safely means keeping them out of **version control** (the system that tracks your code history and syncs it to GitHub) entirely — and `.gitignore` is how you do that.
+
+The fix is a `.gitignore` file. This is a file that tells Git: "never include these files when I commit or push." When `.env` is in your `.gitignore`, Git ignores it completely, even if you run `git add .`.
+
+**Create the `.gitignore` file now.** In VS Code, create a new file called `.gitignore` in the same folder as your `.env` file. (The <a href="https://git-scm.com/docs/gitignore" target="_blank" rel="noopener noreferrer">official Git docs</a> explain how `.gitignore` works in detail — but for now, all you need is this one line.) Add:
+
+```
+.env
+```
+
+That's it. From this point on, Git will never touch your `.env` file.
+
+<Tip>
+ Make it a habit: whenever you start a new project, create the `.gitignore` before you create the `.env`. That way you can't forget.
+</Tip>
+
+Your project folder should now contain:
+
+```
+my-first-project/
+├── .env ← your secrets (Git ignores this)
+└── .gitignore ← tells Git to ignore .env
+```
+
+When you're ready to use your API key in Python code, you'll use a library called <a href="https://pypi.org/project/python-dotenv/" target="_blank" rel="noopener noreferrer">python-dotenv</a> to load the `.env` file automatically, but that's Module 04. For now, your key is stored safely and your project is protected.
+
+---
+
+## Your Task
+
+<Steps>
+ <Step number={1} title="Create your first .env file">
+ Open your terminal and run:
+
+ ```bash
+ mkdir my-first-project
+ cd my-first-project
+ ```
+
+ Now open VS Code. Go to File > New File and save it as `.env`.
+
+ Add this line to the file, replacing with your real key from the previous lesson:
+
+ ```
+ ANTHROPIC_API_KEY=your-key-here
+ ```
+
+ Save the file.
+
+ Next, create a second file called `.gitignore` in the same folder. Add `.env` on the first line:
+
+ ```
+ .env
+ ```
+
+ Save that file too.
+
+ You now have a project folder with your API key stored safely, and Git will never accidentally commit it.
+ </Step>
+</Steps>
+
+<Note>
+ Done? You've completed Lesson 03.08. Next up: [Understanding PATH — why terminal errors happen](/library/building-with-ai/understanding-path) →
+</Note>
+
+---
+
+Ready to keep building? Explore the full [Getting Started learning path](/paths/getting-started) for the complete developer environment sequence.
+
+<FAQ>
+ <FAQItem question="Do I need to install python-dotenv just to use a .env file?">
+ No, the `.env` file is just a plain text file. Any program can read it. The python-dotenv library is a convenience that loads the file automatically into your Python code. You don't need it just to create the file or store a key. You will use it in Module 04 when you start writing Python programs that call APIs.
+ </FAQItem>
+ <FAQItem question="What happens if I forget to add .env to .gitignore?">
+ If you run `git add .` and push to a public repository, your `.env` file and everything in it goes with it. Bots scan GitHub continuously, your API key could be found and used within minutes. If this happens: delete the key immediately in your provider's dashboard, generate a new one, and add `.gitignore` before your next push.
+ </FAQItem>
+ <FAQItem question="Can I store more than one API key in the same .env file?">
+ Yes, one key per line. Each line follows the same format: `KEY_NAME=value`. For example, you might have `ANTHROPIC_API_KEY=...` on one line and `OPENAI_API_KEY=...` on the next. There's no limit to how many keys you can store in one `.env` file.
+ </FAQItem>
+ <FAQItem question="Should I create a new .env file for each project, or reuse one?">
+ Create a fresh `.env` file for each project, stored in that project's root folder. Never share one `.env` file across multiple projects. This keeps your secrets scoped to where they're actually used, and makes it easy to rotate or delete keys for a single project without affecting others.
+ </FAQItem>
+</FAQ>
