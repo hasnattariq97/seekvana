@@ -1,0 +1,158 @@
+---
+title: "How to Clone a GitHub Repository in One Command"
+description: "Learn git clone in under 5 minutes. This lesson covers what cloning actually downloads, how to find the repo URL, and why clone beats downloading a ZIP."
+pillar: "building-with-ai"
+slug: "git-clone"
+difficulty: "beginner"
+readTime: 5
+author: "Seekvana"
+publishedAt: "2026-06-26"
+tags: ["git", "github", "version control", "git clone"]
+featured: false
+lessonModule: "04"
+lessonNumber: "04.04"
+---
+
+{/* IMAGE PROMPT: Editorial flat illustration of a cloud repository being duplicated to a laptop with a single click/arrow, warm cream background, clay accent (#C9633F) on the duplication arrow, clean and minimal, suggests effortless copying, no text in image | FILENAME: cover-git-clone.webp | DIMENSIONS: 1200×630 */}
+
+<ArticleImage src="/images/articles/building-with-ai/git-clone/cover-git-clone.webp" alt="A cloud repository duplicating itself to a laptop with a single arrow" />
+
+In this lesson, you'll learn how to clone a GitHub repository. By the end, you'll be able to download any public project on GitHub to your machine with a single command, and understand exactly what you're getting.
+
+> **Key Takeaways**
+> - `git clone [url]` downloads a complete copy of a repository, including its full history
+> - Cloning is different from downloading a ZIP. You keep a live connection to the original so you can pull updates later
+> - You don't need a GitHub account to clone a public repository
+
+---
+
+## What cloning actually does
+
+You've found an interesting AI project on GitHub. Maybe it's a starter template for building Claude-powered apps, or a script someone shared in a tutorial. You want to run it on your own machine.
+
+There are two ways to get the code: download a ZIP file, or clone the repository. They look similar. You end up with a folder of files either way. But they're not the same.
+
+**Cloning** downloads the complete repository: every file, every folder, and every commit ever made. It also preserves the connection back to the original. That means you can run `git pull` at any time to get the latest changes without downloading anything again.
+
+A **ZIP download** is a frozen snapshot. You get the files as they are right now, no history, and no connection to the original. If the author pushes an update tomorrow, your ZIP never knows about it.
+
+<ComparisonTable
+ col1="git clone"
+ col2="Download ZIP"
+ rows="Full file history|||No history, snapshot only|||Live connection to remote (git pull works)|||No remote connection|||Run git pull for updates|||Re-download ZIP manually|||Works with all git commands|||Plain files only"
+/>
+
+<ArticleImage src="/images/articles/building-with-ai/git-clone/git-clone-vs-zip.webp" alt="Side-by-side diagram comparing git clone and Download ZIP" caption="git clone keeps a live connection to the source so you can pull updates any time. A ZIP is a frozen snapshot with no history and no way to sync." />
+
+For AI development, cloning is almost always what you want. Tutorials tell you to clone for a reason. It keeps your local copy in sync with the source.
+
+---
+
+## How to clone a repository
+
+Here's the full process. It takes about 30 seconds once you've done it once.
+
+<Steps>
+ <Step number={1} title="Find the repository URL">
+ Go to the repository page on GitHub. Look for the green **Code** button above the file list. Click it.
+
+ A dropdown appears with a URL. Make sure **HTTPS** is selected (not SSH; SSH requires extra setup). Click the copy icon to copy the URL.
+ </Step>
+ <Step number={2} title="Open your terminal and navigate to your projects folder">
+ Open your terminal (Terminal on Mac, PowerShell or Git Bash on Windows). Navigate to wherever you keep your projects:
+
+ ```bash
+ cd ~/Desktop
+ ```
+
+ Or any folder you prefer. The clone will create a new subfolder there.
+ </Step>
+ <Step number={3} title="Run git clone">
+ Type `git clone` followed by the URL you copied:
+
+ ```bash
+ git clone https://github.com/owner/repository-name
+ ```
+
+ Press Enter. Git downloads the repository. You'll see progress output, then a confirmation message.
+ </Step>
+ <Step number={4} title="Verify the folder exists">
+ Run `ls` (Mac/Linux) or `dir` (Windows) to confirm the new folder appeared:
+
+ ```bash
+ ls
+ ```
+
+ Then `cd` into it and look at the files:
+
+ ```bash
+ cd repository-name
+ ls
+ ```
+
+ You now have a local copy of the entire project.
+ </Step>
+</Steps>
+
+<Note>
+ You don't need a GitHub account to clone a public repository. The URL is public; anyone can clone it.
+</Note>
+
+SSH is another way to clone, and many developers prefer it for ongoing work because it skips password prompts. We're using HTTPS here because it works immediately with no extra setup. You can switch to SSH later once you're comfortable.
+
+---
+
+## What you get after cloning
+
+Your new folder is a complete Git repository. It's not just files. It has a hidden `.git` folder inside that stores the entire commit history and the connection back to the original on GitHub.
+
+You can run `git log` to see every commit ever made to the project. You can run `git pull` to download any updates the author pushes after your clone.
+
+<Tip>
+ If the project gets updated after you've cloned it, run `git pull` inside the folder to stay current. No need to clone again. I use this constantly when following tutorials that update their starter code.
+</Tip>
+
+This is why cloning is the standard for working with AI projects, SDKs, and starter templates. Once cloned, the project stays connected. When tools update, you update with one command.
+
+The next step after cloning is usually learning to [work with branches](/library/building-with-ai/git-branches), so you can experiment with the code without touching the main version. That's the next lesson.
+
+---
+
+## Your Task
+
+<Steps>
+ <Step number={1} title="Clone a public GitHub repository">
+ In your terminal, navigate to your Desktop or a projects folder, then run:
+
+ ```bash
+ git clone https://github.com/anthropics/anthropic-sdk-python
+ ```
+
+ Wait for it to finish. You should see a new folder appear called `anthropic-sdk-python`.
+
+ Run `ls` (or `dir`) to confirm the folder is there.
+
+ Run `cd anthropic-sdk-python` then `ls` to see the project files.
+
+ You now have a local copy of <a href="https://github.com/anthropics/anthropic-sdk-python" target="_blank" rel="noopener noreferrer">Anthropic's official Python SDK</a>. (You don't need to run it, this is just to practice the clone command.)
+ </Step>
+</Steps>
+
+<Note>
+ Done? You've completed Lesson 04.04. Next up: [Git Branches](/library/building-with-ai/git-branches) →
+</Note>
+
+<FAQ>
+ <FAQItem question="Is git clone the same as downloading a ZIP?">
+ No, they look similar but work differently. A ZIP download is a frozen snapshot of the current files with no Git history and no connection to the original repository. Cloning downloads the complete history and keeps a live connection, so you can run `git pull` to get updates without downloading the whole project again.
+ </FAQItem>
+ <FAQItem question="Do I need a GitHub account to clone a repository?">
+ Not for public repositories. Any repository marked public on GitHub can be cloned by anyone, no account, no login required. You only need an account to clone a private repository, or to push changes back to the original.
+ </FAQItem>
+ <FAQItem question="What's the difference between git clone and git pull?">
+ `git clone` is used once. The first time you download a repository to your machine. `git pull` is used afterward. It fetches any new commits from the remote and updates your local copy. Think of clone as "get this for the first time" and pull as "get the latest updates."
+ </FAQItem>
+ <FAQItem question="Can I clone a private repository?">
+ Yes, but you need to be authenticated. GitHub will prompt for credentials when you try to clone a private repo via HTTPS. The simplest approach for beginners is to use a personal access token (GitHub Settings > Developer Settings > Personal Access Tokens) in place of a password. SSH keys are an alternative that many developers prefer for ongoing work.
+ </FAQItem>
+</FAQ>
