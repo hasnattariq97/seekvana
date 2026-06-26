@@ -1,0 +1,175 @@
+---
+title: "How to install Git for beginners (and what it actually does)"
+description: "Learn what Git is and how to install it on Windows or Mac. Understand version control in plain English, then confirm your install with one terminal command."
+pillar: "building-with-ai"
+slug: "install-git"
+difficulty: "beginner"
+readTime: 6
+author: "Seekvana"
+publishedAt: "2026-06-20"
+tags: ["git", "version control", "install git", "git for beginners", "developer setup"]
+featured: false
+lessonModule: "03"
+lessonNumber: "03.05"
+---
+
+<ArticleImage
+ src="/images/articles/building-with-ai/install-git/cover.webp"
+ alt="Abstract illustration of branching timelines representing version history in Git"
+/>
+
+In this lesson, you'll learn what Git is and how to install it on your computer. By the end, you'll have Git running and understand why it's the first tool every developer installs, before they write a single line of code.
+
+> **Key Takeaways**
+> - Git is a version control system: it tracks every change you make to your files, so you can go back in time if something breaks
+> - Git and GitHub are not the same thing. Git is the tool on your computer; GitHub is a website
+> - On Windows, Git installs a bonus terminal called Git Bash — useful for all developer commands, not just Git
+> - After installing, run `git --version` in your terminal to confirm it worked
+
+---
+
+## You've already done manual version control
+
+Have you ever renamed a file something like this?
+
+```
+essay_final.docx
+essay_final_v2.docx
+essay_final_v2_FINAL.docx
+essay_final_v2_REALLY_FINAL.docx
+```
+
+That is version control. You did it manually because you were scared of losing work, so you kept making copies, each one with a slightly more desperate filename.
+
+Git does the same thing, but automatically, properly, and reversibly. You make changes, tell Git to save a snapshot, and Git records exactly what changed and when. You can go back to any snapshot at any point. No more desperate filenames.
+
+Every developer uses Git. It is not optional. But it is also much simpler than most tutorials make it sound, especially at the install stage.
+
+---
+
+## What Git actually does
+
+Git tracks every change you make to the files in a project folder. Think of it as a time machine for your code. You can:
+
+- **Go back in time.** Break something? Revert to yesterday's working version in seconds.
+- **Try risky experiments.** Create a separate "branch" to test a new idea, without touching your working code. If the experiment fails, delete the branch. Your original code is untouched.
+- **Share code with others.** When you're ready, push your work to a hosting service like GitHub so teammates can see it.
+
+You don't need to understand commits or branches in depth right now. That comes in the next module. For this lesson, just focus on installing Git so the tool is ready when you need it.
+
+If you haven't installed Python yet, the [install Python lesson](/library/building-with-ai/install-python) covers that step.
+
+<Note>
+ Git and GitHub are not the same thing. Git is the version control tool that runs on your computer. GitHub is a website where you can store and share code online. This lesson covers Git only, GitHub comes in Module 04.
+</Note>
+
+---
+
+## How to install Git
+
+### On Windows
+
+Go to <a href="https://git-scm.com/downloads" target="_blank" rel="noopener noreferrer">git-scm.com/downloads</a> and click **Download for Windows**.
+
+Run the installer. You will see a long series of option screens, leave every setting at its default and keep clicking **Next**. The defaults are carefully chosen and correct for beginners.
+
+When the install finishes, you will notice a new app on your computer called **Git Bash**. This is a terminal that comes bundled with Git.
+
+<Tip>
+ Git Bash is just a terminal, think of it as a slightly upgraded version of Command Prompt. You can use it for all your Git commands. It also works for the other terminal commands you have been learning in this module.
+</Tip>
+
+To confirm Git installed, open Git Bash (or Command Prompt, or PowerShell, any terminal works) and run:
+
+```bash
+git --version
+```
+
+You should see something like:
+
+```
+git version 2.45.2.windows.1
+```
+
+### On Mac
+
+Mac often has Git pre-installed. Open your terminal and run:
+
+```bash
+git --version
+```
+
+If Git is already there, you will see a version number and you are done.
+
+If you see a prompt asking you to install Xcode Command Line Tools, click **Install**, this is the easiest way to get Git on Mac. It takes a few minutes.
+
+If neither worked, download the Mac installer from <a href="https://git-scm.com/downloads" target="_blank" rel="noopener noreferrer">git-scm.com/downloads</a> and run it normally.
+
+<ArticleImage
+ src="/images/articles/building-with-ai/install-git/git-download.webp"
+ alt="Illustration of a download button representing the Git installation page at git-scm.com"
+ caption="Git is free and available at git-scm.com. Download the version for your operating system and run the installer."
+/>
+
+### On Linux
+
+If you are on Ubuntu or Debian, open a terminal and run:
+
+```bash
+sudo apt-get install git
+```
+
+For Fedora or Red Hat:
+
+```bash
+sudo dnf install git
+```
+
+Confirm with `git --version` after it finishes.
+
+---
+
+## Your Task
+
+<Steps>
+ <Step number={1} title="Install Git and confirm it works">
+ Go to <a href="https://git-scm.com/downloads" target="_blank" rel="noopener noreferrer">git-scm.com/downloads</a>. Download the version for your operating system.
+
+ Install it. If you are on Windows, leave all installer settings at their defaults, the defaults are fine.
+
+ Open your terminal and run:
+
+ ```bash
+ git --version
+ ```
+
+ You should see something like:
+
+ ```
+ git version 2.x.x
+ ```
+
+ That's it, Git is installed. You will use it in Module 04 when we cover GitHub and your first real developer workflow.
+ </Step>
+</Steps>
+
+<Note>
+ Done? You've completed Lesson 03.05. Next up: [Free accounts to create](/library/building-with-ai/free-accounts-to-create) →
+</Note>
+
+Ready to keep going? The [Getting Started path](/paths/getting-started) has the full module sequence.
+
+<FAQ>
+ <FAQItem question="What's the difference between Git and GitHub?">
+ Git is a tool you install on your own computer. It tracks changes to files locally. GitHub is a website where you can upload your Git-tracked projects so others can see them, or so you have a backup in the cloud. You can use Git without GitHub. You cannot use GitHub without Git.
+ </FAQItem>
+ <FAQItem question="Do I need to learn Git commands before I can start building things?">
+ Not at this stage. Right now all you need is Git installed and confirmed. The commands, committing, branching, pushing, come in Module 04. Many developers use Git every day knowing fewer than ten commands. You will pick them up as you build.
+ </FAQItem>
+ <FAQItem question="What is Git Bash and do I need to use it on Windows?">
+ Git Bash is a terminal application that gets installed alongside Git on Windows. It gives you a Unix-style command line, which works well for Git commands. You do not have to use it, Command Prompt and PowerShell both work too. But Git Bash is worth keeping around: it handles Git commands cleanly and will be familiar as you follow tutorials online.
+ </FAQItem>
+ <FAQItem question="Can I use Git without the terminal?">
+ Yes. There are graphical Git clients like GitHub Desktop and GitKraken that let you manage version control through a visual interface, no terminal required. Most developers learn the terminal commands first because they are faster once you know them, but the GUI options are a valid starting point if the terminal feels overwhelming right now.
+ </FAQItem>
+</FAQ>
