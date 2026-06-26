@@ -178,6 +178,10 @@ If you see version numbers, you're done.
  Done? You've completed Lesson 03.09. Next up: [Install Claude Code →](/library/building-with-ai/install-claude-code)
 </Note>
 
+---
+
+*Understanding the PATH environment variable is one of those things that seems confusing the first time and obvious the second. You now have both the mental model and the fix. Explore the full setup sequence in the [Getting Started path](/paths/getting-started), which walks you through every tool installation in order.*
+
 <FAQ>
  <FAQItem question="What exactly is an environment variable?">
  An environment variable is a named value your operating system stores and makes available to programs and the terminal. PATH is one of these, it's a variable named "PATH" whose value is a list of folder locations. Other environment variables include things like your username or home directory. When you create a `.env` file for API keys, you're using the same concept at the project level.
@@ -192,7 +196,3 @@ If you see version numbers, you're done.
  PATH only affects the terminal, it determines which commands the shell can find and run. Your code doesn't use PATH directly. However, when you run your code from the terminal (like `python my_script.py`), the terminal uses PATH to find the Python executable. So if Python isn't in PATH, you can't run your code from the terminal, but PATH itself isn't part of your program.
  </FAQItem>
 </FAQ>
-
----
-
-*Understanding the PATH environment variable is one of those things that seems confusing the first time and obvious the second. You now have both the mental model and the fix. Explore the full setup sequence in the [Getting Started path](/paths/getting-started), which walks you through every tool installation in order.*
