@@ -172,7 +172,7 @@ export default async function ArticlePage({ params }: PageProps) {
 
         {/* Center — article content */}
         <article className="flex-1 min-w-0">
-          <div className="max-w-2xl mx-auto px-0 md:px-8">
+          <div className="max-w-2xl mx-auto px-0 sm:px-6 md:px-8">
             {/* Breadcrumbs */}
             <nav
               className="flex items-center gap-2 text-sm text-secondary mb-8 flex-wrap"
@@ -189,7 +189,7 @@ export default async function ArticlePage({ params }: PageProps) {
                 {pillarName}
               </Link>
               <svg className="w-3 h-3 text-border" viewBox="0 0 6 10" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M1 1l4 4-4 4"/></svg>
-              <span className="text-primary truncate max-w-[200px]">
+              <span className="text-primary truncate max-w-[200px] sm:max-w-xs">
                 {frontmatter.title}
               </span>
             </nav>
@@ -206,10 +206,10 @@ export default async function ArticlePage({ params }: PageProps) {
                   {frontmatter.difficulty}
                 </span>
               </div>
-              <h1 className="font-fraunces text-4xl md:text-5xl text-primary leading-tight text-balance">
+              <h1 className="font-fraunces text-3xl sm:text-4xl md:text-5xl text-primary leading-tight text-balance">
                 {frontmatter.title}
               </h1>
-              <p className="text-xl text-secondary mt-4 leading-relaxed border-l-2 border-accent-soft pl-4">
+              <p className="text-lg md:text-xl text-secondary mt-4 leading-relaxed border-l-2 border-accent-soft pl-4">
                 {frontmatter.description}
               </p>
               <div className="flex flex-wrap gap-x-4 gap-y-1 mt-4 text-sm text-secondary">

@@ -5,10 +5,9 @@ import { useRouter } from 'next/navigation'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ArrowRight, BookOpen, Hash, Route, Search, X } from 'lucide-react'
 import { useSearch } from '@/context/search-context'
-import { SEARCH_DATA } from '@/lib/search-data'
 import type { SearchItem, SearchResults } from '@/lib/search-types'
 
-function filterData(query: string): SearchResults {
+function filterData(data: SearchItem[], query: string): SearchResults {
   const q = query.toLowerCase().trim()
   if (!q) return { paths: [], articles: [], glossary: [] }
 
@@ -18,9 +17,9 @@ function filterData(query: string): SearchResults {
     item.category.toLowerCase().includes(q)
 
   return {
-    paths: SEARCH_DATA.filter((i) => i.type === 'path' && match(i)).slice(0, 2),
-    articles: SEARCH_DATA.filter((i) => i.type === 'article' && match(i)).slice(0, 5),
-    glossary: SEARCH_DATA.filter((i) => i.type === 'glossary' && match(i)).slice(0, 3),
+    paths: data.filter((i) => i.type === 'path' && match(i)).slice(0, 2),
+    articles: data.filter((i) => i.type === 'article' && match(i)).slice(0, 5),
+    glossary: data.filter((i) => i.type === 'glossary' && match(i)).slice(0, 3),
   }
 }
 
@@ -73,7 +72,7 @@ function ResultGroup({
   )
 }
 
-export function SearchModal() {
+export function SearchModal({ data }: { data: SearchItem[] }) {
   const { isSearchOpen, closeSearch } = useSearch()
   const router = useRouter()
   const inputRef = useRef<HTMLInputElement>(null)
@@ -106,7 +105,7 @@ export function SearchModal() {
     }
   }, [isSearchOpen])
 
-  const results = filterData(debouncedQuery)
+  const results = filterData(data, debouncedQuery)
   const flatItems = [
     ...results.paths,
     ...results.articles,
