@@ -71,10 +71,10 @@ export function NewsletterForm({ source, dark = false }: NewsletterFormProps) {
         className="text-center py-1"
       >
         <div className="text-3xl mb-2">🎉</div>
-        <p className={`font-fraunces text-lg font-semibold mb-1 ${dark ? 'text-[#efebe1]' : 'text-primary'}`}>
+        <p className="font-fraunces text-lg font-semibold mb-1 text-primary">
           You&apos;re in!
         </p>
-        <p className={`text-sm mb-3 ${dark ? 'text-[#a39e92]' : 'text-secondary'}`}>
+        <p className="text-sm mb-3 text-secondary">
           First issue lands Tuesday. Check your inbox for the free cheatsheet.
         </p>
         <a
@@ -95,10 +95,10 @@ export function NewsletterForm({ source, dark = false }: NewsletterFormProps) {
         className="text-center py-1"
       >
         <div className="text-2xl mb-2">🎉</div>
-        <p className={`text-sm font-semibold ${dark ? 'text-[#efebe1]' : 'text-primary'}`}>
+        <p className="text-sm font-semibold text-primary">
           You&apos;re already on the list!
         </p>
-        <p className={`text-xs mt-1 ${dark ? 'text-[#a39e92]' : 'text-secondary'}`}>
+        <p className="text-xs mt-1 text-secondary">
           See you Tuesday.
         </p>
       </motion.div>
@@ -115,7 +115,7 @@ export function NewsletterForm({ source, dark = false }: NewsletterFormProps) {
         <input
           type="email"
           value={email}
-          onChange={(e) => { setEmail(e.target.value); if (state === 'error') setState('idle') }}
+          onChange={(e) => { setEmail(e.target.value); if (state === 'error') { setState('idle'); setErrorMsg('') } }}
           onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
           placeholder="your@email.com"
           className={inputClass}
