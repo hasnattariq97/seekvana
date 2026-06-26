@@ -31,6 +31,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     supabase.auth.getUser().then(({ data }) => {
       setUser(data.user)
       setLoading(false)
+    }).catch(() => {
+      setLoading(false)
     })
 
     const {

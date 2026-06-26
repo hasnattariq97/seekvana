@@ -58,7 +58,7 @@ export function NewsletterForm({ source, dark = false }: NewsletterFormProps) {
 
   const inputClass = dark
     ? 'flex-1 min-w-0 bg-white/10 border border-white/20 rounded-xl py-2.5 px-4 text-sm text-white placeholder:text-white/40 outline-none focus:ring-2 focus:ring-accent/50 transition'
-    : 'flex-1 min-w-0 border border-border rounded-xl py-2.5 px-4 text-sm text-primary bg-white outline-none focus:ring-2 focus:ring-accent/30 transition'
+    : 'flex-1 min-w-0 border border-border rounded-xl py-2.5 px-4 text-sm text-primary bg-surface outline-none focus:ring-2 focus:ring-accent/30 transition'
 
   const buttonClass =
     'shrink-0 bg-accent hover:bg-accent-deep text-white rounded-xl py-2.5 px-5 text-sm font-bold transition-colors disabled:opacity-60 whitespace-nowrap'
