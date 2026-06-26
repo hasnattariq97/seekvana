@@ -23,4 +23,10 @@ describe('isValidEmail', () => {
   it('rejects whitespace only', () => {
     expect(isValidEmail('   ')).toBe(false)
   })
+  it('rejects multiple @ signs', () => {
+    expect(isValidEmail('user@@example.com')).toBe(false)
+  })
+  it('accepts email with surrounding whitespace', () => {
+    expect(isValidEmail('  user@example.com  ')).toBe(true)
+  })
 })

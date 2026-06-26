@@ -1,3 +1,4 @@
 export function isValidEmail(email: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
+  if (!email) return false
+  return /^[^\s@]+@[^@\s]+\.[^@\s]+$/.test(email.trim())
 }
