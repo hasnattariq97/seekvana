@@ -39,12 +39,13 @@ export function AuthModal() {
 
   // Close on Escape
   useEffect(() => {
+    if (!isAuthModalOpen) return
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') closeAuthModal()
     }
     document.addEventListener('keydown', handleKey)
     return () => document.removeEventListener('keydown', handleKey)
-  }, [closeAuthModal])
+  }, [isAuthModalOpen, closeAuthModal])
 
   const handleMagicLink = async () => {
     if (!email.trim()) return
@@ -68,12 +69,16 @@ export function AuthModal() {
   const handleGoogle = async () => {
     const supabase = createClient()
     const returnTo = sessionStorage.getItem('returnTo') ?? '/'
-    await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(returnTo)}`,
       },
     })
+    if (error) {
+      setState('error')
+      setErrorMsg(error.message)
+    }
   }
 
   return (
