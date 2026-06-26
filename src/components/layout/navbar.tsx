@@ -165,6 +165,7 @@ function DesktopNav() {
 // ─── Mobile navigation sheet content ─────────────────────────────────────────
 
 function MobileNav({ onClose }: { onClose: () => void }) {
+  const { user, openAuthModal } = useAuth()
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
@@ -230,14 +231,39 @@ function MobileNav({ onClose }: { onClose: () => void }) {
       </nav>
 
       {/* CTA */}
-      <div className="p-4 border-t border-border">
-        <Link
-          href="/paths/getting-started"
-          onClick={onClose}
-          className="flex w-full items-center justify-center bg-accent text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-accent-deep transition-colors"
-        >
-          Get started
-        </Link>
+      <div className="p-4 border-t border-border space-y-2">
+        {user ? (
+          <>
+            <Link
+              href="/profile/reading-list"
+              onClick={onClose}
+              className="flex w-full items-center justify-center border border-border text-primary rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-surface-subtle transition-colors"
+            >
+              My Profile
+            </Link>
+            <button
+              onClick={async () => {
+                onClose()
+                const supabase = createClient()
+                await supabase.auth.signOut()
+              }}
+              className="flex w-full items-center justify-center text-accent text-sm font-medium py-1"
+            >
+              Sign out
+            </button>
+          </>
+        ) : (
+          <button
+            onClick={() => {
+              onClose()
+              sessionStorage.setItem('returnTo', window.location.pathname)
+              openAuthModal()
+            }}
+            className="flex w-full items-center justify-center bg-accent text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-accent-deep transition-colors"
+          >
+            Get started
+          </button>
+        )}
       </div>
     </div>
   );
