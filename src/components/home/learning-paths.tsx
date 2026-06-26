@@ -205,7 +205,7 @@ const ILLUSTRATIONS: Record<IllustrationKey, React.ComponentType> = {
 // ── Component ───────────────────────────────────────────────────────────────
 
 export function LearningPaths() {
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useReducedMotion() ?? false;
 
   return (
     <section className="bg-surface-subtle py-20 px-4">

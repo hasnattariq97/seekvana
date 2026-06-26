@@ -28,7 +28,7 @@ const CARD_BG = ["bg-accent-soft", "bg-info/20", "bg-surface-subtle"] as const;
 const TABS = ["All", "Beginner", "Intermediate", "Advanced"] as const;
 
 function ArticleGrid({ articles }: { articles: ArticleMeta[] }) {
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useReducedMotion() ?? false;
 
   if (articles.length === 0) {
     return (

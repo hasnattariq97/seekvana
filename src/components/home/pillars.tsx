@@ -91,7 +91,7 @@ const PILLARS: Pillar[] = [
 ];
 
 export function Pillars() {
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useReducedMotion() ?? false;
 
   return (
     <section className="bg-surface-subtle py-16 px-4">
