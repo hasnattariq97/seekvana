@@ -14,6 +14,7 @@ import { ArticleFeedback } from '@/components/article/article-feedback'
 import { ArticleNav } from '@/components/article/article-nav'
 import type { CommentWithReplies } from '@/types/comments'
 import { ArticleComments } from '@/components/article/article-comments'
+import { PostArticleNewsletter } from '@/components/newsletter/post-article-newsletter'
 
 interface PageProps {
   params: Promise<{ pillar: string; slug: string }>
@@ -245,6 +246,11 @@ export default async function ArticlePage({ params }: PageProps) {
               articleId={`${pillar}/${slug}`}
               initialComments={comments}
             />
+
+            {/* Newsletter */}
+            <div className="mt-12 mb-8">
+              <PostArticleNewsletter />
+            </div>
 
             {/* Prev/Next + Related */}
             <ArticleNav pillar={pillar} slug={slug} />
