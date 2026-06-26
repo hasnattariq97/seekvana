@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { SearchProvider } from "@/context/search-context";
+import { AuthProvider } from "@/context/auth-context";
 import { Navbar } from "@/components/layout/navbar";
 import { SearchModalServer } from "@/components/search/search-modal-server";
+import { AuthModal } from "@/components/auth/auth-modal";
 import "./globals.css";
 import 'katex/dist/katex.min.css'
 
@@ -75,9 +77,12 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <SearchProvider>
-            <Navbar />
-            <main>{children}</main>
-            <SearchModalServer />
+            <AuthProvider>
+              <Navbar />
+              <main>{children}</main>
+              <SearchModalServer />
+              <AuthModal />
+            </AuthProvider>
           </SearchProvider>
         </ThemeProvider>
       </body>

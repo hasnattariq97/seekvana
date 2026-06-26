@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { Menu, Search } from "lucide-react";
 import {
   Sheet,
@@ -19,6 +19,8 @@ import {
 } from "@/components/ui/navigation-menu";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useSearch } from "@/context/search-context";
+import { useAuth } from "@/context/auth-context";
+import { createClient } from "@/lib/supabase";
 import { cn } from "@/lib/utils";
 
 // ─── Nav data ─────────────────────────────────────────────────────────────────
@@ -241,6 +243,98 @@ function MobileNav({ onClose }: { onClose: () => void }) {
   );
 }
 
+// ─── User button (auth-aware) ─────────────────────────────────────────────────
+
+function UserButton() {
+  const { user, loading, openAuthModal } = useAuth()
+  const [dropdownOpen, setDropdownOpen] = useState(false)
+
+  if (loading) {
+    return <div className="w-8 h-8 rounded-full bg-surface-subtle animate-pulse hidden md:block" />
+  }
+
+  if (!user) {
+    return (
+      <button
+        onClick={() => {
+          sessionStorage.setItem('returnTo', window.location.pathname)
+          openAuthModal()
+        }}
+        className="hidden md:inline-flex items-center bg-accent text-white rounded-lg px-4 py-2 text-sm font-medium hover:bg-accent-deep transition-colors"
+      >
+        Get started
+      </button>
+    )
+  }
+
+  const initials = (user.user_metadata?.full_name as string)
+    ?.split(' ')
+    .map((n: string) => n[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase() || user.email?.[0].toUpperCase() || '?'
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setDropdownOpen((v) => !v)}
+        className="w-8 h-8 rounded-full bg-accent text-white text-sm font-bold flex items-center justify-center hover:bg-accent-deep transition-colors"
+        aria-label="Account menu"
+      >
+        {initials}
+      </button>
+
+      <AnimatePresence>
+        {dropdownOpen && (
+          <>
+            <div className="fixed inset-0 z-40" onClick={() => setDropdownOpen(false)} />
+            <motion.div
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 4 }}
+              transition={{ duration: 0.15 }}
+              className="absolute right-0 top-10 z-50 w-52 bg-surface border border-border rounded-xl shadow-lg py-1.5 overflow-hidden"
+            >
+              <div className="px-4 py-2.5 border-b border-border mb-1">
+                <p className="text-sm font-semibold text-primary truncate">
+                  {(user.user_metadata?.full_name as string) || 'Seekvana Reader'}
+                </p>
+                <p className="text-xs text-secondary truncate">{user.email}</p>
+              </div>
+              {[
+                { href: '/profile/reading-list', icon: '📚', label: 'My Reading List' },
+                { href: '/profile/progress', icon: '🏆', label: 'My Progress' },
+                { href: '/profile/settings', icon: '⚙️', label: 'Settings' },
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setDropdownOpen(false)}
+                  className="flex items-center gap-2.5 px-4 py-2 text-sm text-primary hover:bg-surface-subtle transition-colors"
+                >
+                  <span>{item.icon}</span>
+                  {item.label}
+                </Link>
+              ))}
+              <div className="h-px bg-border mx-2 my-1" />
+              <button
+                onClick={async () => {
+                  setDropdownOpen(false)
+                  const supabase = createClient()
+                  await supabase.auth.signOut()
+                }}
+                className="w-full text-left flex items-center gap-2.5 px-4 py-2 text-sm text-accent hover:bg-surface-subtle transition-colors"
+              >
+                Sign out
+              </button>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
 // ─── Navbar (assembled) ───────────────────────────────────────────────────────
 
 export function Navbar() {
@@ -274,13 +368,8 @@ export function Navbar() {
           {/* Theme toggle */}
           <ThemeToggle />
 
-          {/* Get started — desktop only */}
-          <Link
-            href="/paths/getting-started"
-            className="hidden md:inline-flex items-center bg-accent text-white rounded-lg px-4 py-2 text-sm font-medium hover:bg-accent-deep transition-colors"
-          >
-            Get started
-          </Link>
+          {/* Auth — desktop only */}
+          <UserButton />
 
           {/* Mobile hamburger */}
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
