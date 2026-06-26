@@ -61,31 +61,33 @@ function SidebarContent({ pillar, currentSlug, articles }: PillarSidebarProps) {
 
 export function PillarSidebar({ pillar, currentSlug, articles }: PillarSidebarProps) {
   return (
-    <>
-      {/* Desktop sticky sidebar — hidden below lg */}
-      <aside className="hidden lg:block w-64 shrink-0">
-        <div className="sticky top-20 overflow-y-auto max-h-[calc(100vh-5rem)] pr-2">
-          <SidebarContent pillar={pillar} currentSlug={currentSlug} articles={articles} />
-        </div>
-      </aside>
-
-      {/* Mobile: Contents button that opens a Sheet — visible below lg */}
-      <div className="lg:hidden mb-6">
-        <Sheet>
-          <SheetTrigger className="flex items-center gap-2 text-sm text-secondary border border-border rounded-lg px-4 py-2 hover:bg-surface-subtle transition-colors">
-            <BookOpen className="h-4 w-4" />
-            Contents
-          </SheetTrigger>
-          <SheetContent side="left" className="w-72 bg-surface p-6">
-            <SheetHeader>
-              <SheetTitle className="text-left font-fraunces">Contents</SheetTitle>
-            </SheetHeader>
-            <div className="mt-6">
-              <SidebarContent pillar={pillar} currentSlug={currentSlug} articles={articles} />
-            </div>
-          </SheetContent>
-        </Sheet>
+    // Desktop sticky sidebar only — hidden below lg
+    <aside className="hidden lg:block w-64 shrink-0">
+      <div className="sticky top-20 overflow-y-auto max-h-[calc(100vh-5rem)] pr-2">
+        <SidebarContent pillar={pillar} currentSlug={currentSlug} articles={articles} />
       </div>
-    </>
+    </aside>
+  )
+}
+
+// Separate mobile button — render inside the article column, not as a flex sibling
+export function PillarSidebarMobile({ pillar, currentSlug, articles }: PillarSidebarProps) {
+  return (
+    <div className="lg:hidden mb-6">
+      <Sheet>
+        <SheetTrigger className="flex items-center gap-2 text-sm text-secondary border border-border rounded-lg px-4 py-2 hover:bg-surface-subtle transition-colors">
+          <BookOpen className="h-4 w-4" />
+          Contents
+        </SheetTrigger>
+        <SheetContent side="left" className="w-72 bg-surface p-6">
+          <SheetHeader>
+            <SheetTitle className="text-left font-fraunces">Contents</SheetTitle>
+          </SheetHeader>
+          <div className="mt-6">
+            <SidebarContent pillar={pillar} currentSlug={currentSlug} articles={articles} />
+          </div>
+        </SheetContent>
+      </Sheet>
+    </div>
   )
 }

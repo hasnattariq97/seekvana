@@ -8,7 +8,7 @@ import { getArticleSource, getAllArticles, getArticlesByPillar, type ArticleFron
 import { getPillarName } from '@/lib/pillars'
 import { getMDXComponents } from '@/components/mdx/mdx-components'
 import { ReadingProgress } from '@/components/article/reading-progress'
-import { PillarSidebar } from '@/components/article/pillar-sidebar'
+import { PillarSidebar, PillarSidebarMobile } from '@/components/article/pillar-sidebar'
 import { TableOfContents } from '@/components/article/table-of-contents'
 import { ArticleFeedback } from '@/components/article/article-feedback'
 import { ArticleNav } from '@/components/article/article-nav'
@@ -173,6 +173,8 @@ export default async function ArticlePage({ params }: PageProps) {
         {/* Center — article content */}
         <article className="flex-1 min-w-0">
           <div className="max-w-2xl mx-auto px-0 sm:px-6 md:px-8">
+            {/* Mobile contents button — inside article column, not a flex sibling */}
+            <PillarSidebarMobile pillar={pillar} currentSlug={slug} articles={pillarArticles} />
             {/* Breadcrumbs */}
             <nav
               className="flex items-center gap-2 text-sm text-secondary mb-8 flex-wrap"
