@@ -1,0 +1,152 @@
+---
+title: "Dev Environment Setup Checklist: Verify Your Setup"
+description: "Run four terminal commands to confirm your developer environment is fully set up. Node.js, Python, Git, and Claude Code verified in under two minutes."
+pillar: "building-with-ai"
+slug: "verify-your-setup"
+difficulty: "beginner"
+readTime: 5
+author: "Seekvana"
+publishedAt: "2026-06-20"
+tags: ["developer environment", "setup checklist", "verify coding setup", "node python git"]
+featured: false
+lessonModule: "03"
+lessonNumber: "03.11"
+---
+
+<ArticleImage
+ src="/images/articles/building-with-ai/verify-your-setup/cover.webp"
+ alt="A flat illustration of a checklist with all items checked off, warm cream background with clay accent ticks"
+/>
+
+You've installed a code editor, Node.js, Python, Git, and Claude Code. Before you move on to the next module, run one final check, it takes under two minutes and tells you exactly where you stand.
+
+> **Key Takeaways**
+> - Four terminal commands confirm your full setup: `node --version`, `python --version`, `git --version`, and `claude --version`
+> - A version number means the tool is installed and working — anything else means go back to that lesson
+> - If something fails, PATH is the most common cause — and every install lesson has the fix
+
+---
+
+## Your developer environment setup checklist
+
+Skipping this check is how developers spend an hour debugging the next module only to discover Python was never actually installed. Run each of these now. It takes under two minutes.
+
+Open your terminal — that's Terminal on Mac, Command Prompt or PowerShell on Windows — and run these commands one at a time.
+
+**Node.js:**
+
+```bash
+node --version
+```
+
+You should see something like `v22.x.x`. If you do, <a href="https://nodejs.org" target="_blank" rel="noopener noreferrer">Node.js</a> is installed and your PATH knows where to find it.
+
+**Python:**
+
+```bash
+python --version
+```
+
+You should see `Python 3.x.x`. On a Mac you may need to run `python3 --version` instead, both are fine.
+
+**Git:**
+
+```bash
+git --version
+```
+
+You should see `git version 2.x.x`. Git is the most reliably quiet installation, this one almost always passes.
+
+**Claude Code:**
+
+```bash
+claude --version
+```
+
+You should see a version number like `1.x.x`. If this one fails, it usually means Node.js wasn't installed when you ran the Claude Code install, reinstall Claude Code after confirming Node.js works.
+
+<Note>
+ The exact version numbers don't matter, any version number means the tool is installed. What matters is that you don't see "command not found" or "is not recognized."
+</Note>
+
+---
+
+## What does "command not found" mean — and how do you fix it?
+
+Seeing an error instead of a version number is more common than you'd think. The most likely cause is a [PATH problem](/library/building-with-ai/understanding-path); your computer can't find the tool because the installer didn't add it to the list of folders your terminal searches.
+
+The fix is almost always to reinstall the tool and tick the right option during installation.
+
+Here's where to go for each one:
+
+- **`node --version` fails** → go back to [install Node.js](/library/building-with-ai/install-node) and reinstall
+- **`python --version` fails** → go back to [install Python](/library/building-with-ai/install-python), if you're on Windows, make sure "Add Python to PATH" is ticked
+- **`git --version` fails** → go back to [install Git](/library/building-with-ai/install-git) and reinstall
+- **`claude --version` fails** → go back to [install Claude Code](/library/building-with-ai/install-claude-code), run it again after Node.js is confirmed working
+
+<Warning>
+ On Windows, after reinstalling a tool, close your terminal and open a new one before testing again. The terminal doesn't pick up PATH changes until it restarts.
+</Warning>
+
+---
+
+## What's next
+
+If all four commands returned version numbers, your developer environment is ready. That's not a small thing — and we mean it. Most people who decide they want to learn to code never get their environment working. You did. You've installed real tools on your real computer and confirmed they work.
+
+Module 04 covers Git and GitHub, the version control system that every developer uses, and the platform where all code lives. You've already installed Git in this module. Now you'll learn how to actually use it.
+
+Start the next module on the [Getting Started path](/paths/getting-started).
+
+---
+
+## Your Task
+
+<Steps>
+ <Step number={1} title="Run all four checks">
+ Open your terminal and run each command. For each one, look for a version number, that means it's installed and working.
+
+ ```bash
+ node --version
+ ```
+ → should show: `v22.x.x`
+
+ ```bash
+ python --version
+ ```
+ → should show: `Python 3.x.x`
+
+ ```bash
+ git --version
+ ```
+ → should show: `git version 2.x.x`
+
+ ```bash
+ claude --version
+ ```
+ → should show: `1.x.x`
+
+ If any command shows "command not found" or "is not recognized," go back to that tool's install lesson in this module to fix it.
+
+ All four passing? Your environment is ready. You're done with Module 03.
+ </Step>
+</Steps>
+
+<Note>
+ Done? You've completed Lesson 03.11, the final lesson in Module 03. Next up: Module 04, Git and GitHub →
+</Note>
+
+<FAQ>
+ <FAQItem question="What does 'command not found' mean after installing a tool?">
+ It means your terminal can't locate the tool, usually because the installer didn't add it to your PATH, which is the list of folders your terminal searches when you type a command. The fix is almost always to reinstall the tool and ensure the "Add to PATH" option is selected during installation. On Windows, restart your terminal after reinstalling.
+ </FAQItem>
+ <FAQItem question="Do the version numbers have to match exactly for the setup to be correct?">
+ No, any version number means the tool is installed and working. The specific numbers (`v22.1.0` vs `v20.3.2`) don't matter for this stage of learning. What matters is that you see a number at all, not an error message.
+ </FAQItem>
+ <FAQItem question="I'm on a Mac and 'python --version' returns Python 2.7. Is that okay?">
+ No. Python 2 is outdated and incompatible with modern AI tools. Run `python3 --version` instead. If that also fails, go back to the [install Python](/library/building-with-ai/install-python) lesson and install the current Python 3 version from python.org.
+ </FAQItem>
+ <FAQItem question="Should I install VS Code extensions or anything else before starting Module 04?">
+ No, if you've completed this module, you have everything you need for Module 04. VS Code and Cursor are already set up from earlier lessons. Module 04 focuses on Git commands and GitHub workflows, which run entirely in the terminal.
+ </FAQItem>
+</FAQ>
