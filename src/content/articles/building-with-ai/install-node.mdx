@@ -37,7 +37,7 @@ Node.js changed that. Released in 2009, Node.js took the same JavaScript engine 
 
 That shift turned JavaScript from a browser language into a general-purpose tool for building servers, command-line scripts, and developer utilities.
 
-**Why this matters for you:** Most AI CLI tools, build systems, and developer automation scripts are built with Node.js. When you install [Cursor](/library/building-with-ai/install-cursor) or follow an AI tutorial that asks you to run `npm install something`, that's Node.js powering what happens next.
+**Why this matters for you:** Most AI CLI tools (CLI stands for Command-Line Interface — another name for the terminal) build systems, and developer automation scripts are built with Node.js. When you install [Cursor](/library/building-with-ai/install-cursor) or follow an AI tutorial that asks you to run `npm install something`, that's Node.js powering what happens next.
 
 ---
 
@@ -59,45 +59,35 @@ You don't need to understand npm deeply right now. You just need Node.js install
 
 ## How to install Node.js
 
-Go to <a href="https://nodejs.org" target="_blank" rel="noopener noreferrer">nodejs.org</a>. You'll see two download buttons.
-
-**Choose the LTS version**, it's the button on the left.
+You'll install Node.js using your terminal's built-in package manager — one command, no installer wizard, no clicking through screens.
 
 <Tip>
- LTS stands for Long-Term Support. It means this version is stable, well-tested, and receives security updates for years. The other button ("Current") has newer features but is less stable. Always choose LTS unless a tutorial specifically requires a different version.
+ You'll be installing the LTS version. LTS stands for Long-Term Support — it's the stable version that receives security updates for years. Always use LTS unless a tutorial specifically requires a different version.
 </Tip>
 
-Download the installer for your operating system and run it. The installer handles everything, Node.js, npm, and the correct system settings. You don't need to change any options during installation; the defaults are correct.
-
-Once it's done, open your terminal and run:
-
-```bash
-node --version
-```
-
-You should see something like:
-
-```
-v22.x.x
-```
-
-If you see a version number, Node.js is installed and working. That's the whole lesson.
-
-### What if you see an error instead?
-
-If the terminal says `command not found: node` after installing, close the terminal completely and open a new one. The terminal reads your system's PATH settings when it opens, the installer updated those settings, but your existing terminal window doesn't know about them yet. Opening a fresh window fixes this almost every time.
-
-If you still get an error, revisit the [understanding PATH](/library/building-with-ai/understanding-path) lesson, it explains exactly what's happening and how to fix it.
+Once installed, you'll confirm it worked by running `node --version` in your terminal. If you see a version number, you're done.
 
 ---
 
 ## Your Task
 
 <Steps>
- <Step number={1} title="Install Node.js and confirm it works">
- Go to <a href="https://nodejs.org" target="_blank" rel="noopener noreferrer">nodejs.org</a>. Download the LTS version (the left button, LTS means Long-Term Support, which is the stable version). Install it.
+ <Step number={1} title="Install Node.js from your terminal">
+ Open your terminal and run the command for your operating system:
 
- Open your terminal and run:
+ **Windows:**
+ ```bash
+ winget install OpenJS.NodeJS.LTS
+ ```
+
+ **Mac:**
+ ```bash
+ brew install node
+ ```
+
+ Mac users: `brew` is Homebrew, a package manager that comes standard on most Mac developer setups. If your terminal returns `command not found: brew`, install Homebrew first at <a href="https://brew.sh" target="_blank" rel="noopener noreferrer">brew.sh</a> (one command), then re-run the line above.
+
+ Once the install finishes, confirm it worked:
 
  ```bash
  node --version
