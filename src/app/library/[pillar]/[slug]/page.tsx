@@ -206,10 +206,10 @@ export default async function ArticlePage({ params }: PageProps) {
                   {frontmatter.difficulty}
                 </span>
               </div>
-              <h1 className="font-fraunces text-3xl sm:text-4xl md:text-5xl text-primary leading-tight text-balance">
+              <h1 className="font-fraunces text-2xl sm:text-4xl md:text-5xl text-primary leading-tight text-balance">
                 {frontmatter.title}
               </h1>
-              <p className="text-lg md:text-xl text-secondary mt-4 leading-relaxed border-l-2 border-accent-soft pl-4">
+              <p className="text-base md:text-lg text-secondary mt-4 leading-relaxed">
                 {frontmatter.description}
               </p>
               <div className="flex flex-wrap gap-x-4 gap-y-1 mt-4 text-sm text-secondary">
