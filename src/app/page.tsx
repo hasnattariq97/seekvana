@@ -4,6 +4,7 @@ import { LearningPaths } from "@/components/home/learning-paths";
 import { Pillars } from "@/components/home/pillars";
 import { RecentArticlesServer } from "@/components/home/recent-articles-server";
 import { Footer } from "@/components/layout/footer";
+import { NewsletterSection } from "@/components/newsletter/newsletter-section";
 import { getAllArticles, getAllPaths } from "@/lib/mdx";
 
 export const metadata: Metadata = {
@@ -25,6 +26,7 @@ export default function HomePage() {
       <LearningPaths />
       <Pillars />
       <RecentArticlesServer />
+      <NewsletterSection />
       <Footer />
     </>
   );
