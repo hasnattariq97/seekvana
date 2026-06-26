@@ -1,12 +1,22 @@
 interface ComparisonTableProps {
-  columns: string[]
-  rows: string[][]
+  headers: string   // "Col1|||Col2|||Col3"
+  rows: string      // "R1C1|||R1C2|||R1C3|||R2C1|||R2C2|||R2C3" (flat, chunks by column count)
+  title?: string
   highlight?: string
 }
 
-export function ComparisonTable({ columns = [], rows = [], highlight }: ComparisonTableProps) {
+export function ComparisonTable({ headers, rows, title, highlight }: ComparisonTableProps) {
+  const columns = headers ? headers.split('|||') : []
+  const colCount = columns.length || 1
+  const flat = rows ? rows.split('|||') : []
+  const parsed: string[][] = []
+  for (let i = 0; i < flat.length; i += colCount) {
+    parsed.push(flat.slice(i, i + colCount))
+  }
+
   return (
     <div className="my-8 overflow-x-auto">
+      {title && <p className="font-semibold text-sm text-secondary mb-2">{title}</p>}
       <table className="w-full border-collapse text-sm">
         <thead>
           <tr>
@@ -31,7 +41,7 @@ export function ComparisonTable({ columns = [], rows = [], highlight }: Comparis
           </tr>
         </thead>
         <tbody>
-          {rows.map((row, ri) => (
+          {parsed.map((row, ri) => (
             <tr key={ri} className="even:bg-surface-subtle">
               {row.map((cell, ci) => (
                 <td
