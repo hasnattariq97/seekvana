@@ -1,0 +1,159 @@
+---
+title: "How to Install Claude Code CLI (Step-by-Step Guide)"
+description: "Learn how to install Claude Code CLI on Mac, Windows, or Linux in under two minutes. Step-by-step beginner guide with install, auth setup, and verification."
+pillar: "building-with-ai"
+slug: "install-claude-code"
+difficulty: "beginner"
+readTime: 5
+author: "Seekvana"
+publishedAt: "2026-06-20"
+tags: ["claude code", "how to install claude code cli", "anthropic cli", "claude code beginner"]
+featured: false
+lessonModule: "03"
+lessonNumber: "03.10"
+---
+
+<ArticleImage
+ src="/images/articles/building-with-ai/install-claude-code/cover.webp"
+ alt="A terminal window with a blinking cursor representing Claude Code CLI"
+/>
+
+In this lesson, you'll install Claude Code, the AI coding tool that lives in your terminal and helps you build projects from the inside out. By the end, you'll have it installed, verified, and ready to use. The install takes under two minutes.
+
+> **Key Takeaways**
+> - Claude Code is a command-line tool, install it once, use it in any project folder
+> - The native installer (recommended in 2026) requires no extra dependencies, not even Node.js
+> - The first time you run `claude`, a browser tab opens for authentication, that's expected
+> - Once authenticated, Claude Code works anywhere, just type `claude` from any project directory
+
+---
+
+## What Is Claude Code (and How It Differs from Cursor)
+
+Claude Code is an AI coding assistant that runs inside your terminal. You navigate to any project folder, type `claude`, and start a conversation about your code. It can read your files, write new ones, run commands, and work across your entire project, not just the file you have open.
+
+If you completed Lesson 03.02, you already have [Cursor](/library/building-with-ai/install-cursor) installed. Claude Code isn't a replacement. They serve different moments.
+
+**Claude Code vs Cursor at a glance**
+
+| | Claude Code | Cursor |
+|---|---|---|
+| **What it is** | Terminal-based AI agent | AI-first code editor (GUI) |
+| **Best for** | Working inside an existing project from the terminal | Writing and editing code with visual context |
+| **Works inside** | Any terminal, VS Code's, your system terminal, anywhere | The Cursor editor only |
+
+Most developers end up using both. Cursor when they're writing and editing; Claude Code when they want to hand a bigger task to an agent and let it run.
+
+---
+
+## What You Need Before Installing
+
+Three things, and you likely have all of them already:
+
+- **An Anthropic account with API access**, the [free account you created in Lesson 03.06](/library/building-with-ai/free-accounts-to-create) and the [API key from Lesson 03.07](/library/building-with-ai/what-is-an-api-key) cover this. Your $5 free credit is enough for weeks of beginner use.
+- **A terminal**, VS Code's built-in terminal works fine. Open it with `Ctrl+`` ` (Windows/Linux) or `Cmd+`` ` (Mac).
+- **Nothing else**, with the native installer, you do not need Node.js.
+
+<Note>
+ The free Claude.ai chat plan does **not** include Claude Code access. You need API access, either a Pro/Max subscription or an API key with credits. The $5 credit from signup covers getting started without spending a penny.
+</Note>
+
+---
+
+## How to Install Claude Code
+
+<ArticleImage
+ src="/images/articles/building-with-ai/install-claude-code/claude-version-verification.webp"
+ alt="Terminal showing claude --version command returning a version number"
+ caption="Running claude --version confirms Claude Code is installed and shows which version you have."
+/>
+
+Open your terminal and run the command for your operating system.
+
+**Mac or Linux:**
+
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+**Windows (PowerShell):**
+
+```powershell
+irm https://claude.ai/install.ps1 | iex
+```
+
+Wait for the install to finish, usually under 30 seconds. Then verify it worked:
+
+```bash
+claude --version
+```
+
+You should see a version number like `1.x.x`. If you do, Claude Code is installed.
+
+**Now run Claude Code for the first time:**
+
+```bash
+claude
+```
+
+A browser tab will open asking you to log in with your Anthropic account. This is normal, it's authenticating your API access. Log in, approve the connection, and return to your terminal. You're in.
+
+Honestly, the whole process takes under two minutes. Fewer steps than most app installs.
+
+<Tip>
+ Claude Code is open source and auto-updates in the background. You don't need to reinstall it when a new version ships. See the <a href="https://github.com/anthropics/claude-code" target="_blank" rel="noopener noreferrer">Claude Code GitHub repository</a> or the <a href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener noreferrer">official setup docs</a> for advanced options.
+</Tip>
+
+**Prefer npm?** If you're comfortable with npm and want version pinning, you can also install via `npm install -g @anthropic-ai/claude-code` (requires Node.js 18+). The native installer is recommended for most beginners.
+
+---
+
+## Your Task
+
+<Steps>
+ <Step number={1} title="Install Claude Code and confirm it works">
+ Open your terminal and run the command for your operating system:
+
+ **Mac or Linux:**
+ ```bash
+ curl -fsSL https://claude.ai/install.sh | bash
+ ```
+
+ **Windows (PowerShell):**
+ ```powershell
+ irm https://claude.ai/install.ps1 | iex
+ ```
+
+ Once it finishes, run:
+ ```bash
+ claude --version
+ ```
+
+ You should see a version number like `1.x.x`. That means Claude Code is installed.
+
+ When you're ready, navigate to any project folder and type `claude` to start a session. A browser tab will open for authentication, log in with your Anthropic account, then return to the terminal.
+
+ (You'll need your API key ready, which you saved in Lesson 03.07.)
+ </Step>
+</Steps>
+
+<Note>
+ Done? You've completed Lesson 03.10. Next up: [Verify Your Setup](/library/building-with-ai/verify-your-setup) →
+
+ Or explore the full [Getting Started path](/paths/getting-started) to see where you are in the course.
+</Note>
+
+<FAQ>
+ <FAQItem question="Do I need Node.js to install Claude Code?">
+ No, not if you use the native installer. The `curl` command (Mac/Linux) or PowerShell command (Windows) installs Claude Code directly with no extra dependencies. Node.js is only required if you choose to install via npm instead. For most beginners, the native installer is the simpler path.
+ </FAQItem>
+ <FAQItem question="Why did a browser tab open when I ran claude?">
+ That's the authentication step. Claude Code verifies your identity through your Anthropic account the first time you run it. A browser tab opens, you log in, you approve the connection, and then you're back in the terminal and ready to go. It only happens once per machine.
+ </FAQItem>
+ <FAQItem question="Can I use Claude Code with the free Claude.ai plan?">
+ No. The free Claude.ai chat plan and the Anthropic API are separate products. Claude Code requires API access, either a Pro or Max subscription, or an API key with credits. If you followed Lesson 03.06, you already have an Anthropic Console account with $5 in free credits. That's enough to get started without paying anything extra.
+ </FAQItem>
+ <FAQItem question="What's the difference between Claude Code and GitHub Copilot?">
+ GitHub Copilot is an autocomplete tool, it suggests the next line of code as you type. Claude Code is an agentic assistant, you describe a goal, and it reads your project, makes a plan, and takes action across multiple files. They work differently and are used at different moments. Copilot is passive; Claude Code is active.
+ </FAQItem>
+</FAQ>
