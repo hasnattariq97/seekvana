@@ -1,0 +1,223 @@
+---
+title: "Git Core Workflow for Beginners: init, add, commit, push"
+description: "Learn the basic Git workflow step by step, git init, add, commit, and push, with terminal examples, common error fixes, and a task to push your first repo."
+pillar: "building-with-ai"
+slug: "git-core-workflow"
+difficulty: "beginner"
+readTime: 8
+author: "Seekvana"
+publishedAt: "2026-06-26"
+tags: ["git", "version control", "git tutorial", "git for beginners"]
+featured: false
+lessonModule: "04"
+lessonNumber: "04.03"
+---
+
+{/* IMAGE PROMPT: Editorial flat illustration of a four-step pipeline, folder icon → staging area tray → commit badge → cloud, with simple icons at each step, warm cream background (#FAF8F3), clay accent (#C9633F) on the active commit step, clean workflow diagram feel, Seekvana editorial style, no text in image | FILENAME: cover.webp | DIMENSIONS: 1200×630 */}
+
+<ArticleImage
+ src="/images/articles/building-with-ai/git-core-workflow/cover.webp"
+ alt="Four-step Git workflow diagram showing folder, staging area, commit, and cloud upload"
+/>
+
+Every developer you will ever meet knows four commands by heart. They run them dozens of times a day. They run them without thinking. By the end of this beginner lesson, you will too.
+
+The four commands are: `git init`, `git add`, `git commit`, and `git push`. Together, they are the core Git workflow, the ritual that turns your messy folder of files into a version-controlled project backed up on GitHub.
+
+> **Key Takeaways**
+> - `git init` tells Git to start tracking a folder, run it once when you start a project
+> - `git add` chooses which changes to include in the next snapshot
+> - `git commit` saves the snapshot with a message describing what changed
+> - `git push` uploads your committed snapshots to GitHub
+
+---
+
+## `git init`: Start tracking this folder
+
+Every Git project starts with one command.
+
+```bash
+git init
+```
+
+Run this inside your project folder and Git will create a hidden `.git` directory. That directory is Git's brain, it stores the entire history of your project from this moment forward. You will never need to open or edit it. Just know it is there.
+
+`git init` only runs once per project. After that, Git is always watching.
+
+<Tip>
+ Run `git status` at any point to see what Git currently sees, which files are tracked, which are changed, and what is staged. It is the safest command in Git: it only reads, never changes anything.
+</Tip>
+
+At this stage, Git is watching your folder but not tracking anything yet. Nothing is saved. Nothing is recorded. You have just turned on the recorder, now you need to tell it what to capture.
+
+---
+
+## `git add`: Choose what goes in the snapshot
+
+Here is the step that confuses almost every beginner: why can't you just commit directly? Why is there an extra step?
+
+The answer is that `git add` gives you control. You can change ten files and choose to commit only three of them. That lets you group related changes into focused, meaningful snapshots instead of committing everything at once in one messy blob.
+
+Think of it like making a scrapbook. You have a pile of photos spread across the table, those are your changed files. `git add` is you picking up the photos you want and placing them in a neat stack. `git commit` is gluing them onto the page.
+
+To add everything in your current folder:
+
+```bash
+git add .
+```
+
+The dot means "all files here." You can also add individual files:
+
+```bash
+git add README.md
+```
+
+{/* IMAGE PROMPT: Editorial flat illustration showing a scrapbook analogy, loose photos scattered on a table (left, representing unstaged changes) with a neat selected stack beside them (right, representing staged files), warm cream background (#FAF8F3), clay accent (#C9633F) on the selected stack, clean and minimal, no text in image | FILENAME: staging-area.webp | DIMENSIONS: 800×450 */}
+
+<ArticleImage
+ src="/images/articles/building-with-ai/git-core-workflow/staging-area.webp"
+ alt="Scrapbook analogy showing loose photos as unstaged files and a selected stack as staged files"
+ caption="The staging area is your chance to choose exactly which changes go into the next commit, like selecting which photos to include before gluing them into a scrapbook page."
+/>
+
+---
+
+## `git commit`: Save the snapshot
+
+Once your files are staged, you commit them. This creates a permanent record in Git's history, a snapshot of exactly what your project looked like at this moment.
+
+```bash
+git commit -m "Add README with project description"
+```
+
+The `-m` flag lets you write your commit message inline. That message is the most underrated part of Git.
+
+Think of your commit message as a letter to your future self. Six months from now, when you are trying to figure out why you changed something, your commit history is the only breadcrumb trail you have. "updated stuff" tells you nothing. "Fix broken API key validation on login" tells you everything.
+
+I've gone back through old repos and been genuinely grateful for good commit messages more times than I can count — and frustrated by bad ones even more.
+
+<Note>
+ Good commit messages use the imperative mood, write what the commit *does*, not what you *did*. "Add login page" instead of "Added login page." Keep messages under 72 characters. You do not need to explain every line, just capture the intent.
+</Note>
+
+After running `git commit`, you will see output like this:
+
+```
+[main (root-commit) a1b2c3d] Add README with project description
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+```
+
+That is success. Git is confirming what was committed, how many files changed, and the short identifier of your new commit (`a1b2c3d`).
+
+---
+
+## `git push`: Upload to GitHub
+
+Your commits live on your computer right now. `git push` uploads them to GitHub so they are backed up, visible to collaborators, and safe even if your machine dies.
+
+```bash
+git push
+```
+
+The first time you push a new repository, Git needs to know which remote branch to push to. You will typically run:
+
+```bash
+git push -u origin main
+```
+
+The `-u` flag sets the upstream connection once. After that, plain `git push` works every time.
+
+When it succeeds, you will see something like:
+
+```
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 235 bytes | 235.00 KiB/s, done.
+To https://github.com/yourname/your-repo.git
+ * [new branch] main -> main
+```
+
+If you see "rejected" or "non-fast-forward," it usually means someone else pushed changes you do not have yet. Run `git pull` first, then `git push` again.
+
+---
+
+## Putting it all together
+
+Here is the basic Git workflow, start to finish. You'll use this sequence on every project you ever build.
+
+```bash
+# 1. Create a folder and go into it
+mkdir my-ai-project
+cd my-ai-project
+
+# 2. Tell Git to start tracking it
+git init
+
+# 3. Create a file
+echo "# My AI Project" > README.md
+
+# 4. Stage the file
+git add .
+
+# 5. Commit with a clear message
+git commit -m "Add README"
+
+# 6. Push to GitHub (after creating the repo on github.com)
+git push -u origin main
+```
+
+That is it. Every project starts this way. And after the first push, your daily rhythm shrinks to three commands: `git add .`, `git commit -m "..."`, `git push`.
+
+Make a change. Add it. Commit it. Push it. Repeat. That rhythm, [tracked in your previous lesson on git vs. GitHub](/library/building-with-ai/git-vs-github), is what professional development actually looks like at the command level.
+
+---
+
+## Your Task
+
+<Steps>
+ <Step number={1} title="Create your first Git repository and push it to GitHub">
+ First, create a free GitHub account at github.com if you have not already.
+
+ Then in your terminal:
+
+ ```bash
+ mkdir my-first-repo
+ cd my-first-repo
+ git init
+ echo "# My First Repo" > README.md
+ git add .
+ git commit -m "first commit"
+ ```
+
+ Now on github.com: click **New Repository**, name it "my-first-repo", leave it empty (do not add a README), and click **Create repository**.
+
+ GitHub will show you two commands under "push an existing repository from the command line." Copy and run both of them, they look like:
+
+ ```bash
+ git remote add origin https://github.com/yourname/my-first-repo.git
+ git push -u origin main
+ ```
+
+ Refresh your GitHub page. Your README should appear. That is your first pushed repository, and the beginning of your [Getting Started path](/paths/getting-started).
+ </Step>
+</Steps>
+
+<Note>
+ Done? You have completed Lesson 04.03. Next up: [git clone — downloading someone else's project to your machine](/library/building-with-ai/git-clone) →
+</Note>
+
+<FAQ>
+ <FAQItem question="Why do I need git add if I already saved the file?">
+ Saving a file in your editor and staging it with `git add` are two different things. Saving writes the file to your hard drive, Git does not notice. Staging with `git add` tells Git "I want to include this specific change in my next commit." This separation gives you control: you can edit ten files and commit only three of them, keeping unrelated changes out of the same snapshot.
+ </FAQItem>
+ <FAQItem question="What should I write in my commit message?">
+ Write a short phrase that describes what the commit does, not what you did. Use the imperative mood: "Add login page" rather than "Added login page." Aim for under 72 characters. If you cannot summarize the change in one short phrase, the commit probably contains too many unrelated changes, consider splitting it into two commits.
+ </FAQItem>
+ <FAQItem question="What does 'nothing to commit, working tree clean' mean?">
+ It means Git sees no changes since your last commit. Every file in your project matches the last snapshot exactly. This is not an error; it is the all-clear. You will see this message whenever you run `git status` immediately after a commit, or when you switch to a branch with no pending changes.
+ </FAQItem>
+ <FAQItem question="Does git add . include my .env file?">
+ Yes, `git add .` stages everything in the folder, including hidden files and `.env` files. This is why you always want a `.gitignore` in place before you run `git add` for the first time. The `.gitignore` file tells Git which files to ignore completely. [Lesson 04.07 on gitignore](/library/building-with-ai/git-gitignore) covers this in detail, it is one of the most important safety habits in all of Git.
+ </FAQItem>
+</FAQ>
