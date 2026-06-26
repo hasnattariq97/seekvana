@@ -2,7 +2,6 @@ import { NewsletterForm } from './newsletter-form'
 
 export function PostArticleNewsletter() {
   return (
-    {/* bg-[#1c1b19]: intentional forced-dark card — no CSS token for always-dark surface */}
     <div className="relative bg-[#1c1b19] rounded-2xl p-7 md:p-8 overflow-hidden">
       {/* Decorative glow circles */}
       <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-accent/20 blur-xl pointer-events-none" />
