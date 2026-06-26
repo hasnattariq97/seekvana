@@ -6,7 +6,7 @@ import { ThumbsUp, ThumbsDown } from 'lucide-react'
 
 export function ArticleFeedback() {
   const [vote, setVote] = useState<'up' | 'down' | null>(null)
-  const shouldReduceMotion = useReducedMotion() ?? false
+  const shouldReduceMotion = useReducedMotion()
 
   return (
     <div className="bg-surface-subtle rounded-xl p-5 flex flex-wrap items-center gap-4">

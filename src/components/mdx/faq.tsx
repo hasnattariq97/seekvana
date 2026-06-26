@@ -31,7 +31,7 @@ export function FAQ({ children, heading = 'Common questions' }: FAQProps) {
 
 export function FAQItem({ question, children }: FAQItemProps) {
   const [open, setOpen] = useState(false)
-  const shouldReduce = useReducedMotion() ?? false
+  const shouldReduce = useReducedMotion()
   const id = useId()
 
   return (
