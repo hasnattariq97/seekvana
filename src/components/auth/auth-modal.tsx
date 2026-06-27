@@ -99,114 +99,155 @@ export function AuthModal() {
 
           {/* Panel */}
           <motion.div
-            className="relative bg-surface border border-border rounded-t-2xl sm:rounded-2xl p-8 w-full sm:max-w-sm shadow-2xl text-center"
+            className="relative w-full sm:max-w-[368px] overflow-hidden"
+            style={{
+              background: 'var(--color-canvas)',
+              border: '1px solid #D0CAC1',
+              borderRadius: '24px',
+              boxShadow: '0 2px 0 rgba(255,255,255,0.9) inset, 0 40px 80px rgba(26,23,20,0.18), 0 12px 32px rgba(26,23,20,0.1)',
+            }}
             initial={{ opacity: 0, scale: 0.97, y: 16 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.97, y: 16 }}
             transition={{ duration: 0.2 }}
           >
+            {/* Close */}
             <button
               onClick={closeAuthModal}
-              className="absolute top-4 right-4 p-1 text-secondary hover:text-primary transition-colors"
               aria-label="Close"
+              className="absolute top-3.5 right-3.5 z-10 w-7 h-7 rounded-full flex items-center justify-center transition-colors"
+              style={{ background: 'rgba(26,23,20,0.06)', border: '1px solid rgba(26,23,20,0.08)' }}
             >
-              <X size={18} />
+              <svg width="9" height="9" viewBox="0 0 12 12" fill="none" stroke="#6B6560" strokeWidth="2" strokeLinecap="round">
+                <line x1="1" y1="1" x2="11" y2="11"/><line x1="11" y1="1" x2="1" y2="11"/>
+              </svg>
             </button>
 
             <AnimatePresence mode="wait">
               {state !== 'sent' ? (
-                <motion.div
-                  key="form"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.15 }}
-                >
-                  {/* Logo ring */}
+                <motion.div key="form" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
+                  {/* Hero section */}
                   <div
-                    className="w-14 h-14 rounded-2xl bg-canvas border border-border mx-auto mb-5 flex items-center justify-center"
-                    style={{ boxShadow: '0 1px 0 rgba(255,255,255,0.9) inset, 0 4px 16px rgba(26,23,20,0.1), 0 0 0 4px rgba(201,99,63,0.07)' }}
+                    className="px-8 pt-9 pb-[26px] text-center relative overflow-hidden border-b"
+                    style={{ background: 'linear-gradient(170deg,#EDE8DF 0%,var(--color-canvas) 100%)', borderColor: '#E4DED6' }}
                   >
-                    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
-                      <path d="M18 8.5C18 6.015 15.761 4 13 4C10.239 4 8 6.015 8 8.5C8 10.985 10.239 13 13 13C15.761 13 18 14.015 18 16.5C18 18.985 15.761 21 13 21C10.239 21 8 18.985 8 16.5" stroke="var(--color-accent)" strokeWidth="2.2" strokeLinecap="round"/>
-                    </svg>
+                    {/* Glow */}
+                    <div className="absolute -top-5 left-1/2 -translate-x-1/2 w-40 h-24 pointer-events-none"
+                      style={{ background: 'radial-gradient(ellipse, rgba(201,99,63,0.12) 0%, transparent 70%)' }} />
+
+                    {/* Logo ring */}
+                    <div
+                      className="w-14 h-14 rounded-2xl inline-flex items-center justify-center mb-[18px] relative z-10"
+                      style={{ background: 'var(--color-canvas)', border: '1px solid #D0CAC1', boxShadow: '0 1px 0 rgba(255,255,255,0.9) inset, 0 4px 16px rgba(26,23,20,0.1), 0 0 0 4px rgba(201,99,63,0.07)' }}
+                    >
+                      <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+                        <path d="M18 8.5C18 6.015 15.761 4 13 4C10.239 4 8 6.015 8 8.5C8 10.985 10.239 13 13 13C15.761 13 18 14.015 18 16.5C18 18.985 15.761 21 13 21C10.239 21 8 18.985 8 16.5" stroke="var(--color-accent)" strokeWidth="2.2" strokeLinecap="round"/>
+                      </svg>
+                    </div>
+
+                    <h2 className="font-fraunces text-[22px] font-bold text-primary relative z-10" style={{ letterSpacing: '-0.5px' }}>
+                      Welcome to Seekvana
+                    </h2>
+                    <p className="text-[12px] text-secondary mt-1.5 mb-[18px] relative z-10">
+                      Your AI learning journey starts here
+                    </p>
+
+                    {/* Feature pills */}
+                    <div className="flex items-center justify-center gap-[5px] flex-wrap relative z-10">
+                      {[
+                        { label: 'Track progress', icon: <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="8 6 12 2 16 6"/><line x1="12" y1="2" x2="12" y2="15"/><path d="M20 21H4"/><path d="M17 15l-5 3-5-3"/></svg> },
+                        { label: 'Comment', icon: <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> },
+                        { label: 'Save articles', icon: <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> },
+                      ].map(f => (
+                        <span key={f.label} className="inline-flex items-center gap-1 px-[10px] py-1 rounded-full text-[11px] font-medium" style={{ background: 'rgba(201,99,63,0.07)', border: '1px solid rgba(201,99,63,0.15)', color: '#A06040' }}>
+                          {f.icon}{f.label}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                  <h2 className="font-fraunces text-xl text-primary font-semibold mb-1">
-                    Welcome to Seekvana
-                  </h2>
-                  <p className="text-secondary text-sm mb-6">
-                    Track progress · Comment · Save articles
-                  </p>
 
-                  {/* Google — first for highest conversion */}
-                  <button
-                    onClick={handleGoogle}
-                    className="w-full border border-border rounded-xl py-2.5 px-4 text-sm font-semibold text-primary flex items-center justify-center gap-2 hover:bg-surface-subtle transition-colors mb-3"
-                  >
-                    <GoogleIcon />
-                    Continue with Google
-                  </button>
+                  {/* Body */}
+                  <div className="px-6 pt-[22px] pb-6 flex flex-col gap-[10px]">
+                    {/* Google */}
+                    <button
+                      onClick={handleGoogle}
+                      className="flex items-center justify-center gap-[10px] w-full py-3 px-4 rounded-xl text-[13px] font-semibold text-primary transition-colors hover:bg-surface-subtle"
+                      style={{ background: 'white', border: '1.5px solid #D0CAC1', boxShadow: '0 1px 4px rgba(26,23,20,0.07)' }}
+                    >
+                      <GoogleIcon />
+                      Continue with Google
+                    </button>
 
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="flex-1 h-px bg-border" />
-                    <span className="text-xs text-secondary">or email</span>
-                    <div className="flex-1 h-px bg-border" />
-                  </div>
+                    {/* Divider */}
+                    <div className="flex items-center gap-3">
+                      <div className="flex-1 h-px" style={{ background: '#E4DED6' }} />
+                      <span className="text-[11px] font-medium whitespace-nowrap" style={{ color: '#B0AA9E' }}>or with email</span>
+                      <div className="flex-1 h-px" style={{ background: '#E4DED6' }} />
+                    </div>
 
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleMagicLink()}
-                    placeholder="your@email.com"
-                    className="w-full border border-border rounded-xl py-2.5 px-4 text-sm text-primary bg-transparent mb-2.5 outline-none focus:ring-2 focus:ring-accent/30 transition"
-                  />
+                    {/* Email input */}
+                    <div className="relative">
+                      <div className="absolute left-[13px] top-1/2 -translate-y-1/2 pointer-events-none">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B0AA9E" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                      </div>
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleMagicLink()}
+                        placeholder="your@email.com"
+                        className="w-full py-3 pl-[38px] pr-4 rounded-xl text-[13px] text-primary outline-none transition-all"
+                        style={{ background: '#EDE8DF', border: '1.5px solid #D0CAC1', boxShadow: '0 1px 3px rgba(26,23,20,0.05) inset' }}
+                        onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.background = 'var(--color-canvas)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(201,99,63,0.1)' }}
+                        onBlur={e => { e.currentTarget.style.borderColor = '#D0CAC1'; e.currentTarget.style.background = '#EDE8DF'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(26,23,20,0.05) inset' }}
+                      />
+                    </div>
 
-                  {state === 'error' && (
-                    <p className="text-red-500 text-xs mb-2 text-left">{errorMsg}</p>
-                  )}
-
-                  <button
-                    onClick={handleMagicLink}
-                    disabled={state === 'loading'}
-                    className="w-full bg-accent hover:bg-accent-deep rounded-xl py-3.5 flex flex-col items-center gap-0.5 transition-colors disabled:opacity-60 mb-4"
-                    style={{ boxShadow: '0 1px 0 rgba(255,255,255,0.15) inset, 0 6px 20px rgba(201,99,63,0.4), 0 2px 6px rgba(26,23,20,0.15)' }}
-                  >
-                    <span className="text-[14px] font-bold text-white flex items-center gap-1.5">
-                      {state === 'loading' ? 'Sending…' : <>Send magic link <span aria-hidden="true">→</span></>}
-                    </span>
-                    {state !== 'loading' && (
-                      <span className="text-[11px] text-white/60 font-normal">No password needed · check your inbox</span>
+                    {state === 'error' && (
+                      <p className="text-red-500 text-xs -mt-1">{errorMsg}</p>
                     )}
-                  </button>
 
-                  <p className="text-xs text-secondary">
-                    By signing in you agree to our{' '}
-                    <a href="/terms" className="text-accent underline underline-offset-2">
-                      Terms
-                    </a>
-                  </p>
+                    {/* Magic link CTA */}
+                    <button
+                      onClick={handleMagicLink}
+                      disabled={state === 'loading'}
+                      className="w-full flex flex-col items-center justify-center gap-[3px] py-[14px] px-4 rounded-xl disabled:opacity-60 transition-all duration-150 hover:-translate-y-px active:translate-y-0"
+                      style={{ background: 'var(--color-accent)', border: 'none', boxShadow: '0 1px 0 rgba(255,255,255,0.15) inset, 0 6px 20px rgba(201,99,63,0.4), 0 2px 6px rgba(26,23,20,0.15)' }}
+                    >
+                      <span className="text-[14px] font-bold text-white flex items-center gap-[7px]">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                        </svg>
+                        {state === 'loading' ? 'Sending…' : 'Send magic link'}
+                      </span>
+                      {state !== 'loading' && (
+                        <span className="text-[11px] font-normal" style={{ color: 'rgba(255,255,255,0.55)' }}>No password needed · check your inbox</span>
+                      )}
+                    </button>
+
+                    {/* Terms */}
+                    <p className="text-center text-[11px] leading-relaxed" style={{ color: '#B0AA9E' }}>
+                      By signing in you agree to our{' '}
+                      <a href="/terms" className="underline underline-offset-2" style={{ color: '#8A8078' }}>Terms</a>
+                      {' '}and{' '}
+                      <a href="/privacy" className="underline underline-offset-2" style={{ color: '#8A8078' }}>Privacy Policy</a>
+                    </p>
+                  </div>
                 </motion.div>
               ) : (
-                <motion.div
-                  key="sent"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.15 }}
+                <motion.div key="sent" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.15 }}
+                  className="px-8 py-12 text-center"
                 >
                   <div className="text-4xl mb-3">📬</div>
-                  <h2 className="font-fraunces text-xl text-primary font-semibold mb-2">
-                    Check your inbox
-                  </h2>
+                  <h2 className="font-fraunces text-xl text-primary font-semibold mb-2">Check your inbox</h2>
                   <p className="text-secondary text-sm mb-2">We sent a magic link to</p>
                   <p className="text-accent font-semibold text-sm mb-4">{email}</p>
                   <div className="bg-accent-soft rounded-xl p-3 text-xs text-secondary text-left mb-4">
                     Click the link in your email to sign in. Link expires in 1 hour.
                   </div>
-                  <button
-                    onClick={() => setState('idle')}
-                    className="text-xs text-secondary hover:text-accent transition-colors"
-                  >
+                  <button onClick={() => setState('idle')} className="text-xs text-secondary hover:text-accent transition-colors">
                     Wrong email? Try again
                   </button>
                 </motion.div>
