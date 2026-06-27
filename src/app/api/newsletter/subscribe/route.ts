@@ -37,14 +37,16 @@ export async function POST(request: Request) {
 
     const unsubscribeUrl = `https://seekvana.com/api/newsletter/unsubscribe?token=${token}`
 
-    resend.emails.send({
-      from: 'Seekvana <hello@seekvana.com>',
-      to: email.toLowerCase().trim(),
-      subject: "You're in — here's your free AI cheatsheet 🎉",
-      react: createElement(WelcomeEmail, { unsubscribeUrl }),
-    }).catch(() => {
+    try {
+      resend.emails.send({
+        from: 'Seekvana <hello@seekvana.com>',
+        to: email.toLowerCase().trim(),
+        subject: "You're in — here's your free AI cheatsheet 🎉",
+        react: createElement(WelcomeEmail, { unsubscribeUrl }),
+      }).catch(() => {})
+    } catch {
       // Non-blocking — subscriber is saved, email failure is acceptable
-    })
+    }
 
     return NextResponse.json({ success: true })
   } catch {
