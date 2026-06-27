@@ -47,7 +47,7 @@ export type PathProgress = {
   colorClass: string
   totalLessons: number
   completedLessons: number
-  nextLesson: { pillar: string; slug: string } | null
+  nextLesson: { pillar: string; slug: string; title: string } | null
   lessons: LessonStatus[]
   status: 'not-started' | 'in-progress' | 'completed'
 }
@@ -230,9 +230,9 @@ export function calculatePathProgress(reads: ArticleRead[]): PathProgress[] {
       completedLessons,
       nextLesson:
         nextLesson?.pillar && nextLesson?.slug
-          ? { pillar: nextLesson.pillar, slug: nextLesson.slug }
+          ? { pillar: nextLesson.pillar, slug: nextLesson.slug, title: nextLesson.title }
           : firstLesson?.pillar && firstLesson?.slug
-          ? { pillar: firstLesson.pillar, slug: firstLesson.slug }
+          ? { pillar: firstLesson.pillar, slug: firstLesson.slug, title: firstLesson.title }
           : null,
       lessons,
       status,
