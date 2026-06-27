@@ -16,6 +16,7 @@ import type { CommentWithReplies } from '@/types/comments'
 import { ArticleComments } from '@/components/article/article-comments'
 import { PostArticleNewsletter } from '@/components/newsletter/post-article-newsletter'
 import { BookmarkButton } from '@/components/article/bookmark-button'
+import { MarkCompleteButton } from '@/components/article/mark-complete-button'
 import { createClient as createServerClient } from '@/lib/supabase-server'
 
 interface PageProps {
@@ -149,6 +150,18 @@ export default async function ArticlePage({ params }: PageProps) {
     isSaved = !!savedRow
   }
 
+  let isCompleted = false
+  if (currentUser) {
+    const { data: readRow } = await serverSupabase
+      .from('article_reads')
+      .select('id')
+      .eq('user_id', currentUser.id)
+      .eq('pillar', pillar)
+      .eq('article_slug', slug)
+      .single()
+    isCompleted = !!readRow
+  }
+
   const pillarName = getPillarName(pillar)
   const pillarArticles = getArticlesByPillar(pillar).map((a) => ({
     title: a.frontmatter.title,
@@ -254,6 +267,11 @@ export default async function ArticlePage({ params }: PageProps) {
             {/* Article body */}
             <div className="mdx-content">
               <MDXRemote source={source} components={getMDXComponents()} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
+            </div>
+
+            {/* Mark complete */}
+            <div className="flex justify-center my-8">
+              <MarkCompleteButton pillar={pillar} articleSlug={slug} initialCompleted={isCompleted} />
             </div>
 
             {/* Feedback */}
