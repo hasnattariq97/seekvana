@@ -1,94 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
-import {
-  Brain,
-  MessageSquare,
-  Bot,
-  Code2,
-  Wrench,
-  Briefcase,
-  Sparkles,
-  Shield,
-  GraduationCap,
-  type LucideIcon,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
+import { PILLARS as PILLAR_DATA } from "@/lib/pillars";
 
-interface Pillar {
-  title: string;
-  description: string;
-  href: string;
-  icon: LucideIcon;
-  flagship: boolean;
-}
-
-const PILLARS: Pillar[] = [
-  {
-    title: "AI Foundations",
-    description: "What AI is, how it works, and why it matters",
-    href: "/library/ai-foundations",
-    icon: Brain,
-    flagship: false,
-  },
-  {
-    title: "Large Language Models",
-    description: "Tokens, context, RAG, fine-tuning, and how LLMs think",
-    href: "/library/large-language-models",
-    icon: MessageSquare,
-    flagship: false,
-  },
-  {
-    title: "Agentic AI",
-    description: "Agents, tool use, memory, planning, multi-agent systems",
-    href: "/library/agentic-ai",
-    icon: Bot,
-    flagship: true,
-  },
-  {
-    title: "Building with AI",
-    description: "APIs, SDKs, evals, deployment, and cost management",
-    href: "/library/building-with-ai",
-    icon: Code2,
-    flagship: false,
-  },
-  {
-    title: "AI Tools",
-    description: "Reviews and comparisons of the best AI tools",
-    href: "/library/ai-tools",
-    icon: Wrench,
-    flagship: false,
-  },
-  {
-    title: "AI in Practice",
-    description: "Real workflows for writing, research, coding, and automation",
-    href: "/library/ai-in-practice",
-    icon: Briefcase,
-    flagship: false,
-  },
-  {
-    title: "Prompt Engineering",
-    description: "Write prompts that get results — techniques and patterns that work",
-    href: "/library/prompt-engineering",
-    icon: Sparkles,
-    flagship: false,
-  },
-  {
-    title: "Ethics & Safety",
-    description: "Responsible AI, alignment, risks, and governance",
-    href: "/library/ethics-safety",
-    icon: Shield,
-    flagship: false,
-  },
-  {
-    title: "Careers",
-    description: "How to learn AI, roles, and building your portfolio",
-    href: "/library/careers",
-    icon: GraduationCap,
-    flagship: false,
-  },
-];
+const START_HERE = new Set(["ai-foundations"]);
 
 export function Pillars() {
   const shouldReduceMotion = useReducedMotion();
@@ -103,12 +20,12 @@ export function Pillars() {
           Nine topic areas covering everything from AI basics to advanced agentic systems.
         </p>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {PILLARS.map((pillar, i) => {
-            const Icon = pillar.icon;
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+          {PILLAR_DATA.map((pillar, i) => {
+            const startHere = START_HERE.has(pillar.slug);
             return (
               <motion.div
-                key={pillar.href}
+                key={pillar.slug}
                 initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -117,50 +34,49 @@ export function Pillars() {
                   ease: "easeOut",
                   delay: shouldReduceMotion ? 0 : i * 0.04,
                 }}
-                whileHover={shouldReduceMotion ? undefined : { y: -2 }}
               >
                 <Link
-                  href={pillar.href}
-                  className={cn(
-                    "group relative block bg-surface rounded-xl border p-5 transition-shadow h-full focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:outline-none",
-                    pillar.flagship
-                      ? "border-accent border-2 hover:shadow-lg"
-                      : "border-border hover:shadow-lg hover:bg-surface-subtle"
-                  )}
+                  href={`/library/${pillar.slug}`}
+                  className="group flex flex-col bg-surface border border-border rounded-[14px] overflow-hidden transition-all duration-150 hover:-translate-y-[3px] hover:shadow-[0_12px_32px_rgba(26,23,20,0.1)] hover:border-accent/30 h-full focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:outline-none"
                 >
-                  {pillar.flagship && (
-                    <span className="absolute top-3 right-3 text-xs bg-accent text-white px-2 py-0.5 rounded-full font-medium">
-                      Flagship
-                    </span>
-                  )}
+                  {/* Image zone */}
+                  <div className="h-[180px] border-b border-border relative overflow-hidden">
+                    <Image
+                      src={`/images/pillars/${pillar.slug}.webp`}
+                      alt={pillar.name}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover"
+                    />
+                  </div>
 
-                  <span
-                    className={cn(
-                      "inline-flex items-center justify-center w-10 h-10 rounded-xl",
-                      pillar.flagship
-                        ? "bg-accent text-white"
-                        : "bg-accent-soft text-accent"
-                    )}
-                  >
-                    <Icon size={20} aria-hidden="true" />
-                  </span>
-
-                  <h3 className="font-fraunces text-base text-primary mt-3">
-                    {pillar.title}
-                  </h3>
-                  <p className="font-inter text-sm text-secondary mt-1">
-                    {pillar.description}
-                  </p>
-
-                  <span
-                    className="flex items-center gap-1 text-accent text-xs mt-3 font-medium"
-                    aria-hidden="true"
-                  >
-                    Explore{" "}
-                    <span className="transition-transform group-hover:translate-x-0.5">
-                      →
-                    </span>
-                  </span>
+                  {/* Body */}
+                  <div className="flex flex-col flex-1 p-[18px] gap-2">
+                    <h3 className="font-fraunces text-[15px] font-bold leading-snug tracking-tight text-primary group-hover:text-accent transition-colors duration-150">
+                      {pillar.name}
+                    </h3>
+                    <p className="text-[11.5px] text-secondary leading-[1.55] flex-1">
+                      {pillar.description}
+                    </p>
+                    <div className="flex items-center justify-between mt-[6px]">
+                      <span className="text-[11px] font-semibold text-secondary group-hover:text-accent transition-colors duration-150">
+                        Explore
+                      </span>
+                      <div className="flex items-center gap-[6px]">
+                        {startHere && (
+                          <span className="text-[10px] font-semibold text-secondary border border-border rounded-full px-2 py-[2px] group-hover:text-accent group-hover:border-accent/30 transition-colors duration-150">
+                            Start here
+                          </span>
+                        )}
+                        <div className="w-6 h-6 rounded-full flex items-center justify-center border border-border bg-canvas transition-colors duration-150 group-hover:border-accent/40 group-hover:bg-accent/[0.06]">
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-secondary group-hover:text-accent transition-colors duration-150" stroke="currentColor">
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                            <polyline points="12 5 19 12 12 19"/>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </Link>
               </motion.div>
             );
