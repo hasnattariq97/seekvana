@@ -1,6 +1,9 @@
 import { createClient } from '@/lib/supabase-server'
 import { isValidEmail } from '@/lib/email'
+import { resend } from '@/lib/resend'
+import { WelcomeEmail } from '@/emails/welcome'
 import { NextResponse } from 'next/server'
+import { createElement } from 'react'
 
 export async function POST(request: Request) {
   try {
@@ -14,9 +17,10 @@ export async function POST(request: Request) {
     }
 
     const supabase = await createClient()
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('newsletter_subscribers')
       .insert({ email: email.toLowerCase().trim(), source: source ?? 'unknown' })
+      .select('unsubscribe_token')
 
     if (error) {
       if (error.code === '23505') {
@@ -30,6 +34,18 @@ export async function POST(request: Request) {
         { status: 500 }
       )
     }
+
+    const token = data?.[0]?.unsubscribe_token
+    const unsubscribeUrl = `https://seekvana.com/api/newsletter/unsubscribe?token=${token}`
+
+    resend.emails.send({
+      from: 'Seekvana <hello@seekvana.com>',
+      to: email.toLowerCase().trim(),
+      subject: "You're in — here's your free AI cheatsheet 🎉",
+      react: createElement(WelcomeEmail, { unsubscribeUrl }),
+    }).catch(() => {
+      // Non-blocking — subscriber is saved, email failure is acceptable
+    })
 
     return NextResponse.json({ success: true })
   } catch {

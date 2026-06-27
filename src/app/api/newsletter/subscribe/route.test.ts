@@ -1,12 +1,20 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
-// Mock Supabase server client
 vi.mock('@/lib/supabase-server', () => ({
   createClient: vi.fn(),
 }))
 
+vi.mock('@/lib/resend', () => ({
+  resend: {
+    emails: {
+      send: vi.fn(),
+    },
+  },
+}))
+
 import { POST } from './route'
 import { createClient } from '@/lib/supabase-server'
+import { resend } from '@/lib/resend'
 
 function makeRequest(body: unknown) {
   return new Request('http://localhost/api/newsletter/subscribe', {
@@ -18,20 +26,39 @@ function makeRequest(body: unknown) {
 
 describe('POST /api/newsletter/subscribe', () => {
   const mockInsert = vi.fn()
+  const mockEmailSend = vi.mocked(resend.emails.send)
 
   beforeEach(() => {
     vi.mocked(createClient).mockResolvedValue({
-      from: () => ({ insert: mockInsert }),
+      from: () => ({ insert: () => ({ select: mockInsert }) }),
     } as never)
     mockInsert.mockReset()
+    mockEmailSend.mockReset()
+    mockEmailSend.mockResolvedValue({ data: { id: 'email-123' }, error: null } as never)
   })
 
   it('returns 200 on valid new subscriber', async () => {
-    mockInsert.mockResolvedValue({ error: null })
+    mockInsert.mockResolvedValue({ data: [{ unsubscribe_token: 'abc-123' }], error: null })
     const res = await POST(makeRequest({ email: 'test@example.com', source: 'homepage' }))
     expect(res.status).toBe(200)
     const data = await res.json()
     expect(data.success).toBe(true)
+  })
+
+  it('calls resend.emails.send after successful insert', async () => {
+    mockInsert.mockResolvedValue({ data: [{ unsubscribe_token: 'abc-123' }], error: null })
+    await POST(makeRequest({ email: 'test@example.com', source: 'homepage' }))
+    expect(mockEmailSend).toHaveBeenCalledOnce()
+    const callArgs = mockEmailSend.mock.calls[0][0] as Record<string, unknown>
+    expect(callArgs.to).toBe('test@example.com')
+    expect(callArgs.subject).toContain('cheatsheet')
+  })
+
+  it('still returns 200 if email send fails (non-blocking)', async () => {
+    mockInsert.mockResolvedValue({ data: [{ unsubscribe_token: 'abc-123' }], error: null })
+    mockEmailSend.mockRejectedValue(new Error('Resend down'))
+    const res = await POST(makeRequest({ email: 'test@example.com', source: 'homepage' }))
+    expect(res.status).toBe(200)
   })
 
   it('returns 400 on invalid email', async () => {
