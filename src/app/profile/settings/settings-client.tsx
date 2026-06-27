@@ -58,10 +58,10 @@ export function SettingsClient({
     return (
       <button
         onClick={onToggle}
-        className={`w-10 h-6 rounded-full transition-colors flex-shrink-0 relative ${on ? 'bg-accent' : 'bg-border'}`}
+        className={`relative w-9 h-5 rounded-full transition-colors flex-shrink-0 cursor-pointer ${on ? 'bg-accent' : 'bg-border'}`}
       >
         <span
-          className={`absolute top-1 w-4 h-4 bg-surface rounded-full shadow-sm transition-transform ${on ? 'translate-x-5' : 'translate-x-1'}`}
+          className={`absolute top-[3px] w-3.5 h-3.5 bg-white rounded-full shadow-sm transition-all ${on ? 'left-[19px]' : 'left-[3px]'}`}
         />
       </button>
     )
