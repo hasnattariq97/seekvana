@@ -5,6 +5,7 @@ import { getPathBySlug, generatePathStaticParams, buildLessonArticleMap } from '
 import { PathHero } from '@/components/paths/path-hero'
 import { ModuleList } from '@/components/paths/module-list'
 import { PathSidebar } from '@/components/paths/path-sidebar'
+import { createClient } from '@/lib/supabase-server'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -47,6 +48,60 @@ export default async function PathPage({ params }: Props) {
 
   const totalTopics = path.modules.reduce((n, m) => n + m.topics.length, 0)
 
+  // Fetch user reads for progress display
+  let readSet: string[] = []
+  let nextLessonHref: string | null = null
+
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (user) {
+      const { data: reads } = await supabase
+        .from('article_reads')
+        .select('pillar, article_slug')
+        .eq('user_id', user.id)
+      if (reads) {
+        readSet = reads.map((r: { pillar: string; article_slug: string }) => `${r.pillar}/${r.article_slug}`)
+      }
+    }
+  } catch {
+    // unauthenticated or error — readSet stays empty
+  }
+
+  // Find next unread lesson across all enriched modules
+  if (readSet.length > 0) {
+    const readSetObj = new Set(readSet)
+    outer: for (const module of enrichedModules) {
+      for (const topic of module.topics) {
+        if (topic.articlePillar && topic.articleSlug) {
+          const key = `${topic.articlePillar}/${topic.articleSlug}`
+          if (!readSetObj.has(key)) {
+            nextLessonHref = `/library/${topic.articlePillar}/${topic.articleSlug}`
+            break outer
+          }
+        }
+      }
+    }
+  }
+
+  // First linkable topic for "Start" button
+  let firstLessonHref: string | null = null
+  for (const module of enrichedModules) {
+    for (const topic of module.topics) {
+      if (topic.articlePillar && topic.articleSlug) {
+        firstLessonHref = `/library/${topic.articlePillar}/${topic.articleSlug}`
+        break
+      }
+    }
+    if (firstLessonHref) break
+  }
+
+  const completedCount = readSet.length > 0
+    ? enrichedModules.flatMap(m => m.topics).filter(
+        t => t.articlePillar && t.articleSlug && readSet.includes(`${t.articlePillar}/${t.articleSlug}`)
+      ).length
+    : 0
+
   return (
     <div className="max-w-[1080px] mx-auto px-7">
       {/* Breadcrumb */}
@@ -63,8 +118,12 @@ export default async function PathPage({ params }: Props) {
 
       {/* Two-column layout */}
       <div className="grid grid-cols-1 xl:grid-cols-[1fr_276px] gap-14 pb-24">
-        <ModuleList modules={enrichedModules} totalTopics={totalTopics} />
-        <PathSidebar path={path} />
+        <ModuleList modules={enrichedModules} totalTopics={totalTopics} readSet={readSet} />
+        <PathSidebar
+          path={path}
+          completedCount={completedCount}
+          continueHref={nextLessonHref ?? firstLessonHref ?? '#modules'}
+        />
       </div>
     </div>
   )

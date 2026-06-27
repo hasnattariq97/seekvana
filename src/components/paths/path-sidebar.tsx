@@ -1,37 +1,60 @@
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, CheckCircle2 } from 'lucide-react'
 import type { PathData } from '@/lib/mdx'
 
 interface PathSidebarProps {
   path: PathData
+  completedCount?: number
+  continueHref?: string
 }
 
-export function PathSidebar({ path }: PathSidebarProps) {
+export function PathSidebar({ path, completedCount = 0, continueHref = '#modules' }: PathSidebarProps) {
   const difficultyLabel =
     path.difficulty.charAt(0).toUpperCase() + path.difficulty.slice(1)
+
+  const total = path.lessonCount ?? 0
+  const pct = total > 0 ? Math.round((completedCount / total) * 100) : 0
+  const isComplete = completedCount >= total && total > 0
+  const inProgress = completedCount > 0 && !isComplete
+
+  const ctaLabel = isComplete ? 'Review path' : inProgress ? 'Continue learning' : 'Start Module 01'
 
   return (
     <aside className="sticky top-[76px] flex flex-col gap-3.5">
       {/* Progress card */}
       <div className="bg-surface border border-border rounded-2xl p-5">
-        <p className="text-[11px] font-bold text-secondary uppercase tracking-widest mb-3.5">
-          Your progress
-        </p>
+        <div className="flex items-center justify-between mb-3.5">
+          <p className="text-[11px] font-bold text-secondary uppercase tracking-widest">
+            Your progress
+          </p>
+          {isComplete && (
+            <CheckCircle2 size={15} strokeWidth={2} className="text-green-500" />
+          )}
+        </div>
 
-        {/* Progress bar — 0% (static; hook into user state later) */}
+        {/* Progress bar */}
         <div className="h-[5px] bg-border rounded-full mb-1.5 overflow-hidden">
           <div
-            className="h-full bg-accent rounded-full origin-left"
-            style={{ transform: 'scaleX(0)' }}
+            className={`h-full rounded-full transition-all duration-500 ${isComplete ? 'bg-green-500' : 'bg-accent'}`}
+            style={{ width: `${pct}%` }}
           />
         </div>
-        <p className="text-xs text-secondary mb-5">0 of {path.lessonCount} topics complete</p>
+        <p className="text-xs text-secondary mb-5">
+          {isComplete
+            ? <span className="text-green-600 dark:text-green-400 font-medium">All {total} topics complete 🎉</span>
+            : <>{completedCount} of {total} topics complete</>
+          }
+        </p>
 
         <Link
-          href="#modules"
-          className="flex items-center justify-between w-full bg-accent hover:bg-accent-deep text-white rounded-[10px] px-4 py-3.5 text-[13.5px] font-semibold transition-colors duration-150 mb-5"
+          href={continueHref}
+          className={`flex items-center justify-between w-full text-white rounded-[10px] px-4 py-3.5 text-[13.5px] font-semibold transition-colors duration-150 mb-5 ${
+            isComplete
+              ? 'bg-green-600 hover:bg-green-700'
+              : 'bg-accent hover:bg-accent-deep'
+          }`}
         >
-          <span>Start Module 01</span>
+          <span>{ctaLabel}</span>
           <ArrowRight size={15} strokeWidth={2} />
         </Link>
 

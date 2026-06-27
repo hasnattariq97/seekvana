@@ -4,9 +4,10 @@ import type { PathModule } from '@/lib/mdx'
 interface ModuleListProps {
   modules: PathModule[]
   totalTopics: number
+  readSet?: string[]
 }
 
-export function ModuleList({ modules, totalTopics }: ModuleListProps) {
+export function ModuleList({ modules, totalTopics, readSet = [] }: ModuleListProps) {
   return (
     <section id="modules">
       <div className="flex items-baseline justify-between mb-2">
@@ -25,6 +26,7 @@ export function ModuleList({ modules, totalTopics }: ModuleListProps) {
             key={module.id}
             module={module}
             defaultOpen={module.id === '01'}
+            readSet={readSet}
           />
         ))}
       </div>
