@@ -66,7 +66,7 @@ export default function LibraryPage() {
               className="group flex flex-col bg-surface-subtle border border-border rounded-[14px] overflow-hidden transition-all duration-150 hover:-translate-y-[3px] hover:shadow-[0_12px_32px_rgba(26,23,20,0.1)] hover:border-accent/30"
             >
               {/* Image zone */}
-              <div className="h-[110px] border-b border-border relative overflow-hidden">
+              <div className="h-[180px] border-b border-border relative overflow-hidden">
                 <Image
                   src={`/images/pillars/${pillar.slug}.webp`}
                   alt={pillar.name}
