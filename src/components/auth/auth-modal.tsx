@@ -148,8 +148,9 @@ export function AuthModal() {
                       </svg>
                     </div>
 
-                    <h2 className="font-fraunces text-[22px] font-bold text-primary relative z-10" style={{ letterSpacing: '-0.5px' }}>
-                      Welcome to Seekvana
+                    <h2 className="font-fraunces text-[22px] font-bold relative z-10" style={{ letterSpacing: '-0.5px', color: 'var(--color-text-primary)' }}>
+                      Welcome to{' '}
+                      <span style={{ color: 'var(--color-accent)' }}>Seekvana</span>
                     </h2>
                     <p className="text-[12px] text-secondary mt-1.5 mb-[18px] relative z-10">
                       Your AI learning journey starts here
