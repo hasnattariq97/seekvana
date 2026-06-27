@@ -315,45 +315,72 @@ function UserButton() {
           <>
             <div className="fixed inset-0 z-40" onClick={() => setDropdownOpen(false)} />
             <motion.div
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 4 }}
+              initial={{ opacity: 0, y: 6, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 4, scale: 0.97 }}
               transition={{ duration: 0.15 }}
-              className="absolute right-0 top-10 z-50 w-52 bg-surface border border-border rounded-xl shadow-lg py-1.5 overflow-hidden"
+              className="absolute right-0 top-11 z-50 w-60 bg-canvas border border-border rounded-2xl overflow-hidden"
+              style={{ boxShadow: '0 20px 60px rgba(26,23,20,0.16), 0 4px 16px rgba(26,23,20,0.08)' }}
             >
-              <div className="px-4 py-2.5 border-b border-border mb-1">
-                <p className="text-sm font-semibold text-primary truncate">
-                  {(user.user_metadata?.full_name as string) || 'Seekvana Reader'}
-                </p>
-                <p className="text-xs text-secondary truncate">{user.email}</p>
-              </div>
-              {[
-                { href: '/profile', icon: '👤', label: 'My Profile' },
-                { href: '/profile/reading-list', icon: '📚', label: 'My Reading List' },
-                { href: '/profile/progress', icon: '🏆', label: 'My Progress' },
-                { href: '/profile/settings', icon: '⚙️', label: 'Settings' },
-              ].map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setDropdownOpen(false)}
-                  className="flex items-center gap-2.5 px-4 py-2 text-sm text-primary hover:bg-surface-subtle transition-colors"
+              {/* Header */}
+              <div className="flex items-center gap-3 px-[18px] py-5 bg-surface-subtle border-b border-border">
+                <div
+                  className="w-[42px] h-[42px] rounded-full flex items-center justify-center font-fraunces font-bold text-base text-white shrink-0"
+                  style={{ background: 'linear-gradient(135deg,#C9633F 0%,#E0875F 100%)', boxShadow: '0 2px 8px rgba(201,99,63,0.35)' }}
                 >
-                  <span>{item.icon}</span>
-                  {item.label}
-                </Link>
-              ))}
-              <div className="h-px bg-border mx-2 my-1" />
-              <button
-                onClick={async () => {
-                  setDropdownOpen(false)
-                  const supabase = createClient()
-                  await supabase.auth.signOut()
-                }}
-                className="w-full text-left flex items-center gap-2.5 px-4 py-2 text-sm text-accent hover:bg-surface-subtle transition-colors"
-              >
-                Sign out
-              </button>
+                  {initials}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-fraunces text-[15px] font-bold text-primary truncate leading-tight">
+                    {(user.user_metadata?.full_name as string) || 'Seekvana Reader'}
+                  </p>
+                  <p className="text-[11px] text-secondary truncate mt-0.5">{user.email}</p>
+                </div>
+                <div className="w-[18px] h-[18px] rounded-full bg-accent/12 border border-accent/20 flex items-center justify-center shrink-0">
+                  <svg width="9" height="9" viewBox="0 0 12 12" fill="none"><path d="M2 6l3 3 5-5" stroke="var(--color-accent)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                </div>
+              </div>
+
+              {/* Nav items */}
+              <div className="p-2">
+                {[
+                  { href: '/profile', label: 'My Profile', desc: 'Badges & activity', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> },
+                  { href: '/profile/reading-list', label: 'Reading List', desc: 'Saved articles', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="13" y2="11"/></svg> },
+                  { href: '/profile/progress', label: 'My Progress', desc: 'Paths & completions', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polyline points="8 6 12 2 16 6"/><line x1="12" y1="2" x2="12" y2="15"/><path d="M20 21H4"/><path d="M17 15l-5 3-5-3"/></svg> },
+                  { href: '/profile/settings', label: 'Settings', desc: 'Account & preferences', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg> },
+                ].map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setDropdownOpen(false)}
+                    className="group flex items-center gap-[11px] px-[10px] py-[9px] rounded-[9px] hover:bg-surface-subtle transition-colors duration-100"
+                  >
+                    <div className="w-[30px] h-[30px] rounded-[8px] bg-surface-subtle border border-border flex items-center justify-center text-secondary shrink-0 group-hover:bg-border/60 transition-colors duration-100">
+                      {item.icon}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[13px] font-medium text-primary leading-none">{item.label}</p>
+                      <p className="text-[10px] text-secondary mt-[3px]">{item.desc}</p>
+                    </div>
+                  </Link>
+                ))}
+
+                <div className="h-px bg-border mx-[2px] my-[6px]" />
+
+                <button
+                  onClick={async () => {
+                    setDropdownOpen(false)
+                    const supabase = createClient()
+                    await supabase.auth.signOut()
+                  }}
+                  className="group w-full flex items-center gap-[11px] px-[10px] py-[9px] rounded-[9px] hover:bg-red-500/5 transition-colors duration-100 mb-0.5"
+                >
+                  <div className="w-[30px] h-[30px] rounded-[8px] bg-red-500/7 border border-red-500/12 flex items-center justify-center shrink-0 group-hover:bg-red-500/12 transition-colors duration-100">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B43232" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                  </div>
+                  <span className="text-[13px] font-medium text-red-600 dark:text-red-400">Sign out</span>
+                </button>
+              </div>
             </motion.div>
           </>
         )}
