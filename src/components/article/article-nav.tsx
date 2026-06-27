@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { getArticlesByPillar } from '@/lib/mdx'
+import { getArticlesByPillar, buildLessonArticleMap } from '@/lib/mdx'
 import fs from 'fs'
 import path from 'path'
 
@@ -32,28 +32,30 @@ function getPathNav(pillar: string, slug: string): {
   next: NavArticle | null
 } | null {
   try {
+    const lessonMap = buildLessonArticleMap()
     const pathsDir = path.join(process.cwd(), 'src/content/paths')
     const files = fs.readdirSync(pathsDir).filter((f) => f.endsWith('.json'))
 
     for (const file of files) {
       const data = JSON.parse(fs.readFileSync(path.join(pathsDir, file), 'utf8'))
       const allTopics: PathTopic[] = data.modules.flatMap((m: { topics: PathTopic[] }) => m.topics)
-      const linkable = allTopics.filter((t) => t.articlePillar && t.articleSlug)
-      const idx = linkable.findIndex(
-        (t) => t.articlePillar === pillar && t.articleSlug === slug
-      )
+
+      // Resolve each topic: prefer JSON fields, fall back to lessonNumber map
+      const resolved = allTopics.map((t) => {
+        if (t.articlePillar && t.articleSlug) {
+          return { title: t.title, pillar: t.articlePillar, slug: t.articleSlug }
+        }
+        const match = lessonMap[t.id]
+        if (match) return { title: match.title, pillar: match.pillar, slug: match.slug }
+        return null
+      }).filter((t): t is NavArticle => t !== null)
+
+      const idx = resolved.findIndex((t) => t.pillar === pillar && t.slug === slug)
       if (idx === -1) continue
 
-      const prevT = idx > 0 ? linkable[idx - 1] : null
-      const nextT = idx < linkable.length - 1 ? linkable[idx + 1] : null
-
       return {
-        prev: prevT?.articlePillar && prevT?.articleSlug
-          ? { title: prevT.title, slug: prevT.articleSlug, pillar: prevT.articlePillar }
-          : null,
-        next: nextT?.articlePillar && nextT?.articleSlug
-          ? { title: nextT.title, slug: nextT.articleSlug, pillar: nextT.articlePillar }
-          : null,
+        prev: idx > 0 ? resolved[idx - 1] : null,
+        next: idx < resolved.length - 1 ? resolved[idx + 1] : null,
       }
     }
   } catch {

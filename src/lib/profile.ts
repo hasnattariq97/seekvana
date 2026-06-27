@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import { buildLessonArticleMap } from '@/lib/mdx'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -177,18 +178,36 @@ function loadAllPaths(): PathJson[] {
 
 export function calculatePathProgress(reads: ArticleRead[]): PathProgress[] {
   const paths = loadAllPaths()
+  const lessonMap = buildLessonArticleMap()
   const readSet = new Set(reads.map((r) => `${r.pillar}/${r.articleSlug}`))
 
   return paths.map((p) => {
     const allTopics = p.modules.flatMap((m) => m.topics)
-    const linkableTopics = allTopics.filter((t) => t.articlePillar && t.articleSlug)
     const totalLessons = allTopics.length
+
+    // Resolve each topic to its article using JSON fields OR lessonNumber frontmatter lookup
+    const resolvedTopics = allTopics.map((t) => {
+      if (t.articlePillar && t.articleSlug) {
+        return { ...t, resolvedPillar: t.articlePillar, resolvedSlug: t.articleSlug }
+      }
+      const match = lessonMap[t.id]
+      if (match) {
+        return { ...t, resolvedPillar: match.pillar, resolvedSlug: match.slug, title: match.title }
+      }
+      return { ...t, resolvedPillar: undefined, resolvedSlug: undefined }
+    })
+
+    const linkableTopics = resolvedTopics.filter((t) => t.resolvedPillar && t.resolvedSlug)
 
     let completedLessons = 0
     let foundNext = false
 
-    const lessons: LessonStatus[] = linkableTopics.map((t) => {
-      const key = `${t.articlePillar}/${t.articleSlug}`
+    const lessons: LessonStatus[] = resolvedTopics.map((t) => {
+      if (!t.resolvedPillar || !t.resolvedSlug) {
+        return { id: t.id, title: t.title, completed: false, isNext: false }
+      }
+
+      const key = `${t.resolvedPillar}/${t.resolvedSlug}`
       const completed = readSet.has(key)
       if (completed) completedLessons++
 
@@ -198,27 +217,22 @@ export function calculatePathProgress(reads: ArticleRead[]): PathProgress[] {
       return {
         id: t.id,
         title: t.title,
-        pillar: t.articlePillar,
-        slug: t.articleSlug,
+        pillar: t.resolvedPillar,
+        slug: t.resolvedSlug,
         completed,
         isNext,
       }
     })
 
-    // If no progress yet, first lesson is "next"
-    if (completedLessons === 0 && lessons.length > 0) {
-      lessons[0] = { ...lessons[0], isNext: false }
-    }
-
     const nextLesson = lessons.find((l) => l.isNext && l.pillar && l.slug)
-    const firstLesson = lessons[0]
+    const firstLinkable = linkableTopics[0]
 
     const status =
       totalLessons === 0
         ? 'not-started'
         : completedLessons === 0
         ? 'not-started'
-        : completedLessons >= totalLessons
+        : completedLessons >= linkableTopics.length
         ? 'completed'
         : 'in-progress'
 
@@ -231,8 +245,8 @@ export function calculatePathProgress(reads: ArticleRead[]): PathProgress[] {
       nextLesson:
         nextLesson?.pillar && nextLesson?.slug
           ? { pillar: nextLesson.pillar, slug: nextLesson.slug, title: nextLesson.title }
-          : firstLesson?.pillar && firstLesson?.slug
-          ? { pillar: firstLesson.pillar, slug: firstLesson.slug, title: firstLesson.title }
+          : firstLinkable?.resolvedPillar && firstLinkable?.resolvedSlug
+          ? { pillar: firstLinkable.resolvedPillar, slug: firstLinkable.resolvedSlug, title: firstLinkable.title }
           : null,
       lessons,
       status,
