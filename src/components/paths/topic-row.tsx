@@ -35,14 +35,10 @@ export function TopicRow({ topic, status = 'unread' }: TopicRowProps) {
   const done = status === 'done'
   const current = status === 'current'
 
-  return (
-    <li
-      className={`flex items-center gap-3 px-5 py-[10px] transition-colors duration-100 ${
-        current
-          ? 'border-l-[3px] border-accent bg-accent/[0.04] pl-[17px]'
-          : 'border-l-[3px] border-transparent hover:bg-surface-subtle'
-      }`}
-    >
+  const href = hasArticle ? `/library/${topic.articlePillar}/${topic.articleSlug}` : null
+
+  const inner = (
+    <>
       {done ? <CheckDone /> : current ? <CheckCurrent /> : <CheckEmpty />}
 
       <span className={`font-mono text-[10.5px] font-medium shrink-0 w-[34px] tabular-nums ${current ? 'text-accent' : 'text-secondary'}`}>
@@ -56,16 +52,14 @@ export function TopicRow({ topic, status = 'unread' }: TopicRowProps) {
       </span>
 
       {hasArticle && (
-        <Link
-          href={`/library/${topic.articlePillar}/${topic.articleSlug}`}
-          className={`inline-flex items-center gap-1 text-[11px] font-medium rounded-[6px] px-[9px] py-[3px] shrink-0 border transition-colors duration-100 whitespace-nowrap ${
+        <span
+          className={`inline-flex items-center gap-1 text-[11px] font-medium rounded-[6px] px-[9px] py-[3px] shrink-0 border whitespace-nowrap ${
             done
-              ? 'bg-canvas border-border text-secondary hover:text-accent'
+              ? 'bg-canvas border-border text-secondary group-hover:text-accent'
               : current
-              ? 'bg-accent/[0.08] border-accent/20 text-accent hover:bg-accent/15'
-              : 'bg-canvas border-border text-secondary hover:text-accent'
+              ? 'bg-accent/[0.08] border-accent/20 text-accent'
+              : 'bg-canvas border-border text-secondary group-hover:text-accent'
           }`}
-          onClick={(e) => e.stopPropagation()}
         >
           {current ? (
             <>
@@ -76,7 +70,25 @@ export function TopicRow({ topic, status = 'unread' }: TopicRowProps) {
               Read now
             </>
           ) : done ? 'Review' : 'Article'}
+        </span>
+      )}
+    </>
+  )
+
+  const rowClass = `group flex items-center gap-3 px-5 py-[10px] transition-colors duration-100 ${
+    current
+      ? 'border-l-[3px] border-accent bg-accent/[0.04] pl-[17px]'
+      : 'border-l-[3px] border-transparent hover:bg-surface-subtle'
+  } ${href ? 'cursor-pointer' : ''}`
+
+  return (
+    <li>
+      {href ? (
+        <Link href={href} className={rowClass}>
+          {inner}
         </Link>
+      ) : (
+        <div className={rowClass}>{inner}</div>
       )}
     </li>
   )
