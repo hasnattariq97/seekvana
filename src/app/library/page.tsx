@@ -79,7 +79,7 @@ export default function LibraryPage() {
 
               {/* Body */}
               <div className="flex flex-col flex-1 p-[18px] gap-2">
-                <h2 className="font-fraunces text-[15px] font-bold leading-snug tracking-tight text-primary group-hover:text-accent transition-colors duration-150">
+                <h2 className="font-fraunces text-lg text-primary leading-snug group-hover:text-accent transition-colors duration-150">
                   {pillar.name}
                 </h2>
                 <p className="text-[11.5px] text-secondary leading-[1.55] flex-1">
