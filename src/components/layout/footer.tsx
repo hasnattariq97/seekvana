@@ -50,32 +50,6 @@ export function Footer() {
   return (
     <footer className="bg-surface-subtle border-t border-border">
       <div className="max-w-screen-xl mx-auto px-4 py-16">
-        {/* Newsletter signup */}
-        <div className="mb-16 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pb-16 border-b border-border">
-          <div>
-            <h3 className="font-fraunces text-lg text-primary">Stay in the loop</h3>
-            <p className="font-inter text-sm text-secondary mt-1">
-              New articles and learning paths, delivered occasionally.
-            </p>
-          </div>
-          <form
-            className="flex gap-2 w-full sm:w-auto"
-            onSubmit={(e) => e.preventDefault()}
-          >
-            <input
-              type="email"
-              placeholder="your@email.com"
-              className="flex-1 sm:w-56 rounded-lg border border-border bg-surface px-4 py-2 text-sm text-primary placeholder:text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
-            />
-            <button
-              type="submit"
-              className="bg-accent text-white rounded-lg px-4 py-2 text-sm font-medium hover:bg-accent-deep transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
-            >
-              Subscribe
-            </button>
-          </form>
-        </div>
-
         {/* 4-column grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
           {/* Brand */}
