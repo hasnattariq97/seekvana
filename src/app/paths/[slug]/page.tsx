@@ -69,6 +69,8 @@ export default async function PathPage({ params }: Props) {
   }
 
   // Find next unread lesson across all enriched modules
+  let nextLessonTitle: string | null = null
+  let nextLessonModuleTitle: string | null = null
   if (readSet.length > 0) {
     const readSetObj = new Set(readSet)
     outer: for (const module of enrichedModules) {
@@ -77,6 +79,8 @@ export default async function PathPage({ params }: Props) {
           const key = `${topic.articlePillar}/${topic.articleSlug}`
           if (!readSetObj.has(key)) {
             nextLessonHref = `/library/${topic.articlePillar}/${topic.articleSlug}`
+            nextLessonTitle = topic.title
+            nextLessonModuleTitle = `Module ${module.id} · ${module.title}`
             break outer
           }
         }
@@ -123,6 +127,8 @@ export default async function PathPage({ params }: Props) {
           path={path}
           completedCount={completedCount}
           continueHref={nextLessonHref ?? firstLessonHref ?? '#modules'}
+          nextLessonTitle={nextLessonTitle}
+          nextLessonModuleTitle={nextLessonModuleTitle}
         />
       </div>
     </div>
