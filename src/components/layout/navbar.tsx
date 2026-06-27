@@ -328,6 +328,7 @@ function UserButton() {
                 <p className="text-xs text-secondary truncate">{user.email}</p>
               </div>
               {[
+                { href: '/profile', icon: '👤', label: 'My Profile' },
                 { href: '/profile/reading-list', icon: '📚', label: 'My Reading List' },
                 { href: '/profile/progress', icon: '🏆', label: 'My Progress' },
                 { href: '/profile/settings', icon: '⚙️', label: 'Settings' },
