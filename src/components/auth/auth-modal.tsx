@@ -237,19 +237,85 @@ export function AuthModal() {
                   </div>
                 </motion.div>
               ) : (
-                <motion.div key="sent" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.15 }}
-                  className="px-8 py-12 text-center"
-                >
-                  <div className="text-4xl mb-3">📬</div>
-                  <h2 className="font-fraunces text-xl text-primary font-semibold mb-2">Check your inbox</h2>
-                  <p className="text-secondary text-sm mb-2">We sent a magic link to</p>
-                  <p className="text-accent font-semibold text-sm mb-4">{email}</p>
-                  <div className="bg-accent-soft rounded-xl p-3 text-xs text-secondary text-left mb-4">
-                    Click the link in your email to sign in. Link expires in 1 hour.
+                <motion.div key="sent" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.15 }}>
+                  {/* Hero */}
+                  <div
+                    className="px-7 pt-9 pb-7 text-center relative overflow-hidden border-b"
+                    style={{ background: 'linear-gradient(170deg,#EDE8DF 0%,var(--color-canvas) 100%)', borderColor: '#E4DED6' }}
+                  >
+                    <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-44 h-28 pointer-events-none"
+                      style={{ background: 'radial-gradient(ellipse,rgba(201,99,63,0.10) 0%,transparent 70%)' }} />
+
+                    {/* Envelope + check icon tile */}
+                    <div
+                      className="w-[60px] h-[60px] rounded-[18px] inline-flex items-center justify-center mb-[18px] relative z-10"
+                      style={{ background: 'var(--color-canvas)', border: '1px solid #D0CAC1', boxShadow: '0 1px 0 rgba(255,255,255,0.9) inset, 0 4px 16px rgba(26,23,20,0.1), 0 0 0 5px rgba(201,99,63,0.06)' }}
+                    >
+                      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                        <rect x="3" y="7" width="22" height="16" rx="2.5" stroke="var(--color-accent)" strokeWidth="1.6"/>
+                        <path d="M3 10l11 7 11-7" stroke="var(--color-accent)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                        <circle cx="21" cy="9" r="4" fill="var(--color-canvas)" stroke="var(--color-accent)" strokeWidth="1.4"/>
+                        <path d="M19.2 9l1.3 1.3 2-2" stroke="var(--color-accent)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+
+                    <h2 className="font-fraunces text-[21px] font-bold text-primary relative z-10" style={{ letterSpacing: '-0.4px' }}>
+                      Check your inbox
+                    </h2>
+                    <p className="text-[12px] text-secondary mt-1.5 relative z-10">We sent a magic link to</p>
+                    <span
+                      className="inline-block text-[13px] font-semibold mt-2 px-[10px] py-[3px] rounded-[6px] relative z-10"
+                      style={{ color: 'var(--color-accent)', background: 'rgba(201,99,63,0.07)', border: '1px solid rgba(201,99,63,0.15)' }}
+                    >
+                      {email}
+                    </span>
                   </div>
-                  <button onClick={() => setState('idle')} className="text-xs text-secondary hover:text-accent transition-colors">
-                    Wrong email? Try again
-                  </button>
+
+                  {/* Body */}
+                  <div className="px-6 pt-5 pb-6 flex flex-col gap-3">
+                    {/* Info strip */}
+                    <div className="flex items-start gap-[11px] p-[14px] rounded-xl" style={{ background: '#EDE8DF', border: '1px solid #D9D4CB' }}>
+                      <div className="w-7 h-7 rounded-[8px] flex items-center justify-center shrink-0 mt-px" style={{ background: 'var(--color-canvas)', border: '1px solid #D0CAC1' }}>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.41 2 2 0 0 1 3.6 1.22h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.71 2.81a2 2 0 0 1-.45 2.11L7.91 8.8a16 16 0 0 0 6 6l.96-.96a2 2 0 0 1 2.11-.45c.9.35 1.85.58 2.81.71A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-[12px] font-semibold text-primary mb-0.5">Click the link in your email to sign in</p>
+                        <p className="text-[11px] leading-relaxed" style={{ color: '#9E9890' }}>Check your spam folder if you don't see it within a minute</p>
+                      </div>
+                    </div>
+
+                    {/* Expiry row */}
+                    <div className="flex items-center gap-2 px-[14px] py-[10px] rounded-[10px]" style={{ background: '#EDE8DF', border: '1px solid #D9D4CB' }}>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9E9890" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                      </svg>
+                      <span className="text-[11px] flex-1" style={{ color: '#9E9890' }}>Link expires in</span>
+                      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full" style={{ color: 'var(--color-accent)', background: 'rgba(201,99,63,0.08)', border: '1px solid rgba(201,99,63,0.15)' }}>
+                        1 hour
+                      </span>
+                    </div>
+
+                    {/* Open email CTA */}
+                    <button
+                      onClick={() => { const domain = email.split('@')[1]; window.open(`https://${domain}`, '_blank') }}
+                      className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-[13px] font-bold text-white transition-colors"
+                      style={{ background: 'var(--color-accent)', boxShadow: '0 1px 0 rgba(255,255,255,0.15) inset, 0 6px 20px rgba(201,99,63,0.35)' }}
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+                      </svg>
+                      Open email app
+                    </button>
+
+                    <p className="text-center text-[12px]" style={{ color: '#9E9890' }}>
+                      Wrong email?{' '}
+                      <button onClick={() => setState('idle')} className="font-semibold" style={{ color: 'var(--color-accent)', borderBottom: '1px solid rgba(201,99,63,0.3)' }}>
+                        Try again
+                      </button>
+                    </p>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
