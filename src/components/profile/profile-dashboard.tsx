@@ -2,10 +2,13 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
+import { useState } from 'react'
 import { BookOpen, Flame, Trophy, Award, Pencil, Plus } from 'lucide-react'
+import { createClient } from '@/lib/supabase'
 import type { Badge, PathProgress } from '@/lib/profile'
 
 type Props = {
+  userId: string
   displayName: string
   initials: string
   isPublic: boolean
@@ -32,9 +35,10 @@ const stats = (totalReads: number, streak: number, completedPathsCount: number, 
 ]
 
 export function ProfileDashboard({
+  userId,
   displayName,
   initials,
-  isPublic,
+  isPublic: initialIsPublic,
   memberSince,
   totalReads,
   streak,
@@ -43,10 +47,21 @@ export function ProfileDashboard({
   badges,
   inProgressPaths,
 }: Props) {
+  const [isPublic, setIsPublic] = useState(initialIsPublic)
+
+  async function togglePublic() {
+    const next = !isPublic
+    setIsPublic(next)
+    const supabase = createClient()
+    await supabase
+      .from('user_profiles')
+      .upsert({ user_id: userId, is_public: next }, { onConflict: 'user_id' })
+  }
+
   return (
     <div className="min-h-screen bg-canvas">
       {/* Hero */}
-      <div className="bg-surface border-b border-border px-6 md:px-10 py-10">
+      <div className="bg-canvas border-b border-border px-6 md:px-10 py-10">
         <motion.div
           className="max-w-4xl mx-auto flex items-start justify-between gap-6 flex-wrap"
           variants={container}
@@ -102,17 +117,19 @@ export function ProfileDashboard({
             </Link>
             <div className="flex items-center gap-2">
               <span className="text-xs text-secondary">Public profile</span>
-              <span
-                className={`inline-block w-9 h-5 rounded-full transition-colors relative ${
+              <button
+                onClick={togglePublic}
+                className={`relative inline-block w-9 h-5 rounded-full transition-colors cursor-pointer ${
                   isPublic ? 'bg-accent' : 'bg-surface-subtle border border-border'
                 }`}
+                aria-label="Toggle public profile"
               >
                 <span
                   className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow-sm transition-transform ${
                     isPublic ? 'translate-x-4' : 'translate-x-0.5'
                   }`}
                 />
-              </span>
+              </button>
             </div>
           </motion.div>
         </motion.div>

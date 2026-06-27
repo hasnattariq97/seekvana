@@ -63,6 +63,7 @@ export default async function ProfilePage() {
 
   return (
     <ProfileDashboard
+      userId={user.id}
       displayName={displayName}
       initials={initials}
       isPublic={isPublic}
