@@ -15,6 +15,8 @@ import { ArticleNav } from '@/components/article/article-nav'
 import type { CommentWithReplies } from '@/types/comments'
 import { ArticleComments } from '@/components/article/article-comments'
 import { PostArticleNewsletter } from '@/components/newsletter/post-article-newsletter'
+import { BookmarkButton } from '@/components/article/bookmark-button'
+import { createClient as createServerClient } from '@/lib/supabase-server'
 
 interface PageProps {
   params: Promise<{ pillar: string; slug: string }>
@@ -132,6 +134,21 @@ export default async function ArticlePage({ params }: PageProps) {
     replies: replies.filter((r) => r.parent_id === c.id),
   }))
 
+  const serverSupabase = await createServerClient()
+  const { data: { user: currentUser } } = await serverSupabase.auth.getUser()
+
+  let isSaved = false
+  if (currentUser) {
+    const { data: savedRow } = await serverSupabase
+      .from('reading_list')
+      .select('id')
+      .eq('user_id', currentUser.id)
+      .eq('pillar', pillar)
+      .eq('article_slug', slug)
+      .single()
+    isSaved = !!savedRow
+  }
+
   const pillarName = getPillarName(pillar)
   const pillarArticles = getArticlesByPillar(pillar).map((a) => ({
     title: a.frontmatter.title,
@@ -199,15 +216,18 @@ export default async function ArticlePage({ params }: PageProps) {
 
             {/* Article header */}
             <header className="mb-10">
-              <div className="flex gap-2 mb-4 flex-wrap">
-                <span className="bg-accent-soft text-accent text-xs px-3 py-1 rounded-full font-medium">
-                  {pillarName}
-                </span>
-                <span
-                  className={`text-xs px-3 py-1 rounded-full font-medium capitalize ${difficultyClass}`}
-                >
-                  {frontmatter.difficulty}
-                </span>
+              <div className="flex items-center justify-between gap-2 mb-4 flex-wrap">
+                <div className="flex gap-2 flex-wrap">
+                  <span className="bg-accent-soft text-accent text-xs px-3 py-1 rounded-full font-medium">
+                    {pillarName}
+                  </span>
+                  <span
+                    className={`text-xs px-3 py-1 rounded-full font-medium capitalize ${difficultyClass}`}
+                  >
+                    {frontmatter.difficulty}
+                  </span>
+                </div>
+                <BookmarkButton pillar={pillar} articleSlug={slug} initialSaved={isSaved} />
               </div>
               <h1 className="font-fraunces text-2xl sm:text-4xl md:text-5xl text-primary leading-tight text-balance">
                 {frontmatter.title}
