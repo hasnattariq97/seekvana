@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronDown, CheckCircle2 } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { TopicRow } from './topic-row'
 import type { PathModule } from '@/lib/mdx'
 
@@ -19,89 +19,110 @@ export function ModuleItem({ module, defaultOpen = false, readSet = [] }: Module
     t => readSet.includes(`${t.articlePillar}/${t.articleSlug}`)
   ).length
   const isModuleComplete = linkableTopics.length > 0 && completedInModule === linkableTopics.length
-  const isModuleStarted = completedInModule > 0
+  const isModuleStarted = completedInModule > 0 && !isModuleComplete
+
+  // First unread linkable topic index (for 'current' marker)
+  let currentTopicId: string | null = null
+  if (isModuleStarted) {
+    const firstUnread = linkableTopics.find(
+      t => !readSet.includes(`${t.articlePillar}/${t.articleSlug}`)
+    )
+    if (firstUnread) currentTopicId = firstUnread.id
+  }
+
+  // Progress strip color
+  const stripClass = isModuleComplete
+    ? 'bg-gradient-to-r from-green-600 to-green-400'
+    : isModuleStarted
+    ? 'bg-gradient-to-r from-accent to-[#E0875F]'
+    : 'bg-border'
+  const stripWidth = isModuleComplete
+    ? '100%'
+    : isModuleStarted
+    ? `${Math.max(Math.round((completedInModule / linkableTopics.length) * 100), 8)}%`
+    : '100%'
+
+  // Module number color
+  const numColor = isModuleComplete
+    ? 'text-green-600 dark:text-green-400'
+    : isModuleStarted
+    ? 'text-accent'
+    : 'text-secondary'
 
   return (
-    <div className="border-b border-border last:border-b-0">
+    <div className="border-b border-border last:border-b-0 overflow-hidden">
+      {/* Progress strip */}
+      <div className="h-[3px] bg-border">
+        <div className={`h-full ${stripClass}`} style={{ width: stripWidth }} />
+      </div>
+
       {/* Header */}
       <button
         type="button"
-        className={`w-full flex items-center gap-4 px-6 py-5 text-left transition-colors duration-150 ${
-          open ? 'bg-accent-soft hover:bg-accent-soft/70' : 'hover:bg-surface-subtle'
-        }`}
+        className="w-full flex items-center gap-4 px-5 py-[18px] text-left bg-surface-subtle hover:brightness-[0.97] dark:hover:brightness-110 transition-all duration-150"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
       >
-        {/* Module ID or complete check */}
-        {isModuleComplete ? (
-          <CheckCircle2 size={18} strokeWidth={2} className="text-green-500 shrink-0" />
-        ) : (
-          <span
-            className={`font-mono text-[11px] font-bold tracking-wide shrink-0 min-w-[24px] transition-colors duration-200 ${
-              open ? 'text-accent' : 'text-border'
-            }`}
-          >
-            {module.id}
-          </span>
-        )}
+        <span className={`font-fraunces text-[15px] font-bold shrink-0 w-7 tabular-nums ${numColor}`}>
+          {module.id}
+        </span>
 
         <div className="flex-1 min-w-0">
-          <p className={`font-fraunces text-[15.5px] font-semibold leading-tight ${isModuleComplete ? 'text-secondary line-through decoration-border' : 'text-primary'}`}>
+          <p className="font-fraunces text-[15.5px] font-bold text-primary leading-tight">
             {module.title}
           </p>
-          <p className="text-xs text-secondary mt-0.5 truncate max-w-[45ch]">
+          <p className="text-[12px] text-secondary mt-0.5 truncate max-w-[45ch]">
             {module.description}
           </p>
         </div>
 
-        <div className="flex items-center gap-3.5 shrink-0">
-          {/* Progress badge */}
+        <div className="flex items-center gap-2.5 shrink-0">
           {isModuleComplete ? (
-            <span className="text-[11px] rounded-md px-2 py-1 border bg-green-500/10 border-green-500/20 text-green-600 dark:text-green-400 font-semibold">
+            <span className="inline-flex items-center gap-[5px] text-[11px] font-semibold rounded-full px-[10px] py-1 bg-green-600/10 border border-green-600/25 text-green-600 dark:text-green-400">
+              <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+                <circle cx="6" cy="6" r="5.5" stroke="currentColor" strokeWidth="1"/>
+                <path d="M3.5 6l2 2 3-3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
               Complete
             </span>
           ) : isModuleStarted ? (
-            <span className={`text-[11.5px] rounded-md px-2 py-1 border transition-colors duration-200 ${
-              open ? 'bg-accent-soft border-accent/25 text-accent-deep' : 'bg-surface-subtle border-border text-secondary'
-            }`}>
-              {completedInModule}/{linkableTopics.length}
+            <span className="inline-flex items-center text-[11px] font-semibold rounded-full px-[10px] py-1 bg-accent/10 border border-accent/25 text-accent">
+              {completedInModule} / {linkableTopics.length}
             </span>
           ) : (
-            <span className={`text-[11.5px] rounded-md px-2 py-1 border transition-colors duration-200 ${
-              open ? 'bg-accent-soft border-accent/25 text-accent-deep' : 'bg-surface-subtle border-border text-secondary'
-            }`}>
+            <span className="inline-flex items-center text-[11px] font-medium rounded-full px-[10px] py-1 bg-canvas border border-border text-secondary">
               {module.topics.length} topics
             </span>
           )}
           <ChevronDown
             size={16}
             strokeWidth={1.8}
-            className={`text-secondary transition-transform duration-250 ${open ? 'rotate-180' : ''}`}
+            className={`text-secondary transition-transform duration-250 shrink-0 ${open ? 'rotate-180' : ''}`}
           />
         </div>
       </button>
 
-      {/* Topics panel — grid-rows animation */}
+      {/* Topics panel */}
       <div
-        className="grid transition-[grid-template-rows] duration-300 ease-in-out bg-canvas border-t border-border"
+        className="grid transition-[grid-template-rows] duration-300 ease-in-out bg-canvas"
         style={{
           gridTemplateRows: open ? '1fr' : '0fr',
-          borderTopWidth: open ? '1px' : '0px',
         }}
       >
         <div className="overflow-hidden">
-          <ul className="py-1.5">
+          <ul className="py-1.5 border-t border-border">
             {module.topics.map((topic) => {
-              const completed = Boolean(
+              const done = Boolean(
                 topic.articlePillar && topic.articleSlug &&
                 readSet.includes(`${topic.articlePillar}/${topic.articleSlug}`)
               )
-              return <TopicRow key={topic.id} topic={topic} completed={completed} />
+              const status = done ? 'done' : topic.id === currentTopicId ? 'current' : 'unread'
+              return <TopicRow key={topic.id} topic={topic} status={status} />
             })}
           </ul>
-          <div className="flex justify-between items-center px-6 py-2.5 pl-12 border-t border-border text-xs text-secondary">
-            <span>Each topic includes a 5-min task</span>
-            <span className="font-semibold text-primary">{module.topics.length} tasks</span>
+          <div className="flex justify-between items-center px-5 py-2.5 pl-[52px] border-t border-border bg-surface-subtle">
+            <span className="text-[11px] text-secondary"><span className="text-primary font-medium">Each topic</span> includes a 5-min task</span>
+            <span className="text-[11px] font-semibold text-secondary">{module.topics.length} tasks</span>
           </div>
         </div>
       </div>
