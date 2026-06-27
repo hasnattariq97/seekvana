@@ -14,9 +14,7 @@ export const metadata: Metadata = {
   },
 }
 
-const PILLAR_META: Record<string, { featured?: boolean; startHere?: boolean }> = {
-  'ai-foundations': { featured: true, startHere: true },
-}
+const START_HERE = new Set(['ai-foundations'])
 
 export default function LibraryPage() {
   const allArticles = getAllArticles()
@@ -58,28 +56,22 @@ export default function LibraryPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {PILLARS.map((pillar) => {
           const count = countByPillar[pillar.slug] ?? 0
-          const meta = PILLAR_META[pillar.slug] ?? {}
-          const featured = meta.featured ?? false
-          const startHere = meta.startHere ?? false
+          const startHere = START_HERE.has(pillar.slug)
 
           return (
             <Link
               key={pillar.slug}
               href={`/library/${pillar.slug}`}
-              className={`group flex flex-col bg-surface-subtle border rounded-[14px] overflow-hidden transition-all duration-150 hover:-translate-y-[3px] hover:shadow-[0_12px_32px_rgba(26,23,20,0.1)] ${
-                featured
-                  ? 'border-accent/40 shadow-[0_0_0_1px_rgba(201,99,63,0.08)]'
-                  : 'border-border hover:border-border/80'
-              }`}
+              className="group flex flex-col bg-surface-subtle border border-border rounded-[14px] overflow-hidden transition-all duration-150 hover:-translate-y-[3px] hover:shadow-[0_12px_32px_rgba(26,23,20,0.1)] hover:border-accent/30"
             >
               {/* Image zone */}
-              <div className={`h-[110px] border-b border-border flex items-center justify-center relative overflow-hidden ${
-                featured ? 'bg-accent-soft/50' : 'bg-surface-subtle'
-              }`}>
-                {/* Placeholder — replace with next/image once you add images (see below) */}
-                <div className={`absolute inset-0 flex flex-col items-center justify-center gap-[6px] ${featured ? 'opacity-40' : 'opacity-30'} pointer-events-none`}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={featured ? 'var(--color-accent)' : 'currentColor'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-secondary"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                  <span className={`text-[10px] font-medium text-center leading-tight ${featured ? 'text-accent' : 'text-secondary'}`}>
+              <div className="h-[110px] bg-surface-subtle border-b border-border flex items-center justify-center relative overflow-hidden">
+                {/* Drop your image at public/images/pillars/<slug>.webp to replace this placeholder */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-[6px] opacity-30 pointer-events-none">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-secondary">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+                  </svg>
+                  <span className="text-[10px] font-medium text-secondary text-center leading-tight">
                     Your image<br/>goes here
                   </span>
                 </div>
@@ -87,30 +79,24 @@ export default function LibraryPage() {
 
               {/* Body */}
               <div className="flex flex-col flex-1 p-[18px] gap-2">
-                <h2 className={`font-fraunces text-[15px] font-bold leading-snug tracking-tight ${
-                  featured ? 'text-accent' : 'text-primary'
-                }`}>
+                <h2 className="font-fraunces text-[15px] font-bold leading-snug tracking-tight text-primary group-hover:text-accent transition-colors duration-150">
                   {pillar.name}
                 </h2>
                 <p className="text-[11.5px] text-secondary leading-[1.55] flex-1">
                   {pillar.description}
                 </p>
                 <div className="flex items-center justify-between mt-[6px]">
-                  <span className={`text-[11px] font-semibold ${featured ? 'text-accent' : 'text-secondary'}`}>
+                  <span className="text-[11px] font-semibold text-secondary group-hover:text-accent transition-colors duration-150">
                     {count > 0 ? `${count} article${count !== 1 ? 's' : ''}` : 'Coming soon'}
                   </span>
                   <div className="flex items-center gap-[6px]">
                     {startHere && (
-                      <span className="text-[10px] font-semibold text-accent bg-accent/[0.08] border border-accent/[0.15] rounded-full px-2 py-[2px]">
+                      <span className="text-[10px] font-semibold text-secondary border border-border rounded-full px-2 py-[2px] group-hover:text-accent group-hover:border-accent/30 transition-colors duration-150">
                         Start here
                       </span>
                     )}
-                    <div className={`w-6 h-6 rounded-full flex items-center justify-center border transition-colors ${
-                      featured
-                        ? 'bg-accent/[0.1] border-accent/25 group-hover:bg-accent/20'
-                        : 'bg-canvas border-border group-hover:border-accent/40'
-                    }`}>
-                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={featured ? 'var(--color-accent)' : 'currentColor'} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={featured ? '' : 'text-secondary'}>
+                    <div className="w-6 h-6 rounded-full flex items-center justify-center border border-border bg-canvas transition-colors duration-150 group-hover:border-accent/40 group-hover:bg-accent/[0.06]">
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-secondary group-hover:text-accent transition-colors duration-150" stroke="currentColor">
                         <line x1="5" y1="12" x2="19" y2="12"/>
                         <polyline points="12 5 19 12 12 19"/>
                       </svg>
