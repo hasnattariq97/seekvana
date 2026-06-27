@@ -122,8 +122,14 @@ export function AuthModal() {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.15 }}
                 >
-                  <div className="w-11 h-11 bg-accent-soft rounded-xl mx-auto mb-4 flex items-center justify-center text-xl">
-                    🧭
+                  {/* Logo ring */}
+                  <div
+                    className="w-14 h-14 rounded-2xl bg-canvas border border-border mx-auto mb-5 flex items-center justify-center"
+                    style={{ boxShadow: '0 1px 0 rgba(255,255,255,0.9) inset, 0 4px 16px rgba(26,23,20,0.1), 0 0 0 4px rgba(201,99,63,0.07)' }}
+                  >
+                    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+                      <path d="M18 8.5C18 6.015 15.761 4 13 4C10.239 4 8 6.015 8 8.5C8 10.985 10.239 13 13 13C15.761 13 18 14.015 18 16.5C18 18.985 15.761 21 13 21C10.239 21 8 18.985 8 16.5" stroke="var(--color-accent)" strokeWidth="2.2" strokeLinecap="round"/>
+                    </svg>
                   </div>
                   <h2 className="font-fraunces text-xl text-primary font-semibold mb-1">
                     Welcome to Seekvana
@@ -163,9 +169,15 @@ export function AuthModal() {
                   <button
                     onClick={handleMagicLink}
                     disabled={state === 'loading'}
-                    className="w-full bg-accent hover:bg-accent-deep text-white rounded-xl py-2.5 text-sm font-bold transition-colors disabled:opacity-60 mb-4"
+                    className="w-full bg-accent hover:bg-accent-deep rounded-xl py-3.5 flex flex-col items-center gap-0.5 transition-colors disabled:opacity-60 mb-4"
+                    style={{ boxShadow: '0 1px 0 rgba(255,255,255,0.15) inset, 0 6px 20px rgba(201,99,63,0.4), 0 2px 6px rgba(26,23,20,0.15)' }}
                   >
-                    {state === 'loading' ? 'Sending…' : 'Send magic link →'}
+                    <span className="text-[14px] font-bold text-white flex items-center gap-1.5">
+                      {state === 'loading' ? 'Sending…' : <>Send magic link <span aria-hidden="true">→</span></>}
+                    </span>
+                    {state !== 'loading' && (
+                      <span className="text-[11px] text-white/60 font-normal">No password needed · check your inbox</span>
+                    )}
                   </button>
 
                   <p className="text-xs text-secondary">
