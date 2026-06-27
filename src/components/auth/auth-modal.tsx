@@ -140,8 +140,11 @@ export function AuthModal() {
                       className="w-14 h-14 rounded-2xl inline-flex items-center justify-center mb-[18px] relative z-10"
                       style={{ background: 'var(--color-canvas)', border: '1px solid #D0CAC1', boxShadow: '0 1px 0 rgba(255,255,255,0.9) inset, 0 4px 16px rgba(26,23,20,0.1), 0 0 0 4px rgba(201,99,63,0.07)' }}
                     >
-                      <svg width="26" height="26" viewBox="0 0 26 26" fill="none" aria-hidden="true">
-                        <path d="M18 8.5C18 6.015 15.761 4 13 4C10.239 4 8 6.015 8 8.5C8 10.985 10.239 13 13 13C15.761 13 18 14.015 18 16.5C18 18.985 15.761 21 13 21C10.239 21 8 18.985 8 16.5" stroke="var(--color-accent)" strokeWidth="2.2" strokeLinecap="round"/>
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="text-accent">
+                        <path d="M12 1.5 L10.5 10.5 L12 12 L13.5 10.5 Z" fill="currentColor" />
+                        <path d="M12 22.5 L10.5 13.5 L12 12 L13.5 13.5 Z" fill="currentColor" fillOpacity="0.14" />
+                        <path d="M22.5 12 L13.5 10.5 L12 12 L13.5 13.5 Z" fill="currentColor" fillOpacity="0.28" />
+                        <path d="M1.5 12 L10.5 10.5 L12 12 L10.5 13.5 Z" fill="currentColor" fillOpacity="0.28" />
                       </svg>
                     </div>
 
