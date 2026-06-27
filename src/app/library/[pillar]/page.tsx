@@ -77,20 +77,14 @@ export default async function PillarPage({ params }: PageProps) {
             >
               {/* Cover image */}
               <div className="h-[180px] bg-surface-subtle relative overflow-hidden">
-                {frontmatter.coverImage ? (
-                  <>
-                    <Image
-                      src={frontmatter.coverImage}
-                      alt={frontmatter.title}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                  </>
-                ) : (
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                )}
+                <Image
+                  src={`/images/articles/${pillar}/${slug}/cover.webp`}
+                  alt={frontmatter.title}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                 {/* Pillar label */}
                 <div className="absolute bottom-3 left-3">
                   <span className="text-[11px] font-semibold text-white bg-black/30 backdrop-blur-[2px] rounded-full px-2.5 py-1">
