@@ -119,14 +119,14 @@ export function ProfileDashboard({
               <span className="text-xs text-secondary">Public profile</span>
               <button
                 onClick={togglePublic}
-                className={`relative inline-block w-9 h-5 rounded-full transition-colors cursor-pointer ${
-                  isPublic ? 'bg-accent' : 'bg-surface-subtle border border-border'
+                className={`relative w-9 h-5 rounded-full transition-colors cursor-pointer flex-shrink-0 ${
+                  isPublic ? 'bg-accent' : 'bg-border'
                 }`}
                 aria-label="Toggle public profile"
               >
                 <span
-                  className={`absolute top-0.5 w-4 h-4 bg-white rounded-full shadow-sm transition-transform ${
-                    isPublic ? 'translate-x-4' : 'translate-x-0.5'
+                  className={`absolute top-[3px] w-3.5 h-3.5 bg-white rounded-full shadow-sm transition-all ${
+                    isPublic ? 'left-[19px]' : 'left-[3px]'
                   }`}
                 />
               </button>
