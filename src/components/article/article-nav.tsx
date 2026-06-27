@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { getArticlesByPillar } from '@/lib/mdx'
+import fs from 'fs'
+import path from 'path'
 
 interface NavArticle {
   title: string
@@ -15,28 +17,77 @@ interface RelatedArticle extends NavArticle {
 interface ArticleNavProps {
   pillar: string
   slug: string
+  lessonNumber?: string
 }
 
-export function ArticleNav({ pillar, slug }: ArticleNavProps) {
-  const all = getArticlesByPillar(pillar).sort(
-    (a, b) =>
-      new Date(a.frontmatter.publishedAt).getTime() -
-      new Date(b.frontmatter.publishedAt).getTime()
-  )
+type PathTopic = {
+  id: string
+  title: string
+  articlePillar?: string
+  articleSlug?: string
+}
 
-  const idx = all.findIndex((a) => a.slug === slug)
-  const prevArticle = idx > 0 ? all[idx - 1] : null
-  const nextArticle = idx < all.length - 1 ? all[idx + 1] : null
+function getPathNav(pillar: string, slug: string): {
+  prev: NavArticle | null
+  next: NavArticle | null
+} | null {
+  try {
+    const pathsDir = path.join(process.cwd(), 'src/content/paths')
+    const files = fs.readdirSync(pathsDir).filter((f) => f.endsWith('.json'))
 
-  const prev: NavArticle | null = prevArticle
-    ? { title: prevArticle.frontmatter.title, slug: prevArticle.slug, pillar }
-    : null
+    for (const file of files) {
+      const data = JSON.parse(fs.readFileSync(path.join(pathsDir, file), 'utf8'))
+      const allTopics: PathTopic[] = data.modules.flatMap((m: { topics: PathTopic[] }) => m.topics)
+      const linkable = allTopics.filter((t) => t.articlePillar && t.articleSlug)
+      const idx = linkable.findIndex(
+        (t) => t.articlePillar === pillar && t.articleSlug === slug
+      )
+      if (idx === -1) continue
 
-  const next: NavArticle | null = nextArticle
-    ? { title: nextArticle.frontmatter.title, slug: nextArticle.slug, pillar }
-    : null
+      const prevT = idx > 0 ? linkable[idx - 1] : null
+      const nextT = idx < linkable.length - 1 ? linkable[idx + 1] : null
 
-  const related: RelatedArticle[] = all
+      return {
+        prev: prevT?.articlePillar && prevT?.articleSlug
+          ? { title: prevT.title, slug: prevT.articleSlug, pillar: prevT.articlePillar }
+          : null,
+        next: nextT?.articlePillar && nextT?.articleSlug
+          ? { title: nextT.title, slug: nextT.articleSlug, pillar: nextT.articlePillar }
+          : null,
+      }
+    }
+  } catch {
+    // fall through to pillar-based nav
+  }
+  return null
+}
+
+export function ArticleNav({ pillar, slug, lessonNumber }: ArticleNavProps) {
+  // Use path order when article is a lesson
+  const pathNav = lessonNumber ? getPathNav(pillar, slug) : null
+
+  let prev: NavArticle | null = null
+  let next: NavArticle | null = null
+
+  if (pathNav) {
+    prev = pathNav.prev
+    next = pathNav.next
+  } else {
+    const all = getArticlesByPillar(pillar).sort(
+      (a, b) =>
+        new Date(a.frontmatter.publishedAt).getTime() -
+        new Date(b.frontmatter.publishedAt).getTime()
+    )
+    const idx = all.findIndex((a) => a.slug === slug)
+    prev = idx > 0
+      ? { title: all[idx - 1].frontmatter.title, slug: all[idx - 1].slug, pillar }
+      : null
+    next = idx < all.length - 1
+      ? { title: all[idx + 1].frontmatter.title, slug: all[idx + 1].slug, pillar }
+      : null
+  }
+
+  const related: RelatedArticle[] = getArticlesByPillar(pillar)
     .filter((a) => a.slug !== slug)
     .slice(0, 3)
     .map((a) => ({
@@ -86,9 +137,7 @@ export function ArticleNav({ pillar, slug }: ArticleNavProps) {
       {/* Related articles */}
       {related.length > 0 && (
         <div>
-          <h3 className="font-fraunces text-xl text-primary mb-5">
-            Keep reading
-          </h3>
+          <h3 className="font-fraunces text-xl text-primary mb-5">Keep reading</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {related.map((article) => (
               <Link

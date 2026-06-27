@@ -291,7 +291,7 @@ export default async function ArticlePage({ params }: PageProps) {
             </div>
 
             {/* Prev/Next + Related */}
-            <ArticleNav pillar={pillar} slug={slug} />
+            <ArticleNav pillar={pillar} slug={slug} lessonNumber={frontmatter.lessonNumber} />
           </div>
         </article>
 

@@ -182,7 +182,7 @@ export function calculatePathProgress(reads: ArticleRead[]): PathProgress[] {
   return paths.map((p) => {
     const allTopics = p.modules.flatMap((m) => m.topics)
     const linkableTopics = allTopics.filter((t) => t.articlePillar && t.articleSlug)
-    const totalLessons = linkableTopics.length
+    const totalLessons = allTopics.length
 
     let completedLessons = 0
     let foundNext = false
