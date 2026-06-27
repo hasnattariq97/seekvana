@@ -16,11 +16,11 @@ export async function POST(request: Request) {
       )
     }
 
+    const token = crypto.randomUUID()
     const supabase = await createClient()
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from('newsletter_subscribers')
-      .insert({ email: email.toLowerCase().trim(), source: source ?? 'unknown' })
-      .select('unsubscribe_token')
+      .insert({ email: email.toLowerCase().trim(), source: source ?? 'unknown', unsubscribe_token: token })
 
     if (error) {
       if (error.code === '23505') {
@@ -35,7 +35,6 @@ export async function POST(request: Request) {
       )
     }
 
-    const token = data?.[0]?.unsubscribe_token
     const unsubscribeUrl = `https://seekvana.com/api/newsletter/unsubscribe?token=${token}`
 
     resend.emails.send({

@@ -30,7 +30,7 @@ describe('POST /api/newsletter/subscribe', () => {
 
   beforeEach(() => {
     vi.mocked(createClient).mockResolvedValue({
-      from: () => ({ insert: () => ({ select: mockInsert }) }),
+      from: () => ({ insert: mockInsert }),
     } as never)
     mockInsert.mockReset()
     mockEmailSend.mockReset()
@@ -38,7 +38,7 @@ describe('POST /api/newsletter/subscribe', () => {
   })
 
   it('returns 200 on valid new subscriber', async () => {
-    mockInsert.mockResolvedValue({ data: [{ unsubscribe_token: 'abc-123' }], error: null })
+    mockInsert.mockResolvedValue({ error: null })
     const res = await POST(makeRequest({ email: 'test@example.com', source: 'homepage' }))
     expect(res.status).toBe(200)
     const data = await res.json()
@@ -46,7 +46,7 @@ describe('POST /api/newsletter/subscribe', () => {
   })
 
   it('calls resend.emails.send after successful insert', async () => {
-    mockInsert.mockResolvedValue({ data: [{ unsubscribe_token: 'abc-123' }], error: null })
+    mockInsert.mockResolvedValue({ error: null })
     await POST(makeRequest({ email: 'test@example.com', source: 'homepage' }))
     expect(mockEmailSend).toHaveBeenCalledOnce()
     const callArgs = mockEmailSend.mock.calls[0][0] as Record<string, unknown>
@@ -55,7 +55,7 @@ describe('POST /api/newsletter/subscribe', () => {
   })
 
   it('still returns 200 if email send fails (non-blocking)', async () => {
-    mockInsert.mockResolvedValue({ data: [{ unsubscribe_token: 'abc-123' }], error: null })
+    mockInsert.mockResolvedValue({ error: null })
     mockEmailSend.mockRejectedValue(new Error('Resend down'))
     const res = await POST(makeRequest({ email: 'test@example.com', source: 'homepage' }))
     expect(res.status).toBe(200)
