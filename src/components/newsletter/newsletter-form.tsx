@@ -207,11 +207,11 @@ function DuplicateCard() {
       <div style={{ fontFamily: 'var(--font-fraunces, serif)', fontSize: 24, fontWeight: 700, color: '#1A1714', letterSpacing: '-0.4px', marginBottom: 8, position: 'relative', zIndex: 1 }}>
         You&apos;re already on<br />the <span style={{ fontStyle: 'italic', fontWeight: 300, color: '#C9633F' }}>list!</span>
       </div>
-      <p style={{ fontSize: 13, color: '#6B6560', lineHeight: 1.65, marginBottom: 24, position: 'relative', zIndex: 1 }}>
+      <p style={{ fontSize: 13, color: '#6B6560', lineHeight: 1.65, marginBottom: 16, position: 'relative', zIndex: 1 }}>
         Good taste. Next issue drops <strong style={{ color: '#1A1714' }}>this Tuesday</strong> — check your inbox.
       </p>
 
-      <ExpectStrip label="Every Tuesday you'll get" items={expectItems} />
+      <ExpectStrip label="Every Tuesday you'll get" items={expectItems.slice(0, 2)} />
 
       <HintRow
         icon={<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#B0AA9E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>}
