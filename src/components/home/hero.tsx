@@ -200,14 +200,6 @@ export function Hero({ articleCount, pathCount }: HeroProps) {
 
       {/* ── CENTER CONTENT ── */}
       <div className="relative flex flex-col items-center text-center gap-5 max-w-xl mx-auto px-4 lg:px-0 lg:pb-48" style={{ zIndex: 10 }}>
-        {/* Pill badge */}
-        <motion.div {...fadeUp(0)}>
-          <span className="inline-flex items-center gap-2 bg-accent-soft border border-accent/20 text-accent text-sm rounded-full px-4 py-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-accent" aria-hidden="true" />
-            {articleCount} article{articleCount !== 1 ? "s" : ""} · {pathCount} learning path{pathCount !== 1 ? "s" : ""}
-          </span>
-        </motion.div>
-
         {/* H1 */}
         <motion.h1
           {...fadeUp(0.08)}
