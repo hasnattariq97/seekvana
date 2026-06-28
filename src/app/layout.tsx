@@ -70,7 +70,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body className="bg-canvas min-h-screen antialiased">
+      <body className="bg-canvas min-h-screen antialiased" suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
