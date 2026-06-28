@@ -125,7 +125,7 @@ export function Hero({ articleCount, pathCount }: HeroProps) {
             {/* Travelling dot along the line */}
             <circle r="2.5" fill="rgba(201,99,63,0.65)">
               <animateMotion
-                dur={`${3 + Math.random() * 2}s`}
+                dur={l.dur}
                 repeatCount="indefinite"
                 path={`M${l.x1},${l.y1} L${l.x2},${l.y2}`}
               />

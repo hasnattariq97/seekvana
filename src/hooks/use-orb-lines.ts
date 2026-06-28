@@ -8,6 +8,7 @@ export interface LineData {
   x2: number
   y2: number
   id: string
+  dur: string
 }
 
 export interface OrbRefs {
@@ -63,7 +64,7 @@ export function useOrbLines(refs: OrbRefs): LineData[] {
       for (const [id, ref] of orbEntries) {
         if (!ref.current) continue
         const c = getCenter(ref.current, hero)
-        next.push({ id, x1: c.x, y1: c.y, x2: robotCenter.x, y2: robotCenter.y })
+        next.push({ id, x1: c.x, y1: c.y, x2: robotCenter.x, y2: robotCenter.y, dur: `${3 + Math.random() * 2}s` })
       }
       setLines(next)
     }
