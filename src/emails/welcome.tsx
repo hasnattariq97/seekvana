@@ -19,7 +19,7 @@ interface WelcomeEmailProps {
 
 export function WelcomeEmail({
   unsubscribeUrl,
-  cheatsheetUrl = '#',
+  cheatsheetUrl = 'https://seekvana.com/cheatsheet.pdf',
 }: WelcomeEmailProps) {
   return (
     <Html>
