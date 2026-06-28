@@ -1,3 +1,6 @@
+"use client"
+
+import { useState, useEffect } from "react"
 import { NavigationMenu as NavigationMenuPrimitive } from "@base-ui/react/navigation-menu"
 import { cva } from "class-variance-authority"
 
@@ -11,6 +14,9 @@ function NavigationMenu({
   ...props
 }: NavigationMenuPrimitive.Root.Props &
   Pick<NavigationMenuPrimitive.Positioner.Props, "align">) {
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+
   return (
     <NavigationMenuPrimitive.Root
       data-slot="navigation-menu"
@@ -21,7 +27,7 @@ function NavigationMenu({
       {...props}
     >
       {children}
-      <NavigationMenuPositioner align={align} />
+      {mounted && <NavigationMenuPositioner align={align} />}
     </NavigationMenuPrimitive.Root>
   )
 }
