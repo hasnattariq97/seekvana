@@ -7,7 +7,6 @@ import { Navbar } from "@/components/layout/navbar";
 import { SearchModalServer } from "@/components/search/search-modal-server";
 import { AuthModal } from "@/components/auth/auth-modal";
 import { ScrollToTop } from "@/components/scroll-to-top";
-import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 import 'katex/dist/katex.min.css'
 
@@ -72,7 +71,6 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-canvas min-h-screen antialiased">
-        <NextTopLoader color="#C9633F" height={3} showSpinner={false} />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
