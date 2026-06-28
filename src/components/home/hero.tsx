@@ -22,7 +22,7 @@ interface HeroProps {
 function OrbImage({
   src,
   alt,
-  size = 88,
+  size = 120,
   orbRef,
 }: {
   src: string;
@@ -159,7 +159,7 @@ export function Hero({ articleCount, pathCount }: HeroProps) {
         className="absolute hidden lg:block"
         style={{ left: "15%", bottom: "2.5rem", zIndex: 10 }}
       >
-        <OrbImage src="/orbs/Orchestration.png" alt="Orchestration" size={72} orbRef={orbRefs.orchestration} />
+        <OrbImage src="/orbs/Orchestration.png" alt="Orchestration" size={96} orbRef={orbRefs.orchestration} />
       </div>
 
       {/* ── BOTTOM-RIGHT: Deployment (desktop only) ── */}
@@ -167,22 +167,22 @@ export function Hero({ articleCount, pathCount }: HeroProps) {
         className="absolute hidden lg:block"
         style={{ right: "15%", bottom: "2.5rem", zIndex: 10 }}
       >
-        <OrbImage src="/orbs/Deployment.png" alt="Deployment" size={72} orbRef={orbRefs.deployment} />
+        <OrbImage src="/orbs/Deployment.png" alt="Deployment" size={96} orbRef={orbRefs.deployment} />
       </div>
 
       {/* ── ROBOT: bottom-center ── */}
       <div
         ref={orbRefs.robot}
         className="absolute bottom-0 left-1/2 -translate-x-1/2 hidden lg:block"
-        style={{ zIndex: 8 }}
+        style={{ zIndex: 20 }}
       >
         {/* Spotlight ring under robot */}
         <div
           aria-hidden="true"
           className="absolute bottom-0 left-1/2 -translate-x-1/2"
           style={{
-            width: 160,
-            height: 28,
+            width: 200,
+            height: 32,
             background: "radial-gradient(ellipse, rgba(201,99,63,0.55) 0%, transparent 70%)",
             borderRadius: "50%",
           }}
@@ -190,8 +190,8 @@ export function Hero({ articleCount, pathCount }: HeroProps) {
         <Image
           src="/orbs/Robot.png"
           alt="AI Robot"
-          width={140}
-          height={160}
+          width={180}
+          height={200}
           className="relative"
           style={{ zIndex: 2 }}
           priority
@@ -199,7 +199,7 @@ export function Hero({ articleCount, pathCount }: HeroProps) {
       </div>
 
       {/* ── CENTER CONTENT ── */}
-      <div className="relative flex flex-col items-center text-center gap-5 max-w-xl mx-auto px-4 lg:px-0" style={{ zIndex: 10 }}>
+      <div className="relative flex flex-col items-center text-center gap-5 max-w-xl mx-auto px-4 lg:px-0 lg:pb-48" style={{ zIndex: 10 }}>
         {/* Pill badge */}
         <motion.div {...fadeUp(0)}>
           <span className="inline-flex items-center gap-2 bg-accent-soft border border-accent/20 text-accent text-sm rounded-full px-4 py-1.5">
