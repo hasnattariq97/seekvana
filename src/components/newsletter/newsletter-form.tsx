@@ -139,7 +139,7 @@ const cardStyle: React.CSSProperties = {
   background: '#F5F0E8',
   border: '1px solid #D0CAC1',
   borderRadius: 20,
-  padding: '40px 40px 36px',
+  padding: '28px 32px 24px',
   textAlign: 'center',
   boxShadow: '0 24px 64px rgba(26,23,20,0.12),0 4px 16px rgba(26,23,20,0.06),0 2px 0 rgba(255,255,255,0.8) inset',
   position: 'relative',
@@ -178,41 +178,7 @@ function SuccessCard() {
         Your free cheatsheet is on its way now.
       </p>
 
-      {/* Repo preview */}
-      <div style={{
-        background: '#EDE8DF', border: '1px solid #D9D4CB', borderRadius: 10,
-        padding: '12px 14px', textAlign: 'left', marginBottom: 16,
-        position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', gap: 12,
-      }}>
-        <div style={{ width: 36, height: 36, borderRadius: 9, background: '#F5F0E8', border: '1px solid #D0CAC1', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9633F" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
-          </svg>
-        </div>
-        <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 12, fontWeight: 600, color: '#1A1714', marginBottom: 2 }}>Must-Have AI Repos Cheatsheet</div>
-          <div style={{ fontSize: 11, color: '#9E9890' }}>Seekvana&apos;s curated GitHub picks · 2026</div>
-        </div>
-        <div style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em', background: 'rgba(201,99,63,0.1)', border: '1px solid rgba(201,99,63,0.2)', color: '#C9633F', padding: '2px 7px', borderRadius: 20, whiteSpace: 'nowrap' }}>
-          FREE
-        </div>
-      </div>
-
-      <button style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-        width: '100%', padding: 13,
-        background: '#C9633F', border: 'none', borderRadius: 11,
-        fontSize: 13, fontWeight: 700, color: 'white', cursor: 'pointer', fontFamily: 'inherit',
-        boxShadow: '0 1px 0 rgba(255,255,255,0.15) inset,0 6px 20px rgba(201,99,63,0.38)',
-        marginBottom: 14, position: 'relative', zIndex: 1,
-      }}>
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" />
-        </svg>
-        Download Cheatsheet
-      </button>
-
-      <ExpectStrip label="Every Tuesday you'll also get" items={expectItems.slice(0, 2)} />
+      <ExpectStrip label="Every Tuesday you'll get" items={expectItems.slice(0, 2)} />
 
       <HintRow
         icon={<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#B0AA9E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>}
