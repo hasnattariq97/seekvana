@@ -39,7 +39,13 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
+  // Only run auth middleware on routes that actually need it.
+  // Running getUser() on every public page causes Vercel cold-start hangs
+  // that stall RSC fetches and break client-side navigation.
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/profile/:path*',
+    '/u/:path*',
+    '/api/:path*',
+    '/auth/:path*',
   ],
 }
