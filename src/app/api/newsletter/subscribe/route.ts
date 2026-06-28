@@ -39,7 +39,7 @@ export async function POST(request: Request) {
 
     try {
       const result = await resend.emails.send({
-        from: 'Seekvana <hello@seekvana.com>',
+        from: process.env.EMAIL_FROM ?? 'Seekvana <onboarding@resend.dev>',
         to: email.toLowerCase().trim(),
         subject: "You're in — here's your free AI cheatsheet 🎉",
         react: createElement(WelcomeEmail, { unsubscribeUrl }),
