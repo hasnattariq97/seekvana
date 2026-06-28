@@ -25,11 +25,14 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // Refresh session — failures must not block navigation
+  // Refresh session with 1.5s timeout — a hanging promise never throws
   try {
-    await supabase.auth.getUser()
+    await Promise.race([
+      supabase.auth.getUser(),
+      new Promise<void>((resolve) => setTimeout(resolve, 1500)),
+    ])
   } catch {
-    // Supabase unavailable — continue without session refresh
+    // Supabase error — continue without session refresh
   }
 
   return supabaseResponse
