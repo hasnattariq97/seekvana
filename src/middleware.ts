@@ -25,8 +25,12 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // Refresh session — must not be removed
-  await supabase.auth.getUser()
+  // Refresh session — failures must not block navigation
+  try {
+    await supabase.auth.getUser()
+  } catch {
+    // Supabase unavailable — continue without session refresh
+  }
 
   return supabaseResponse
 }
