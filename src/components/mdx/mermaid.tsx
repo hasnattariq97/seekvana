@@ -40,7 +40,6 @@ export function Mermaid({ chart }: MermaidProps) {
   useEffect(() => {
     if (!chart) return
     let active = true
-    setSvg(null)
 
     const t = resolvedTheme === 'dark' ? THEME.dark : THEME.light
 

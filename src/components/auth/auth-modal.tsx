@@ -285,7 +285,7 @@ export function AuthModal() {
                       </div>
                       <div>
                         <p className="text-[12px] font-semibold text-primary mb-0.5">Click the link in your email to sign in</p>
-                        <p className="text-[11px] leading-relaxed" style={{ color: '#9E9890' }}>Check your spam folder if you don't see it within a minute</p>
+                        <p className="text-[11px] leading-relaxed" style={{ color: '#9E9890' }}>Check your spam folder if you don&apos;t see it within a minute</p>
                       </div>
                     </div>
 

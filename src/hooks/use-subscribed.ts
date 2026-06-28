@@ -1,15 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 const KEY = 'sk_subscribed'
 
 export function useSubscribed() {
-  const [subscribed, setSubscribedState] = useState<boolean | null>(null)
-
-  useEffect(() => {
-    setSubscribedState(localStorage.getItem(KEY) === '1')
-  }, [])
+  const [subscribed, setSubscribedState] = useState<boolean | null>(() =>
+    typeof window !== 'undefined' ? localStorage.getItem(KEY) === '1' : null
+  )
 
   function setSubscribed() {
     localStorage.setItem(KEY, '1')

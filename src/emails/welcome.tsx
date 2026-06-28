@@ -24,7 +24,7 @@ export function WelcomeEmail({
   return (
     <Html>
       <Head />
-      <Preview>You're in — your free AI cheatsheet is ready</Preview>
+      <Preview>You&apos;re in — your free AI cheatsheet is ready</Preview>
       <Body style={{ backgroundColor: '#FAF8F3', fontFamily: 'Georgia, serif', margin: 0, padding: 0 }}>
         <Container style={{ maxWidth: '560px', margin: '40px auto', padding: '0 20px' }}>
           {/* Header */}

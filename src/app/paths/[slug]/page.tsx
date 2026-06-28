@@ -73,14 +73,14 @@ export default async function PathPage({ params }: Props) {
   let nextLessonModuleTitle: string | null = null
   if (readSet.length > 0) {
     const readSetObj = new Set(readSet)
-    outer: for (const module of enrichedModules) {
-      for (const topic of module.topics) {
+    outer: for (const mod of enrichedModules) {
+      for (const topic of mod.topics) {
         if (topic.articlePillar && topic.articleSlug) {
           const key = `${topic.articlePillar}/${topic.articleSlug}`
           if (!readSetObj.has(key)) {
             nextLessonHref = `/library/${topic.articlePillar}/${topic.articleSlug}`
             nextLessonTitle = topic.title
-            nextLessonModuleTitle = `Module ${module.id} · ${module.title}`
+            nextLessonModuleTitle = `Module ${mod.id} · ${mod.title}`
             break outer
           }
         }
@@ -90,8 +90,8 @@ export default async function PathPage({ params }: Props) {
 
   // First linkable topic for "Start" button
   let firstLessonHref: string | null = null
-  for (const module of enrichedModules) {
-    for (const topic of module.topics) {
+  for (const mod of enrichedModules) {
+    for (const topic of mod.topics) {
       if (topic.articlePillar && topic.articleSlug) {
         firstLessonHref = `/library/${topic.articlePillar}/${topic.articleSlug}`
         break

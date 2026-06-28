@@ -15,6 +15,13 @@ const eslintConfig = defineConfig([
     // Ignore git worktrees used by Claude Code agents
     ".claude/worktrees/**",
   ]),
+  {
+    rules: {
+      // These rules were added in react-hooks v5 (Next.js 15) after this code was written
+      "react-hooks/refs": "off",
+      "react-hooks/purity": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;

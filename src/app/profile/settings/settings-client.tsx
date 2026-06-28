@@ -4,6 +4,19 @@ import { useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 
+function Toggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
+  return (
+    <button
+      onClick={onToggle}
+      className={`relative w-9 h-5 rounded-full transition-colors flex-shrink-0 cursor-pointer ${on ? 'bg-accent' : 'bg-border'}`}
+    >
+      <span
+        className={`absolute top-[3px] w-3.5 h-3.5 bg-white rounded-full shadow-sm transition-all ${on ? 'left-[19px]' : 'left-[3px]'}`}
+      />
+    </button>
+  )
+}
+
 type Props = {
   userId: string
   email: string
@@ -52,19 +65,6 @@ export function SettingsClient({
     const supabase = createClient()
     await supabase.auth.signOut()
     router.push('/')
-  }
-
-  function Toggle({ on, onToggle }: { on: boolean; onToggle: () => void }) {
-    return (
-      <button
-        onClick={onToggle}
-        className={`relative w-9 h-5 rounded-full transition-colors flex-shrink-0 cursor-pointer ${on ? 'bg-accent' : 'bg-border'}`}
-      >
-        <span
-          className={`absolute top-[3px] w-3.5 h-3.5 bg-white rounded-full shadow-sm transition-all ${on ? 'left-[19px]' : 'left-[3px]'}`}
-        />
-      </button>
-    )
   }
 
   return (

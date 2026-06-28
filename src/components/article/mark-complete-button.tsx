@@ -72,7 +72,7 @@ export function MarkCompleteButton({ pillar, articleSlug, initialCompleted, arti
               </p>
               {articleTitle && (
                 <p className="text-sm text-secondary mt-0.5 line-clamp-1">
-                  "{articleTitle}" marked as read
+                  &quot;{articleTitle}&quot; marked as read
                 </p>
               )}
             </div>
