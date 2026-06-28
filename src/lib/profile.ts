@@ -26,7 +26,6 @@ export type UserProfile = {
 
 export type Badge = {
   id: string
-  emoji: string
   name: string
   description: string
   earned: boolean
@@ -100,7 +99,6 @@ export function calculateBadges(
   return [
     {
       id: '7-day-streak',
-      emoji: '🔥',
       name: '7-Day Streak',
       description: 'Read for 7 consecutive days',
       earned: streak >= 7,
@@ -108,7 +106,6 @@ export function calculateBadges(
     },
     {
       id: '30-day-streak',
-      emoji: '⚡',
       name: '30-Day Streak',
       description: 'Read for 30 consecutive days',
       earned: streak >= 30,
@@ -116,7 +113,6 @@ export function calculateBadges(
     },
     {
       id: 'agentic-explorer',
-      emoji: '🤖',
       name: 'Agent Explorer',
       description: 'Read 10 Agentic AI articles',
       earned: agenticCount >= 10,
@@ -124,7 +120,6 @@ export function calculateBadges(
     },
     {
       id: 'llm-deep-dive',
-      emoji: '🧠',
       name: 'LLM Deep Dive',
       description: 'Read 10 LLM articles',
       earned: llmCount >= 10,
@@ -132,7 +127,6 @@ export function calculateBadges(
     },
     {
       id: 'path-complete',
-      emoji: '🎓',
       name: 'Path Complete',
       description: 'Finish any learning path',
       earned: completedPathSlugs.length > 0,
@@ -140,7 +134,6 @@ export function calculateBadges(
     },
     {
       id: 'master-agentic',
-      emoji: '🏆',
       name: 'Master Agentic',
       description: 'Complete Master Agentic AI path',
       earned: completedPathSlugs.includes('master-agentic-ai'),
