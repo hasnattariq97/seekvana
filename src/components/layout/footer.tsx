@@ -5,18 +5,14 @@ import { useState } from "react";
 
 function FooterLogo() {
   return (
-    <div className="flex items-center gap-2.5">
-      <div className="w-9 h-9 rounded-[10px] bg-primary flex items-center justify-center flex-shrink-0">
-        <svg width="20" height="20" viewBox="0 0 26 26" fill="none" aria-hidden="true">
-          <path
-            d="M18 8.5C18 6.015 15.761 4 13 4C10.239 4 8 6.015 8 8.5C8 10.985 10.239 13 13 13C15.761 13 18 14.015 18 16.5C18 18.985 15.761 21 13 21C10.239 21 8 18.985 8 16.5"
-            stroke="#C9633F"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-          />
-        </svg>
-      </div>
-      <span className="font-fraunces font-bold text-xl leading-none tracking-tight">
+    <div className="flex items-center gap-1.5">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="text-accent">
+        <path d="M12 1.5 L10.5 10.5 L12 12 L13.5 10.5 Z" fill="currentColor" />
+        <path d="M12 22.5 L10.5 13.5 L12 12 L13.5 13.5 Z" fill="currentColor" fillOpacity="0.14" />
+        <path d="M22.5 12 L13.5 10.5 L12 12 L13.5 13.5 Z" fill="currentColor" fillOpacity="0.28" />
+        <path d="M1.5 12 L10.5 10.5 L12 12 L10.5 13.5 Z" fill="currentColor" fillOpacity="0.28" />
+      </svg>
+      <span className="font-fraunces font-bold text-lg leading-none">
         <span className="text-primary">Seek</span>
         <span className="text-accent">vana</span>
       </span>
@@ -155,8 +151,8 @@ export function Footer() {
               { label: "All Paths", href: "/paths" },
               { label: "AI Foundations", href: "/library/ai-foundations" },
             ].map((l) => (
-              <li key={l.href}>
-                <Link href={l.href} className="flex items-center justify-between py-2 border-b border-border text-sm text-secondary hover:text-primary hover:pl-1 transition-all group">
+              <li key={l.href} className="border-b border-border last:border-none">
+                <Link href={l.href} className="flex items-center justify-between py-2 text-sm text-secondary hover:text-primary hover:pl-1 transition-all group">
                   {l.label}
                   <span className="opacity-0 group-hover:opacity-100 text-accent text-xs transition-opacity">→</span>
                 </Link>
@@ -176,8 +172,8 @@ export function Footer() {
               { label: "Prompt Engineering", href: "/library/prompt-engineering" },
               { label: "All 9 Topics →", href: "/library", accent: true },
             ].map((l) => (
-              <li key={l.href}>
-                <Link href={l.href} className={`flex items-center justify-between py-2 border-b border-border text-sm hover:pl-1 transition-all group last:border-none ${l.accent ? "text-accent font-medium hover:text-accent-deep" : "text-secondary hover:text-primary"}`}>
+              <li key={l.href} className="border-b border-border last:border-none">
+                <Link href={l.href} className={`flex items-center justify-between py-2 text-sm hover:pl-1 transition-all group ${l.accent ? "text-accent font-medium hover:text-accent-deep" : "text-secondary hover:text-primary"}`}>
                   {l.label}
                   {!l.accent && <span className="opacity-0 group-hover:opacity-100 text-accent text-xs transition-opacity">→</span>}
                 </Link>
@@ -192,18 +188,14 @@ export function Footer() {
           <ul className="space-y-0">
             {[
               { label: "AI Tool Reviews", href: "/tools" },
-              { label: "Free Repos Cheatsheet", href: "/cheatsheet.pdf", accent: true, badge: "Free" },
               { label: "Glossary", href: "/glossary" },
               { label: "Contact", href: "/contact" },
               { label: "About Seekvana", href: "/about" },
             ].map((l) => (
-              <li key={l.href}>
-                <Link href={l.href} className={`flex items-center justify-between py-2 border-b border-border text-sm hover:pl-1 transition-all group last:border-none ${l.accent ? "text-accent font-medium hover:text-accent-deep" : "text-secondary hover:text-primary"}`}>
-                  <span className="flex items-center gap-2">
-                    {l.label}
-                    {l.badge && <span className="text-[8px] font-bold uppercase tracking-wide bg-accent/10 border border-accent/20 text-accent px-1.5 py-0.5 rounded-full">{l.badge}</span>}
-                  </span>
-                  {!l.accent && <span className="opacity-0 group-hover:opacity-100 text-accent text-xs transition-opacity">→</span>}
+              <li key={l.href} className="border-b border-border last:border-none">
+                <Link href={l.href} className="flex items-center justify-between py-2 text-sm text-secondary hover:text-primary hover:pl-1 transition-all group">
+                  {l.label}
+                  <span className="opacity-0 group-hover:opacity-100 text-accent text-xs transition-opacity">→</span>
                 </Link>
               </li>
             ))}
