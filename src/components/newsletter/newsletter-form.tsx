@@ -158,12 +158,6 @@ const versionTagStyle: React.CSSProperties = {
 function SuccessCard() {
   return (
     <div style={cardStyle}>
-      <style>{`
-        @keyframes seekvana-confetti-fall {
-          0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
-          100% { transform: translateY(380px) rotate(400deg); opacity: 0; }
-        }
-      `}</style>
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
         {confettiPieces.map((p, i) => <ConfettiPiece key={i} piece={p} />)}
       </div>
@@ -192,12 +186,6 @@ function SuccessCard() {
 function DuplicateCard() {
   return (
     <div style={cardStyle}>
-      <style>{`
-        @keyframes seekvana-confetti-fall {
-          0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
-          100% { transform: translateY(380px) rotate(400deg); opacity: 0; }
-        }
-      `}</style>
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}>
         {confettiPieces.map((p, i) => <ConfettiPiece key={i} piece={p} />)}
       </div>
