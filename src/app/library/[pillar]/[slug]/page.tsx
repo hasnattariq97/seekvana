@@ -271,7 +271,7 @@ export default async function ArticlePage({ params }: PageProps) {
 
             {/* Mark complete */}
             <div className="flex justify-center my-8">
-              <MarkCompleteButton pillar={pillar} articleSlug={slug} initialCompleted={isCompleted} />
+              <MarkCompleteButton pillar={pillar} articleSlug={slug} initialCompleted={isCompleted} articleTitle={frontmatter.title} />
             </div>
 
             {/* Feedback */}
