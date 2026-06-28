@@ -1,6 +1,12 @@
+'use client'
+
+import { useSubscribed } from '@/hooks/use-subscribed'
 import { NewsletterForm } from './newsletter-form'
 
 export function NewsletterSection() {
+  const { subscribed, setSubscribed } = useSubscribed()
+  if (subscribed === null || subscribed) return null
+
   return (
     <section className="w-full bg-canvas border-t border-border">
       <div className="max-w-screen-xl mx-auto px-4 md:px-6 lg:px-8 py-12">
@@ -32,7 +38,7 @@ export function NewsletterSection() {
             </ul>
 
             <div className="max-w-sm">
-              <NewsletterForm source="homepage" />
+              <NewsletterForm source="homepage" onSuccess={setSubscribed} />
             </div>
 
             <p className="text-xs text-secondary">

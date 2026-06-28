@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useSubscribed } from "@/hooks/use-subscribed";
 
 function FooterLogo() {
   return (
@@ -23,6 +24,7 @@ function FooterLogo() {
 function FooterNewsletter() {
   const [email, setEmail] = useState("");
   const [state, setState] = useState<"idle" | "loading" | "success" | "duplicate" | "error">("idle");
+  const { subscribed, setSubscribed } = useSubscribed();
 
   const handleSubmit = async () => {
     if (!email.trim()) return;
@@ -34,12 +36,16 @@ function FooterNewsletter() {
         body: JSON.stringify({ email: email.trim(), source: "footer" }),
       });
       if (res.status === 409) { setState("duplicate"); return; }
-      setState(res.ok ? "success" : "error");
+      if (res.ok) { setState("success"); setSubscribed(); return; }
+      setState("error");
     } catch {
       setState("error");
     }
   };
 
+  if (subscribed) return (
+    <p className="text-sm text-secondary">You&apos;re already subscribed. See you Tuesday!</p>
+  );
   if (state === "success") return (
     <p className="text-sm text-accent font-medium">You&apos;re in — see you Tuesday! 🎉</p>
   );

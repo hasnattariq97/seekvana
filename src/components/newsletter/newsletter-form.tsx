@@ -8,6 +8,7 @@ type FormState = 'idle' | 'loading' | 'success' | 'error' | 'duplicate'
 type NewsletterFormProps = {
   source: 'homepage' | 'post-article'
   dark?: boolean
+  onSuccess?: () => void
 }
 
 const confettiPieces = [
@@ -221,7 +222,7 @@ function DuplicateCard() {
   )
 }
 
-export function NewsletterForm({ source, dark = false }: NewsletterFormProps) {
+export function NewsletterForm({ source, dark = false, onSuccess }: NewsletterFormProps) {
   const [email, setEmail] = useState('')
   const [state, setState] = useState<FormState>('idle')
   const [errorMsg, setErrorMsg] = useState('')
@@ -261,6 +262,7 @@ export function NewsletterForm({ source, dark = false }: NewsletterFormProps) {
         return
       }
       setState('success')
+      onSuccess?.()
     } catch {
       setState('error')
       setErrorMsg('Something went wrong. Try again?')
