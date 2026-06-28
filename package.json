@@ -13,6 +13,7 @@
   "dependencies": {
     "@base-ui/react": "^1.5.0",
     "@codesandbox/sandpack-react": "^2.20.0",
+    "@radix-ui/react-navigation-menu": "^1.2.16",
     "@react-email/components": "^1.0.12",
     "@react-email/render": "^2.0.9",
     "@supabase/ssr": "^0.12.0",

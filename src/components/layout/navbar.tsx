@@ -82,7 +82,7 @@ function DesktopNav() {
 
         {/* Learning Paths dropdown */}
         <NavigationMenuItem>
-          <NavigationMenuTrigger className="text-sm text-secondary bg-transparent hover:text-primary hover:bg-surface-subtle data-popup-open:bg-surface-subtle data-popup-open:text-primary">
+          <NavigationMenuTrigger className="text-sm text-secondary bg-transparent hover:text-primary hover:bg-surface-subtle data-[state=open]:bg-surface-subtle data-[state=open]:text-primary">
             Learning Paths
           </NavigationMenuTrigger>
           <NavigationMenuContent>
@@ -119,7 +119,7 @@ function DesktopNav() {
 
         {/* Library mega-menu */}
         <NavigationMenuItem>
-          <NavigationMenuTrigger className="text-sm text-secondary bg-transparent hover:text-primary hover:bg-surface-subtle data-popup-open:bg-surface-subtle data-popup-open:text-primary">
+          <NavigationMenuTrigger className="text-sm text-secondary bg-transparent hover:text-primary hover:bg-surface-subtle data-[state=open]:bg-surface-subtle data-[state=open]:text-primary">
             Library
           </NavigationMenuTrigger>
           <NavigationMenuContent>
