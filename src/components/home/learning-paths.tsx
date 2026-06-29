@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import {
-  ArrowRight, ImageIcon,
+  ArrowRight,
   Brain, Terminal, Monitor, GitBranch, Code2,
   Globe, Database, Cpu, Rocket, Star,
 } from "lucide-react";
@@ -63,33 +64,16 @@ export function LearningPaths() {
           <div className="grid grid-cols-1 md:grid-cols-[38%_62%]">
 
             {/* Image — top on mobile, right on desktop */}
-            <div className="relative bg-accent overflow-hidden h-52 md:h-auto md:min-h-[420px] order-first md:order-last flex items-center justify-center">
-              {/* Dot texture */}
-              <div
-                className="absolute inset-0 opacity-[0.1] pointer-events-none"
-                style={{
-                  backgroundImage: "radial-gradient(circle, white 1.2px, transparent 1.2px)",
-                  backgroundSize: "20px 20px",
-                }}
+            <div className="relative overflow-hidden h-52 md:h-auto md:min-h-[420px] order-first md:order-last bg-surface-subtle">
+              <Image
+                src="/images/paths/getting-started/cover.png"
+                alt="Getting Started learning path — a robot's journey through 10 AI modules"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 62vw"
+                priority
               />
-              {/* Decorative blobs */}
-              <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-white/10 pointer-events-none" />
-              <div className="absolute -bottom-16 -left-16 w-56 h-56 rounded-full bg-black/10 pointer-events-none" />
-
-              {/* Placeholder */}
-              <div className="relative z-10 flex flex-col items-center gap-2 text-center px-6">
-                <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center mb-1">
-                  <ImageIcon size={16} className="text-white/80" aria-hidden="true" />
-                </div>
-                <p className="text-[11px] font-semibold text-white/70">Your illustration</p>
-                <p className="text-[15px] font-bold text-white font-mono tracking-tight">1200 × 800 px</p>
-                <p className="text-[10px] text-white/50 leading-relaxed mt-0.5">
-                  WebP · object-cover<br />
-                  <code className="text-[9px] text-white/35">public/images/paths/getting-started/cover.webp</code>
-                </p>
-              </div>
-
-              <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-[0.05] transition-opacity duration-300 pointer-events-none" />
+              <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-[0.03] transition-opacity duration-300 pointer-events-none" />
             </div>
 
             {/* Content — bottom on mobile, left on desktop */}
