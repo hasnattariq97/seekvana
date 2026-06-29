@@ -38,11 +38,11 @@ export function NewsletterSection() {
             </ul>
 
             <div className="max-w-sm">
-              <NewsletterForm source="homepage" onSuccess={setSubscribed} />
+              <NewsletterForm source="homepage" onSuccess={() => setTimeout(setSubscribed, 4000)} />
             </div>
 
             <p className="text-xs text-secondary">
-              Join 10,000+ learners · Unsubscribe anytime
+              Unsubscribe anytime
             </p>
           </div>
 
