@@ -62,20 +62,18 @@ function TaglineCycle() {
   const word = CYCLE_WORDS[index];
 
   return (
-    <span className="block overflow-hidden">
-      <AnimatePresence mode="popLayout" initial={false}>
-        <motion.span
-          key={word}
-          initial={{ y: "100%" }}
-          animate={{ y: 0 }}
-          exit={{ y: "-100%" }}
-          transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
-          className="block text-accent"
-        >
-          {word}
-        </motion.span>
-      </AnimatePresence>
-    </span>
+    <AnimatePresence mode="wait" initial={false}>
+      <motion.span
+        key={word}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.15 }}
+        className="block text-accent"
+      >
+        {word}
+      </motion.span>
+    </AnimatePresence>
   );
 }
 
