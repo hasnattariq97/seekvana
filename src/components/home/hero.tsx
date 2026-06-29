@@ -59,24 +59,24 @@ function TaglineCycle() {
     return () => clearInterval(id);
   }, []);
 
+  const word = CYCLE_WORDS[index];
+  const isLast = word === "TOGETHER";
+
   return (
-    <div className="inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.18em] text-secondary">
-      <span className="w-5 h-px bg-accent" aria-hidden="true" />
-      <span className="relative inline-flex h-5 w-24 overflow-hidden items-center">
-        <AnimatePresence mode="popLayout" initial={false}>
-          <motion.span
-            key={CYCLE_WORDS[index]}
-            initial={{ y: 14, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -14, opacity: 0 }}
-            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute text-accent"
-          >
-            {CYCLE_WORDS[index]}
-          </motion.span>
-        </AnimatePresence>
-      </span>
-    </div>
+    <span className="block overflow-hidden">
+      <AnimatePresence mode="popLayout" initial={false}>
+        <motion.span
+          key={word}
+          initial={{ y: "100%" }}
+          animate={{ y: 0 }}
+          exit={{ y: "-100%" }}
+          transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
+          className={`block ${isLast ? "text-accent" : "text-primary"}`}
+        >
+          {word}
+        </motion.span>
+      </AnimatePresence>
+    </span>
   );
 }
 
@@ -89,14 +89,9 @@ export function Hero() {
 
         {/* Left content */}
         <div className="flex flex-col items-start">
-          {/* Animated tagline */}
-          <TaglineCycle />
-
-          {/* Headline */}
-          <h1 className="mt-6 font-fraunces text-6xl font-semibold leading-[0.95] tracking-tight text-balance text-primary sm:text-7xl">
-            Learn AI,
-            <br />
-            <span className="text-accent">clearly.</span>
+          {/* Animated headline */}
+          <h1 className="font-fraunces text-7xl font-semibold leading-[0.95] tracking-tight sm:text-8xl">
+            <TaglineCycle />
           </h1>
 
           {/* Description */}
