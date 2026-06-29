@@ -86,12 +86,7 @@ function DesktopNav() {
             Learning Paths
           </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <motion.div
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.15 }}
-              className="w-72 p-2"
-            >
+            <div className="w-72 p-2">
               {LEARNING_PATHS_META.map((path) => (
                 <NavigationMenuLink
                   key={path.href}
@@ -113,7 +108,7 @@ function DesktopNav() {
                   Browse all paths →
                 </NavigationMenuLink>
               </div>
-            </motion.div>
+            </div>
           </NavigationMenuContent>
         </NavigationMenuItem>
 
@@ -123,12 +118,7 @@ function DesktopNav() {
             Library
           </NavigationMenuTrigger>
           <NavigationMenuContent>
-            <motion.div
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.15 }}
-              className="grid grid-cols-2 gap-x-2 p-3 w-[400px]"
-            >
+            <div className="grid grid-cols-2 gap-x-2 p-3 w-[400px]">
               {PILLARS.map((pillar) => (
                 <NavigationMenuLink
                   key={pillar.href}
@@ -144,7 +134,7 @@ function DesktopNav() {
                   {pillar.label}
                 </NavigationMenuLink>
               ))}
-            </motion.div>
+            </div>
           </NavigationMenuContent>
         </NavigationMenuItem>
 
