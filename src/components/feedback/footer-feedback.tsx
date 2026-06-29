@@ -66,6 +66,7 @@ export function FooterFeedback() {
         onClick={() => setOpen((v) => !v)}
         className="w-full flex items-center justify-between px-6 md:px-14 py-4 text-sm text-secondary hover:text-primary transition-colors group"
         aria-expanded={open}
+        aria-controls="footer-feedback-panel"
       >
         <span className="font-medium">Send feedback</span>
         <ChevronDown
@@ -77,6 +78,7 @@ export function FooterFeedback() {
 
       {/* Expandable panel */}
       <div
+        id="footer-feedback-panel"
         style={{
           display: 'grid',
           gridTemplateRows: open ? '1fr' : '0fr',
@@ -112,7 +114,9 @@ export function FooterFeedback() {
 
                 {/* Message */}
                 <div className="mb-3">
+                  <label htmlFor="feedback-message" className="sr-only">Message</label>
                   <textarea
+                    id="feedback-message"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     rows={4}
@@ -131,7 +135,9 @@ export function FooterFeedback() {
                 {/* Email + submit row */}
                 <div className="flex flex-col sm:flex-row gap-2">
                   <div className="flex-1">
+                    <label htmlFor="feedback-email" className="sr-only">Email address</label>
                     <input
+                      id="feedback-email"
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
