@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useId } from 'react'
-import { useReducedMotion } from 'framer-motion'
 
 interface FAQProps {
   children: React.ReactNode
@@ -31,7 +30,6 @@ export function FAQ({ children, heading = 'Common questions' }: FAQProps) {
 
 export function FAQItem({ question, children }: FAQItemProps) {
   const [open, setOpen] = useState(false)
-  const shouldReduce = useReducedMotion()
   const id = useId()
 
   return (
@@ -69,7 +67,7 @@ export function FAQItem({ question, children }: FAQItemProps) {
             strokeWidth="1.8"
             strokeLinecap="round"
             style={{
-              transition: shouldReduce ? undefined : 'transform 0.25s ease',
+              transition: 'transform 0.25s ease',
               transform: open ? 'rotate(45deg)' : 'rotate(0deg)',
             }}
           >
@@ -86,7 +84,7 @@ export function FAQItem({ question, children }: FAQItemProps) {
         style={{
           display: 'grid',
           gridTemplateRows: open ? '1fr' : '0fr',
-          transition: shouldReduce ? undefined : 'grid-template-rows 0.28s ease',
+          transition: 'grid-template-rows 0.28s ease',
         }}
       >
         <div style={{ overflow: 'hidden' }}>

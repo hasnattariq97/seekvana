@@ -1,13 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { ThumbsUp, ThumbsDown } from 'lucide-react'
 
 export function ArticleFeedback() {
   const [vote, setVote] = useState<'up' | 'down' | null>(null)
-  const shouldReduceMotion = useReducedMotion()
-
   return (
     <div className="bg-surface-subtle rounded-xl p-5 flex flex-wrap items-center gap-4">
       <span className="text-sm text-primary font-medium">Was this article helpful?</span>
@@ -39,7 +37,7 @@ export function ArticleFeedback() {
       </div>
       {vote && (
         <motion.span
-          initial={shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 4 }}
+          initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-sm text-secondary"
         >
