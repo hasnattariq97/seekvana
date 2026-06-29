@@ -1,11 +1,48 @@
 "use client";
 
 import Link from "next/link";
-import { Search } from "lucide-react";
-import { motion } from "framer-motion";
+import Image from "next/image";
+import {
+  Search,
+  ArrowRight,
+  MessageSquareText,
+  Bot,
+  Wrench,
+  Share2,
+  Brain,
+  BarChart3,
+  CloudUpload,
+  UserRound,
+  Rocket,
+  ShieldCheck,
+  Lightbulb,
+} from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { useSearch } from "@/context/search-context";
 
-const SEARCH_CHIPS = ["Agentic AI", "RAG", "Prompting", "Evals"] as const;
+const TOPIC_CHIPS = ["Agentic AI", "RAG", "Prompting", "Evals"] as const;
+
+const TRUST_ITEMS: { label: string; Icon: LucideIcon }[] = [
+  { label: "Beginner Friendly", Icon: UserRound },
+  { label: "Production Focused", Icon: Rocket },
+  { label: "Expert Crafted", Icon: ShieldCheck },
+  { label: "Practical Examples", Icon: Lightbulb },
+];
+
+const FLOATING_CARDS: {
+  label: string;
+  Icon: LucideIcon;
+  className: string;
+  delay: string;
+}[] = [
+  { label: "Prompt Engineering", Icon: MessageSquareText, className: "left-[2%] top-[16%]",                delay: "0s"   },
+  { label: "Agentic AI",         Icon: Bot,               className: "left-1/2 top-[4%] -translate-x-1/2", delay: "0.5s" },
+  { label: "Tools",              Icon: Wrench,            className: "right-[2%] top-[16%]",               delay: "1s"   },
+  { label: "RAG",                Icon: Share2,            className: "left-[0%] top-[44%]",                delay: "1.4s" },
+  { label: "LLMs",               Icon: Brain,             className: "right-[0%] top-[44%]",               delay: "0.8s" },
+  { label: "Evals",              Icon: BarChart3,         className: "left-[4%] bottom-[18%]",             delay: "1.2s" },
+  { label: "Deploy",             Icon: CloudUpload,       className: "right-[4%] bottom-[14%]",            delay: "0.3s" },
+];
 
 interface HeroProps {
   articleCount: number;
@@ -16,124 +53,116 @@ export function Hero({ articleCount, pathCount }: HeroProps) {
   const { openSearch } = useSearch();
 
   return (
-    <section className="relative flex flex-col items-center justify-center min-h-[80vh] bg-canvas overflow-hidden px-4">
-      {/* Subtle background glow */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
+    <section className="relative overflow-hidden bg-canvas">
+      <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 py-14 md:py-20 lg:grid-cols-[1fr_1.1fr] lg:gap-6">
+
+        {/* Left content */}
+        <div className="flex flex-col items-start">
+          {/* Pill badge */}
+          <div className="inline-flex items-center gap-2 rounded-full bg-accent-soft px-4 py-1.5 text-sm font-medium text-accent">
+            <span className="size-1.5 rounded-full bg-accent" aria-hidden="true" />
+            {articleCount} articles · {pathCount} learning paths
+          </div>
+
+          {/* Headline */}
+          <h1 className="mt-6 font-fraunces text-6xl font-semibold leading-[0.95] tracking-tight text-balance text-primary sm:text-7xl">
+            Learn AI,
+            <br />
+            <span className="text-accent">clearly.</span>
+          </h1>
+
+          {/* Description */}
+          <p className="mt-6 max-w-md text-lg leading-relaxed text-secondary">
+            From your first prompt to production-grade agents — clear, well-sourced writing for beginners and builders alike.
+          </p>
+
+          {/* Search bar */}
+          <button
+            onClick={openSearch}
+            className="mt-8 flex w-full max-w-md items-center gap-3 rounded-2xl border border-border bg-surface px-4 py-3.5 shadow-sm text-left hover:ring-2 hover:ring-accent/20 focus-visible:ring-2 focus-visible:ring-accent/40 focus-visible:outline-none transition-all"
+            aria-label="Open search"
+          >
+            <Search className="size-5 shrink-0 text-secondary" aria-hidden="true" />
+            <span className="text-base text-secondary">What do you want to understand?</span>
+          </button>
+
+          {/* Topic chips */}
+          <div className="mt-4 flex flex-wrap gap-2.5">
+            {TOPIC_CHIPS.map((chip) => (
+              <button
+                key={chip}
+                type="button"
+                onClick={openSearch}
+                className="rounded-full border border-border bg-surface px-4 py-2 text-sm font-medium text-secondary transition-colors hover:border-accent/40 hover:text-primary focus-visible:ring-2 focus-visible:ring-accent/30 focus-visible:outline-none"
+              >
+                {chip}
+              </button>
+            ))}
+          </div>
+
+          {/* CTA buttons */}
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+            <Link
+              href="/paths/getting-started"
+              className="inline-flex items-center gap-2 rounded-xl bg-accent px-7 py-3.5 text-base font-semibold text-white shadow-sm hover:bg-accent-deep focus-visible:ring-2 focus-visible:ring-accent/40 focus-visible:ring-offset-2 focus-visible:outline-none transition-colors"
+            >
+              Start Learning <ArrowRight className="size-4" aria-hidden="true" />
+            </Link>
+            <Link
+              href="/library"
+              className="inline-flex items-center justify-center rounded-xl border border-border bg-surface px-7 py-3.5 text-base font-semibold text-primary hover:bg-surface-subtle focus-visible:ring-2 focus-visible:ring-accent/30 focus-visible:ring-offset-2 focus-visible:outline-none transition-colors"
+            >
+              Explore Library
+            </Link>
+          </div>
+
+          {/* Trust row */}
+          <ul className="mt-10 flex flex-wrap gap-x-6 gap-y-3">
+            {TRUST_ITEMS.map(({ label, Icon }) => (
+              <li key={label} className="flex items-center gap-2 text-sm font-medium text-secondary">
+                <Icon className="size-4 text-accent" aria-hidden="true" />
+                {label}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Right visual */}
+        <div className="relative w-full">
+          <HeroVisual />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HeroVisual() {
+  return (
+    <div className="relative mx-auto aspect-square w-full max-w-2xl">
+      {/* Scene illustration with edge fade */}
+      <Image
+        src="/seekvana-scene.png"
+        alt="A friendly AI robot holding a laptop, sitting on a stack of books surrounded by coffee, a plant, and a notebook"
+        fill
+        className="object-contain"
+        priority
         style={{
-          background:
-            "radial-gradient(ellipse 80% 50% at 50% 0%, rgba(201,99,63,0.08) 0%, transparent 70%)",
+          WebkitMaskImage: "radial-gradient(circle at 50% 50%, black 60%, transparent 92%)",
+          maskImage: "radial-gradient(circle at 50% 50%, black 60%, transparent 92%)",
         }}
       />
 
-      <div className="relative z-10 flex flex-col items-center text-center gap-6 max-w-2xl mx-auto py-24 md:py-32">
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      {/* Floating topic cards */}
+      {FLOATING_CARDS.map(({ label, Icon, className, delay }) => (
+        <div
+          key={label}
+          className={`absolute ${className} flex items-center gap-2 rounded-2xl border border-border/60 bg-surface/85 px-3.5 py-2.5 shadow-lg backdrop-blur-sm`}
+          style={{ animation: `seekvana-float 5s ease-in-out ${delay} infinite` }}
         >
-          <span className="inline-flex items-center gap-2 bg-accent-soft text-accent text-sm rounded-full px-4 py-1.5 font-medium">
-            <span className="w-1.5 h-1.5 rounded-full bg-accent inline-block" />
-            {articleCount} articles · {pathCount} learning paths
-          </span>
-        </motion.div>
-
-        {/* Headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
-          className="font-fraunces text-5xl md:text-6xl font-medium text-primary leading-tight tracking-tight text-balance"
-        >
-          Learn AI,{" "}
-          <span className="text-accent">clearly.</span>
-        </motion.h1>
-
-        {/* Subheading */}
-        <motion.p
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1], delay: 0.16 }}
-          className="font-inter text-lg text-secondary max-w-lg mx-auto leading-relaxed"
-        >
-          From your first prompt to production-grade agents — clear, well-sourced
-          writing for beginners and builders alike.
-        </motion.p>
-
-        {/* Search bar */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.22 }}
-          className="w-full max-w-md"
-        >
-          <button
-            onClick={openSearch}
-            className="flex items-center gap-3 w-full rounded-xl border border-border bg-surface px-4 py-3 text-left text-secondary hover:ring-2 hover:ring-accent/30 focus-visible:ring-2 focus-visible:ring-accent/30 focus-visible:outline-none transition-all"
-          >
-            <Search size={18} className="shrink-0 text-secondary" />
-            <span className="text-sm">What do you want to understand?</span>
-          </button>
-        </motion.div>
-
-        {/* Quick chips */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.27 }}
-          className="flex flex-wrap justify-center gap-2"
-        >
-          {SEARCH_CHIPS.map((chip) => (
-            <button
-              key={chip}
-              onClick={openSearch}
-              className="bg-surface-subtle border border-border rounded-full text-sm text-secondary px-4 py-1.5 hover:text-accent hover:border-accent focus-visible:ring-2 focus-visible:ring-accent/30 focus-visible:outline-none transition-colors"
-            >
-              {chip}
-            </button>
-          ))}
-        </motion.div>
-
-        {/* CTAs */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.33 }}
-          className="flex flex-col sm:flex-row gap-3"
-        >
-          <Link
-            href="/paths/getting-started"
-            className="bg-accent text-white rounded-lg px-8 py-3 font-medium hover:bg-accent-deep focus-visible:ring-2 focus-visible:ring-accent/30 focus-visible:ring-offset-2 focus-visible:outline-none transition-colors"
-          >
-            Start Learning →
-          </Link>
-          <Link
-            href="/library"
-            className="border border-border text-primary rounded-lg px-6 py-3 font-medium hover:bg-surface-subtle focus-visible:ring-2 focus-visible:ring-accent/30 focus-visible:ring-offset-2 focus-visible:outline-none transition-colors"
-          >
-            Explore Library
-          </Link>
-        </motion.div>
-
-        {/* Trust row */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.45 }}
-          className="flex flex-wrap justify-center gap-x-5 gap-y-1 text-sm text-secondary pt-1"
-        >
-          {["Beginner Friendly", "Production Focused", "Expert Crafted", "Practical Examples"].map(
-            (label) => (
-              <span key={label} className="flex items-center gap-1.5">
-                <span className="text-accent text-xs" aria-hidden="true">✦</span>
-                {label}
-              </span>
-            )
-          )}
-        </motion.div>
-      </div>
-    </section>
+          <Icon className="size-4 shrink-0 text-accent" aria-hidden="true" />
+          <span className="text-xs font-semibold uppercase tracking-wide text-primary">{label}</span>
+        </div>
+      ))}
+    </div>
   );
 }
