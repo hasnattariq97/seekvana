@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useSubscribed } from "@/hooks/use-subscribed";
+import { FooterFeedback } from "@/components/feedback/footer-feedback";
 
 function FooterLogo() {
   return (
@@ -208,6 +209,9 @@ export function Footer() {
           </ul>
         </div>
       </div>
+
+      {/* Feedback accordion */}
+      <FooterFeedback />
 
       {/* Bottom bar */}
       <div className="max-w-screen-xl mx-auto px-6 md:px-14 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
