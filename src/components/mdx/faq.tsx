@@ -34,8 +34,8 @@ export function FAQItem({ question, children }: FAQItemProps) {
 
   return (
     <li
-      className={`border-b border-border rounded-sm transition-colors duration-200 ${
-        open ? 'bg-accent-soft' : ''
+      className={`group/faq border-b border-border rounded-sm transition-colors duration-200 ${
+        open ? 'bg-accent-soft' : 'hover:bg-surface-subtle'
       }`}
     >
       <button
@@ -47,7 +47,7 @@ export function FAQItem({ question, children }: FAQItemProps) {
       >
         <span
           className={`font-fraunces text-lg font-medium leading-snug transition-colors duration-150 ${
-            open ? 'text-accent-deep' : 'text-primary'
+            open ? 'text-accent-deep' : 'text-primary group-hover/faq:text-accent'
           }`}
         >
           {question}
@@ -55,7 +55,7 @@ export function FAQItem({ question, children }: FAQItemProps) {
         <span
           aria-hidden="true"
           className={`shrink-0 mt-0.5 transition-colors duration-150 ${
-            open ? 'text-accent-deep' : 'text-secondary'
+            open ? 'text-accent-deep' : 'text-secondary group-hover/faq:text-accent'
           }`}
         >
           <svg
