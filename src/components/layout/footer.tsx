@@ -87,37 +87,6 @@ export function Footer() {
   return (
     <footer className="bg-surface-subtle border-t border-border">
 
-      {/* Top band — mission + newsletter */}
-      <div className="max-w-screen-xl mx-auto px-6 md:px-14 py-10 grid md:grid-cols-2 gap-10 md:gap-16 border-b border-border">
-
-        {/* Mission */}
-        <div>
-          <p className="text-[10px] font-semibold uppercase tracking-widest text-accent mb-3">Our mission</p>
-          <p className="font-fraunces text-2xl font-light italic text-primary leading-snug mb-6">
-            Making AI education <strong className="font-bold not-italic text-accent">free</strong><br className="hidden md:block" /> for every human on earth.
-          </p>
-          <div className="flex gap-8">
-            {[
-              { num: "30+", lbl: "Free articles" },
-              { num: "9", lbl: "Topic pillars" },
-              { num: "∞", lbl: "Always free" },
-            ].map((s) => (
-              <div key={s.lbl}>
-                <div className="font-fraunces text-2xl font-bold text-primary leading-none">{s.num}</div>
-                <div className="text-xs text-secondary mt-1 font-medium">{s.lbl}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Newsletter */}
-        <div className="flex flex-col justify-center gap-3">
-          <p className="text-[10px] font-semibold uppercase tracking-widest text-accent">Weekly newsletter · free</p>
-          <p className="font-fraunces text-base font-bold text-primary tracking-tight">AI knowledge, every Tuesday.</p>
-          <FooterNewsletter />
-        </div>
-      </div>
-
       {/* Nav grid */}
       <div className="max-w-screen-xl mx-auto px-6 md:px-14 py-10 grid grid-cols-2 md:grid-cols-4 gap-10 border-b border-border">
 
