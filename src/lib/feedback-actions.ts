@@ -65,8 +65,8 @@ export async function submitFeedback(
       `Email:   ${email || 'not provided'}`,
       `Page:    ${pageUrl || 'unknown'}`,
     ].join('\n'),
-  }).catch(() => {
-    // Email failure does not block submission
+  }).catch((err: unknown) => {
+    console.error('[feedback] email notification failed:', err)
   })
 
   return { success: true }
