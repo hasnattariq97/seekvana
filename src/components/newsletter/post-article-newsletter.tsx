@@ -11,7 +11,7 @@ export function PostArticleNewsletter() {
   if (subscribed === null || subscribed) return null
 
   return (
-    <div className="relative bg-canvas border border-border rounded-2xl px-8 py-9 overflow-hidden my-12">
+    <div className="relative bg-surface border border-border rounded-2xl px-8 py-9 overflow-hidden my-12" style={{ boxShadow: '0 2px 16px rgba(26,23,20,0.07)' }}>
       {/* Subtle top-right glow */}
       <div
         aria-hidden="true"
