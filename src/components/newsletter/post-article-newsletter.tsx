@@ -3,12 +3,6 @@
 import { useSubscribed } from '@/hooks/use-subscribed'
 import { NewsletterForm } from './newsletter-form'
 
-const PILLS = [
-  { label: 'AI Agents', accent: true },
-  { label: 'Tool picks', accent: false },
-  { label: 'Practical guides', accent: true },
-  { label: 'Cheatsheets', accent: false },
-]
 
 export function PostArticleNewsletter() {
   const { subscribed, setSubscribed } = useSubscribed()
@@ -17,7 +11,7 @@ export function PostArticleNewsletter() {
   if (subscribed === null || subscribed) return null
 
   return (
-    <div className="relative bg-canvas border border-border rounded-2xl px-8 py-9 overflow-hidden grid grid-cols-1 sm:grid-cols-[1fr_auto] gap-8 items-center my-12">
+    <div className="relative bg-canvas border border-border rounded-2xl px-8 py-9 overflow-hidden my-12">
       {/* Subtle top-right glow */}
       <div
         aria-hidden="true"
@@ -61,27 +55,6 @@ export function PostArticleNewsletter() {
         </div>
       </div>
 
-      {/* Right: reader count + content pills */}
-      <div className="hidden sm:flex flex-col items-end gap-3 pr-2 relative">
-        <div>
-          <div className="font-fraunces text-[42px] font-medium text-accent leading-none tracking-tight text-right">4.2k</div>
-          <div className="text-[11px] uppercase tracking-[0.06em] text-secondary text-right mt-1">readers</div>
-        </div>
-        <div className="flex flex-col gap-2 items-end mt-2">
-          {PILLS.map((p) => (
-            <span
-              key={p.label}
-              className={`text-[11.5px] font-medium px-3.5 py-1.5 rounded-full whitespace-nowrap border ${
-                p.accent
-                  ? 'bg-accent-soft border-accent/20 text-accent'
-                  : 'bg-surface-subtle border-border text-secondary'
-              }`}
-            >
-              {p.label}
-            </span>
-          ))}
-        </div>
-      </div>
     </div>
   )
 }
