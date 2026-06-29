@@ -28,8 +28,8 @@ export function PostArticleNewsletter() {
         </p>
 
         <h3 className="font-fraunces text-[28px] font-medium leading-[1.2] text-primary tracking-tight mb-3">
-          The <em className="italic text-accent not-italic" style={{ fontStyle: 'italic' }}>sharpest</em> AI reads,<br />
-          every Tuesday.
+          Help me build the AI newsletter<br />
+          I always wanted to <em style={{ fontStyle: 'italic', color: 'var(--color-accent)' }}>read.</em>
         </h3>
 
         <p className="text-sm text-secondary leading-relaxed mb-6 max-w-sm">
