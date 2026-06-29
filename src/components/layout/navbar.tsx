@@ -251,7 +251,7 @@ function MobileNav({ onClose }: { onClose: () => void }) {
             }}
             className="flex w-full items-center justify-center bg-accent text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-accent-deep transition-colors"
           >
-            Get started
+            Join Seekvana
           </button>
         )}
       </div>
@@ -278,7 +278,7 @@ function UserButton() {
         }}
         className="hidden md:inline-flex items-center bg-accent text-white rounded-lg px-4 py-2 text-sm font-medium hover:bg-accent-deep transition-colors"
       >
-        Get started
+        Join Seekvana
       </button>
     )
   }
