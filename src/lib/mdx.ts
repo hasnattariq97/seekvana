@@ -148,6 +148,10 @@ export interface PathModule {
 
 export interface PathData extends PathDefinition {
   subtitle?: string
+  heroTitle?: string
+  pills?: string[]
+  learnerCount?: number
+  coverImage?: string
   modules: PathModule[]
   nextPath?: {
     title: string
