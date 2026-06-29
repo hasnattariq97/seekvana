@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useState, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   Search,
   ArrowRight,
@@ -19,6 +21,9 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useSearch } from "@/context/search-context";
+
+const CYCLE_WORDS = ["LEARN", "BUILD", "GROW", "TOGETHER"] as const;
+const CYCLE_INTERVAL_MS = 2000;
 
 const TOPIC_CHIPS = ["Agentic AI", "RAG", "Prompting", "Evals"] as const;
 
@@ -44,12 +49,38 @@ const FLOATING_CARDS: {
   { label: "Deploy",             Icon: CloudUpload,       className: "right-[4%] bottom-[14%]",            delay: "0.3s" },
 ];
 
-interface HeroProps {
-  articleCount: number;
-  pathCount: number;
+function TaglineCycle() {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setIndex((i) => (i + 1) % CYCLE_WORDS.length);
+    }, CYCLE_INTERVAL_MS);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div className="inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.18em] text-secondary">
+      <span className="w-5 h-px bg-accent" aria-hidden="true" />
+      <span className="relative inline-flex h-5 w-24 overflow-hidden items-center">
+        <AnimatePresence mode="popLayout" initial={false}>
+          <motion.span
+            key={CYCLE_WORDS[index]}
+            initial={{ y: 14, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -14, opacity: 0 }}
+            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute text-accent"
+          >
+            {CYCLE_WORDS[index]}
+          </motion.span>
+        </AnimatePresence>
+      </span>
+    </div>
+  );
 }
 
-export function Hero({ articleCount, pathCount }: HeroProps) {
+export function Hero() {
   const { openSearch } = useSearch();
 
   return (
@@ -58,11 +89,8 @@ export function Hero({ articleCount, pathCount }: HeroProps) {
 
         {/* Left content */}
         <div className="flex flex-col items-start">
-          {/* Pill badge */}
-          <div className="inline-flex items-center gap-2 rounded-full bg-accent-soft px-4 py-1.5 text-sm font-medium text-accent">
-            <span className="size-1.5 rounded-full bg-accent" aria-hidden="true" />
-            {articleCount} articles · {pathCount} learning paths
-          </div>
+          {/* Animated tagline */}
+          <TaglineCycle />
 
           {/* Headline */}
           <h1 className="mt-6 font-fraunces text-6xl font-semibold leading-[0.95] tracking-tight text-balance text-primary sm:text-7xl">
