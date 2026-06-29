@@ -22,7 +22,7 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { useSearch } from "@/context/search-context";
 
-const CYCLE_WORDS = ["LEARN", "BUILD", "GROW", "TOGETHER"] as const;
+const CYCLE_WORDS = ["LEARN", "BUILD", "GROW", "THRIVE"] as const;
 const CYCLE_INTERVAL_MS = 2000;
 
 const TOPIC_CHIPS = ["Agentic AI", "RAG", "Prompting", "Evals"] as const;
@@ -60,7 +60,6 @@ function TaglineCycle() {
   }, []);
 
   const word = CYCLE_WORDS[index];
-  const isLast = word === "TOGETHER";
 
   return (
     <span className="block overflow-hidden">
@@ -71,7 +70,7 @@ function TaglineCycle() {
           animate={{ y: 0 }}
           exit={{ y: "-100%" }}
           transition={{ duration: 0.38, ease: [0.16, 1, 0.3, 1] }}
-          className={`block ${isLast ? "text-accent" : "text-primary"}`}
+          className="block text-accent"
         >
           {word}
         </motion.span>
@@ -90,8 +89,10 @@ export function Hero() {
         {/* Left content */}
         <div className="flex flex-col items-start">
           {/* Animated headline */}
-          <h1 className="font-fraunces text-7xl font-semibold leading-[0.95] tracking-tight sm:text-8xl">
+          <h1 className="font-fraunces text-6xl font-semibold leading-[1.05] tracking-tight sm:text-7xl">
+            <span className="block text-primary">A place to</span>
             <TaglineCycle />
+            <span className="block text-primary">AI skills.</span>
           </h1>
 
           {/* Description */}
