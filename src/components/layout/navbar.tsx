@@ -85,8 +85,8 @@ function DesktopNav() {
           <NavigationMenuTrigger className="text-sm text-secondary bg-transparent hover:text-primary hover:bg-surface-subtle data-[state=open]:bg-surface-subtle data-[state=open]:text-primary">
             Learning Paths
           </NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <div className="w-72 p-2">
+          <NavigationMenuContent className="w-72">
+            <div className="p-2">
               {LEARNING_PATHS_META.map((path) => (
                 <NavigationMenuLink
                   key={path.href}
@@ -117,8 +117,8 @@ function DesktopNav() {
           <NavigationMenuTrigger className="text-sm text-secondary bg-transparent hover:text-primary hover:bg-surface-subtle data-[state=open]:bg-surface-subtle data-[state=open]:text-primary">
             Library
           </NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <div className="grid grid-cols-2 gap-x-2 p-3 w-[400px]">
+          <NavigationMenuContent className="w-[400px]">
+            <div className="grid grid-cols-2 gap-x-2 p-3">
               {PILLARS.map((pillar) => (
                 <NavigationMenuLink
                   key={pillar.href}
