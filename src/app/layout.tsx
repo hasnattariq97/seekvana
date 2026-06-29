@@ -71,6 +71,8 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-CX5PQDJSZD"></script>
+        <script dangerouslySetInnerHTML={{ __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CX5PQDJSZD');` }} />
       </head>
       <body className="bg-canvas min-h-screen antialiased" suppressHydrationWarning>
         <ThemeProvider
