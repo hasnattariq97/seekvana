@@ -98,8 +98,8 @@ export function SideFeedback() {
         {/* Panel header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-border">
           <div>
-            <p className="text-[10px] font-semibold tracking-widest uppercase text-accent mb-0.5">Seekvana</p>
             <h2 className="font-fraunces text-base font-medium text-primary">Share your feedback</h2>
+            <p className="text-xs text-secondary mt-0.5">We read every message</p>
           </div>
           <button
             onClick={handleClose}
