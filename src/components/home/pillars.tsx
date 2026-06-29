@@ -38,7 +38,7 @@ export function Pillars() {
                   className="group flex flex-col bg-surface border border-border rounded-[14px] overflow-hidden transition-all duration-150 hover:-translate-y-[3px] hover:shadow-[0_12px_32px_rgba(26,23,20,0.1)] hover:border-accent/30 h-full focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:outline-none"
                 >
                   {/* Image zone */}
-                  <div className="h-[180px] border-b border-border relative overflow-hidden">
+                  <div className="h-48 border-b border-border relative overflow-hidden">
                     <Image
                       src={`/images/pillars/${pillar.slug}.webp`}
                       alt={pillar.name}
