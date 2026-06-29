@@ -64,13 +64,16 @@ export function FooterFeedback() {
       {/* Accordion trigger */}
       <button
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between px-6 md:px-14 py-4 text-sm text-secondary hover:text-primary transition-colors group"
+        className="w-full flex items-center justify-between px-6 md:px-14 py-4 text-sm transition-colors group"
         aria-expanded={open}
         aria-controls="footer-feedback-panel"
       >
-        <span className="font-medium">Send feedback</span>
+        <span className="flex items-center gap-2 text-primary font-medium group-hover:text-accent transition-colors">
+          <MessageSquare className="h-4 w-4 text-accent" aria-hidden="true" />
+          Help us improve — share your feedback
+        </span>
         <ChevronDown
-          className="h-4 w-4 transition-transform duration-200 group-hover:text-accent"
+          className="h-4 w-4 text-secondary transition-transform duration-200 group-hover:text-accent"
           style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}
           aria-hidden="true"
         />
