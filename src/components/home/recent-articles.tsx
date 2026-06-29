@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   Tabs,
   TabsList,
@@ -28,8 +28,6 @@ const CARD_BG = ["bg-accent-soft", "bg-info/20", "bg-surface-subtle"] as const;
 const TABS = ["All", "Beginner", "Intermediate", "Advanced"] as const;
 
 function ArticleGrid({ articles }: { articles: ArticleMeta[] }) {
-  const shouldReduceMotion = useReducedMotion();
-
   if (articles.length === 0) {
     return (
       <p className="text-secondary text-sm py-12 text-center">
@@ -43,15 +41,11 @@ function ArticleGrid({ articles }: { articles: ArticleMeta[] }) {
       {articles.map((article, i) => (
         <motion.article
           key={`${article.pillar}/${article.slug}`}
-          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 16 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{
-            duration: shouldReduceMotion ? 0 : 0.3,
-            ease: "easeOut",
-            delay: shouldReduceMotion ? 0 : (i % 3) * 0.08,
-          }}
-          whileHover={shouldReduceMotion ? undefined : { y: -2 }}
+          transition={{ duration: 0.3, ease: "easeOut", delay: (i % 3) * 0.08 }}
+          whileHover={{ y: -2 }}
           className="bg-surface rounded-xl border border-border overflow-hidden hover:shadow-md transition-all group"
         >
           <Link href={`/library/${article.pillar}/${article.slug}`} className="block focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none">

@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 type Difficulty = "Beginner" | "Intermediate" | "Advanced";
@@ -205,8 +205,6 @@ const ILLUSTRATIONS: Record<IllustrationKey, React.ComponentType> = {
 // ── Component ───────────────────────────────────────────────────────────────
 
 export function LearningPaths() {
-  const shouldReduceMotion = useReducedMotion();
-
   return (
     <section className="bg-surface-subtle py-20 px-4">
       <div className="max-w-screen-lg mx-auto">
@@ -235,19 +233,11 @@ export function LearningPaths() {
             return (
               <motion.article
                 key={path.href}
-                initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 16 }}
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{
-                  duration: shouldReduceMotion ? 0 : 0.5,
-                  ease: EXPO_EASE,
-                  delay: shouldReduceMotion ? 0 : i * 0.1,
-                }}
-                whileHover={
-                  shouldReduceMotion
-                    ? undefined
-                    : { y: -3, transition: { duration: 0.2, ease: "easeOut" } }
-                }
+                transition={{ duration: 0.5, ease: EXPO_EASE, delay: i * 0.1 }}
+                whileHover={{ y: -3, transition: { duration: 0.2, ease: "easeOut" } }}
                 className="group relative bg-surface rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 flex flex-col md:flex-row"
               >
                 {/* Invisible full-card link */}

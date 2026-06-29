@@ -2,14 +2,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { PILLARS as PILLAR_DATA } from "@/lib/pillars";
 
 const START_HERE = new Set(["ai-foundations"]);
 
 export function Pillars() {
-  const shouldReduceMotion = useReducedMotion();
-
   return (
     <section className="bg-surface-subtle py-16 px-4">
       <div className="max-w-screen-xl mx-auto">
@@ -26,13 +24,13 @@ export function Pillars() {
             return (
               <motion.div
                 key={pillar.slug}
-                initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 16 }}
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{
-                  duration: shouldReduceMotion ? 0 : 0.3,
+                  duration: 0.3,
                   ease: "easeOut",
-                  delay: shouldReduceMotion ? 0 : i * 0.04,
+                  delay: i * 0.04,
                 }}
               >
                 <Link
