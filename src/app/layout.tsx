@@ -7,6 +7,7 @@ import { Navbar } from "@/components/layout/navbar";
 import { SearchModalServer } from "@/components/search/search-modal-server";
 import { AuthModal } from "@/components/auth/auth-modal";
 import { ScrollToTop } from "@/components/scroll-to-top";
+import { SideFeedback } from "@/components/feedback/side-feedback";
 import "./globals.css";
 import 'katex/dist/katex.min.css'
 
@@ -84,6 +85,7 @@ export default function RootLayout({
               <main>{children}</main>
               <SearchModalServer />
               <AuthModal />
+              <SideFeedback />
             </AuthProvider>
           </SearchProvider>
         </ThemeProvider>
