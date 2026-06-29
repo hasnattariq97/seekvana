@@ -88,9 +88,9 @@ export function Hero() {
         <div className="flex flex-col items-start">
           {/* Animated headline */}
           <h1 className="font-fraunces text-6xl font-semibold leading-[1.05] tracking-tight sm:text-7xl">
-            <span className="block text-primary">A place to</span>
+            <span className="block text-primary">A Place to</span>
             <TaglineCycle />
-            <span className="block text-primary">AI skills.</span>
+            <span className="block text-primary">AI Skills.</span>
           </h1>
 
           {/* Description */}
