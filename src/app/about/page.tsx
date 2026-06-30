@@ -20,65 +20,60 @@ export default function AboutPage() {
 
       <div className="space-y-10 text-primary">
 
-        {/* Origin story */}
         <section>
           <h2 className="font-fraunces text-2xl text-primary mb-4">Where this started</h2>
           <div className="space-y-4 text-secondary leading-relaxed">
             <p>
-              Three months ago, I was a complete non-technical person. My background is in life sciences
-              and biotechnology — no engineering, no coding, no AI. My relationship with AI was simple:
-              I used it to write documents, analyse data, make images, and answer questions. That was it.
+              Three months ago I was a complete non-technical person. My background is in life sciences
+              and biotechnology. No engineering, no coding, no AI. I used AI to write documents, analyse
+              data, make images, and answer questions. That was it.
             </p>
             <p>
               Then I started noticing what was actually possible. Agents that could take repetitive tasks
               off your plate entirely. Automation that could free up hours every day. I kept thinking about
-              my own work — the monotonous, time-consuming tasks that left little room for the things that
-              actually mattered: supporting the people I worked with, learning, growing. If I could automate
-              the noise, I could focus on what was meaningful.
+              my own work. The monotonous, time-consuming tasks left little room for the things that
+              mattered. If I could automate the noise, I could focus on what was meaningful.
             </p>
             <p>
-              That curiosity sent me searching for content on agentic AI. Most of what I found was deeply
-              technical — built for engineers, not for someone like me. It was frustrating. The knowledge
-              existed, but it wasn&apos;t written for people who needed it most.
+              So I went looking for content on agentic AI. Most of what I found was built for engineers,
+              not for someone like me. The knowledge existed. It just wasn&apos;t written for the people
+              who needed it most.
             </p>
           </div>
         </section>
 
-        {/* The turning point */}
         <section>
           <h2 className="font-fraunces text-2xl text-primary mb-4">The turning point</h2>
           <div className="space-y-4 text-secondary leading-relaxed">
             <p>
-              My organisation opened seats for an agentic AI course. I applied, got selected, and everything
+              My organisation opened seats for an agentic AI course. I applied, got in, and everything
               changed. I learned how to set up environments, build files and documents, connect databases,
-              create frontends and backends, design agent memories, workflows, and systems — and deploy them.
+              create frontends and backends, design agent memories, and deploy working systems.
             </p>
             <p>
-              Within weeks I had automated the majority of my daily work. What used to consume my entire
-              day now takes 2 to 3 hours. The rest of my time is mine again.
+              Within weeks I had automated most of my daily work. What used to consume my entire day now
+              takes two to three hours. The rest of my time is mine again.
             </p>
             <p>
-              That experience made one thing clear: this technology is not just for engineers. Anyone — in
-              any field — can learn it, apply it, and benefit from it. The barrier is not ability. It is
-              access to the right kind of explanation.
+              That experience made one thing clear: this is not just for engineers. Anyone in any field
+              can learn it, apply it, and benefit from it. The barrier isn&apos;t ability. It&apos;s access
+              to the right kind of explanation.
             </p>
           </div>
         </section>
 
-        {/* Why Seekvana */}
         <section>
           <h2 className="font-fraunces text-2xl text-primary mb-4">Why I built Seekvana</h2>
           <div className="space-y-4 text-secondary leading-relaxed">
             <p>
-              I built Seekvana because the content I needed three months ago did not exist in the form
-              I needed it. Clear, narrative-driven, example-rich explanations that a non-technical person
-              could actually follow — and actually apply.
+              I built Seekvana because the content I needed three months ago didn&apos;t exist in the
+              form I needed it.
             </p>
             <p>
-              My name is <strong className="text-primary">Hasnat</strong>. I am not a software engineer.
-              I am a biotechnology professional who, three months ago, had no idea how to build a website.
-              Seekvana — the content, the design, the code, everything — I built it myself. If I could do
-              it, so can you. That is the whole point.
+              My name is <strong className="text-primary">Hasnat</strong>. I&apos;m not a software engineer.
+              I&apos;m a biotechnology professional who, three months ago, had no idea how to build a website.
+              I built Seekvana myself. The content, the design, the code, everything. If I could do it,
+              so can you. That&apos;s the whole point.
             </p>
             <p>
               I share what I learn as I learn it. Every article is written the way I wish things had been
@@ -88,30 +83,29 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* What Seekvana is */}
         <section>
           <h2 className="font-fraunces text-2xl text-primary mb-4">What Seekvana is</h2>
           <div className="space-y-4 text-secondary leading-relaxed">
             <p>
-              Seekvana is a free AI learning platform covering everything from the basics of how AI works
-              to building production-grade agents — across{' '}
+              Seekvana is a free AI learning platform. It covers everything from how AI works to building
+              production-grade agents, across{' '}
               <strong className="text-primary">9 topic pillars</strong> and{' '}
               <strong className="text-primary">5 structured learning paths</strong>.
             </p>
             <p>
-              It is built for everyone: complete beginners with no technical background, students switching
-              careers, developers looking to go deeper, and professionals in any field who want to use AI
-              to work smarter. The content cuts straight to what you need to know, moves fast, and lands
-              on something you can actually use.
+              It&apos;s built for everyone: complete beginners with no technical background, students
+              switching careers, developers going deeper, and professionals in any field who want to use
+              AI to work smarter. The content cuts straight to what you need to know and lands on
+              something you can actually use.
             </p>
             <p>
-              The goal is not to make you an AI researcher. It is to give you enough understanding and
-              practical skill to build agents that work for you — whatever your field, whatever your goal.
+              The goal isn&apos;t to make you an AI researcher. It&apos;s to give you enough understanding
+              and practical skill to build agents that work for you, whatever your field, whatever
+              your goal.
             </p>
           </div>
         </section>
 
-        {/* Editorial standards */}
         <section>
           <h2 className="font-fraunces text-2xl text-primary mb-4">How we write</h2>
           <div className="space-y-4 text-secondary leading-relaxed">
@@ -120,33 +114,32 @@ export default function AboutPage() {
               <li>Plain language first — no jargon without explanation</li>
               <li>Real-world examples over abstract theory</li>
               <li>Accurate and up to date — the AI field moves fast and we move with it</li>
-              <li>Honest about what we do not know</li>
+              <li>Honest about what we don&apos;t know</li>
               <li>No filler — every sentence earns its place</li>
             </ul>
             <p>
-              If you spot an error or something that is outdated, please{' '}
+              If you spot an error or something outdated,{' '}
               <Link href="/contact" className="text-accent hover:underline">tell us</Link>. We take
               corrections seriously.
             </p>
           </div>
         </section>
 
-        {/* Vision */}
         <section>
           <h2 className="font-fraunces text-2xl text-primary mb-4">Where we&apos;re going</h2>
           <div className="space-y-4 text-secondary leading-relaxed">
             <p>
-              Seekvana is just getting started. The vision is to become the world&apos;s leading free learning
-              platform for AI — built collaboratively with the people who use it.
+              Seekvana is just getting started. The vision is to become the world&apos;s leading free
+              learning platform for AI, built collaboratively with the people who use it.
             </p>
             <p>
-              If you learn something here that changes how you work, share it. Tell someone. Help us build
-              this together. The more people who find Seekvana, the better the content gets — and the more
-              people we can help.
+              If you learn something here that changes how you work, share it. Tell someone. Help us
+              build this together. The more people who find Seekvana, the better the content gets, and
+              the more people we can help.
             </p>
             <p>
-              AI is not going anywhere. The question is whether you use it, or it uses the people around you.
-              Seekvana exists to make sure you are on the right side of that equation.
+              AI isn&apos;t going anywhere. The question is whether you use it, or whether the people
+              around you do. Seekvana exists to make sure you&apos;re on the right side of that.
             </p>
           </div>
         </section>
