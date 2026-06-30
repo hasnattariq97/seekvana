@@ -152,10 +152,10 @@ export default function AboutPage() {
           </p>
           <div className="flex flex-wrap gap-3">
             <Link
-              href="/paths/ai-for-beginners"
+              href="/paths/getting-started"
               className="bg-accent text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-accent-deep transition-colors"
             >
-              AI for Beginners →
+              Getting Started →
             </Link>
             <Link
               href="/library"
