@@ -1,0 +1,175 @@
+---
+title: "What Is a .gitignore File? Keep API Keys Off GitHub"
+description: "Learn what a .gitignore file does, which lines every AI project needs, and how to keep your API keys from ending up on GitHub."
+pillar: "building-with-ai"
+slug: "git-gitignore"
+difficulty: "beginner"
+readTime: 6
+author: "Seekvana"
+publishedAt: "2026-06-26"
+tags: ["git", "github", "gitignore", "api keys", "version control"]
+featured: false
+lessonModule: "04"
+lessonNumber: "04.07"
+---
+
+<ArticleImage
+  src="/images/articles/building-with-ai/git-gitignore/cover.webp"
+  alt="A file icon with a shield blocking it from entering a cloud — illustrating how .gitignore prevents secrets from reaching GitHub"
+/>
+
+12.8 million secrets were leaked to public GitHub repositories last year — that's from GitHub's own 2025 secret sprawl report. Most of them were pushed by developers who thought they'd be careful.
+
+A **`.gitignore` file** is a plain text file that tells Git which files to completely ignore. They never appear in `git status`, never get staged, and never get committed. It is the single most important safety habit you can build before you start pushing code to GitHub.
+
+> **Key Takeaways**
+> - A `.gitignore` file tells Git to never track certain files. They become invisible to version control.
+> - Every AI project needs at minimum four lines: `.env`, `node_modules/`, `__pycache__/`, and `.DS_Store`
+> - Create your `.gitignore` *before* your first commit, not after. Files already committed stay in the history even if you add them to `.gitignore` later.
+> - If a key is ever accidentally pushed to a public repo, rotate it immediately — do not wait to clean the history first.
+
+---
+
+## What a .gitignore file actually does
+
+When you run `git status`, Git shows you every untracked or modified file in your project. Without a `.gitignore`, that list includes everything: your API keys stored in a `.env` file, thousands of dependency files in `node_modules/`, Python's compiled cache in `__pycache__/`. All of it.
+
+A **`.gitignore` file** changes that. It is a simple list of filenames and folder patterns that Git agrees to pretend do not exist. Once a file matches a pattern in your `.gitignore`, it disappears from `git status` entirely. You cannot accidentally stage it or commit it.
+
+The file lives in the root of your project, is named exactly `.gitignore` (dot, then gitignore, no other extension), and is itself committed to your repository. That is how Git knows to read it.
+
+<Note>
+  If you add a file to `.gitignore` but it still shows up in `git status`, the file was probably already committed before you added the rule. At that point, `.gitignore` cannot help. Git is already tracking it. You would need to run `git rm --cached filename` to stop tracking it, then commit that change.
+</Note>
+
+The syntax is simple. Each line in `.gitignore` is either a filename, a folder name (ending in `/`), or a wildcard like `*.log` to match any file ending in `.log`. That is all there is to it.
+
+---
+
+## The four lines every AI project needs
+
+Here is the `.gitignore` you should create in every project. Do it before you write a single line of code and before you run `git add` for the first time.
+
+```
+.env
+node_modules/
+__pycache__/
+.DS_Store
+```
+
+<ArticleImage
+  src="/images/articles/building-with-ai/git-gitignore/gitignore-four-lines.webp"
+  alt="Four file icons — .env, node_modules, __pycache__, and .DS_Store — each blocked from being committed"
+  caption="The four entries every AI project's .gitignore needs. Each one prevents a different category of files from reaching GitHub."
+/>
+
+Here is what each one does and why it matters:
+
+**`.env`**: This is the most critical line. Your `.env` file is where you store API keys, database passwords, and other secrets. It should never leave your machine. One push to a public repo, and automated bots can find and use your Anthropic or OpenAI key within minutes, sometimes running up hundreds of dollars in charges before you notice.
+
+**`node_modules/`**: If you are using Node.js or JavaScript tools, this folder holds all your installed packages. It can contain tens of thousands of files and reach gigabytes in size. Nobody should be committing this. It gets recreated from `package.json` with a single `npm install`.
+
+**`__pycache__/`**: Python creates this folder automatically when it compiles your scripts to bytecode. It is specific to your machine and has no place in version control. Every Python AI project generates one.
+
+**`.DS_Store`**: macOS creates this invisible file in every folder you open in Finder. It stores display preferences for that folder. It is completely meaningless to anyone else and clutters your repository history.
+
+<Warning>
+  Add `.gitignore` **before** your first commit. If you push code to GitHub first, then create `.gitignore` afterward, any secrets already in your history are still there, visible to anyone who knows where to look. Git history is permanent unless you take deliberate steps to rewrite it.
+</Warning>
+
+You can generate a more complete `.gitignore` for your specific stack at <a href="https://gitignore.io" target="_blank" rel="noopener noreferrer">gitignore.io</a>. Type in Python, Node, or whatever you are using and it generates the full file.
+
+---
+
+## How to verify it is working
+
+After you create your `.gitignore` and add the lines above, do this:
+
+```bash
+echo "SECRET=abc123" > .env
+git status
+```
+
+Your `.env` file should **not** appear in the output. If `git status` lists it as an untracked file, something went wrong. Check that your `.gitignore` is in the same folder as your `.git` directory (the project root) and that the filename is spelled exactly `.gitignore` with no extra extension.
+
+If it does not show up, you are good. Delete the test `.env` and create your real one.
+
+One more thing: GitHub has a built-in <a href="https://docs.github.com/en/code-security/secret-scanning" target="_blank" rel="noopener noreferrer">secret scanning feature</a> that detects common API key patterns and notifies the provider. This is genuinely useful — and I think it's one of the best things GitHub has shipped for beginners. But it is not fast enough to rely on as your only safety net. Bots scrape new commits within seconds. Your `.gitignore` is your first and most important line of defense.
+
+Now commit your `.gitignore` file and push it:
+
+```bash
+git add .gitignore
+git commit -m "add gitignore"
+git push
+```
+
+This lesson follows the [previous lesson on pull requests](/library/building-with-ai/git-pull-requests). The next lesson covers [reading a GitHub repository](/library/building-with-ai/reading-github-repos), specifically what you are actually looking at when you land on someone else's project page.
+
+If you want to understand how `.env` files work in more detail, the [guide to creating a .env file](/library/building-with-ai/create-env-file) from Module 03 covers it fully.
+
+---
+
+## Your Task
+
+<Steps>
+  <Step number={1} title="Add a .gitignore to your project">
+    In your my-first-repo folder, create a file called `.gitignore`.
+
+    Mac/Linux:
+    ```bash
+    touch .gitignore
+    ```
+
+    Windows:
+    ```powershell
+    New-Item .gitignore
+    ```
+
+    Open it in VS Code and add these lines:
+    ```
+    .env
+    node_modules/
+    __pycache__/
+    .DS_Store
+    ```
+
+    Save it. Now create a test `.env` file:
+    ```bash
+    echo "SECRET=abc123" > .env
+    ```
+
+    Run:
+    ```bash
+    git status
+    ```
+
+    Your `.env` file should **not** appear in the output. If it does not show, `.gitignore` is working.
+
+    Commit and push the `.gitignore`:
+    ```bash
+    git add .gitignore
+    git commit -m "add gitignore"
+    git push
+    ```
+  </Step>
+</Steps>
+
+<Note>
+  Done? You have completed Lesson 04.07. Next up: [Reading a GitHub Repository](/library/building-with-ai/reading-github-repos) and what everything on that page actually means. New to the course? Start from the beginning with the [Getting Started path](/paths/getting-started).
+</Note>
+
+<FAQ>
+  <FAQItem question="What happens if I already committed my .env file before adding .gitignore?">
+    Rotate your API key immediately. Go to your provider's console (Anthropic, OpenAI, etc.) and regenerate it before doing anything else. The old key is compromised the moment it hits a public repo. Once you have rotated it, you can remove the file from Git history using a tool called `git filter-repo`. Adding `.gitignore` now prevents future commits but does not erase the past.
+  </FAQItem>
+  <FAQItem question="Does .gitignore protect me if my GitHub repo is private?">
+    Private repos reduce your exposure, but they are not a substitute for `.gitignore`. Private repos can become public accidentally, collaborators can see everything, and if your GitHub account is ever compromised, all private repo contents are exposed. Treat your API keys as secrets regardless of repo visibility.
+  </FAQItem>
+  <FAQItem question="Do I need a .gitignore file in every project?">
+    Yes. Every project that has a `.git` folder should have a `.gitignore`. Make creating it the second thing you do after `git init`. It takes 30 seconds and protects you from a category of mistakes that can be very expensive to fix after the fact.
+  </FAQItem>
+  <FAQItem question="Can I add comments to a .gitignore file?">
+    Yes. Any line starting with `#` is treated as a comment and ignored by Git. This is useful for organizing your `.gitignore` into labeled sections, for example `# Python` above your Python patterns and `# macOS` above `.DS_Store`. Comments have no effect on behavior.
+  </FAQItem>
+</FAQ>
