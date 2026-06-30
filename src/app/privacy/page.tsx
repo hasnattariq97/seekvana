@@ -170,8 +170,8 @@ export default function PrivacyPage() {
             For privacy-related questions or to exercise your data rights, contact us via our{' '}
             <Link href="/contact" className="text-accent hover:underline">contact page</Link> or
             email us directly at{' '}
-            <a href="mailto:contact@seekvana.com" className="text-accent hover:underline">
-              contact@seekvana.com
+            <a href="mailto:seekvanateam@gmail.com" className="text-accent hover:underline">
+              seekvanateam@gmail.com
             </a>
             .
           </p>

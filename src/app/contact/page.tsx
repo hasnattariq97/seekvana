@@ -25,10 +25,10 @@ export default function ContactPage() {
       <div className="bg-surface border border-border rounded-xl p-6 mb-6">
         <p className="text-xs font-medium text-secondary uppercase tracking-wide mb-4">Email us directly</p>
         <a
-          href="mailto:contact@seekvana.com"
+          href="mailto:seekvanateam@gmail.com"
           className="font-fraunces text-xl text-accent hover:text-accent-deep transition-colors"
         >
-          contact@seekvana.com
+          seekvanateam@gmail.com
         </a>
         <p className="text-sm text-secondary mt-2">We aim to respond within 2–3 business days.</p>
       </div>
