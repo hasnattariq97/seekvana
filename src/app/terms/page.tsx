@@ -149,8 +149,8 @@ export default function TermsPage() {
             Questions about these Terms? Contact us via our{' '}
             <Link href="/contact" className="text-accent hover:underline">contact page</Link> or
             email{' '}
-            <a href="mailto:seekvanateam@gmail.com" className="text-accent hover:underline">
-              seekvanateam@gmail.com
+            <a href="mailto:contact@seekvana.com" className="text-accent hover:underline">
+              contact@seekvana.com
             </a>
             .
           </p>
