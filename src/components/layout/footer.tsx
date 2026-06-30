@@ -183,11 +183,12 @@ export function Footer() {
         <p className="text-xs text-secondary">© 2026 Seekvana · <span className="text-primary font-medium">Free AI education for everyone, everywhere.</span></p>
         <div className="flex items-center">
           {[
+            { label: "About", href: "/about" },
             { label: "Privacy Policy", href: "/privacy" },
             { label: "Terms of Use", href: "/terms" },
             { label: "Contact", href: "/contact" },
           ].map((l, i) => (
-            <Link key={l.href} href={l.href} className={`text-xs text-secondary hover:text-primary transition-colors px-3.5 ${i < 2 ? "border-r border-border" : ""} ${i === 0 ? "pl-0" : ""}`}>
+            <Link key={l.href} href={l.href} className={`text-xs text-secondary hover:text-primary transition-colors px-3.5 ${i < 3 ? "border-r border-border" : ""} ${i === 0 ? "pl-0" : ""}`}>
               {l.label}
             </Link>
           ))}
