@@ -73,6 +73,7 @@ export default function RootLayout({
         />
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-CX5PQDJSZD"></script>
         <script dangerouslySetInnerHTML={{ __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CX5PQDJSZD');` }} />
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4583972977988838" crossOrigin="anonymous"></script>
       </head>
       <body className="bg-canvas min-h-screen antialiased" suppressHydrationWarning>
         <ThemeProvider
