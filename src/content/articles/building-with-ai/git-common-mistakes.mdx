@@ -124,6 +124,31 @@ Merge small and often rather than large and rarely.
 
 ---
 
+## Quick Check
+
+<Quiz
+  question="You just pushed a .env file with an API key to a public GitHub repo. What do you do first?"
+  options="Delete the file and push again|||Run git filter-repo to clean the history|||Rotate the API key immediately|||Make the repo private"
+  correct="2"
+  explanation="Rotate the key first — assume it was already seen. Cleaning the history matters, but an active key is the live danger. Delete-and-push doesn't remove the key from earlier commits."
+/>
+
+<Quiz
+  question="In a merge conflict, what does the section between <<<<<<< HEAD and ======= contain?"
+  options="The incoming branch's version of the code|||The version from the remote repository|||Your current branch's version of the code|||Git's automatically chosen version"
+  correct="2"
+  explanation="HEAD refers to your current branch. Everything between <<<<<<< HEAD and ======= is what your branch had before the merge. The section below ======= is the incoming branch's version."
+/>
+
+<Quiz
+  question="What is the best way to prevent merge conflicts before they happen?"
+  options="Never work in branches|||Pull frequently from main before starting work|||Always use git merge --abort|||Commit directly to the main branch"
+  correct="1"
+  explanation="Pulling frequently keeps your branch close to main. The further your branch drifts, the more likely two people edited the same lines. Small, frequent merges are far easier to resolve than large, rare ones."
+/>
+
+---
+
 ## Your Task
 
 <Steps>
@@ -136,7 +161,7 @@ Merge small and often rather than large and rarely.
 
  If nothing appears, your `.env` files were never committed. You're clear.
 
- If any commits appear, your `.env` was committed at some point. Rotate any keys that were in it immediately (go to your Anthropic console and regenerate your API key), then ask in the Seekvana community forum for help cleaning the Git history.
+ If any commits appear, your `.env` was committed at some point. Rotate any keys that were in it immediately (go to your Anthropic console and regenerate your API key), then use `git filter-repo` to remove the file from your history (see the GitHub documentation linked in the Mistake 1 section above).
 
  All clear? Add a `.gitignore` to any repo that doesn't have one yet.
  </Step>
