@@ -1,0 +1,164 @@
+---
+title: "Common Git Mistakes Beginners Make (And How to Fix Them)"
+description: "Accidentally pushed an API key? Hit a merge conflict? These are the two most common Git mistakes beginners make. Here's how to detect, fix, and prevent both."
+pillar: "building-with-ai"
+slug: "git-common-mistakes"
+difficulty: "beginner"
+readTime: 7
+author: "Seekvana"
+publishedAt: "2026-07-01"
+tags: ["git", "github", "version control", "beginner"]
+featured: false
+lessonModule: "04"
+lessonNumber: "04.11"
+---
+
+<ArticleImage src="/images/articles/building-with-ai/git-common-mistakes/cover.webp" alt="Illustration showing a Git repository with an exposed API key being scanned by bots on the left, and a merge conflict resolution flow on the right" />
+
+In this lesson, you'll learn about the two most common Git mistakes beginners make, and exactly how to handle both. By the end, you'll know how to detect secrets that may have been exposed and how to resolve a merge conflict without panicking.
+
+> **Key Takeaways**
+> - If you accidentally push an API key to GitHub, rotate it immediately, then clean the history
+> - Bots scan public repos for exposed secrets within minutes; assume the key was already seen
+> - Merge conflict markers aren't error messages, they're Git asking which version to keep
+> - Pulling frequently from the main branch prevents most merge conflicts before they happen
+
+---
+
+## Mistake 1: Accidentally Pushing Secrets to GitHub
+
+Here's what happens: you're building a project, you have an API key in a `.env` file, and somewhere along the way that file gets committed and pushed to a public GitHub repository.
+
+Within minutes, sometimes seconds, automated bots that continuously scan public repos find the key and begin using it. This isn't theoretical. GitHub's own data shows millions of secrets are leaked to public repos every year.
+
+The thing that catches most beginners: **deleting the file and committing again does not fix the problem**. Git stores the full history of every file ever committed. The key still exists in that earlier commit, and anyone who clones your repo gets the complete history.
+
+### How to detect it
+
+Before you panic, check whether your `.env` was ever committed in the first place. Run this from inside your project folder:
+
+```bash
+git log --all --full-history -- "*.env" -- ".env"
+```
+
+If nothing appears, your `.env` was never committed. You're fine.
+
+If commits appear, the file was committed at some point. Move to the fix immediately.
+
+### The right order: rotate first, clean history second
+
+This is the part most guides get wrong. People spend time learning `git filter-repo` while their exposed key is still active and being used. Don't do that.
+
+**Step 1:** Go to wherever your key was issued (e.g., the <a href="https://console.anthropic.com" target="_blank" rel="noopener noreferrer">Anthropic console</a>) and revoke the exposed key. Generate a new one.
+
+**Step 2:** Update your `.env` with the new key so your project still works.
+
+**Step 3:** Now clean the history. Use `git filter-repo` to remove the file from every commit in your repo's history. GitHub's documentation on <a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository" target="_blank" rel="noopener noreferrer">removing sensitive data from a repository</a> walks through this process in detail.
+
+I've seen experienced developers make this mistake. The key is just knowing the right order when it happens.
+
+<Warning>
+ Assume the key was already seen. Even if you catch it within a minute, rotate it. The cost of rotating a key is five minutes. The cost of not rotating one can be much worse.
+</Warning>
+
+### Prevention
+
+The simplest prevention is covered in [your .gitignore file](/library/building-with-ai/git-gitignore): add `.env` to `.gitignore` before your very first commit. If the file is never tracked, it can never be pushed.
+
+<ArticleImage src="/images/articles/building-with-ai/git-common-mistakes/secrets-detection.webp" alt="Terminal showing git log command output with a flagged .env commit entry, alongside a commit timeline diagram showing where the .env file was introduced" caption="The git log command tells you exactly whether your .env was ever committed. No output means you're safe; a commit entry means rotate your key immediately before doing anything else." />
+
+---
+
+## Mistake 2: Merge Conflicts
+
+A **merge conflict** happens when two branches have changed the same lines of the same file differently, and Git can't automatically decide which version to keep. So it stops and asks you.
+
+That's the key reframe: the markers Git adds to your file aren't error messages. They're questions. Git is saying: "I found two different versions of this code. Which one do you want?"
+
+This happens most often when you and someone else (or you on two different machines) both edit the same file at the same time. It's normal. It's how Git protects you from silently overwriting each other's work.
+
+### What it looks like
+
+When you open a conflicted file, you'll see something like this:
+
+```
+<<<<<<< HEAD
+const greeting = "Hello from main branch";
+=======
+const greeting = "Hello from feature branch";
+>>>>>>> feature/update-greeting
+```
+
+Here's what each section means:
+
+- `<<<<<<< HEAD`: start of YOUR current branch's version
+- `=======`: the divider between the two versions
+- `>>>>>>> feature/update-greeting`: end of the INCOMING branch's version (the one you're merging in)
+
+Everything between `<<<<<<< HEAD` and `=======` is what your branch had. Everything between `=======` and `>>>>>>>` is what the other branch had.
+
+### How to fix it
+
+1. Open the conflicted file in your editor
+2. Decide which version to keep, or write a new version that combines both
+3. Delete all three marker lines (`<<<<<<<`, `=======`, `>>>>>>>`)
+4. Save the file
+5. Run `git add [filename]`
+6. Run `git commit` to complete the merge
+
+That's it. No special commands needed once you understand what you're looking at.
+
+<Tip>
+ If you open a conflicted file and feel completely lost, run `git merge --abort` to cancel the merge entirely and return your repo to its pre-merge state. Then take a breath, pull the latest changes, and try again.
+</Tip>
+
+For more context on how GitHub handles conflicts, see the <a href="https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/about-merge-conflicts" target="_blank" rel="noopener noreferrer">GitHub documentation on merge conflicts</a>.
+
+### Prevention
+
+The most effective prevention is simple: **pull before you push**. Before you start working on a file, run `git pull` to get the latest version from main. The closer your branch stays to main, the less likely two people are editing the same lines.
+
+Merge small and often rather than large and rarely.
+
+---
+
+## Your Task
+
+<Steps>
+ <Step number={1} title="Audit your repos for committed secrets">
+ For every Git repository you've created so far, run this command from inside the project folder:
+
+ ```bash
+ git log --all --full-history -- "*.env" -- ".env"
+ ```
+
+ If nothing appears, your `.env` files were never committed. You're clear.
+
+ If any commits appear, your `.env` was committed at some point. Rotate any keys that were in it immediately (go to your Anthropic console and regenerate your API key), then ask in the Seekvana community forum for help cleaning the Git history.
+
+ All clear? Add a `.gitignore` to any repo that doesn't have one yet.
+ </Step>
+</Steps>
+
+<Note>
+ Done? You've completed Lesson 04.11. Next up: [Install VS Code and Set Up Your Developer Environment](/library/building-with-ai/install-vs-code) →
+</Note>
+
+You can also explore more structured learning through the [Getting Started path](/paths/getting-started), it picks up right where this module leaves off.
+
+And if you're curious about what comes before Module 04, the [previous lesson on using GitHub as a portfolio](/library/building-with-ai/github-as-portfolio) is worth revisiting before you move on.
+
+<FAQ>
+ <FAQItem question="What if I accidentally pushed a secret to a private GitHub repo?">
+ Private repos reduce your exposure significantly, but they don't eliminate risk entirely. Private repos can be made public accidentally, shared with the wrong collaborator, or compromised if someone gains access to your account. The safest rule: rotate any exposed key regardless of whether the repo is public or private. It takes five minutes and removes all doubt.
+ </FAQItem>
+ <FAQItem question="Can I use git revert instead of git filter-repo to remove a secret from history?">
+ No. `git revert` adds a new commit that undoes the changes from a previous commit, but the original commit, including your secret, stays in the history permanently. Anyone who clones your repo can still check out the earlier commit and read the key. Only `git filter-repo` (or BFG Repo Cleaner) actually rewrites history and removes the secret from every commit.
+ </FAQItem>
+ <FAQItem question="What does <<<<<<< HEAD mean in a merge conflict?">
+ HEAD refers to your current branch, the one you're on right now. The section between `<<<<<<< HEAD` and `=======` is the version of that code that exists in your current branch. The section between `=======` and `>>>>>>>` is the incoming version from the branch you're merging in. You choose which to keep, delete all three marker lines, and save.
+ </FAQItem>
+ <FAQItem question="Is it safe to just delete a conflicted file and start it from scratch?">
+ That would delete your work and likely break things. The safer escape hatch is `git merge --abort`, it cancels the entire merge and returns your repo to exactly how it was before you started merging. From there you can pull the latest changes from the other branch, understand what changed, and attempt the merge again when you're ready.
+ </FAQItem>
+</FAQ>
