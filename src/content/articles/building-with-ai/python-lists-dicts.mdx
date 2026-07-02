@@ -1,0 +1,181 @@
+---
+title: "Python Lists & Dicts for Beginners (With Examples)"
+description: "Understand Python lists and dictionaries for beginners using real Anthropic SDK code. Learn to read the messages array that powers every Claude API call."
+pillar: "building-with-ai"
+slug: "python-lists-dicts"
+difficulty: "beginner"
+readTime: 7
+author: "Seekvana"
+publishedAt: "2026-06-26"
+tags: ["python", "python for beginners", "python lists", "python dictionaries", "python data structures"]
+featured: false
+lessonModule: "05"
+lessonNumber: "05.03"
+---
+
+<ArticleImage src="/images/articles/building-with-ai/python-lists-dicts/cover.webp" alt="A vertical list structure beside a key-value dictionary table, illustrating the two core Python data structures used in AI code" />
+
+If you've ever looked at an AI API code sample and felt like you were staring at brackets and curly braces with no pattern, this is the lesson that makes it click.
+
+Two data structures, **lists** and **dictionaries**, appear in almost every line of AI code. Learn them here, and the brackets stop being noise. If you're new to Python entirely, the [Getting Started path](/paths/getting-started) gives you the full foundation.
+
+> **Key Takeaways**
+> - A list stores items in order, using square brackets: `["item1", "item2"]`
+> - A dictionary stores labelled values in pairs, using curly braces: `{"key": "value"}`
+> - The Claude API messages parameter is always a list of dictionaries, one per message in the conversation
+> - Once you can read `messages[0]["content"]`, you can navigate any AI API data structure
+
+---
+
+## Lists: an ordered collection in square brackets
+
+A **list** is a collection of items in a specific order. Think of it like a numbered playlist. Items have a position. You can add to it, read from it, and go through it one item at a time.
+
+The syntax uses square brackets:
+
+```python
+["apple", "banana", "cherry"]
+```
+
+In AI code, lists hold things that come in sequences:
+
+- Conversation history (all the messages so far, in order)
+- Tool definitions (what tools an [AI agent](/library/agentic-ai/what-is-an-agent) can use)
+- Search results (a list of documents retrieved for [RAG](/library/agentic-ai/rag-explained))
+
+To read a specific item from a list, you use its position number inside square brackets:
+
+```python
+messages[0] # the first item
+messages[1] # the second item
+messages[2] # the third item
+```
+
+Lists count from zero, not one. This is called **zero-based indexing**, and it's the single most common source of off-by-one errors in all of programming. The first item is always `[0]`. Keep that in your head.
+
+---
+
+## Dictionaries: labelled fields in curly braces
+
+A **dictionary** stores values with labels, called keys. Think of it as a form with named fields.
+
+```python
+{"role": "user", "content": "Hello"}
+```
+
+This is a form where "role" is filled in as "user" and "content" is filled in as "Hello." Each pair is a key and a value, separated by a colon. Multiple pairs are separated by commas.
+
+In AI code, dictionaries hold structured data:
+
+- A single message (role + content)
+- A tool call result
+- An API response object
+- Configuration settings
+
+To read a value from a dictionary, you use its key inside square brackets:
+
+```python
+message["role"] # returns "user"
+message["content"] # returns "Hello"
+```
+
+The key always goes in quotes inside the brackets. If you leave out the quotes, Python thinks you're referencing a variable name, not a dictionary key. I find this the easiest rule to remember in all of Python: if it's a key you made up, it needs quotes.
+
+---
+
+## The combination: a list of dictionaries
+
+Here's where it all comes together. The Claude API messages parameter is always a **list of dictionaries**. Every conversation is structured this way.
+
+Start with one message. That's one dictionary, one form filled out:
+
+```python
+{"role": "user", "content": "What is an AI agent?"}
+```
+
+Now wrap it in a list, the container for the full conversation history:
+
+```python
+[{"role": "user", "content": "What is an AI agent?"}]
+```
+
+Now add the assistant's response as a second dictionary:
+
+```python
+messages = [
+ {"role": "user", "content": "What is an AI agent?"},
+ {"role": "assistant", "content": "An AI agent is a system that perceives its environment..."}
+]
+```
+
+Two messages. Two dictionaries. One list. This is the exact structure passed to `client.messages.create()` in every Claude API call you'll ever write or read.
+
+To access parts of this structure, chain your accesses together:
+
+```python
+messages[0] # the whole first dictionary (the user message)
+messages[0]["role"] # "user"
+messages[0]["content"] # "What is an AI agent?"
+messages[1]["content"] # "An AI agent is a system that..."
+```
+
+Read `messages[0]["content"]` out loud as: "from the messages list, get item zero, then from that dictionary get the value at key content." Say it. It works.
+
+**Why this structure?** The Claude API needs to know two things about each message: who said it, and what did they say. `role` answers the first. `content` answers the second. The list keeps the conversation in order. The dictionaries hold each individual message. Once you see the purpose, the structure feels obvious.
+
+<ArticleImage src="/images/articles/building-with-ai/python-lists-dicts/python-lists-dicts-structure.webp" alt="Diagram comparing a list (ordered collection) and a dictionary (key-value pairs), then showing how they combine into the messages array used in every Claude API call" caption="A list holds items in order. A dictionary labels each item's fields. Together, they model a conversation." />
+
+<Note>
+**Commas between items, not after the last one**
+
+Each item in a list or dictionary is separated by a comma. The last item doesn't need one. `{"role": "user", "content": "Hello",}`, that trailing comma after `"Hello"` can cause a syntax error in strict contexts. Look for this pattern when reading code that isn't working.
+</Note>
+
+---
+
+## Your Task
+
+<Steps>
+ <Step number={1} title="Navigate the Structure">
+ Read this messages array and answer the four questions below. Use what you learned in this lesson to work through each one.
+
+ ```python
+ messages = [
+ {"role": "user", "content": "What is RAG?"},
+ {"role": "assistant", "content": "RAG stands for Retrieval-Augmented Generation."},
+ {"role": "user", "content": "Can you give me an example?"}
+ ]
+ ```
+
+ **How many messages are in this conversation?**
+ Three. Count the dictionaries inside the outer list, there are three sets of curly braces.
+
+ **What is `messages[1]["role"]`?**
+ `"assistant"`. `messages[1]` gets the second item (counting starts at zero), then `["role"]` gets the value stored under the key `"role"`.
+
+ **What is `messages[2]["content"]`?**
+ `"Can you give me an example?"`. `messages[2]` is the third item, and `"content"` is the text of that message.
+
+ **If you were adding Claude's response to the last question, what would the new dictionary look like?**
+ `{"role": "assistant", "content": "Here's an example of RAG: ..."}`. Same structure as every other assistant message. Role is always `"user"` or `"assistant"`.
+ </Step>
+</Steps>
+
+<Note>
+ Done? You've completed Lesson 05.03. Next up: [Python Functions: what they are, how to read one](/library/building-with-ai/python-functions) →
+</Note>
+
+<FAQ>
+ <FAQItem question="Why does Python start counting lists from 0 instead of 1?">
+ Zero-based indexing is a convention inherited from lower-level languages like C, where it reflects how memory addresses are calculated. Python kept it for consistency with the broader programming world. In practice, you just need to remember: the first item is always `[0]`, the second is `[1]`, and so on. It becomes automatic quickly.
+ </FAQItem>
+ <FAQItem question="What happens if you try to access a dictionary key that doesn't exist?">
+ Python raises a `KeyError` and the script crashes. For example, `message["name"]` on a dictionary that only has `"role"` and `"content"` throws `KeyError: 'name'`. In production code, developers use `message.get("name")` instead, which returns `None` if the key is missing rather than crashing. When reading AI code, if you see `.get()` instead of direct bracket access, that's why.
+ </FAQItem>
+ <FAQItem question="Can a list contain items of different types, like strings and numbers together?">
+ Yes. Python lists can hold any mix of types in the same list, strings, numbers, booleans, other lists, or dictionaries. The Claude API messages list holds dictionaries, but you might also see lists of strings, lists of numbers, or even lists containing other lists. The square bracket syntax is always the same regardless of what's inside.
+ </FAQItem>
+ <FAQItem question="Is there a limit to how many messages you can put in the messages array?">
+ Not a Python limit, but an API one. The Claude API has a context window measured in tokens, and every message in the list counts toward it. Very long conversation histories can hit the context limit and cause the API to return an error. In practice, long-running AI agents often summarise or trim older messages to keep the list within the token limit.
+ </FAQItem>
+</FAQ>
