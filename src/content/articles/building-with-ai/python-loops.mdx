@@ -1,0 +1,142 @@
+---
+title: "Python Loops for Beginners: Read Any Agent's Code"
+description: "Python loops for beginners, explained without jargon. Learn to read for and while loops and follow exactly what an AI agent is doing."
+pillar: "building-with-ai"
+slug: "python-loops"
+difficulty: "beginner"
+readTime: 6
+author: "Seekvana"
+publishedAt: "2026-06-26"
+tags: ["python loops", "python for loop", "python while loop", "learn python basics"]
+featured: false
+lessonModule: "05"
+lessonNumber: "05.05"
+---
+
+<ArticleImage src="/images/articles/building-with-ai/python-loops/cover.webp" alt="Circular arrow suggesting repetition next to a list of items being processed one by one, clay accent on the active item" />
+
+If you're working through Python loops for beginners, here's the fastest way in: [Agentic AI](/library/agentic-ai/what-is-an-agent) code almost always contains a loop. The agent checks something, acts, checks again, acts again, until the job is done. I still trace loops by hand when I'm reading unfamiliar agent code, and it works every time. If you can read a loop, you can follow what any agent is doing at any point in its execution.
+
+> **Key Takeaways**
+> - A `for` loop means "do this once for each item in a collection."
+> - A `while` loop means "keep doing this as long as a condition stays true", this is the core shape of an AI agent's action loop.
+> - Indentation tells Python what's inside the loop and what runs after it.
+> - `while True` combined with `break` is a common, intentional pattern: run forever until one specific thing happens.
+> - You don't need to write loops for this lesson. You need to trace them, follow what happens, step by step.
+
+---
+
+## Python for loops: do this for each item
+
+The mental model: "for each X in this collection, run this block once."
+
+```python
+for message in messages:
+    print(message["role"] + ": " + message["content"])
+```
+
+Read this as: for each message in the messages list, print its role and content. The loop runs once per item in the list. Three messages means it runs three times. This is the whole python for loop explained: no counters to manage, no manual indexing, just "run this once per item."
+
+The indented block underneath is the loop's **body**, the code that runs on every pass. The first line that isn't indented anymore is outside the loop and only runs once, after the loop finishes.
+
+You'll see `for` loops in AI code whenever something needs to happen to every item in a group:
+
+- Processing each message in a conversation history
+- Running a check on each tool result
+- Going through each item in a list of search results
+
+## Python while loops: keep going until something changes
+
+The mental model: "keep running this block as long as this condition is true."
+
+```python
+while task_not_complete:
+    result = agent.take_next_action()
+    task_not_complete = not result.is_done
+```
+
+Read this as: while the task isn't complete, take the next action and check again. This is the agentic loop, and it's why loops matter so much for reading AI code. An agent isn't running a fixed number of steps. It keeps acting until it decides, on its own, that it's finished.
+
+`while` loops show up whenever the number of steps isn't known in advance:
+
+- An agent running autonomously toward a goal
+- Retrying an API call until it succeeds
+- Polling for a result that isn't ready yet
+
+## How to trace a loop when reading code
+
+You don't need to run code to understand a loop. You need a method for reading one:
+
+1. Find what collection or condition the loop is operating on.
+2. Find the loop body, the indented block underneath.
+3. Ask: "what happens once per item?" or "what keeps this running?"
+4. Find where the loop ends, the first unindented line after the block.
+
+There's one pattern worth naming on its own: the infinite loop trap.
+
+```python
+while True:
+    response = get_next_response()
+    if response.stop_reason == "end_turn":
+        break
+```
+
+`while True` runs forever, unless something inside it stops it. `break` exits the loop immediately. This isn't a bug, it's intentional: keep running until one specific thing happens, then stop. Whenever you see `while True`, go looking for the `break` that ends it.
+
+<Note>
+**Indentation is not decoration.** In Python, indentation is what tells the interpreter what's inside a loop and what's outside it. `for message in messages:` followed by an unindented line means that line does NOT run inside the loop, it runs after. Misread the indentation, and you'll misread what the code does. When reading Python, always check what's indented.
+</Note>
+
+---
+
+## Your Task
+
+<Steps>
+  <Step number={1} title="Trace this loop by hand">
+    Read this code without running it:
+
+    ```python
+    conversation = [
+        {"role": "user", "content": "Hello"},
+        {"role": "assistant", "content": "Hi! How can I help?"},
+        {"role": "user", "content": "What is streaming?"}
+    ]
+
+    for turn in conversation:
+        if turn["role"] == "user":
+            print("Human said: " + turn["content"])
+    ```
+
+    Answer these four questions on paper or in your head:
+
+    - How many times does the loop run?
+    - How many times does `print` actually run?
+    - What gets printed on the second pass through the loop?
+    - What would you add to also print the assistant's messages?
+
+    <details>
+    <summary>Check your answers</summary>
+
+    The loop runs 3 times, once per dictionary in the list. `print` runs only 2 times, because it's guarded by `if turn["role"] == "user"`, and one of the three messages has role `"assistant"`. On the second pass, nothing is printed; that item's role is `"assistant"`, so the `if` is False. To also print assistant messages, you'd add an `elif turn["role"] == "assistant":` block, or remove the `if` check entirely.
+    </details>
+  </Step>
+</Steps>
+
+<Note>
+Done? You've completed Lesson 05.05. You now know how Python loops work, the core skill for beginners reading any agent code. Agent code is loops, checks, and actions; you can read all three now. Next up: [Reading and writing files in Python](/library/building-with-ai/python-files) →
+</Note>
+
+<FAQ>
+  <FAQItem question="What's the difference between a for loop and a while loop in Python?">
+    A `for` loop runs once for each item in a known collection, like a list of messages, you know roughly how many times it'll run before it starts. A `while` loop keeps running as long as a condition stays true, with no fixed number of passes decided in advance. AI agents use `while` loops because they don't know how many steps a task will take until it's done.
+  </FAQItem>
+  <FAQItem question="Why does agent code use while loops instead of for loops?">
+    An agent doesn't know in advance how many actions it will need to complete a task, it might take two steps or twenty. A `while` loop lets it keep checking "am I done yet?" after each action, which is exactly the shape of autonomous behavior. A `for` loop would require knowing the step count upfront, which agents don't.
+  </FAQItem>
+  <FAQItem question="What happens if a while loop's condition never becomes false?">
+    It runs forever, this is called an infinite loop, and it will hang or crash your program. In real code, this is usually prevented with a `break` statement tied to a specific exit condition, or a maximum retry count. If you see `while True`, always look for the `break` that's meant to stop it.
+  </FAQItem>
+  <FAQItem question="Do I need to memorize loop syntax to read AI code?">
+    No. This lesson is about recognizing the pattern, not writing it from memory. If you can look at a loop and say "this repeats for each item" or "this keeps going until X happens," you've got what you need to follow agent code. Writing loops yourself is a separate skill for a later stage.
+  </FAQItem>
+</FAQ>
