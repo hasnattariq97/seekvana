@@ -1,0 +1,197 @@
+---
+title: "Python Functions Explained: How to Read Any Function"
+description: "Learn what a Python function is, how to read one, and how to call it. Uses real Anthropic SDK examples. By the end, you can decode any AI code wrapper."
+pillar: "building-with-ai"
+slug: "python-functions"
+difficulty: "beginner"
+readTime: 7
+author: "Seekvana"
+publishedAt: "2026-06-26"
+tags: ["python", "python functions", "python for beginners", "building with ai"]
+featured: false
+lessonModule: "05"
+lessonNumber: "05.04"
+---
+
+<ArticleImage src="/images/articles/building-with-ai/python-functions/cover.webp" alt="Illustration of a function as a processor: input arrow on the left, output arrow on the right, clay accent on the output" />
+
+Whenever you see the word `def` in Python code, a function is being defined, a named, reusable block of code that does one specific job. In this lesson, you'll learn to identify any function's name, inputs, and output. By the end, you can read any AI SDK wrapper without losing the thread.
+
+> **Key Takeaways**
+> - A function is a reusable block of code with a name, inputs, and an output
+> - `def` marks the start of a function definition, nothing runs until you call it
+> - Every function has three readable parts: name, parameters, and return value
+> - Default parameters mean a function can be called with fewer arguments than it defines
+
+---
+
+## A Function Is a Named Recipe
+
+Think of a function as a recipe. The recipe has a name, a list of ingredients, and a set of steps that produce something.
+
+```python
+def make_request(prompt):
+ # steps here
+ return result
+```
+
+`make_request` is the recipe name. `prompt` is the one ingredient. The `return` statement is what comes out at the end.
+
+The recipe lives in one place. You can follow it as many times as you want, you just call it by name each time. You don't rewrite the steps; you call them.
+
+This is why functions appear constantly in AI code. An API call has six or seven lines of setup. Wrapping those lines in a function means you write them once and call the wrapper everywhere else.
+
+<Tip>
+ The `def` keyword stands for "define." It tells Python: "I'm about to describe a function. Store this for later." Nothing runs at this point, the function is just being registered.
+</Tip>
+
+---
+
+## The Three Parts of Every Function
+
+Every Python function has exactly three readable parts. Once you can spot them, you can decode any function you encounter.
+
+<ArticleImage src="/images/articles/building-with-ai/python-functions/function-anatomy.webp" alt="Diagram showing the three parts of a Python function: name, parameters, and return value annotated on ask_claude(), with a five-step call flow below" caption="Every Python function has three readable parts (name, parameters, return value), plus a predictable five-step execution flow when called." />
+
+**Part 1, The Name**
+
+The name comes right after `def`:
+
+```python
+def send_to_claude(...):
+```
+
+Good function names are verbs: `send`, `get`, `build`, `process`, `load`. If the name is clear, you already know the purpose before reading a single line of the body. `send_to_claude` sends something to Claude. That's all you need to know to start reading.
+
+**Part 2, The Parameters**
+
+Parameters live inside the parentheses:
+
+```python
+def send_to_claude(prompt, model):
+```
+
+This function takes two inputs: a prompt and a model name. When you call it, you provide both. Parameters are the ingredient list, the function won't do its job without them.
+
+Some parameters have defaults:
+
+```python
+def send_to_claude(prompt, model="claude-haiku-4-5-20251001"):
+```
+
+`model` is now optional. If you don't pass one, Haiku is used automatically. You'll see this pattern constantly in [AI agent](/library/agentic-ai/what-is-an-agent) code; sensible defaults that can be overridden.
+
+**Part 3, The Return Value**
+
+The `return` statement is what the function hands back:
+
+```python
+return response.content[0].text
+```
+
+Whatever calls this function will receive this value as the result. If there's no `return` statement, the function does its work and gives back nothing, useful for functions that save files or print output but don't need to pass a value along.
+
+---
+
+## Reading a Complete Function
+
+Here's a real AI SDK wrapper. Everything you need to read it is in the three parts above. (This is adapted from the <a href="https://docs.anthropic.com/en/api/getting-started" target="_blank" rel="noopener noreferrer">Anthropic Python SDK</a> quickstart pattern.)
+
+```python
+def ask_claude(prompt, model="claude-haiku-4-5-20251001"):
+ client = anthropic.Anthropic()
+ message = client.messages.create(
+ model=model,
+ max_tokens=256,
+ messages=[{"role": "user", "content": prompt}]
+ )
+ return message.content[0].text
+```
+
+Let's walk through every line:
+
+- `def ask_claude(...)`, the function is named `ask_claude`
+- `prompt`, required input; you must provide a prompt when calling it
+- `model="claude-haiku-4-5-20251001"`, optional input with a default; if you don't specify a model, Haiku is used
+- `client = anthropic.Anthropic()`, creates the API client inside the function
+- `client.messages.create(...)`, makes the API call using the inputs
+- `messages=[{"role": "user", "content": prompt}]`, builds the conversation structure from the [lists and dictionaries lesson](/library/building-with-ai/python-lists-dicts)
+- `return message.content[0].text`, sends back just the text of Claude's response
+
+The function takes a question in and hands a text answer out. Everything in between is the setup to make that happen.
+
+---
+
+## How to Call a Function
+
+Defining a function and calling a function are two different things. The `def` block stores the recipe. A call runs it.
+
+```python
+response = ask_claude("What is an AI agent?")
+```
+
+This calls `ask_claude` with one argument. The result, Claude's text response, is stored in `response`. Haiku is used because we didn't specify a model.
+
+To override the default:
+
+```python
+response = ask_claude("What is RAG?", model="claude-sonnet-4-6")
+```
+
+Same function. Different model. The second argument overrides the default.
+
+You can call the same function dozens of times in the same script, with different prompts each time. That's the point. The six lines of API setup live once inside `ask_claude` and never again.
+
+I find this is the moment when Python stops feeling like noise. One function replaces six scattered lines of setup code, everywhere you need it.
+
+<Warning>
+ **Defining vs calling.** `def ask_claude(prompt):` defines the function, nothing runs. `ask_claude("Hello")` calls it, this is when it executes. If you wrote a `def` block and nothing happened, that's why. Both lines are needed.
+</Warning>
+
+---
+
+## Your Task
+
+Read the function below. For each question, write down your answer before looking at the reveal.
+
+```python
+def build_system_prompt(role, instructions, tone="professional"):
+ prompt = f"You are a {role}. {instructions} Respond in a {tone} tone."
+ return prompt
+```
+
+<Steps>
+ <Step number={1} title="Name the function">
+ What is this function called? Answer: `build_system_prompt`, it comes right after `def`.
+ </Step>
+ <Step number={2} title="Count the parameters">
+ How many parameters does it take, and which ones are required? Answer: Three parameters, `role`, `instructions`, and `tone`. The first two are required (no default). `tone` is optional, if not specified, it defaults to `"professional"`.
+ </Step>
+ <Step number={3} title="Find the return value">
+ What does this function return? Answer: A string, a formatted system prompt that combines `role`, `instructions`, and `tone` into one sentence.
+ </Step>
+ <Step number={4} title="Trace a call">
+ What would `build_system_prompt("teacher", "explain things simply")` return? Answer: `"You are a teacher. explain things simply. Respond in a professional tone."`, `tone` defaults to `"professional"` because we didn't pass one.
+ </Step>
+</Steps>
+
+<Note>
+ Done? You've completed Lesson 05.04. Next up: [for and while loops, reading them without panic](/library/building-with-ai/python-loops) →
+
+New to Seekvana? Start from the beginning with the [Getting Started path](/paths/getting-started).
+</Note>
+
+<FAQ>
+ <FAQItem question="What does def mean in Python?">
+ `def` stands for "define." It marks the start of a function definition and tells Python to store the function under that name for later use. Nothing inside the function runs at this point, the function is only executed when you call it by name elsewhere in the code.
+ </FAQItem>
+ <FAQItem question="What happens if a Python function has no return statement?">
+ The function runs all its code and then returns `None`, Python's value for "nothing." This is fine for functions that perform an action (printing output, saving a file, making an API call with no result needed) but will cause bugs if you try to store or use the result. Always check whether a function's return value matters before using it.
+ </FAQItem>
+ <FAQItem question="Can a Python function call another function inside it?">
+ Yes, and this is exactly how AI agent code is structured. A high-level function like `run_agent()` calls smaller functions like `call_tool()`, `format_response()`, and `log_result()`. Each function does one job. Reading agent code becomes much easier once you treat each function call as a black box: name in, result out, details inside.
+ </FAQItem>
+ <FAQItem question="What is 'self' in a Python function?">
+ `self` appears in functions that belong to a class, called methods. When you see `def create(self, model, messages):`, the function is part of an object and `self` refers to that object. In the Anthropic SDK, `client.messages.create(...)` calls a method where `self` is the `client` object. You don't pass `self` yourself, Python handles it automatically. For reading purposes, treat `self` as the object the method belongs to and ignore it.
+ </FAQItem>
+</FAQ>
