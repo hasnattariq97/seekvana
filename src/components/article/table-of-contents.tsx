@@ -36,7 +36,7 @@ export function TableOfContents({ headings }: TableOfContentsProps) {
   if (headings.length === 0) return null
 
   return (
-    <aside className="hidden xl:block w-56 shrink-0">
+    <aside className="hidden xl:block w-56 shrink-0 self-stretch">
       <div className="sticky top-20 flex flex-col gap-6">
         <nav aria-label="Table of contents">
           <p className="font-inter text-xs font-semibold text-secondary mb-4">

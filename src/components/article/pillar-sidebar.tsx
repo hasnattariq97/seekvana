@@ -62,7 +62,7 @@ function SidebarContent({ pillar, currentSlug, articles }: PillarSidebarProps) {
 export function PillarSidebar({ pillar, currentSlug, articles }: PillarSidebarProps) {
   return (
     // Desktop sticky sidebar only — hidden below lg
-    <aside className="hidden lg:block w-64 shrink-0">
+    <aside className="hidden lg:block w-64 shrink-0 self-stretch">
       <div className="sticky top-20 overflow-y-auto max-h-[calc(100vh-5rem)] pr-2">
         <SidebarContent pillar={pillar} currentSlug={currentSlug} articles={articles} />
       </div>
