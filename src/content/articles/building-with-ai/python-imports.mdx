@@ -1,0 +1,180 @@
+---
+title: "What Python Import Statements Actually Do (Beginner's Guide)"
+description: "Python import explained for beginners: the three import patterns, three library types, and how to read any AI script's imports block."
+pillar: "building-with-ai"
+slug: "python-imports"
+difficulty: "beginner"
+readTime: 5
+author: "Seekvana"
+publishedAt: "2026-07-03"
+tags: ["python import", "python library", "python module", "python import statement"]
+featured: false
+lessonModule: "05"
+lessonNumber: "05.07"
+---
+
+{/* IMAGE PROMPT: Editorial flat illustration of a toolbox being opened with specific tools floating out labelled as functions, warm cream background, clay accent (#C9633F) on the open toolbox, clean and clear, suggests ready-to-use capability, no text in image, Seekvana palette: #FAF8F3, #C9633F | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+{/* IMAGE PROMPT: Diagram showing the three import patterns, the three library types, and a decoded four-line imports block annotated with what breaks if each import is removed, Seekvana palette: #FAF8F3, #C9633F | FILENAME: import-patterns-decoded.webp | DIMENSIONS: 800x450 */}
+
+<ArticleImage src="/images/articles/building-with-ai/python-imports/cover.webp" alt="A toolbox opening with individual tools floating out, clay accent on the open lid" />
+
+The first few lines of almost every AI Python script look like this:
+
+```python
+import os
+import anthropic
+from dotenv import load_dotenv
+```
+
+These lines aren't doing anything yet, they're loading tools. Once you can read them, you'll know exactly what a script depends on before running a single line of logic.
+
+> **Key Takeaways**
+> - `import x` loads a whole library, you access its tools with `x.something`.
+> - `from x import y` pulls one specific thing out, so you use `y` directly, no prefix.
+> - `import x as y` gives a library a shorter nickname, common in data science code.
+> - Standard library imports (`os`, `json`) come with Python, third-party imports (`anthropic`, `dotenv`) need `pip install` first.
+> - Recognizing which type an import is tells you what happens if that line, or the install behind it, is missing.
+
+---
+
+## What a library actually is
+
+The same way you learned to trace a [file operation](/library/building-with-ai/python-files) line by line, you can learn to trace an import line by line, once you know the pattern, you'll never see it as a mystery block again.
+
+A library, also called a package or module, is someone else's code you can use in your own program. Instead of building every tool from scratch, you import tools that are already made and tested. `import anthropic` says: go find the anthropic library, which I installed earlier, and load all its tools so I can use them.
+
+The import runs once, at the top of the script. After that, every tool the library provides is available for the rest of the file. You never have to re-import it mid-script.
+
+---
+
+## The three import patterns
+
+You'll only ever see three shapes. Once you can name them, you can read any imports block.
+
+**Pattern 1, import the whole library**
+```python
+import anthropic
+```
+Access its tools with dot notation: `anthropic.Anthropic()`, `anthropic.APIError`. Use this when you need multiple things from the library.
+
+**Pattern 2, import one specific thing**
+```python
+from anthropic import Anthropic
+```
+Access it directly: `Anthropic()`, no `anthropic.` prefix needed. Use this when you only need one class or function and don't want to type the full path every time.
+
+**Pattern 3, import with an alias**
+```python
+import numpy as np
+```
+Access it as `np.array(...)` instead of `numpy.array(...)`. Use this when a library's name is long and you'll type it constantly. Less common in simple AI scripts, but you'll see it often in data science code.
+
+---
+
+## The three types of libraries
+
+Every import falls into one of three buckets, and the bucket tells you what breaks if the import fails.
+
+**Standard library** comes with Python, no install needed. `import os` gives you operating system functions like file paths and environment variables. `import json` parses and generates JSON. These never need `pip install`, they're always available.
+
+**Third-party packages** are installed via pip. `import anthropic` needs `pip install anthropic` first. `from dotenv import load_dotenv` needs `pip install python-dotenv`. If you haven't installed it, the import fails with `ModuleNotFoundError`, that's your signal the [pip install](/library/building-with-ai/package-managers-explained) step was skipped.
+
+**Local files** are your own code in the same project. `from utils import build_prompt` imports from a file you wrote called `utils.py`. No install needed, Python finds it because it's sitting in the same folder.
+
+---
+
+## Decode a real imports block
+
+```python
+import os # standard library, access environment variables
+import json # standard library, parse API responses
+import anthropic # third-party, the Claude SDK
+from dotenv import load_dotenv # third-party, load .env files
+```
+
+Two standard, two third-party. This exact block, or something close to it, sits at the top of most beginner AI scripts. I've seen this four-line pattern open more Claude scripts than almost any other combination, it's worth being able to read on sight.
+
+<ArticleImage src="/images/articles/building-with-ai/python-imports/import-patterns-decoded.webp" alt="Diagram showing the three import patterns, the three library types, and a decoded four-line imports block with what breaks if each line is removed" caption="The three patterns, the three library types, and what breaks if each import is removed, all in one script." />
+
+<Warning>
+**Import order is convention, not enforcement.** By convention, imports go standard library first, then third-party, then local files. Python doesn't require this, the script runs fine either way. But every professional codebase follows it, and linters flag violations. When reading someone else's code, the position of an import tells you roughly what type it is before you even check.
+</Warning>
+
+---
+
+## Match the Import
+
+Six real import lines. For each, work out the type and what removing it would break before checking the answer.
+
+```python
+import os
+```
+<Note>
+Standard library. Removing it breaks any line that reads environment variables (`os.getenv`) or handles file paths.
+</Note>
+
+```python
+import anthropic
+```
+<Note>
+Third-party. Removing it breaks every line that creates a client or makes an API call, anything mentioning `anthropic.` fails.
+</Note>
+
+```python
+from dotenv import load_dotenv
+```
+<Note>
+Third-party. Removing it means `load_dotenv()` isn't defined. Your API key won't load from the `.env` file, and every API call fails with an authentication error.
+</Note>
+
+```python
+import json
+```
+<Note>
+Standard library. Removing it breaks any line calling `json.loads()` or `json.dumps()`, common when parsing API responses or config files.
+</Note>
+
+```python
+from tools import web_search
+```
+<Note>
+Local file. There's a file called `tools.py` in the same folder. Removing this import means `web_search()` isn't available in the script.
+</Note>
+
+```python
+import datetime
+```
+<Note>
+Standard library. Removing it breaks any line that creates timestamps, often used for logging when an API call happened.
+</Note>
+
+The imports block is the ingredient list. Once you can read it, you know exactly what a script depends on, and what breaks, before running a single line of logic. That's the same skill you'll keep building through the rest of the [Launchpad path](/paths/getting-started).
+
+---
+
+## Your Task
+
+<Steps>
+ <Step number={1} title="Trace a real imports block">
+ Find any Python script that uses `import` (a repo, a tutorial, an AI SDK example, any will do). Pick one import line and answer three questions without running the code: is it standard library, third-party, or local; would it need `pip install`; and what would break in the script if that line were deleted. Write your three answers down.
+ </Step>
+</Steps>
+
+<Note>
+Done? You've completed Lesson 05.07. Next up: [Using dotenv to Load Your API Keys](/library/building-with-ai/python-dotenv) →
+</Note>
+
+<FAQ>
+ <FAQItem question="Do I need to memorize the standard library, third-party, local order for imports?">
+ No. Python runs the script correctly no matter what order imports appear in. The order is a readability convention that professional codebases and linters follow, so learning to recognize it just helps you read other people's code faster, it's not a rule you need to enforce yourself yet.
+ </FAQItem>
+ <FAQItem question="Why does pip install work but the import still fails?">
+ This is almost always a virtual environment mismatch: the package installed into a different Python environment than the one running your script. It's a common but separate issue from what this lesson covers, you'll deal with virtual environments directly in a later Launchpad lesson.
+ </FAQItem>
+ <FAQItem question="What does an import with a dot in front, like from.import utils, mean?">
+ That's a relative import, it tells Python to look inside the current package folder rather than the top-level project. You'll run into these in larger, multi-folder projects. For now, focus on the three patterns in this lesson, relative imports become relevant once your projects grow past a single file.
+ </FAQItem>
+ <FAQItem question="Can I import the same library twice in one script?">
+ You can, but Python only actually loads it once, repeat imports are ignored after the first. There's no error and no performance cost, but it's unnecessary clutter, so most codebases keep every library's import to a single line near the top of the file.
+ </FAQItem>
+</FAQ>
