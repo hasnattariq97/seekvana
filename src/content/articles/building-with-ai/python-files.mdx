@@ -1,0 +1,181 @@
+---
+title: "How to Read and Write Files in Python (Beginner's Guide)"
+description: "How to read and write files in Python, explained for beginners. Learn the two file I/O patterns that appear in almost every AI pipeline."
+pillar: "building-with-ai"
+slug: "python-files"
+difficulty: "beginner"
+readTime: 6
+author: "Seekvana"
+publishedAt: "2026-06-26"
+tags: ["python files", "python open file", "python write to file", "python read text file beginners"]
+featured: false
+lessonModule: "05"
+lessonNumber: "05.06"
+---
+
+<ArticleImage src="/images/articles/building-with-ai/python-files/cover.webp" alt="A file document with two arrows, one reading content out and one writing content in, clay accent on the arrows" />
+
+If you're learning how to read and write files in Python, here's the good news: once you can trace a [loop](/library/building-with-ai/python-loops), file operations are the next easiest pattern to recognize. Almost every AI tool that does something useful touches the filesystem somewhere. It reads a document to summarize it. It saves a generated output. It logs an API response for debugging later. Once you can recognize the two patterns that cover file handling, you can follow how any AI pipeline moves data in and out.
+
+> **Key Takeaways**
+> - `open("file.txt", "r")` reads a file, `open("file.txt", "w")` writes one, the letter is the only thing that changes.
+> - `"w"` mode erases the file's existing content before writing anything new, this is the most common data-loss bug in beginner scripts.
+> - `"a"` mode appends to the end of a file without deleting what's already there, useful for logs.
+> - `with open(...) as f:` automatically closes the file when the block finishes, you never need to call `f.close()` yourself.
+> - Read, process, write is the skeleton of most AI content pipelines, recognizing it means you can follow any variation of it.
+
+---
+
+## Reading a file: the pattern you'll see constantly
+
+```python
+with open("document.txt", "r") as f:
+    content = f.read()
+```
+
+Here's every piece, decoded:
+
+- `open(...)` opens the file.
+- `"document.txt"` is the filename, relative to wherever the script runs.
+- `"r"` is the mode: read. The file must already exist, or this line throws an error.
+- `as f` gives the open file a nickname, `f`, so the code below can refer to it.
+- `f.read()` reads the entire file into a single string.
+- `content` now holds everything that was in the file.
+
+In an AI pipeline, this is how a document gets loaded before it's sent to Claude. A summarization script reads a text file, stores it in `content`, then passes that string as the user message in an API call. I've written this exact three-line block more times than I can count, it's the entry point for almost any script that processes existing text.
+
+---
+
+## Writing to a file: same shape, one letter different
+
+```python
+with open("output.txt", "w") as f:
+    f.write(response_text)
+```
+
+The only structural change from reading is the mode: `"w"` instead of `"r"`.
+
+- `"w"` means write. It creates the file if it doesn't exist, and overwrites it completely if it does.
+- `f.write(...)` writes a string to the file.
+
+In AI context, this is how you'd save Claude's response, write a generated article to disk, or export structured output for later use. Recognize `"w"` and you know: whatever was in that file before is gone, and what you're writing now takes its place.
+
+<Warning>
+**"w" mode deletes first, writes second.** Opening a file in `"w"` mode immediately erases its existing content, before your code writes a single character of the new content. If you needed to keep what was already there, use `"a"` instead. This silently overwrites files people meant to preserve, more often than any other beginner file bug.
+</Warning>
+
+---
+
+## The three modes, named
+
+You'll see three letters over and over. That's the whole vocabulary:
+
+| Mode | Name | Effect |
+|---|---|---|
+| `"r"` | Read | File must already exist. Nothing is changed. |
+| `"w"` | Write | Creates the file if missing, overwrites if it exists. |
+| `"a"` | Append | Adds to the end of the file, existing content stays. |
+
+**Python file modes at a glance**
+
+That's it. Spot one of these three letters inside `open(...)` and you know exactly what the surrounding code is about to do to that file.
+
+---
+
+## Why `with` is always there
+
+`with open(...) as f:` does one extra thing beyond opening the file: it automatically closes the file the moment the indented block underneath finishes running.
+
+This matters because a file left open can lose data or block other programs from reading it, a subtle bug that's annoying to track down. You don't need to remember to call `f.close()` yourself, `with` handles it even if something inside the block goes wrong. Whenever you see `with open`, you can trust the file is opened, used, and closed cleanly, no cleanup step to keep track of.
+
+---
+
+## A full pipeline: read, process, write
+
+```python
+# Load the document
+with open("article.txt", "r") as f:
+    article = f.read()
+
+# Ask Claude to summarize it (API call here)
+summary = ask_claude("Summarize this: " + article)
+
+# Save the summary
+with open("summary.txt", "w") as f:
+    f.write(summary)
+```
+
+Three sections, three jobs: read a file in, do something with the content, write a file out. This is the skeleton underneath most AI content pipelines, whether they're summarizing PDFs, generating articles, or transforming data. Once you recognize this shape, you can follow any variation of it, even ones with extra steps wedged in the middle.
+
+---
+
+## Name the pattern
+
+Four real snippets. For each, work out what it's doing before checking the answer.
+
+**Block 1**
+```python
+with open("prompts.txt", "r") as f:
+    template = f.read()
+```
+<Note>
+Reading. Loads the content of `prompts.txt` into `template`. The file must already exist, or this line fails.
+</Note>
+
+**Block 2**
+```python
+with open("log.txt", "a") as f:
+    f.write("API called at 14:32\n")
+```
+<Note>
+Appending. Adds one line to `log.txt` without erasing anything already there. The `\n` at the end is a newline character, it starts a new line in the file rather than tacking text onto the last one.
+</Note>
+
+**Block 3**
+```python
+with open("response.txt", "w") as f:
+    f.write(claude_output)
+```
+<Note>
+Writing. Saves `claude_output` to `response.txt`. If the file already existed, its previous content is gone the moment this line runs.
+</Note>
+
+**Block 4**
+```python
+with open("context.txt", "r") as f:
+    lines = f.readlines()
+```
+<Note>
+Reading, but with a twist. Instead of one big string, `readlines()` returns a list where each item is one line from the file. Useful when a script needs to process a file line by line instead of all at once.
+</Note>
+
+Every AI data pipeline reads files, transforms them, and writes results. You can now follow that entire flow, line by line, in any script you come across. That's the same skill you'll be building on for the rest of the [Launchpad path](/paths/getting-started).
+
+---
+
+## Your Task
+
+<Steps>
+  <Step number={1} title="Trace a real file operation">
+    Find any Python script that uses `open(...)` (a repo, a tutorial, an AI SDK example, any of them will do). Locate one `open()` call and answer three questions without running the code: which mode is it using, will it create/overwrite/preserve the file, and what does the surrounding code do with the result. Write your three answers down.
+  </Step>
+</Steps>
+
+<Note>
+Done? You've completed Lesson 05.06. Next up: [What Import Means and How to Use It](/library/building-with-ai/python-imports) →
+</Note>
+
+<FAQ>
+ <FAQItem question="What happens if I open a file in 'r' mode and it doesn't exist?">
+ Python raises a `FileNotFoundError` and the script stops at that line unless the error is caught elsewhere. Read mode never creates files, it only opens ones that already exist. This is different from `"w"` mode, which creates a missing file automatically.
+ </FAQItem>
+ <FAQItem question="Do I need to close a file if I use the with keyword?">
+ No. `with open(...) as f:` closes the file automatically as soon as the indented block underneath it finishes, even if an error happens partway through. You only need to call `f.close()` manually if you open a file without `with`, which is why almost all modern Python code uses the `with` form.
+ </FAQItem>
+ <FAQItem question="What's the difference between f.read() and f.readlines()?">
+ `f.read()` returns the entire file as one single string, newlines and all. `f.readlines()` returns a list where each element is one line of the file. Use `read()` when you want the whole document as a block of text, and `readlines()` when a script needs to process the file one line at a time.
+ </FAQItem>
+ <FAQItem question="Can I read and write to the same file at the same time?">
+ Python supports modes like `"r+"` that allow both, but they're rare in beginner and AI pipeline code, and easy to misuse. The far more common pattern is two separate steps: read the file fully into a variable first, then open it again in `"w"` mode to write updated content back. That's the pattern you'll see in almost every real script.
+ </FAQItem>
+</FAQ>
