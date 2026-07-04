@@ -22,9 +22,6 @@ faqs:
     a: "They solve different problems. `pip` installs packages; `venv` decides *where* those packages go. Without an active venv, `pip install` targets your one global Python installation. With a venv active, the same `pip install` command targets that project's isolated folder instead, same tool, different destination."
 ---
 
-{/* IMAGE PROMPT: Editorial flat illustration of two separate open folders side by side, each containing its own small Python logo and stack of package icons, warm cream background, clay accent (#C9633F) outlining each folder, clean and minimal, no text in image, Seekvana palette: #FAF8F3, #C9633F | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
-{/* IMAGE PROMPT: Split terminal window illustration, left half showing a plain $ prompt labeled "before", right half showing a (venv) $ prompt labeled "after", warm cream background, clay accent on the (venv) text, minimal and clean, Seekvana palette: #FAF8F3, #C9633F | FILENAME: venv-prompt-before-after.webp | DIMENSIONS: 800x450 */}
-
 <ArticleImage
  src="/images/articles/building-with-ai/python-venv/cover.webp"
  alt="Two separate folders side by side, each holding its own Python logo and package icons, clay accent outlines"
@@ -63,6 +60,12 @@ Give each project its own venv, and the conflict disappears entirely. Project A'
 
 This isn't a rare edge case, it's the default state of having more than one Python project on your machine. The moment you have two, you need this.
 
+<ArticleImage
+  src="/images/articles/building-with-ai/python-venv/venv-isolation-diagram.webp"
+  alt="Diagram comparing a shared global Python environment causing a Django version conflict against isolated per-project venvs, plus a terminal showing the prompt before and after activation"
+  caption="No venv: Project A and B fight over one Django version. With venv: each project keeps its own, and the (venv) prefix confirms which one is active."
+/>
+
 ## Creating and Activating a venv
 
 <Steps>
@@ -91,12 +94,6 @@ This isn't a rare edge case, it's the default state of having more than one Pyth
  One word, no arguments. The `(venv)` prefix disappears, and your terminal returns to using system Python. Your project files are untouched either way, deactivating just changes which Python interpreter is currently active.
  </Step>
 </Steps>
-
-<ArticleImage
- src="/images/articles/building-with-ai/python-venv/venv-prompt-before-after.webp"
- alt="Terminal prompt shown plain before activation and prefixed with (venv) after activation"
- caption="The (venv) prefix is the only visual signal telling you which Python your commands are actually using."
-/>
 
 ## The #1 Beginner Mistake
 
