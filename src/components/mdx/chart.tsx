@@ -10,21 +10,24 @@ import {
   Cell,
 } from 'recharts'
 
-interface ChartDataPoint {
-  label: string
-  value: number
-}
-
 interface ChartProps {
   type: 'bar'
   title: string
-  data: ChartDataPoint[]
+  data: string
   unit?: string
   caption?: string
 }
 
-export function Chart({ title, data = [], unit, caption }: ChartProps) {
-  const formatted = data.map((d) => ({ ...d, name: d.label }))
+export function Chart({ title, data, unit, caption }: ChartProps) {
+  const parsed = (data ?? '')
+    .split('|||')
+    .map((entry) => entry.trim())
+    .filter(Boolean)
+    .map((entry) => {
+      const [label, value] = entry.split(':')
+      return { label: label?.trim() ?? '', value: parseFloat(value ?? '0') }
+    })
+  const formatted = parsed.map((d) => ({ ...d, name: d.label }))
 
   return (
     <figure className="my-8 bg-surface-subtle border border-border rounded-xl p-6">
@@ -60,7 +63,7 @@ export function Chart({ title, data = [], unit, caption }: ChartProps) {
             }}
           />
           <Bar dataKey="value" radius={[0, 4, 4, 0]}>
-            {data.map((_, i) => (
+            {parsed.map((_, i) => (
               <Cell
                 key={i}
                 fill="var(--color-accent)"

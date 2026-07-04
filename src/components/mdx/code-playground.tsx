@@ -13,12 +13,14 @@ const Sandpack = dynamic(
 )
 
 interface CodePlaygroundProps {
-  files: Record<string, string>
+  filename: string
+  code: string
   title?: string
 }
 
-export function CodePlayground({ files, title }: CodePlaygroundProps) {
+export function CodePlayground({ filename, code, title }: CodePlaygroundProps) {
   const { resolvedTheme } = useTheme()
+  const files = { [`/${filename}`]: code.replace(/\\n/g, '\n') }
 
   return (
     <div className="my-8">
