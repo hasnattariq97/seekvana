@@ -11,6 +11,15 @@ tags: ["git", "version control", "git tutorial", "git for beginners"]
 featured: false
 lessonModule: "04"
 lessonNumber: "04.03"
+faqs:
+  - q: "Why do I need git add if I already saved the file?"
+    a: "Saving a file in your editor and staging it with `git add` are two different things. Saving writes the file to your hard drive, Git does not notice. Staging with `git add` tells Git \"I want to include this specific change in my next commit.\" This separation gives you control: you can edit ten files and commit only three of them, keeping unrelated changes out of the same snapshot."
+  - q: "What should I write in my commit message?"
+    a: "Write a short phrase that describes what the commit does, not what you did. Use the imperative mood: \"Add login page\" rather than \"Added login page.\" Aim for under 72 characters. If you cannot summarize the change in one short phrase, the commit probably contains too many unrelated changes, consider splitting it into two commits."
+  - q: "What does 'nothing to commit, working tree clean' mean?"
+    a: "It means Git sees no changes since your last commit. Every file in your project matches the last snapshot exactly. This is not an error; it is the all-clear. You will see this message whenever you run `git status` immediately after a commit, or when you switch to a branch with no pending changes."
+  - q: "Does git add . include my .env file?"
+    a: "Yes, `git add .` stages everything in the folder, including hidden files and `.env` files. This is why you always want a `.gitignore` in place before you run `git add` for the first time. The `.gitignore` file tells Git which files to ignore completely. [Lesson 04.07 on gitignore](/library/building-with-ai/git-gitignore) covers this in detail, it is one of the most important safety habits in all of Git."
 ---
 
 {/* IMAGE PROMPT: Editorial flat illustration of a four-step pipeline, folder icon → staging area tray → commit badge → cloud, with simple icons at each step, warm cream background (#FAF8F3), clay accent (#C9633F) on the active commit step, clean workflow diagram feel, Seekvana editorial style, no text in image | FILENAME: cover.webp | DIMENSIONS: 1200×630 */}

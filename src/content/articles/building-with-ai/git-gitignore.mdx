@@ -11,6 +11,15 @@ tags: ["git", "github", "gitignore", "api keys", "version control"]
 featured: false
 lessonModule: "04"
 lessonNumber: "04.07"
+faqs:
+  - q: "What happens if I already committed my .env file before adding .gitignore?"
+    a: "Rotate your API key immediately. Go to your provider's console (Anthropic, OpenAI, etc.) and regenerate it before doing anything else. The old key is compromised the moment it hits a public repo. Once you have rotated it, you can remove the file from Git history using a tool called `git filter-repo`. Adding `.gitignore` now prevents future commits but does not erase the past."
+  - q: "Does .gitignore protect me if my GitHub repo is private?"
+    a: "Private repos reduce your exposure, but they are not a substitute for `.gitignore`. Private repos can become public accidentally, collaborators can see everything, and if your GitHub account is ever compromised, all private repo contents are exposed. Treat your API keys as secrets regardless of repo visibility."
+  - q: "Do I need a .gitignore file in every project?"
+    a: "Yes. Every project that has a `.git` folder should have a `.gitignore`. Make creating it the second thing you do after `git init`. It takes 30 seconds and protects you from a category of mistakes that can be very expensive to fix after the fact."
+  - q: "Can I add comments to a .gitignore file?"
+    a: "Yes. Any line starting with `#` is treated as a comment and ignored by Git. This is useful for organizing your `.gitignore` into labeled sections, for example `# Python` above your Python patterns and `# macOS` above `.DS_Store`. Comments have no effect on behavior."
 ---
 
 <ArticleImage

@@ -11,6 +11,15 @@ tags: ["how do llms work", "tokens in ai", "llm explained", "how does chatgpt wo
 featured: false
 lessonModule: "00"
 lessonNumber: "01.03"
+faqs:
+  - q: "Why doesn't ChatGPT remember me from last week?"
+    a: "The base LLM is stateless — it starts fresh every session with no memory of previous conversations. What feels like memory in apps like Claude.ai or ChatGPT is the application layer storing your history and re-injecting it into the context window at the start of each new session. The model itself isn't recalling anything. It's reading your past messages the same way it reads your current one: as tokens in context."
+  - q: "If it's just predicting the next word, how can it write code and solve problems?"
+    a: "Because predicting the next token in code or logic requires the model to have internalized the patterns of correct reasoning. After training on billions of lines of working code and millions of solved math problems, \"what comes next\" in a function means knowing what valid syntax, logical structure, and correct outputs look like. The mechanism is simple. The result of applying it at scale is not."
+  - q: "Why does ChatGPT give different answers to the same question every time?"
+    a: "The model doesn't always select the single most likely next token — it samples from a probability distribution. This randomness is controlled by a setting called temperature. Higher temperature produces more varied, creative responses. Lower temperature locks the output closer to the statistically dominant prediction. This is why asking the same question twice rarely gives the exact same answer, and why setting temperature to zero gives you more deterministic, repeatable output."
+  - q: "Can you run an LLM on your own computer without the internet?"
+    a: "Yes. Many open-weight models — Llama, Mistral, Phi — can run entirely on a personal laptop or desktop using tools like Ollama or LM Studio, with no internet connection after the initial download. ChatGPT and Claude are cloud-based services where the model lives on company servers. But the underlying technology is not locked to the cloud. Local models are typically smaller and less capable than frontier cloud models, but they run privately, offline, and for free."
 ---
 
 <ArticleImage

@@ -11,6 +11,15 @@ tags: ["python loops", "python for loop", "python while loop", "learn python bas
 featured: false
 lessonModule: "05"
 lessonNumber: "05.05"
+faqs:
+  - q: "What's the difference between a for loop and a while loop in Python?"
+    a: "A `for` loop runs once for each item in a known collection, like a list of messages, you know roughly how many times it'll run before it starts. A `while` loop keeps running as long as a condition stays true, with no fixed number of passes decided in advance. AI agents use `while` loops because they don't know how many steps a task will take until it's done."
+  - q: "Why does agent code use while loops instead of for loops?"
+    a: "An agent doesn't know in advance how many actions it will need to complete a task, it might take two steps or twenty. A `while` loop lets it keep checking \"am I done yet?\" after each action, which is exactly the shape of autonomous behavior. A `for` loop would require knowing the step count upfront, which agents don't."
+  - q: "What happens if a while loop's condition never becomes false?"
+    a: "It runs forever, this is called an infinite loop, and it will hang or crash your program. In real code, this is usually prevented with a `break` statement tied to a specific exit condition, or a maximum retry count. If you see `while True`, always look for the `break` that's meant to stop it."
+  - q: "Do I need to memorize loop syntax to read AI code?"
+    a: "No. This lesson is about recognizing the pattern, not writing it from memory. If you can look at a loop and say \"this repeats for each item\" or \"this keeps going until X happens,\" you've got what you need to follow agent code. Writing loops yourself is a separate skill for a later stage."
 ---
 
 <ArticleImage src="/images/articles/building-with-ai/python-loops/cover.webp" alt="Circular arrow suggesting repetition next to a list of items being processed one by one, clay accent on the active item" />

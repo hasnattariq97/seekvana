@@ -11,6 +11,15 @@ tags: ["terminal", "command line", "basic terminal commands", "beginner"]
 featured: false
 lessonModule: "02"
 lessonNumber: "02.03"
+faqs:
+  - q: "Does rm really skip the Recycle Bin?"
+    a: "Yes, on Mac, Linux, and Windows PowerShell, `rm` (or `Remove-Item`) permanently deletes without sending files to the Recycle Bin. There is no undo. Before running `rm` on anything important, double-check the filename. If you're nervous, move the file to a backup folder with `mv` first, then delete it once you're sure."
+  - q: "What's the difference between mv and cp?"
+    a: "`cp` copies a file, the original stays exactly where it was, and a copy appears at the destination. `mv` moves or renames a file, the original disappears from its current location. If you want to keep the original and also have a copy elsewhere, use `cp`. If you want to rename or relocate the file, use `mv`."
+  - q: "Do I need to memorize all of these?"
+    a: "No. Professional developers look up command syntax regularly, that's not a sign of inexperience, it's just how the job works. What matters is knowing *which command to reach for* when you need to do something. Bookmark this page and refer back to it. After a few weeks of regular use, the ones you use most will stick naturally."
+  - q: "Some of these commands work on my Mac but not on Windows, why?"
+    a: "Most commands here (`pwd`, `ls`, `cd`, `mkdir`, `cp`, `mv`, `rm`, `cat`, `clear`) work on Mac, Linux, and Windows PowerShell. The main exceptions: `touch` doesn't exist in PowerShell, use `New-Item` instead. `clear` works in PowerShell but Windows CMD uses `cls`. If you're following along on Windows and hitting errors, make sure you're using PowerShell or Git Bash, not the older Command Prompt."
 ---
 
 <ArticleImage

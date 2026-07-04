@@ -11,6 +11,15 @@ tags: ["python", "python for beginners", "python variables", "learn python"]
 featured: false
 lessonModule: "05"
 lessonNumber: "05.02"
+faqs:
+  - q: "What's the difference between a variable and a value in Python?"
+    a: "A variable is the label, the name you give to a piece of stored data. A value is what's actually stored. In `model = \"claude-sonnet-4-6\"`, the variable is `model` and the value is `\"claude-sonnet-4-6\"`. The variable is the sticky note label; the value is what's written on it. You refer to the value later by using the variable name."
+  - q: "Can you change a variable's value after setting it?"
+    a: "Yes. In Python, you can reassign a variable at any point by writing a new assignment: `model = \"claude-haiku-4-5-20251001\"` would overwrite the previous value. The variable name stays the same; the stored value changes. This is common in scripts that switch models mid-run or update settings based on conditions."
+  - q: "Does Python care if you use double quotes or single quotes for strings?"
+    a: "No, Python accepts both. `model = \"claude-sonnet-4-6\"` and `model = 'claude-sonnet-4-6'` are identical. The only rule: you must open and close with the same type. `model = \"claude-sonnet-4-6'` (mixed) is an error. Most AI code uses double quotes by convention, but single quotes are equally valid."
+  - q: "What happens if you pass the wrong type, like a number in quotes?"
+    a: "The API rejects it. If you write `max_tokens = \"1024\"` with quotes, Python stores it as the string `\"1024\"`, not the integer `1024`. When that value reaches the Anthropic API, the API expects an integer and receives a string instead, it returns a validation error. Type matters. The quotes are not decoration; they determine what kind of value you're sending."
 ---
 
 <ArticleImage src="/images/articles/building-with-ai/python-variables/cover.webp" alt="Four coloured sticky notes representing the four Python data types: string, integer, float, and boolean" />

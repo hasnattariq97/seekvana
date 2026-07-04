@@ -11,6 +11,15 @@ tags: ["python", "python for beginners", "python lists", "python dictionaries", 
 featured: false
 lessonModule: "05"
 lessonNumber: "05.03"
+faqs:
+  - q: "Why does Python start counting lists from 0 instead of 1?"
+    a: "Zero-based indexing is a convention inherited from lower-level languages like C, where it reflects how memory addresses are calculated. Python kept it for consistency with the broader programming world. In practice, you just need to remember: the first item is always `[0]`, the second is `[1]`, and so on. It becomes automatic quickly."
+  - q: "What happens if you try to access a dictionary key that doesn't exist?"
+    a: "Python raises a `KeyError` and the script crashes. For example, `message[\"name\"]` on a dictionary that only has `\"role\"` and `\"content\"` throws `KeyError: 'name'`. In production code, developers use `message.get(\"name\")` instead, which returns `None` if the key is missing rather than crashing. When reading AI code, if you see `.get()` instead of direct bracket access, that's why."
+  - q: "Can a list contain items of different types, like strings and numbers together?"
+    a: "Yes. Python lists can hold any mix of types in the same list, strings, numbers, booleans, other lists, or dictionaries. The Claude API messages list holds dictionaries, but you might also see lists of strings, lists of numbers, or even lists containing other lists. The square bracket syntax is always the same regardless of what's inside."
+  - q: "Is there a limit to how many messages you can put in the messages array?"
+    a: "Not a Python limit, but an API one. The Claude API has a context window measured in tokens, and every message in the list counts toward it. Very long conversation histories can hit the context limit and cause the API to return an error. In practice, long-running AI agents often summarise or trim older messages to keep the list within the token limit."
 ---
 
 <ArticleImage src="/images/articles/building-with-ai/python-lists-dicts/cover.webp" alt="A vertical list structure beside a key-value dictionary table, illustrating the two core Python data structures used in AI code" />

@@ -11,6 +11,15 @@ tags: ["environment variables", "terminal", "api keys", "developer setup"]
 featured: false
 lessonModule: "02"
 lessonNumber: "02.06"
+faqs:
+  - q: "What is an environment variable in simple terms?"
+    a: "An environment variable is a named value stored by your operating system that any program running on that machine can read. Write `API_KEY=abc123` once in your environment, and any script that knows to look for `API_KEY` can use it, without that value ever being written directly into your code files."
+  - q: "Why can't I just paste my API key directly into my Python file?"
+    a: "You can, and it works, but if that file ever reaches GitHub (even accidentally), the key is exposed. GitHub's secret-scanning detects it within minutes, and many API providers automatically revoke compromised keys. Using an environment variable keeps the key out of your source files entirely, so it can't accidentally leak."
+  - q: "Do environment variables get saved permanently when I set them in the terminal?"
+    a: "No. Using `export MY_VAR=value` (Mac/Linux) or `$env:MY_VAR=value` (Windows PowerShell) only lasts for the current terminal session. Close the window and it's gone. For persistent storage across sessions and projects, you use a `.env` file, which you'll set up in Module 03."
+  - q: "Are environment variables the same as the system variables I see in Windows Settings?"
+    a: "Related, but different. Windows has persistent \"system environment variables\" you can set through Control Panel → Advanced System Settings, and those stay permanently. When developers say \"set an env var,\" they usually mean the session-based terminal approach or a `.env` file, not editing system settings, which affects every program on your machine."
 ---
 
 <ArticleImage

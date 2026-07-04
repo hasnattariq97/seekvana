@@ -11,6 +11,15 @@ tags: ["git", "github", "version control", "beginner"]
 featured: false
 lessonModule: "04"
 lessonNumber: "04.11"
+faqs:
+  - q: "What if I accidentally pushed a secret to a private GitHub repo?"
+    a: "Private repos reduce your exposure significantly, but they don't eliminate risk entirely. Private repos can be made public accidentally, shared with the wrong collaborator, or compromised if someone gains access to your account. The safest rule: rotate any exposed key regardless of whether the repo is public or private. It takes five minutes and removes all doubt."
+  - q: "Can I use git revert instead of git filter-repo to remove a secret from history?"
+    a: "No. `git revert` adds a new commit that undoes the changes from a previous commit, but the original commit, including your secret, stays in the history permanently. Anyone who clones your repo can still check out the earlier commit and read the key. Only `git filter-repo` (or BFG Repo Cleaner) actually rewrites history and removes the secret from every commit."
+  - q: "What does <<<<<<< HEAD mean in a merge conflict?"
+    a: "HEAD refers to your current branch, the one you're on right now. The section between `<<<<<<< HEAD` and `=======` is the version of that code that exists in your current branch. The section between `=======` and `>>>>>>>` is the incoming version from the branch you're merging in. You choose which to keep, delete all three marker lines, and save."
+  - q: "Is it safe to just delete a conflicted file and start it from scratch?"
+    a: "That would delete your work and likely break things. The safer escape hatch is `git merge --abort`, it cancels the entire merge and returns your repo to exactly how it was before you started merging. From there you can pull the latest changes from the other branch, understand what changed, and attempt the merge again when you're ready."
 ---
 
 <ArticleImage src="/images/articles/building-with-ai/git-common-mistakes/cover.webp" alt="Illustration showing a Git repository with an exposed API key being scanned by bots on the left, and a merge conflict resolution flow on the right" />

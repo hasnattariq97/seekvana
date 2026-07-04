@@ -11,6 +11,15 @@ tags: ["python files", "python open file", "python write to file", "python read 
 featured: false
 lessonModule: "05"
 lessonNumber: "05.06"
+faqs:
+  - q: "What happens if I open a file in 'r' mode and it doesn't exist?"
+    a: "Python raises a `FileNotFoundError` and the script stops at that line unless the error is caught elsewhere. Read mode never creates files, it only opens ones that already exist. This is different from `\"w\"` mode, which creates a missing file automatically."
+  - q: "Do I need to close a file if I use the with keyword?"
+    a: "No. `with open(...) as f:` closes the file automatically as soon as the indented block underneath it finishes, even if an error happens partway through. You only need to call `f.close()` manually if you open a file without `with`, which is why almost all modern Python code uses the `with` form."
+  - q: "What's the difference between f.read() and f.readlines()?"
+    a: "`f.read()` returns the entire file as one single string, newlines and all. `f.readlines()` returns a list where each element is one line of the file. Use `read()` when you want the whole document as a block of text, and `readlines()` when a script needs to process the file one line at a time."
+  - q: "Can I read and write to the same file at the same time?"
+    a: "Python supports modes like `\"r+\"` that allow both, but they're rare in beginner and AI pipeline code, and easy to misuse. The far more common pattern is two separate steps: read the file fully into a variable first, then open it again in `\"w\"` mode to write updated content back. That's the pattern you'll see in almost every real script."
 ---
 
 <ArticleImage src="/images/articles/building-with-ai/python-files/cover.webp" alt="A file document with two arrows, one reading content out and one writing content in, clay accent on the arrows" />

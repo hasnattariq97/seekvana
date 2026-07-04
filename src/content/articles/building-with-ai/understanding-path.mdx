@@ -11,6 +11,15 @@ tags: ["developer environment", "terminal", "PATH variable", "command not found"
 featured: false
 lessonModule: "03"
 lessonNumber: "03.09"
+faqs:
+  - q: "What exactly is an environment variable?"
+    a: "An environment variable is a named value your operating system stores and makes available to programs and the terminal. PATH is one of these, it's a variable named \"PATH\" whose value is a list of folder locations. Other environment variables include things like your username or home directory. When you create a `.env` file for API keys, you're using the same concept at the project level."
+  - q: "Why does reinstalling fix a PATH problem?"
+    a: "When you reinstall a tool and choose the \"Add to PATH\" option, the installer writes the tool's folder location into your system's PATH environment variable. The tool was never the problem, the missing registration was. Reinstalling with the right option checked just adds the address to the list."
+  - q: "I ticked the checkbox but the terminal still says command not found, why?"
+    a: "Your terminal reads PATH when it first opens. If your terminal was already open when you reinstalled, it loaded the old PATH and doesn't know about the new entry. Close the terminal completely, not just the tab, the whole window, and open it again. Then try the command. This fixes the problem 90% of the time."
+  - q: "Does PATH affect my code, or just the terminal?"
+    a: "PATH only affects the terminal, it determines which commands the shell can find and run. Your code doesn't use PATH directly. However, when you run your code from the terminal (like `python my_script.py`), the terminal uses PATH to find the Python executable. So if Python isn't in PATH, you can't run your code from the terminal, but PATH itself isn't part of your program."
 ---
 
 <ArticleImage

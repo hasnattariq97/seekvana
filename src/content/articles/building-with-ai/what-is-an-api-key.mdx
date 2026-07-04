@@ -11,6 +11,15 @@ tags: ["api key", "what is an api key", "api for beginners", "building with ai"]
 featured: false
 lessonModule: "03"
 lessonNumber: "03.07"
+faqs:
+  - q: "Is an API key the same as a password?"
+    a: "Partially, yes, but with an important difference. A password identifies *you* as a person. An API key identifies your *app or project*. You might have multiple API keys for different projects, all connected to the same account. If one key gets compromised, you revoke just that one without affecting the others."
+  - q: "What happens if my API key gets stolen?"
+    a: "The thief can send requests billed to your account, and they will, usually through automated scripts. Go to console.anthropic.com immediately, revoke the compromised key, and create a new one. Then check your usage dashboard for any unexpected charges. This is why storing keys in a `.env` file (next lesson) is non-negotiable."
+  - q: "Do I get charged just for creating an API key?"
+    a: "No. Creating an API key is free. You're only charged when your code actually sends requests to the API. Anthropic gives you $5 free credit on signup, enough to run hundreds of beginner-level requests without spending anything. Your key won't cost you a penny until you start using it."
+  - q: "Why is an API key such a long random string and not something readable?"
+    a: "The randomness is the security. A short or readable key, like your username, would be easy to guess. The long random string means there are trillions of possible combinations, making it practically impossible to stumble on by accident. The more random, the more secure."
 ---
 
 <ArticleImage

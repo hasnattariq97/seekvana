@@ -11,6 +11,15 @@ tags: ["git", "github", "pull request", "version control", "beginners"]
 featured: false
 lessonModule: "04"
 lessonNumber: "04.06"
+faqs:
+  - q: "What happens to a branch after a pull request is merged?"
+    a: "The branch still exists until you delete it, merging doesn't remove it automatically. GitHub will offer you a \"Delete branch\" button right after you merge. It's good practice to delete branches once their work is in `main`. Your commits are safe; they're now part of the main branch history."
+  - q: "Can I open a pull request if no one else will review it?"
+    a: "Yes, and you should. Solo pull requests are normal for learners and solo developers. The act of writing a PR title and description forces you to review your own changes before they become permanent, you'll catch mistakes you'd miss if you merged directly. It also builds the habit for when you do work with a team."
+  - q: "Why does GitHub call it a pull request if I'm the one pushing my code?"
+    a: "The name comes from the receiving branch's perspective. You push your branch, then ask the `main` branch to pull your changes in. GitLab calls the same thing a \"merge request,\" which most people find clearer. The underlying workflow is identical, the difference is just terminology between the two platforms."
+  - q: "What's the difference between merging a pull request and running git merge in the terminal?"
+    a: "Both accomplish the same thing: combining one branch into another. The difference is where it happens. `git merge` runs locally in your terminal and takes effect immediately. A PR merge happens on GitHub, leaves a visible record in the repo's history, and gives you (or a teammate) a chance to review the diff first. For real projects, PRs are preferred because of that review step and the audit trail they create."
 ---
 
 <ArticleImage

@@ -11,6 +11,15 @@ tags: ["claude api python", "anthropic python sdk", "first api call", "python be
 featured: false
 lessonModule: "05"
 lessonNumber: "05.09"
+faqs:
+  - q: "Do I need a paid Anthropic account to make my first API call?"
+    a: "Anthropic gives new accounts free starter credit, which is enough for many first scripts and lessons like this one. Once that credit runs out, API usage is billed per request, unlike the free chat interface at claude.ai, which runs on a separate plan entirely."
+  - q: "Why does my script hang for a few seconds before printing anything?"
+    a: "That pause is normal. Your request travels to Claude's servers, Claude generates a full response, and the reply travels back before `print()` has anything to show. Longer questions or higher `max_tokens` values take a bit longer; a silent multi-second wait is expected behavior, not a bug."
+  - q: "Can I send more than one message in the messages list?"
+    a: "Yes, that's exactly how a back-and-forth conversation works. Each previous message, both yours and Claude's, gets added to the list as its own dictionary with a role of `\"user\"` or `\"assistant\"`, so Claude sees the full conversation history on every call."
+  - q: "What happens if I forget max_tokens entirely?"
+    a: "The call fails immediately with a validation error, before your request ever reaches Claude's model. `max_tokens` is required on every call; there's no default value the SDK assumes for you, so it's worth treating it as a non-optional line every time you write this script."
 ---
 
 {/* IMAGE PROMPT: Editorial flat illustration of a small paper airplane made of code flying from a laptop screen toward a stylized soft cloud icon, warm cream background, clay accent (#C9633F) on the paper airplane, clean and minimal, no text in image, Seekvana palette: #FAF8F3, #C9633F | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}

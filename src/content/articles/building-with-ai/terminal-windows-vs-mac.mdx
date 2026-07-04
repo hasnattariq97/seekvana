@@ -11,6 +11,15 @@ tags: ["terminal", "powershell", "command line", "windows", "mac", "git bash"]
 featured: false
 lessonModule: "02"
 lessonNumber: "02.02"
+faqs:
+  - q: "What is the difference between PowerShell and Terminal?"
+    a: "PowerShell is a shell that runs on Windows. Terminal is a word people use for the command-line interface on Mac and Linux, specifically, it usually runs a shell called zsh or bash. They serve the same basic purpose (letting you type commands to control your computer), but they have different syntax for some commands. Most beginner commands like `cd`, `ls`, and `pwd` work in both."
+  - q: "Is Windows Terminal the same as PowerShell?"
+    a: "No, and this trips up a lot of beginners. Windows Terminal is an app (think of it as a frame or window) that can run different shells inside it, including PowerShell, Command Prompt, or Git Bash. PowerShell is the shell itself, the thing that interprets your commands. You can run PowerShell inside Windows Terminal, but Windows Terminal is not PowerShell."
+  - q: "Do I need Git Bash if I already have PowerShell?"
+    a: "Not immediately. PowerShell handles most commands in this course without issues. Git Bash becomes valuable when you follow tutorials written for Mac/Linux, it removes the command translation step entirely. Since Module 03 installs Git anyway, you'll get Git Bash automatically at that point. Until then, PowerShell is fine."
+  - q: "Why do some commands work on Mac but not on Windows?"
+    a: "Mac and Linux terminals use a shell standard called POSIX, which defines a set of commands like `touch`, `grep`, and `cat`. PowerShell is not POSIX-based; it has its own command set, though it includes aliases for the most common ones. When a tutorial uses a POSIX-only command, PowerShell either has a different name for it or doesn't have it at all. Git Bash is POSIX-compatible, which is why it closes that gap."
 ---
 
 <ArticleImage

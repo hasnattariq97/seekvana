@@ -11,6 +11,15 @@ tags: ["terminal", "file paths", "command line", "beginners"]
 featured: false
 lessonModule: "02"
 lessonNumber: "02.04"
+faqs:
+  - q: "Why does the same path work sometimes but not other times?"
+    a: "This almost always means you're using a relative path and your current folder has changed. A relative path like `my-app/index.py` means \"look for my-app starting from wherever I am right now.\" If you move to a different folder, the same path now points somewhere else, or nowhere. Run `pwd` to check your current location, then adjust your path or navigate to the right starting folder first."
+  - q: "What does ./ mean at the beginning of a path?"
+    a: "The `./` prefix means \"starting from this folder\", it makes a relative path explicit. Writing `./my-app` is the same as writing `my-app`, but the dot-slash makes it obvious you mean the current folder. You'll see it often in commands like `./script.sh` to run a script that's in your current folder. It's not required, but it removes ambiguity."
+  - q: "Do file paths work the same on Windows and Mac?"
+    a: "The concept is identical, both use a tree of folders with a root at the top. The differences are cosmetic: Mac and Linux use a forward slash (`/`) as the separator and start from `/` (root), while Windows uses a backslash (`\\`) and starts from a drive letter like `C:\\`. Most modern Windows tools (including Git Bash and PowerShell) also accept forward slashes, so the practical difference is smaller than it looks."
+  - q: "How do I find my absolute path if I don't know it?"
+    a: "Run `pwd` in your terminal, it prints the full absolute path to your current folder. If you need the absolute path to a specific file inside that folder, run `pwd` to get the base, then add the filename. On Mac, you can also right-click any file in Finder, hold the Option key, and choose \"Copy as Pathname\" to get its absolute path without touching the terminal."
 ---
 
 <ArticleImage

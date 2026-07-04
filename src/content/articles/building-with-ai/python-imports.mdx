@@ -11,6 +11,15 @@ tags: ["python import", "python library", "python module", "python import statem
 featured: false
 lessonModule: "05"
 lessonNumber: "05.07"
+faqs:
+  - q: "Do I need to memorize the standard library, third-party, local order for imports?"
+    a: "No. Python runs the script correctly no matter what order imports appear in. The order is a readability convention that professional codebases and linters follow, so learning to recognize it just helps you read other people's code faster, it's not a rule you need to enforce yourself yet."
+  - q: "Why does pip install work but the import still fails?"
+    a: "This is almost always a virtual environment mismatch: the package installed into a different Python environment than the one running your script. It's a common but separate issue from what this lesson covers, you'll deal with virtual environments directly in a later Launchpad lesson."
+  - q: "What does an import with a dot in front, like from.import utils, mean?"
+    a: "That's a relative import, it tells Python to look inside the current package folder rather than the top-level project. You'll run into these in larger, multi-folder projects. For now, focus on the three patterns in this lesson, relative imports become relevant once your projects grow past a single file."
+  - q: "Can I import the same library twice in one script?"
+    a: "You can, but Python only actually loads it once, repeat imports are ignored after the first. There's no error and no performance cost, but it's unnecessary clutter, so most codebases keep every library's import to a single line near the top of the file."
 ---
 
 {/* IMAGE PROMPT: Editorial flat illustration of a toolbox being opened with specific tools floating out labelled as functions, warm cream background, clay accent (#C9633F) on the open toolbox, clean and clear, suggests ready-to-use capability, no text in image, Seekvana palette: #FAF8F3, #C9633F | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}

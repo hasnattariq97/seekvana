@@ -11,6 +11,15 @@ tags: ["terminal", "error messages", "command line", "debugging", "beginners"]
 featured: false
 lessonModule: "02"
 lessonNumber: "02.07"
+faqs:
+  - q: "What does 'command not found' mean on a Mac?"
+    a: "It means the shell (usually zsh on modern Macs) searched all the folders in your PATH and couldn't find a program with that name. The three most common causes are a typo in the command, the tool not being installed, or the tool being installed somewhere your PATH doesn't include. Start by checking the spelling, that fixes it the majority of the time."
+  - q: "Is it safe to use sudo to fix permission denied errors?"
+    a: "For the tasks in this course, yes. `sudo` lets you run a command as the system administrator, which is sometimes required for installing software or editing system files. The risk isn't `sudo` itself, it's using it without understanding what the command does. Read the command before adding `sudo`. If you're following a trusted tutorial, it's generally fine."
+  - q: "Why does the Python error point to a line that isn't where my mistake actually is?"
+    a: "Python detects the error at the point where it becomes impossible to continue parsing the code, which is sometimes after the actual mistake. A missing opening bracket on line 3 might not cause an error until line 8 when Python expects something to close. If the line Python highlights looks fine to you, look at the line just before it for the real problem."
+  - q: "How do I know which part of a long error message to actually read?"
+    a: "Start at the bottom. The last line of any terminal error is almost always the summary, it tells you the error type and what specifically went wrong. The lines above it are the traceback, which shows how the program got to that point. For fixing most beginner errors, the bottom line and the line number are the only parts you need."
 ---
 
 <ArticleImage

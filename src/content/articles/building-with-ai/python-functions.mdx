@@ -11,6 +11,15 @@ tags: ["python", "python functions", "python for beginners", "building with ai"]
 featured: false
 lessonModule: "05"
 lessonNumber: "05.04"
+faqs:
+  - q: "What does def mean in Python?"
+    a: "`def` stands for \"define.\" It marks the start of a function definition and tells Python to store the function under that name for later use. Nothing inside the function runs at this point, the function is only executed when you call it by name elsewhere in the code."
+  - q: "What happens if a Python function has no return statement?"
+    a: "The function runs all its code and then returns `None`, Python's value for \"nothing.\" This is fine for functions that perform an action (printing output, saving a file, making an API call with no result needed) but will cause bugs if you try to store or use the result. Always check whether a function's return value matters before using it."
+  - q: "Can a Python function call another function inside it?"
+    a: "Yes, and this is exactly how AI agent code is structured. A high-level function like `run_agent()` calls smaller functions like `call_tool()`, `format_response()`, and `log_result()`. Each function does one job. Reading agent code becomes much easier once you treat each function call as a black box: name in, result out, details inside."
+  - q: "What is 'self' in a Python function?"
+    a: "`self` appears in functions that belong to a class, called methods. When you see `def create(self, model, messages):`, the function is part of an object and `self` refers to that object. In the Anthropic SDK, `client.messages.create(...)` calls a method where `self` is the `client` object. You don't pass `self` yourself, Python handles it automatically. For reading purposes, treat `self` as the object the method belongs to and ignore it."
 ---
 
 <ArticleImage src="/images/articles/building-with-ai/python-functions/cover.webp" alt="Illustration of a function as a processor: input arrow on the left, output arrow on the right, clay accent on the output" />

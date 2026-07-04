@@ -11,6 +11,15 @@ tags: ["npm", "pip", "package manager", "python", "nodejs"]
 featured: false
 lessonModule: "02"
 lessonNumber: "02.05"
+faqs:
+  - q: "What's the difference between npm install and npm install -g?"
+    a: "`npm install [package]` installs a package into the current project folder only, it goes into a `node_modules` subfolder and is only available to that project. `npm install -g [package]` installs globally, meaning the package is available anywhere in your terminal, not tied to a specific project. CLI tools like Claude Code should always be installed globally."
+  - q: "Do I need to install npm separately?"
+    a: "No. npm comes bundled with Node.js, when you install Node.js, you automatically get npm as well. You can verify both are installed by running `node --version` and `npm --version` in your terminal. If Node.js is on your machine, npm is already there."
+  - q: "Why does pip install say 'externally managed environment' on my Mac or Linux?"
+    a: "Python 3.12 and above on some Mac and Linux setups blocks system-wide pip installs to protect the OS. If you see this error, you can add the `--break-system-packages` flag: `pip install --break-system-packages [package]`. A cleaner long-term solution is virtual environments, which you'll set up in Module 04."
+  - q: "Can I use npm and pip in the same project?"
+    a: "Yes, and most AI projects do. Python handles the AI logic and backend scripts (pip packages like `anthropic` or `fastapi`), while npm handles CLI tools or JavaScript-based parts of the project. The two package managers are completely independent and don't interfere with each other."
 ---
 
 <ArticleImage

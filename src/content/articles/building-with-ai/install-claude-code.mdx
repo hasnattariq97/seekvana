@@ -11,6 +11,15 @@ tags: ["claude code", "how to install claude code cli", "anthropic cli", "claude
 featured: false
 lessonModule: "03"
 lessonNumber: "03.10"
+faqs:
+  - q: "Do I need Node.js to install Claude Code?"
+    a: "No, not if you use the native installer. The `curl` command (Mac/Linux) or PowerShell command (Windows) installs Claude Code directly with no extra dependencies. Node.js is only required if you choose to install via npm instead. For most beginners, the native installer is the simpler path."
+  - q: "Why did a browser tab open when I ran claude?"
+    a: "That's the authentication step. Claude Code verifies your identity through your Anthropic account the first time you run it. A browser tab opens, you log in, you approve the connection, and then you're back in the terminal and ready to go. It only happens once per machine."
+  - q: "Can I use Claude Code with the free Claude.ai plan?"
+    a: "No. The free Claude.ai chat plan and the Anthropic API are separate products. Claude Code requires API access, either a Pro or Max subscription, or an API key with credits. If you followed Lesson 03.06, you already have an Anthropic Console account with $5 in free credits. That's enough to get started without paying anything extra."
+  - q: "What's the difference between Claude Code and GitHub Copilot?"
+    a: "GitHub Copilot is an autocomplete tool, it suggests the next line of code as you type. Claude Code is an agentic assistant, you describe a goal, and it reads your project, makes a plan, and takes action across multiple files. They work differently and are used at different moments. Copilot is passive; Claude Code is active."
 ---
 
 <ArticleImage

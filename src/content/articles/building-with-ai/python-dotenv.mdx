@@ -11,6 +11,15 @@ tags: ["python dotenv", "load environment variables python", "python env file"]
 featured: false
 lessonModule: "05"
 lessonNumber: "05.08"
+faqs:
+  - q: "Why does os.getenv() return None even though my .env file has the key?"
+    a: "Almost always one of four causes: `load_dotenv()` was never called, it was called after `os.getenv()`, the key name doesn't match exactly (names are case-sensitive), or your script is running from a different working directory than where `.env` lives. Check those four in order."
+  - q: "Does load_dotenv() work the same way in Docker or production?"
+    a: "Not quite. `load_dotenv()` doesn't override environment variables that are already set, so if your hosting platform injects real environment variables, those take priority over anything in `.env`. This is intentional, it lets `.env` handle local development while production uses its own secret system."
+  - q: "Can I load a .env file from a different folder?"
+    a: "Yes. Pass a path directly: `load_dotenv(dotenv_path=\"/path/to/.env\")`, or build one relative to your script with `Path(__file__).resolve().parent / '.env'`. This avoids the working-directory problem entirely and is worth doing once your project has more than one script."
+  - q: "Is it safe to commit my .env file to git if I delete it later?"
+    a: "No. Deleting the file removes it going forward, but the secret still exists in your git history and can be recovered from any earlier commit. Add `.env` to `.gitignore` before your first commit, and if a key was ever pushed, treat it as exposed, rotate it."
 ---
 
 <ArticleImage

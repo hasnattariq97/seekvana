@@ -11,6 +11,15 @@ tags: ["developer environment", "api keys", "dotenv", "security", "beginners"]
 featured: false
 lessonModule: "03"
 lessonNumber: "03.08"
+faqs:
+  - q: "Do I need to install python-dotenv just to use a .env file?"
+    a: "No, the `.env` file is just a plain text file. Any program can read it. The python-dotenv library is a convenience that loads the file automatically into your Python code. You don't need it just to create the file or store a key. You will use it in Module 04 when you start writing Python programs that call APIs."
+  - q: "What happens if I forget to add .env to .gitignore?"
+    a: "If you run `git add .` and push to a public repository, your `.env` file and everything in it goes with it. Bots scan GitHub continuously, your API key could be found and used within minutes. If this happens: delete the key immediately in your provider's dashboard, generate a new one, and add `.gitignore` before your next push."
+  - q: "Can I store more than one API key in the same .env file?"
+    a: "Yes, one key per line. Each line follows the same format: `KEY_NAME=value`. For example, you might have `ANTHROPIC_API_KEY=...` on one line and `OPENAI_API_KEY=...` on the next. There's no limit to how many keys you can store in one `.env` file."
+  - q: "Should I create a new .env file for each project, or reuse one?"
+    a: "Create a fresh `.env` file for each project, stored in that project's root folder. Never share one `.env` file across multiple projects. This keeps your secrets scoped to where they're actually used, and makes it easy to rotate or delete keys for a single project without affecting others."
 ---
 
 <ArticleImage

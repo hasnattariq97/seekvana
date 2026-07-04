@@ -11,6 +11,15 @@ tags: ["python json", "json explained for beginners", "python json parsing"]
 featured: false
 lessonModule: "05"
 lessonNumber: "05.10"
+faqs:
+  - q: "Is JSON the same thing as a Python dictionary?"
+    a: "Not exactly. JSON is text, a string format for moving structured data between programs. A Python dictionary is a live object in memory. They look nearly identical and `json.loads()` converts one into the other, but until you parse it, a JSON response is just a string, not something you can index with `[\"key\"]` yet."
+  - q: "Why does my JSON response have quotes around numbers sometimes?"
+    a: "If a number is inside quotes like `\"14\"`, it's being stored as a string, not a number, in that JSON document. This happens when an API author encodes IDs or counts as strings deliberately. Check with `type()` after parsing, and wrap in `int()` or `float()` if you need to do math with it."
+  - q: "What happens if I call json.loads() on invalid JSON?"
+    a: "Python raises a `json.JSONDecodeError` with a message pointing at the exact character where parsing failed. This is common when an API returns an error page (like HTML) instead of JSON, or when a string got truncated mid-transfer. Always wrap `json.loads()` in a try/except when parsing data you didn't generate yourself."
+  - q: "Do I ever need to write raw JSON by hand as a beginner?"
+    a: "Rarely. Most of the time you'll build a Python dict normally and let `json.dumps()` convert it when you need to send it somewhere, or let the Claude SDK handle the conversion for you entirely. Hand-writing JSON mostly comes up when testing an API directly with a tool like curl or Postman."
 ---
 
 <ArticleImage

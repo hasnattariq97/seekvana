@@ -11,6 +11,15 @@ tags: ["git", "version control", "git branches", "github", "beginners"]
 featured: false
 lessonModule: "04"
 lessonNumber: "04.05"
+faqs:
+  - q: "What's the difference between main and master in Git?"
+    a: "They're the same thing with different names. \"master\" was the default branch name in older versions of Git. Around 2020, GitHub and GitLab switched their default to \"main\" to use more neutral terminology. If you see a tutorial using \"master,\" it's just following the older convention, the concept is identical."
+  - q: "Do I lose my changes when I switch branches?"
+    a: "If you've committed your changes before switching, you won't lose anything, each branch remembers its own commits independently. If you switch with uncommitted changes, Git will either carry them over to the new branch or prevent the switch until you commit or discard them. The safe habit: commit your work, then switch."
+  - q: "How many branches can I have in one repository?"
+    a: "Unlimited, Git branches are extremely lightweight. Most projects have a handful of active branches at any time (one per feature or experiment) and delete them after merging. There's no performance cost to having many branches. Delete them when they're no longer needed to keep things tidy."
+  - q: "What's the difference between a branch and a fork?"
+    a: "A branch lives inside your repository, it's a parallel version of the same project. A fork creates a completely separate copy of someone else's repository under your own GitHub account. You use branches to manage your own experiments; you fork a repo when you want to build on top of someone else's project independently. They solve different problems."
 ---
 
 <ArticleImage
