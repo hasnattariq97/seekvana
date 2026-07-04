@@ -1,0 +1,143 @@
+---
+title: "Python dotenv: How load_dotenv() Reads Your .env File"
+description: "python dotenv load env file: decode the 4-line pattern every AI script uses, and fix the #1 reason api_key comes back None."
+pillar: "building-with-ai"
+slug: "python-dotenv"
+difficulty: "beginner"
+readTime: 5
+author: "Seekvana"
+publishedAt: "2026-06-26"
+tags: ["python dotenv", "load environment variables python", "python env file"]
+featured: false
+lessonModule: "05"
+lessonNumber: "05.08"
+---
+
+<ArticleImage
+  src="/images/articles/building-with-ai/python-dotenv/cover.webp"
+  alt="A .env file feeding values into a Python script through a funnel"
+/>
+
+You created your [`.env` file in Module 03](/library/building-with-ai/create-env-file). Your API key is sitting there, stored safely, not in your code. Now: how does python-dotenv load env file data into your script? Four lines. Every AI script uses them. This lesson decodes all four.
+
+> **Key Takeaways**
+> - `load_dotenv()` reads your `.env` file and loads its values into environment variables, it does nothing if the file isn't found
+> - `os.getenv("KEY")` returns the value as a string, or `None` if the key doesn't exist
+> - The #1 beginner bug: calling `load_dotenv()` after you've already tried to read a variable
+> - `.env` is found relative to your terminal's current folder, not your script's folder
+> - Always check `if not api_key:` before using it, fail fast with a clear error, not a confusing one later
+
+---
+
+## The four-line pattern
+
+Here's the pattern you'll see at the top of almost every AI script you write or read:
+
+```python
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+api_key = os.getenv("ANTHROPIC_API_KEY")
+```
+
+Four lines. Let's decode each one.
+
+**Line 1:** `from dotenv import load_dotenv` imports the function from the python-dotenv library (`pip install python-dotenv`, covered in Module 02).
+
+**Line 2:** `import os` imports Python's standard `os` module. You need it for `os.getenv()`, the function that actually reads environment variables.
+
+**Line 3:** `load_dotenv()` opens the `.env` file in your current working directory, reads every `KEY=value` pair inside it, and loads them into your process's environment. If `.env` doesn't exist, this line quietly does nothing, no crash, no warning.
+
+**Line 4:** `os.getenv("ANTHROPIC_API_KEY")` reads that specific variable. Returns the string value if found, `None` if not. That's it, one function call, one variable assigned.
+
+## What breaks when a line is missing
+
+Skip `load_dotenv()` and `os.getenv()` still runs, but it's reading an environment that was never populated. `api_key` becomes `None`, and your API call fails with an authentication error that has nothing to say about `.env` files at all. This is the most common silent bug in beginner AI scripts.
+
+Skip the check on `api_key` and the failure just moves further downstream, from a clear "key not found" moment to a cryptic error buried inside whatever function tries to use `None` as a key.
+
+## Add the defensive check
+
+Professional AI scripts don't stop at line four. They add a fifth:
+
+```python
+if not api_key:
+ raise ValueError("ANTHROPIC_API_KEY not found - check your .env file")
+```
+
+This fails fast, with a message that tells you exactly what to check. When you're reading someone else's code and this check is missing, that's your signal they haven't handled the missing-key edge case yet.
+
+Order matters too: import → load → use. If you build your API client before `load_dotenv()` has run, `api_key` is still `None` at that point, it doesn't matter that the file gets loaded a line later.
+
+## Why "why is my api key None" happens so often
+
+I've debugged this exact bug more times than I can count. Search "python dotenv" on any forum and the top complaint is always the same: `os.getenv()` returns `None` even though the key is clearly sitting in `.env`. It's almost never a typo in the key's value, it's one of four things:
+
+<Steps>
+ <Step number={1} title="Check the working directory">
+ `load_dotenv()` looks in your terminal's current folder, not your script's folder. Running `python app.py` from the project root works. Clicking "Run" in an editor with a different working directory can silently break it, same file, same code, different result.
+ </Step>
+ <Step number={2} title="Check the call order">
+ `load_dotenv()` must run before any `os.getenv()` call that depends on it.
+ </Step>
+ <Step number={3} title="Check the key name matches exactly">
+ Environment variable names are case-sensitive. `API_KEY` and `Api_Key` are two different variables.
+ </Step>
+ <Step number={4} title="Check the type">
+ `os.getenv()` always returns a string. `PORT=8000` in your `.env` comes back as `"8000"`, not `8000`, wrap it in `int()` if your code expects a number.
+ </Step>
+</Steps>
+
+<Warning>
+ `load_dotenv()` won't override a variable that's already set in your environment. If you set a value both in `.env` and in your terminal or Docker config, the real environment variable wins by default. This is by design, it's what lets production platforms inject real secrets without your `.env` file getting in the way.
+</Warning>
+
+<Note>
+ Never commit `.env` to git, add it to `.gitignore` immediately. If it was ever committed, deleting the file isn't enough; the secret is still in your git history. Rotate the key.
+</Note>
+
+---
+
+## Your Task
+
+<Steps>
+ <Step number={1} title="Write a script that loads and checks your key">
+ Install python-dotenv if you haven't already:
+ ```
+ pip install python-dotenv
+ ```
+ Then write a script that loads your `.env` file, reads `ANTHROPIC_API_KEY`, and prints only the first 8 characters, never print a full key, even your own.
+ ```python
+ from dotenv import load_dotenv
+ import os
+
+ load_dotenv()
+ api_key = os.getenv("ANTHROPIC_API_KEY")
+
+ if not api_key:
+ raise ValueError("ANTHROPIC_API_KEY not found - check your .env file")
+
+ print(api_key[:8])
+ ```
+ </Step>
+</Steps>
+
+<Note>
+ Done? You've completed Lesson 05.08. Next up: [Making your first API call in Python, understanding every line](/library/building-with-ai/python-first-api-call) →
+</Note>
+
+<FAQ>
+ <FAQItem question="Why does os.getenv() return None even though my .env file has the key?">
+ Almost always one of four causes: `load_dotenv()` was never called, it was called after `os.getenv()`, the key name doesn't match exactly (names are case-sensitive), or your script is running from a different working directory than where `.env` lives. Check those four in order.
+ </FAQItem>
+ <FAQItem question="Does load_dotenv() work the same way in Docker or production?">
+ Not quite. `load_dotenv()` doesn't override environment variables that are already set, so if your hosting platform injects real environment variables, those take priority over anything in `.env`. This is intentional, it lets `.env` handle local development while production uses its own secret system.
+ </FAQItem>
+ <FAQItem question="Can I load a .env file from a different folder?">
+ Yes. Pass a path directly: `load_dotenv(dotenv_path="/path/to/.env")`, or build one relative to your script with `Path(__file__).resolve().parent / '.env'`. This avoids the working-directory problem entirely and is worth doing once your project has more than one script.
+ </FAQItem>
+ <FAQItem question="Is it safe to commit my .env file to git if I delete it later?">
+ No. Deleting the file removes it going forward, but the secret still exists in your git history and can be recovered from any earlier commit. Add `.env` to `.gitignore` before your first commit, and if a key was ever pushed, treat it as exposed, rotate it.
+ </FAQItem>
+</FAQ>
