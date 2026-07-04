@@ -152,6 +152,33 @@ The imports block is the ingredient list. Once you can read it, you know exactly
 
 ---
 
+## Quick Check: Fix the Crash
+
+Three scripts just crashed. Each error points to exactly one fix.
+
+<Quiz
+  question="A script has `import anthropic` at the top and crashes with: ModuleNotFoundError: No module named 'anthropic'. What fixes it?"
+  options="Delete the import line|||Run pip install anthropic|||Rename the file to anthropic.py|||Restart the terminal"
+  correct="1"
+  explanation="ModuleNotFoundError on a third-party import means it was never installed. pip install anthropic fixes it. Deleting the import would just move the crash to the first line that uses anthropic."
+/>
+
+<Quiz
+  question="A script calls `os.getenv('API_KEY')` but never has `import os` at the top. What error shows up, and what fixes it?"
+  options="ModuleNotFoundError, fixed with pip install os|||NameError, fixed by adding import os|||SyntaxError, fixed by restarting the script|||No error, os works automatically"
+  correct="1"
+  explanation="os is standard library, it's never installed with pip, it's imported. Skipping the import gives a NameError: name 'os' is not defined the moment os.getenv() runs. The fix is one line: import os at the top."
+/>
+
+<Quiz
+  question="A script has `from dotenv import load_dotenv` but python-dotenv was never installed. What error type is this?"
+  options="NameError|||IndentationError|||ModuleNotFoundError|||SyntaxError"
+  correct="2"
+  explanation="Any import of an uninstalled third-party package fails with ModuleNotFoundError, at the import line itself, before any other code runs. That's your signal to pip install the missing package, not to touch the code."
+/>
+
+---
+
 ## Your Task
 
 <Steps>
