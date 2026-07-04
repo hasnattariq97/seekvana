@@ -22,7 +22,10 @@ faqs:
     a: "The API rejects it. If you write `max_tokens = \"1024\"` with quotes, Python stores it as the string `\"1024\"`, not the integer `1024`. When that value reaches the Anthropic API, the API expects an integer and receives a string instead, it returns a validation error. Type matters. The quotes are not decoration; they determine what kind of value you're sending."
 ---
 
-<ArticleImage src="/images/articles/building-with-ai/python-variables/cover.webp" alt="Four coloured sticky notes representing the four Python data types: string, integer, float, and boolean" />
+<ArticleImage src="/images/articles/building-with-ai/python-variables/cover.webp" alt="Four coloured sticky notes representing the four Python data types: string, integer, float, and boolean"
+  priority
+  isCover
+/>
 
 Every line of AI code is either storing a value, moving a value somewhere, or doing something with a value. Variables are how you store values. Once you understand them, half of any Python script becomes instantly readable.
 

@@ -22,7 +22,10 @@ faqs:
     a: "That would delete your work and likely break things. The safer escape hatch is `git merge --abort`, it cancels the entire merge and returns your repo to exactly how it was before you started merging. From there you can pull the latest changes from the other branch, understand what changed, and attempt the merge again when you're ready."
 ---
 
-<ArticleImage src="/images/articles/building-with-ai/git-common-mistakes/cover.webp" alt="Illustration showing a Git repository with an exposed API key being scanned by bots on the left, and a merge conflict resolution flow on the right" />
+<ArticleImage src="/images/articles/building-with-ai/git-common-mistakes/cover.webp" alt="Illustration showing a Git repository with an exposed API key being scanned by bots on the left, and a merge conflict resolution flow on the right"
+  priority
+  isCover
+/>
 
 In this lesson, you'll learn about the two most common Git mistakes beginners make, and exactly how to handle both. By the end, you'll know how to detect secrets that may have been exposed and how to resolve a merge conflict without panicking.
 

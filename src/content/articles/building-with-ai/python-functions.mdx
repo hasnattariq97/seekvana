@@ -22,7 +22,10 @@ faqs:
     a: "`self` appears in functions that belong to a class, called methods. When you see `def create(self, model, messages):`, the function is part of an object and `self` refers to that object. In the Anthropic SDK, `client.messages.create(...)` calls a method where `self` is the `client` object. You don't pass `self` yourself, Python handles it automatically. For reading purposes, treat `self` as the object the method belongs to and ignore it."
 ---
 
-<ArticleImage src="/images/articles/building-with-ai/python-functions/cover.webp" alt="Illustration of a function as a processor: input arrow on the left, output arrow on the right, clay accent on the output" />
+<ArticleImage src="/images/articles/building-with-ai/python-functions/cover.webp" alt="Illustration of a function as a processor: input arrow on the left, output arrow on the right, clay accent on the output"
+  priority
+  isCover
+/>
 
 Whenever you see the word `def` in Python code, a function is being defined, a named, reusable block of code that does one specific job. In this lesson, you'll learn to identify any function's name, inputs, and output. By the end, you can read any AI SDK wrapper without losing the thread.
 

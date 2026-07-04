@@ -22,7 +22,10 @@ faqs:
     a: "Python supports modes like `\"r+\"` that allow both, but they're rare in beginner and AI pipeline code, and easy to misuse. The far more common pattern is two separate steps: read the file fully into a variable first, then open it again in `\"w\"` mode to write updated content back. That's the pattern you'll see in almost every real script."
 ---
 
-<ArticleImage src="/images/articles/building-with-ai/python-files/cover.webp" alt="A file document with two arrows, one reading content out and one writing content in, clay accent on the arrows" />
+<ArticleImage src="/images/articles/building-with-ai/python-files/cover.webp" alt="A file document with two arrows, one reading content out and one writing content in, clay accent on the arrows"
+  priority
+  isCover
+/>
 
 If you're learning how to read and write files in Python, here's the good news: once you can trace a [loop](/library/building-with-ai/python-loops), file operations are the next easiest pattern to recognize. Almost every AI tool that does something useful touches the filesystem somewhere. It reads a document to summarize it. It saves a generated output. It logs an API response for debugging later. Once you can recognize the two patterns that cover file handling, you can follow how any AI pipeline moves data in and out.
 
