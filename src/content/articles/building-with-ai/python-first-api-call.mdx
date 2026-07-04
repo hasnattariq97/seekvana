@@ -1,0 +1,160 @@
+---
+title: "Your First Claude API Call in Python (Full Walkthrough)"
+description: "Write and run your first Claude API call in Python. This lesson breaks down the client, model, messages, and response, line by line, for total beginners."
+pillar: "building-with-ai"
+slug: "python-first-api-call"
+difficulty: "beginner"
+readTime: 6
+author: "Seekvana"
+publishedAt: "2026-07-04"
+tags: ["claude api python", "anthropic python sdk", "first api call", "python beginners"]
+featured: false
+lessonModule: "05"
+lessonNumber: "05.09"
+---
+
+{/* IMAGE PROMPT: Editorial flat illustration of a small paper airplane made of code flying from a laptop screen toward a stylized soft cloud icon, warm cream background, clay accent (#C9633F) on the paper airplane, clean and minimal, no text in image, Seekvana palette: #FAF8F3, #C9633F | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+{/* IMAGE PROMPT: Diagram showing four labeled boxes in a left-to-right flow: client, model, messages, response, each box annotated with the one line of code it represents, warm cream background, clay accent lines connecting the boxes, Seekvana palette: #FAF8F3, #C9633F | FILENAME: four-ingredients.webp | DIMENSIONS: 800x450 */}
+
+<ArticleImage
+ src="/images/articles/building-with-ai/python-first-api-call/cover.webp"
+ alt="A paper airplane made of code flying from a laptop toward a soft cloud icon, clay accent on the airplane"
+/>
+
+This is the line every AI product ultimately runs: a script that sends text to Claude and gets text back. You've already learned to read every piece of it. This lesson puts those pieces together into one working script.
+
+By the end, you'll have sent a real message to Claude from Python and read back its real answer.
+
+> **Key Takeaways**
+> - An API call is your script sending a request to Claude's servers and waiting for a response, not a free chat window
+> - The four ingredients are a client, a model name, a messages list, and the response you read back
+> - `response.content[0].text` looks strange at first, but it's just "the first block of content, and its text"
+> - This script reuses the `.env` file from lesson 05.08 and the import patterns from lesson 05.07, nothing here is new syntax
+
+---
+
+## What "Making an API Call" Actually Means
+
+When you use Claude in a browser, someone else already wrote the script that talks to Claude for you. An API call is you writing that script yourself: your Python code sends a request over the internet to Claude's servers, and gets a response back.
+
+Think of it like a rented conversation. You're not running Claude on your own computer, you're sending it a question and paying (or using a free credit) per response. Every AI product you've ever used, a chatbot, a coding assistant, a customer support widget, is doing exactly this underneath, just with more code wrapped around it.
+
+Nothing about this is free-form. Claude's servers expect your request in one specific shape, documented in the <a href="https://platform.claude.com/docs/en/api/messages" target="_blank" rel="noopener noreferrer">official Messages API reference</a>. Learn that shape once, and you can read almost any AI script you'll ever encounter.
+
+---
+
+## The Four Ingredients
+
+Every Claude API call in Python has the same four parts. You've met three of them already in this module.
+
+**Client**, the object that actually sends your request. Created once, near the top of your script, from the anthropic library you met when [learning to read import lines](/library/building-with-ai/python-imports).
+
+**Model**, a string naming which Claude model answers your request, such as `"claude-opus-4-8"`. Just a variable, like the ones from lesson 05.02.
+
+**Messages**, a list of dictionaries, the exact structure from [the lesson on lists and dictionaries](/library/building-with-ai/python-lists-dicts). Each dictionary has a `role` (who's speaking: `"user"` or `"assistant"`) and `content` (what they said).
+
+**Response**, what comes back from Claude's servers. An object, not plain text, which is why reading it takes one extra step.
+
+That's the whole shape. Everything below is just those four pieces written out.
+
+<ArticleImage
+  src="/images/articles/building-with-ai/python-first-api-call/four-ingredients.webp"
+  alt="Numbered infographic showing four steps, client, model, messages, response, each with its exact code line and a one-sentence explanation"
+  caption="Client, model, messages, response: the same four steps, same order, every single Claude API call."
+/>
+
+---
+
+## The Full Script, Annotated
+
+Here's a complete, working script. Every import line was covered in lesson 05.07, and the [`.env` file](/library/building-with-ai/create-env-file) it loads from was covered in lesson 05.08.
+
+```python
+import os
+from dotenv import load_dotenv
+import anthropic
+
+load_dotenv()  # reads your .env file, makes ANTHROPIC_API_KEY available
+
+client = anthropic.Anthropic(
+    api_key=os.getenv("ANTHROPIC_API_KEY")
+)
+
+response = client.messages.create(
+    model="claude-opus-4-8",
+    max_tokens=1024,
+    messages=[
+        {"role": "user", "content": "What is an AI agent?"}
+    ]
+)
+
+print(response.content[0].text)
+```
+
+Walk it top to bottom: three imports, one line to load the `.env` file, one client built from your API key, one call to `client.messages.create()` with a model name and a messages list, and one `print()` to see the answer.
+
+`max_tokens=1024` caps how long Claude's reply can be. Leave it out and the call fails, Claude needs to know the ceiling before it starts writing.
+
+If you run this and see nothing at all, check that last line. A response comes back whether you print it or not, forgetting `print()` is the single most common reason beginners think "nothing happened."
+
+---
+
+## Reading the Response Object
+
+`response` isn't a string, it's an object, the same kind of thing you learned to inspect back in the dictionaries lesson. Claude's reply lives inside it at `response.content[0].text`. I still glance at this line every time I write a new script, that's normal, not a sign you're behind.
+
+Break that down piece by piece: `response.content` is a list, because Claude's reply can technically contain more than one block. `[0]` grabs the first block, which is almost always the only one for a simple text question. `.text` pulls the actual words out of that block.
+
+<Note>
+`response.content[0].text` reads oddly the first time, but it's really just "the first piece of content, and its text." Once you've typed it a few times, the `[0]` stops feeling strange, it becomes as automatic as `os.getenv()` did in lesson 05.08.
+</Note>
+
+---
+
+## When Something's Wrong (Preview)
+
+Run this script with a bad or missing API key, and you won't get a normal reply. You'll get an error like this instead:
+
+```
+anthropic.AuthenticationError: Error code: 401 - invalid x-api-key
+```
+
+<Warning>
+**This is expected, not a sign you broke something.** A 401 error almost always means your `.env` file isn't loading correctly, or the key inside it was copied wrong. Full error-handling with `try` and `except` is coming in lesson 05.11, for now just know: an error message naming your API key means check the `.env` file, not the rest of your code.
+</Warning>
+
+<Quiz
+  question="You run the script above and see: anthropic.AuthenticationError: Error code: 401 - invalid x-api-key. What should you check first?"
+  options="The messages list format|||The .env file and API key value|||The max_tokens number|||The print() statement"
+  correct="1"
+  explanation="A 401 authentication error means Claude's servers rejected your API key before ever looking at your request. The messages list, max_tokens, and print() are all irrelevant at that point, the fix lives in the .env file from lesson 05.08."
+/>
+
+---
+
+## Your Task
+
+<Steps>
+ <Step number={1} title="Send your first real message to Claude">
+ Create a new Python file. Copy the full annotated script from this lesson into it exactly as written, using the API key already stored in your `.env` file from lesson 05.08. Run the script and confirm Claude's answer to "What is an AI agent?" prints in your terminal.
+ </Step>
+</Steps>
+
+<Note>
+Done? You've completed Lesson 05.09. Next up: [Reading JSON: the Data Format AI APIs Speak In](/library/building-with-ai/python-json) →
+</Note>
+
+<FAQ>
+ <FAQItem question="Do I need a paid Anthropic account to make my first API call?">
+ Anthropic gives new accounts free starter credit, which is enough for many first scripts and lessons like this one. Once that credit runs out, API usage is billed per request, unlike the free chat interface at claude.ai, which runs on a separate plan entirely.
+ </FAQItem>
+ <FAQItem question="Why does my script hang for a few seconds before printing anything?">
+ That pause is normal. Your request travels to Claude's servers, Claude generates a full response, and the reply travels back before `print()` has anything to show. Longer questions or higher `max_tokens` values take a bit longer; a silent multi-second wait is expected behavior, not a bug.
+ </FAQItem>
+ <FAQItem question="Can I send more than one message in the messages list?">
+ Yes, that's exactly how a back-and-forth conversation works. Each previous message, both yours and Claude's, gets added to the list as its own dictionary with a role of `"user"` or `"assistant"`, so Claude sees the full conversation history on every call.
+ </FAQItem>
+ <FAQItem question="What happens if I forget max_tokens entirely?">
+ The call fails immediately with a validation error, before your request ever reaches Claude's model. `max_tokens` is required on every call; there's no default value the SDK assumes for you, so it's worth treating it as a non-optional line every time you write this script.
+ </FAQItem>
+</FAQ>
