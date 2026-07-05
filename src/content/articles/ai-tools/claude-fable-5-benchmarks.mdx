@@ -33,6 +33,13 @@ faqs: [
 ]
 ---
 
+<ArticleImage
+ src="/images/articles/ai-tools/claude-fable-5-benchmarks/cover.webp"
+ alt="Developer comparing Claude Fable 5 benchmark charts against competing AI models on a monitor"
+ priority
+ isCover
+/>
+
 Claude Fable 5's benchmarks put it ahead of nearly every public model on agentic coding right now, scoring 80.3% on <a href="https://www.swebench.com/" target="_blank" rel="noopener noreferrer">SWE-Bench Pro</a> against 69.2% for Claude Opus 4.8, 58.6% for GPT-5.5, and 54.2% for Gemini 3.1 Pro. That gap holds up, and often widens, on longer and harder coding tasks, and it extends to reasoning, vision, and long-context evaluations too.
 
 But a benchmark score is not the same thing as what you'll get in your own terminal. Claude Fable 5 also runs a safety classifier that quietly reroutes a slice of requests, cybersecurity, biology and chemistry, and a few other flagged categories, to Claude Opus 4.8 instead. Anthropic says that happens in under five percent of sessions, but if your work regularly touches one of those categories, the model answering you might not be the one that earned the 80.3%. We cover exactly how that [fallback mechanism works](/library/ai-tools/claude-fable-5-vs-opus-4-8) in a separate breakdown.
@@ -45,11 +52,6 @@ This article walks through what each major benchmark actually tests, which numbe
 - On FrontierCode Diamond, a harder code-quality eval, the gap widens dramatically: Fable 5 at 29.3% versus 13.4% for Opus 4.8 and 5.7% for GPT-5.5.
 - Fable 5's 1-million-token context window lets it retain state across genuinely long sessions, demonstrated by reaching the final act of Slay the Spire three times more often than Opus 4.8 using file-based memory.
 - Several reported numbers, including GDPVal-AA, Humanity's Last Exam, and niche evals like HealthBench, are vendor-reported and not yet independently reproduced, so treat them as early signal rather than settled fact.
-
-<ArticleImage
- src="/images/articles/ai-tools/claude-fable-5-benchmarks/cover.webp"
- alt="Developer comparing Claude Fable 5 benchmark charts against competing AI models on a monitor"
-/>
 
 ## Agentic Coding Benchmarks: SWE-Bench Pro, FrontierCode, and Terminal-Bench
 
