@@ -1,0 +1,185 @@
+---
+title: "Claude Fable 5 Benchmarks Explained: What the Numbers Mean"
+description: "Claude Fable 5 leads SWE-Bench Pro at 80.3% and most coding evals, but here's what each benchmark actually measures and when the lead matters."
+pillar: "ai-tools"
+slug: "claude-fable-5-benchmarks"
+difficulty: "intermediate"
+readTime: 12
+author: "Seekvana"
+publishedAt: "2026-07-05"
+tags: ["claude fable 5", "benchmarks", "anthropic", "ai models"]
+featured: false
+faqs: [
+ {
+ "question": "How good is Claude Fable 5 at coding?",
+ "answer": "Claude Fable 5 is the strongest publicly available model for agentic coding as of mid-2026, scoring 80.3% on SWE-Bench Pro, well ahead of Claude Opus 4.8 (69.2%), GPT-5.5 (58.6%), and Gemini 3.1 Pro (54.2%). Its biggest edge shows up on long, multi-step engineering tasks rather than short, isolated coding questions."
+ },
+ {
+ "question": "Is Claude Fable 5 better than GPT-5.5?",
+ "answer": "On the benchmarks Anthropic and Cognition have published, yes: Claude Fable 5 leads GPT-5.5 on SWE-Bench Pro, FrontierCode, and Terminal-Bench by wide margins. Whether that translates to a better result for you depends on your task. GPT-5.5 stays competitive on pure scientific reasoning, and Fable 5's safety classifier can reroute certain requests to a different model entirely."
+ },
+ {
+ "question": "What benchmarks does Claude Fable 5 lead?",
+ "answer": "Claude Fable 5 leads on SWE-Bench Pro (agentic software engineering), FrontierCode Diamond (code quality on hard tasks), Terminal-Bench 2.1 (command-line proficiency), and OSWorld-Verified (vision and computer-use tasks). It's also reported to lead on several reasoning and long-context evaluations, though some of those numbers come from a single detailed source and haven't been independently reproduced yet."
+ },
+ {
+ "question": "Are Claude Fable 5's benchmark scores independently verified?",
+ "answer": "Not fully. The headline SWE-Bench Pro numbers are consistent across Anthropic's own release and independent aggregation, but numbers like FrontierCode and Terminal-Bench are vendor-reported by Anthropic and Cognition Labs and haven't been reproduced by an independent evaluator such as Epoch AI as of this writing."
+ },
+ {
+ "question": "Does Claude Fable 5's safety fallback affect its benchmark scores?",
+ "answer": "No, the published benchmark scores reflect Fable 5 running without the safety classifier intervening. In real use, a small share of sessions, Anthropic says under five percent, get automatically rerouted to Claude Opus 4.8 on flagged topics, so your actual results on those specific tasks can differ from the benchmark table."
+ }
+]
+---
+
+Claude Fable 5's benchmarks put it ahead of nearly every public model on agentic coding right now, scoring 80.3% on <a href="https://www.swebench.com/" target="_blank" rel="noopener noreferrer">SWE-Bench Pro</a> against 69.2% for Claude Opus 4.8, 58.6% for GPT-5.5, and 54.2% for Gemini 3.1 Pro. That gap holds up, and often widens, on longer and harder coding tasks, and it extends to reasoning, vision, and long-context evaluations too.
+
+But a benchmark score is not the same thing as what you'll get in your own terminal. Claude Fable 5 also runs a safety classifier that quietly reroutes a slice of requests, cybersecurity, biology and chemistry, and a few other flagged categories, to Claude Opus 4.8 instead. Anthropic says that happens in under five percent of sessions, but if your work regularly touches one of those categories, the model answering you might not be the one that earned the 80.3%. We cover exactly how that [fallback mechanism works](/library/ai-tools/claude-fable-5-vs-opus-4-8) in a separate breakdown.
+
+This article walks through what each major benchmark actually tests, which numbers are solid versus still vendor-reported, and how to judge whether Fable 5's lead is worth paying for on your specific workload.
+
+## Key Takeaways
+
+- Claude Fable 5 scores 80.3% on SWE-Bench Pro, 11 points ahead of Opus 4.8 and more than 20 points ahead of GPT-5.5 and Gemini 3.1 Pro.
+- On FrontierCode Diamond, a harder code-quality eval, the gap widens dramatically: Fable 5 at 29.3% versus 13.4% for Opus 4.8 and 5.7% for GPT-5.5.
+- Fable 5's 1-million-token context window lets it retain state across genuinely long sessions, demonstrated by reaching the final act of Slay the Spire three times more often than Opus 4.8 using file-based memory.
+- Several reported numbers, including GDPVal-AA, Humanity's Last Exam, and niche evals like HealthBench, are vendor-reported and not yet independently reproduced, so treat them as early signal rather than settled fact.
+
+<ArticleImage
+ src="/images/articles/ai-tools/claude-fable-5-benchmarks/cover.webp"
+ alt="Developer comparing Claude Fable 5 benchmark charts against competing AI models on a monitor"
+/>
+
+## Agentic Coding Benchmarks: SWE-Bench Pro, FrontierCode, and Terminal-Bench
+
+Coding benchmarks aren't interchangeable. Each one tests a different slice of what "good at coding" means, and the gap between Fable 5 and everyone else changes depending on which slice you're looking at.
+
+**SWE-Bench Pro** measures whether a model can take a real, messy GitHub issue and produce a patch that actually resolves it, end to end, inside a live repository. It's the closest public proxy to "can this model do my day job," which is why it's become the headline number for agentic coding models.
+
+**Claude Fable 5 vs the field on SWE-Bench Pro**
+
+| Model | SWE-Bench Pro |
+|---|---|
+| Claude Fable 5 | 80.3% |
+| Claude Opus 4.8 | 69.2% |
+| GPT-5.5 | 58.6% |
+| Gemini 3.1 Pro | 54.2% |
+
+These figures are consistent across <a href="https://www.anthropic.com/news/claude-fable-5-mythos-5" target="_blank" rel="noopener noreferrer">Anthropic's own launch announcement</a> and independent aggregation, which makes this the single most reliable number in Fable 5's whole benchmark suite.
+
+**FrontierCode**, built by <a href="https://cognition.com/" target="_blank" rel="noopener noreferrer">Cognition Labs</a>, scores something different: code quality and efficiency on genuinely hard problems, not just whether the tests eventually pass. Anthropic reports Fable 5 at 29.3% on the Diamond tier, compared with 13.4% for Opus 4.8 and 5.7% for GPT-5.5. That's a relative gap wider than SWE-Bench Pro's, which suggests Fable 5's advantage grows as tasks get harder, not just longer.
+
+**<a href="https://www.tbench.ai/" target="_blank" rel="noopener noreferrer">Terminal-Bench</a> 2.1** tests something more mundane but just as practical: how well a model operates a real command-line environment, chaining shell commands, reading error output, and recovering from mistakes without a human stepping in. Fable 5 is reported at 88.0% here, ahead of GPT-5.5 and Opus 4.8. If your workflow leans on agentic tools like Claude Code that live in a terminal, this number matters more than a pure code-generation score.
+
+<Tip>
+If your work is mostly short, self-contained coding questions, the SWE-Bench Pro gap will matter less to you than it sounds. Fable 5's biggest edge shows up on long, multi-step, repository-level work, exactly the kind of task Cursor's CEO Michael Truell described as opening up "a class of long-horizon problems that were out of reach" for earlier models.
+</Tip>
+
+None of this means the numbers are made up. Anthropic and Cognition Labs are credible primary sources, and the SWE-Bench Pro figures specifically hold up under independent scrutiny. But FrontierCode and Terminal-Bench are still vendor-reported, and as of this writing, no independent evaluator like Epoch AI has published a reproduction. Treat them as strong signal, not gospel.
+
+If you're new to what "agentic" actually means in this context, our explainer on [what an AI agent is](/library/agentic-ai/what-is-an-agent) covers the underlying concept these benchmarks are built to measure.
+
+## Reasoning and Knowledge Benchmarks: GDPVal-AA and Humanity's Last Exam
+
+Coding benchmarks test doing. Reasoning benchmarks test knowing, and knowing how to reason through unfamiliar problems rather than recalling facts.
+
+**GDPVal-AA** is a knowledge-and-reasoning eval built around real professional tasks across a range of industries, scored on a point system rather than a simple percentage. Anthropic reports Fable 5 well ahead of GPT-5.5 and Gemini 3.1 Pro here, though this is a single-source figure from Anthropic's own reporting and hasn't been cross-verified against an independent scorecard.
+
+**Humanity's Last Exam (HLE)** is a deliberately brutal benchmark of expert-level questions across dozens of fields, designed to resist memorization. The result that matters most isn't the raw score, it's the gap between two versions of the same test.
+
+**Humanity's Last Exam: with and without tool access**
+
+| Model | Without tools | With tools |
+|---|---|---|
+| Claude Fable 5 | 59.0% | 64.5% |
+| Claude Opus 4.8 | 56.8% | 57.9% |
+| GPT-5.5 | 41.4% | 52.2% |
+| Gemini 3.1 Pro | 44.4% | 51.4% |
+
+The "without tools" column shows how the model reasons on its own, using only what it learned during training. The "with tools" column lets the model search, calculate, or run code to check its own answers, closer to how you'd actually use it day to day. Fable 5's score climbs by 5.5 points when tools are added, while GPT-5.5 and Gemini 3.1 Pro climb by roughly 7 to 11 points, which suggests Fable 5's raw, tool-free reasoning was already closer to its ceiling than the competition's.
+
+<Note>
+The "with tools" number is the more practically relevant one for most developers, since you're rarely deploying a model in a vacuum with no ability to search or execute code. If your use case involves the model working entirely on its own, though, the without-tools column tells you more about what to actually expect.
+</Note>
+
+The distinction matters because tool access changes what you're actually testing. A model that reasons well without help handles ambiguous, one-shot questions better. A model that closes the gap with tools shows it can competently use the systems you'd build around it in a real product, the kind of workflow covered in our guide to [how tool use works in AI systems](/library/agentic-ai/tool-use-explained).
+
+## Vision and Multimodal Benchmarks: OSWorld-Verified and CharXiv
+
+Vision benchmarks test whether a model can actually see and act on what's in an image or screen, not just describe it in general terms.
+
+**OSWorld-Verified** measures computer-use tasks: can the model look at a live screen, understand what's on it, and click, type, or navigate correctly to complete a goal. Fable 5 is reported at 85.0%, ahead of Opus 4.8 (83.4%), GPT-5.5 (78.7%), and Gemini 3.1 Pro (76.2%). This is the benchmark behind Anthropic's own published demonstration of Fable 5 rebuilding a web app's source code just from screenshots of its interface, a task that requires reading layout, spacing, and component structure from pixels alone.
+
+**CharXiv** tests something narrower but genuinely difficult: reading scientific charts and figures accurately enough to extract precise numbers, not just a general sense of the trend. This maps directly to Anthropic's other published example, pulling exact data points out of a research paper's figures rather than approximating them.
+
+<Tip>
+Vision benchmarks are one of the few areas where you can sanity-check the claims yourself in minutes. Feed Fable 5 a screenshot of a UI you know well or a chart from a paper you've read, and see whether it gets the specific details right, not just the gist.
+</Tip>
+
+Both of these are reported by Anthropic rather than independently reproduced, but they're consistent with the kind of tasks Anthropic has demonstrated publicly, which gives them more credibility than a benchmark number with no accompanying example to check against.
+
+## Long-Context and Specialty Benchmarks
+
+Fable 5 ships with a <a href="https://www.anthropic.com/claude/fable" target="_blank" rel="noopener noreferrer">1-million-token context window</a>, roughly five times Opus 4.8's 200,000-token limit. In practice, that's the difference between a model that forgets what happened three hours into a long agentic session and one that doesn't.
+
+Anthropic's own demonstration of this used an unusual but concrete example: having Fable 5 play the roguelike deck-builder <a href="https://www.megacrit.com/" target="_blank" rel="noopener noreferrer">Slay the Spire</a> using file-based memory to track its own strategy across a run. Fable 5 reached the game's final act three times more often than Opus 4.8, purely because it could remember more of what it had already tried and learned without the context window forcing a reset.
+
+For a developer, the practical version of that test is a multi-hour coding session, a large repository migration, or an agent that has to hold state across dozens of tool calls without losing track of its own earlier decisions. Our explainer on [how context windows work](/library/large-language-models/how-llms-work) goes deeper into why this limit matters at all.
+
+Beyond the mainstream evals, a handful of niche, specialty benchmarks have also been reported for Fable 5: ExploitBench (security), HealthBench Pro (medical reasoning), and LegalAgent (legal tasks).
+
+<Warning>
+Treat every specialty benchmark number in this section as early signal, not a verdict. These come from a single detailed research source, not Anthropic's own primary materials, and as of this writing there's no independent, standardized scorecard for Fable 5 on any of them. If you're evaluating the model for security, medical, or legal work specifically, run your own test set before trusting a benchmark percentage.
+</Warning>
+
+It's also worth being honest about what isn't well documented here: Grok 4's performance on these same benchmarks appears only as rough, inconsistent estimates across sources, generally cited around 75%, with no reliable primary figure to point to. We're leaving it out of the comparison tables above for that reason rather than presenting a number we can't stand behind.
+
+## Does Claude Fable 5's Benchmark Lead Actually Matter for Your Work?
+
+Sometimes. The benchmark lead is real and well-documented for agentic coding specifically, but it doesn't translate evenly across every use case, and the safety fallback changes the calculation for a subset of workloads.
+
+<ArticleImage
+ src="/images/articles/ai-tools/claude-fable-5-benchmarks/benchmark-overview.webp"
+ alt="Infographic summarizing Claude Fable 5's scores across SWE-Bench Pro, FrontierCode, Terminal-Bench, OSWorld-Verified, reasoning, long-context, and the safety classifier fallback to Opus 4.8"
+ caption="Every major benchmark from this article in one place, alongside the safety-classifier fallback that determines whether the lead reaches you."
+/>
+
+**When the lead likely translates to a better result for you**
+
+| Your task | Benchmark lead survives? | Why |
+|---|---|---|
+| Long, multi-step coding tasks (repo-level fixes, migrations) | Yes | This is exactly what SWE-Bench Pro and FrontierCode measure |
+| Long agentic sessions needing memory across hours | Yes | 1M-token context window is a structural advantage, not just a score |
+| Computer-use or screenshot-to-code work | Yes | OSWorld-Verified and Anthropic's own demos back this up directly |
+| Cybersecurity, exploit development, or bio/chem-adjacent tasks | Often not | Safety classifier can reroute the request to Opus 4.8 |
+| Short, one-off coding questions | Partially | Fable 5's edge grows with task length; a quick fix may not show much difference |
+| Pure scientific reasoning without tools | Not clearly | Gemini 3.1 Pro and GPT-5.5 stay competitive here in some reported evals |
+
+The pattern across almost every benchmark is the same: Fable 5's advantage grows with task length and complexity. If you're doing quick, isolated tasks, you may not notice much difference from Opus 4.8 at half the cost. If you're running an agent for hours against a real codebase, the gap is where the value is.
+
+The bigger caveat is the safety fallback. <a href="https://techcrunch.com/2026/06/09/anthropic-released-claude-fable-5-its-most-powerful-model-publicly-days-after-warning-ai-is-getting-too-dangerous/" target="_blank" rel="noopener noreferrer">TechCrunch's launch coverage</a> confirms the same pattern Anthropic describes: in high-risk areas like cybersecurity, biology, chemistry, and distillation, the model blocks its response and falls back to Claude Opus 4.8. If a meaningful share of your work touches those categories, some of your requests will quietly get routed to Opus 4.8 regardless of what the benchmark table says, and you should read our full breakdown of [how the Fable 5 to Opus 4.8 fallback works](/library/ai-tools/claude-fable-5-vs-opus-4-8) before assuming you'll always get Fable 5's benchmark-level performance.
+
+<Note>
+This is genuinely new information as of mid-2026. New benchmark runs, competing model releases, and pricing changes will date parts of this article within a few months, so treat the specific numbers here as a snapshot rather than a permanent ranking.
+</Note>
+
+For the bigger picture on what Fable 5 is and how it fits into Anthropic's lineup, start with our overview of [what Claude Fable 5 is](/library/ai-tools/claude-fable-5).
+
+<FAQ>
+<FAQItem question="How good is Claude Fable 5 at coding?">
+Claude Fable 5 is the strongest publicly available model for agentic coding as of mid-2026, scoring 80.3% on SWE-Bench Pro, well ahead of Claude Opus 4.8 (69.2%), GPT-5.5 (58.6%), and Gemini 3.1 Pro (54.2%). Its biggest edge shows up on long, multi-step engineering tasks rather than short, isolated coding questions.
+</FAQItem>
+<FAQItem question="Is Claude Fable 5 better than GPT-5.5?">
+On the benchmarks Anthropic and Cognition have published, yes: Claude Fable 5 leads GPT-5.5 on SWE-Bench Pro, FrontierCode, and Terminal-Bench by wide margins. Whether that translates to a better result for you depends on your task. GPT-5.5 stays competitive on pure scientific reasoning, and Fable 5's safety classifier can reroute certain requests to a different model entirely.
+</FAQItem>
+<FAQItem question="What benchmarks does Claude Fable 5 lead?">
+Claude Fable 5 leads on SWE-Bench Pro (agentic software engineering), FrontierCode Diamond (code quality on hard tasks), Terminal-Bench 2.1 (command-line proficiency), and OSWorld-Verified (vision and computer-use tasks). It's also reported to lead on several reasoning and long-context evaluations, though some of those numbers come from a single detailed source and haven't been independently reproduced yet.
+</FAQItem>
+<FAQItem question="Are Claude Fable 5's benchmark scores independently verified?">
+Not fully. The headline SWE-Bench Pro numbers are consistent across Anthropic's own release and independent aggregation, but numbers like FrontierCode and Terminal-Bench are vendor-reported by Anthropic and Cognition Labs and haven't been reproduced by an independent evaluator such as Epoch AI as of this writing.
+</FAQItem>
+<FAQItem question="Does Claude Fable 5's safety fallback affect its benchmark scores?">
+No, the published benchmark scores reflect Fable 5 running without the safety classifier intervening. In real use, a small share of sessions, Anthropic says under five percent, get automatically rerouted to Claude Opus 4.8 on flagged topics, so your actual results on those specific tasks can differ from the benchmark table.
+</FAQItem>
+</FAQ>
