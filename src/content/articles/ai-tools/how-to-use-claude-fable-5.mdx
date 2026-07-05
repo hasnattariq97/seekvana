@@ -1,0 +1,152 @@
+---
+title: "How to Use Claude Fable 5: Sub-Agents, Vision, Setup"
+description: "Claude Fable 5 is built for long agentic coding runs and vision tasks, not chat. Here's how to access it and structure prompts that use it well."
+pillar: "ai-tools"
+slug: "how-to-use-claude-fable-5"
+difficulty: "intermediate"
+readTime: 11
+author: "Seekvana"
+publishedAt: "2026-07-05"
+tags: ["claude fable 5", "claude code", "sub-agents", "anthropic"]
+featured: false
+faqs: [
+ {
+ "question": "How do I use Claude Fable 5?",
+ "answer": "You use Claude Fable 5 by selecting it in Claude.ai (Pro, Max, Team, or Enterprise), calling it by model name through the Anthropic API, or running it inside Claude Code with the /model command. It performs best on long, multi-step agentic tasks and vision-heavy work rather than quick one-off questions."
+ },
+ {
+ "question": "What is Claude Fable 5 best for?",
+ "answer": "Claude Fable 5 is best for long-running agentic coding tasks, delegating work to sub-agents, and vision-heavy jobs like rebuilding an app's code from screenshots or pulling exact numbers out of scientific figures. It is not a meaningful upgrade for quick chat-style questions, where Claude Opus 4.8 performs almost as well for half the cost."
+ },
+ {
+ "question": "Can I use Claude Fable 5 in Claude Code?",
+ "answer": "Yes. Update the Claude Code CLI to version 2.1.17 or later, then run the /model command and select Fable from the list. Claude Code is the most common way developers run Fable 5's long agentic sessions, since it can spawn and manage sub-agents directly."
+ }
+]
+---
+
+Here's how to use Claude Fable 5: reach for it on long, multi-step agentic work, not faster small talk. Use it for jobs that need a model to plan, delegate to sub-agents, and check its own output over hours, and for vision-heavy tasks like turning a screenshot into working code. If your task is a quick question or a short, well-scoped edit, Claude Opus 4.8 handles it almost as well for roughly half the price.
+
+That distinction matters because Fable 5 costs twice as much per token as Opus 4.8 and can burn through a usage window fast on long runs. Picking it for the wrong kind of task wastes both money and time. This guide walks through where to access Fable 5, what its agentic and vision capabilities actually look like in practice, how to prompt it for long-running work, and the friction points worth planning around before you commit a real project to it.
+
+{/* IMAGE PROMPT: Developer at a desk watching several terminal panes run in parallel, each showing a different AI agent session, editorial illustration style, Seekvana palette: #FAF8F3, #C9633F | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+
+<ArticleImage
+ src="/images/articles/ai-tools/how-to-use-claude-fable-5/cover.webp"
+ alt="Developer at a desk watching several terminal panes run in parallel, representing Claude Fable 5 coordinating multiple sub-agents"
+/>
+
+**Key takeaways**
+
+- Claude Fable 5 is available through Claude.ai (Pro, Max, Team, Enterprise), the Anthropic API, Claude Code, AWS Bedrock, Google Vertex AI, and Microsoft Foundry.
+- It's built for tasks that run for hours: Ethan Mollick documented Fable 5 working roughly 12 hours on an interactive isochrone map and 9.5 hours on a separate data-analysis tool, in both cases spawning cheaper sub-agents to do research and testing.
+- Its vision capability can rebuild a web app's source code from screenshots and extract precise numbers from scientific figures, a genuinely different workflow from typing a question and reading an answer.
+- A safety classifier can decline cybersecurity, biology/chemistry, and a few other flagged categories, falling back to Claude Opus 4.8 in under 5% of sessions on average, higher on coding-heavy work.
+- Real developer complaints center on cost at scale ($10 per million input tokens, $50 per million output tokens), token burn on long runs, and occasional false-positive refusals on legitimate coding or security work.
+
+## Where to Access Claude Fable 5
+
+You can reach Claude Fable 5 through six channels, and which one makes sense depends on whether you're a casual user, a developer building a product, or an enterprise deploying at scale.
+
+**Claude Fable 5 access channels**
+
+| Channel | Who it's for | Setup note |
+|---|---|---|
+| Claude.ai (Pro/Max/Team/Enterprise) | Individual users, no code | Select Fable from the model picker in a chat |
+| Anthropic API | Developers building products | Call the model by name in your API request |
+| Claude Code | Developers doing agentic coding | Update the CLI to 2.1.17+, run `/model`, select Fable |
+| AWS Bedrock | Enterprises already on AWS | Available as a Bedrock-hosted model |
+| Google Vertex AI | Enterprises already on Google Cloud | Available as a Vertex-hosted model |
+| Microsoft Foundry | Enterprises already on Azure | Available as a Foundry-hosted model |
+
+For the full pricing breakdown, context window size, and benchmark specs, Seekvana's [pillar guide to what Claude Fable 5 is](/library/ai-tools/claude-fable-5) covers those details rather than repeating them here, and Anthropic's own <a href="https://www.anthropic.com/claude/fable" target="_blank" rel="noopener noreferrer">Fable product page</a> lists live availability by channel. This article focuses on how you'd actually use each channel once you're in it.
+
+<Tip>
+If you're already inside Claude Code for day-to-day development work, switching models with `/model` is the fastest way to try Fable 5 on a real task without changing your workflow at all.
+</Tip>
+
+## What Can Claude Fable 5 Actually Do Autonomously?
+
+It can hold a plan together across a long task, delegate pieces of that plan to sub-agents, and check its own work before calling the job done, all without you sitting there prompting each step.
+
+That's a different skill from answering a single question well. An **[AI agent](/library/agentic-ai/what-is-an-agent)** decides its own next action instead of waiting for you to specify every move, and Fable 5's benchmark lead shows up specifically on tasks that require holding that kind of plan together for a long time, not on short single-turn questions.
+
+Ethan Mollick's hands-on writeup for One Useful Thing gives the clearest real example available. He asked Fable 5 to build an interactive isochrone map: a tool showing how far you can travel from any city within a set amount of time, using real airport, rail, and road data instead of placeholder numbers. Fable 5 worked on the project for roughly twelve hours. During that time it launched multiple cheaper sub-agents, mostly Claude Sonnet instances, to research travel times. Those sub-agents retrieved more than 2,200 specific flights, plus rail schedules and road speeds pulled from academic sources (<a href="https://www.oneusefulthing.org/p/what-it-feels-like-to-work-with-mythos" target="_blank" rel="noopener noreferrer">Ethan Mollick, One Useful Thing</a>). While that research ran, Fable 5 started writing the actual application code. Then it launched still more agents to test and verify what it had built.
+
+In a separate example from the same writeup, Fable 5 spent nine and a half hours building a data-analysis tool called Concord, refining it across multiple iterations rather than producing one draft and stopping. These are two different projects with two different run times, not conflicting reports of the same task, so treat any secondhand summary that flattens them into one number with some suspicion.
+
+This sub-agent pattern is what makes Fable 5 different to actually work with, not just benchmark against. Instead of one model doing everything in a single, growing context window, Fable 5 acts as an orchestrator. It decides what to delegate, hands pieces of the job to fresh sub-agent sessions, and integrates their results. Each sub-agent starts with only the context it needs for its slice of the task, which keeps the overall job from collapsing under its own context length. That delegation pattern is a form of **[tool use](/library/agentic-ai/tool-use-explained)** at the orchestration level: the coordinating model treats other model instances as tools it can call.
+
+The practical takeaway from Mollick's example isn't just "it worked for twelve hours." It's that Fable 5 treated the sub-agents as disposable research assistants rather than trying to hold every flight schedule and road speed in its own context at once. That's the actual mechanism behind the long run times you'll see quoted around Fable 5: the coordinating model stays lean by handing off the heavy lifting, then reassembling the results.
+
+Anthropic's own launch materials describe this as the model planning across stages, delegating to sub-agents, and checking its own work, all inside a single agent harness like Claude Code (<a href="https://www.anthropic.com/news/claude-fable-5-mythos-5" target="_blank" rel="noopener noreferrer">Anthropic, June 9, 2026</a>).
+
+<ArticleImage
+ src="/images/articles/ai-tools/how-to-use-claude-fable-5/sub-agent-workflow.webp"
+ alt="Diagram of Claude Fable 5's sub-agent workflow: plan and delegate to specialized sub-agents, execute in parallel with tools, verify and integrate results, then deliver"
+ caption="Fable 5 orchestrates specialized sub-agents (researcher, coder, tester, reviewer) in parallel, then verifies and integrates their output before delivering a finished result."
+/>
+
+For a full benchmark breakdown of exactly how much better Fable 5 performs on agentic coding, Seekvana's [benchmarks article](/library/ai-tools/claude-fable-5-benchmarks) covers the SWE-Bench Pro and FrontierCode numbers in plain English.
+
+## Using Claude Fable 5 for Vision-Heavy Work
+
+Point Fable 5 at a screenshot or a scientific figure and it can extract the underlying structure or data with more precision than most models manage, turning an image into working code or exact numbers rather than a rough description.
+
+The clearest version of this workflow is rebuilding a web app's source code from screenshots. You give Fable 5 a set of screenshots showing a UI's states, layouts, and interactions, and it works backward to produce the underlying markup, styling, and component structure that would render those screens. This is genuinely useful when you've inherited a design with no accessible source, or when a client hands you a mockup and asks for a working page rather than a static image.
+
+The second workflow is scientific figure extraction: feeding Fable 5 a chart, graph, or diagram from a paper or report and having it pull out the precise underlying numbers rather than a paraphrase of what the figure shows. This matters for research and data work where "roughly 40%" isn't good enough and you need the actual value the chart was plotting.
+
+{/* TODO: Add image — /images/articles/ai-tools/how-to-use-claude-fable-5/screenshot-to-code.webp */}
+
+In practice, this workflow is most reliable when you feed it a full set of screenshots covering the UI's different states, not just one static view. A single screenshot shows Fable 5 what the page looks like; multiple states (hover, error, loading, mobile) show it how the page behaves, which matters more once it starts writing the actual component logic rather than just the layout.
+
+<Note>
+Both workflows work best when you ask for the underlying structure or data explicitly, rather than a general description of the image. "Extract the exact axis values and data points from this chart" gets a more precise result than "what does this chart show."
+</Note>
+
+## Prompting Tips for Fable 5's Agentic Style
+
+Structure a long-running prompt differently than a quick one. Give Fable 5 the full scope of a multi-hour task upfront, including constraints, sources it should trust, and what "done" looks like, and let it plan its own steps rather than walking it through the task turn by turn.
+
+For a long, autonomous job, Mollick's isochrone-map prompt is the model to follow: specify the deliverable clearly, name the kind of data it should use (real rather than placeholder), and say what it should verify before calling the work finished. That's a fundamentally different prompt shape from a quick coding question, where the fastest result comes from a specific, narrow ask with minimal extra framing.
+
+For a short, one-off task, don't give Fable 5 the same long-horizon framing you'd use for a multi-hour build. A narrow, well-scoped request gets a fast answer without paying for planning overhead the task didn't need.
+
+One thing worth knowing before you commit a real project to a long Fable 5 session: it has a safety classifier that can decline requests involving cybersecurity, biology or chemistry, and a few other flagged categories, and some integrations are configured to retry those declined requests on Claude Opus 4.8 instead. Anthropic strengthened this classifier specifically after the export-control episode that pulled Fable 5 offline for 18 days in June 2026, and the tradeoff for restoring broad access was accepting more of these fallback triggers on benign requests (<a href="https://www.tomshardware.com/tech-industry/artificial-intelligence/anthropic-restores-claude-fable-5-as-us-lifts-export-controls" target="_blank" rel="noopener noreferrer">Tom's Hardware, July 1, 2026</a>). Anthropic says this triggers in under 5% of sessions on average, but that rate climbs meaningfully higher on coding-heavy benchmarks. If a long agentic session suddenly feels like it lost a step partway through, that fallback is the most likely explanation, not a bug. Seekvana's <a href="https://www.interconnects.ai/p/claude-fable-5-and-new-ai-safety" target="_blank" rel="noopener noreferrer">companion article comparing Claude Fable 5 and Opus 4.8</a> walks through exactly how that fallback mechanism works and how to detect it in your own API responses.
+
+<Tip>
+If predictability matters for your workflow, route your prompts through the API's `fallbacks` parameter rather than a default chat interface, so you can see which model actually answered instead of guessing from writing style.
+</Tip>
+
+We test our own long-running Fable 5 prompts this way, mostly because the first time a session quietly answered from Opus 4.8 instead, we spent twenty minutes debugging code that was never the problem. Checking the `model` field first would have saved that time.
+
+## Known Friction Points to Plan Around
+
+Cost, token burn, and occasional false-positive refusals are the three complaints that show up most often from developers who've actually run real projects on Fable 5, not just benchmarked it.
+
+Cost is the most concrete one. Fable 5 runs at $10 per million input tokens and $50 per million output tokens (<a href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noopener noreferrer">Claude Platform pricing docs</a>), double Opus 4.8's standard rate, and pricing at that scale adds up fast on a multi-hour agentic session that's calling sub-agents and re-reading context repeatedly. One developer summed up the practical effect on Hacker News after Fable 5's July 7 shift to pay-as-you-go billing: a single long session can burn through an entire rate-limited usage window before the task finishes.
+
+Token burn compounds that cost problem specifically on long agentic runs, since every sub-agent call and every self-check cycle consumes context on top of the core task. That's the tradeoff for the autonomy: the same planning and verification loop that makes Fable 5 good at long tasks is also what makes it expensive on them.
+
+False-positive refusals are the third friction point, and they land hardest on developers doing legitimate security or biotech-adjacent coding work. A safety classifier tuned to catch genuinely harmful requests will also occasionally flag benign ones that merely look similar, and when that happens mid-task, it interrupts an otherwise-working agentic session rather than just declining a single question.
+
+<Note>
+None of these are reasons to avoid Fable 5 outright. They're reasons to scope your task first: reserve it for jobs where the long-horizon capability is worth the cost and the occasional refusal, and route quick or routine work elsewhere.
+</Note>
+
+---
+
+*Last updated July 5, 2026. Access channels and pricing are likely to shift as Anthropic adjusts availability, so this article is flagged for a freshness review within three months, sooner if pricing or access policy changes again.*
+
+<FAQ>
+<FAQItem question="How do I use Claude Fable 5?">
+You use Claude Fable 5 by selecting it in Claude.ai (Pro, Max, Team, or Enterprise), calling it by model name through the Anthropic API, or running it inside Claude Code with the /model command. It performs best on long, multi-step agentic tasks and vision-heavy work rather than quick one-off questions.
+</FAQItem>
+<FAQItem question="What is Claude Fable 5 best for?">
+Claude Fable 5 is best for long-running agentic coding tasks, delegating work to sub-agents, and vision-heavy jobs like rebuilding an app's code from screenshots or pulling exact numbers out of scientific figures. It is not a meaningful upgrade for quick chat-style questions, where Claude Opus 4.8 performs almost as well for half the cost.
+</FAQItem>
+<FAQItem question="Can I use Claude Fable 5 in Claude Code?">
+Yes. Update the Claude Code CLI to version 2.1.17 or later, then run the /model command and select Fable from the list. Claude Code is the most common way developers run Fable 5's long agentic sessions, since it can spawn and manage sub-agents directly.
+</FAQItem>
+</FAQ>

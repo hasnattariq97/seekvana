@@ -108,7 +108,7 @@ His framing: "an AI model that gets less intelligent automatically without notif
 
 The classifier itself exists because of the export-control episode that pulled Fable 5 offline for 18 days in June 2026. Anthropic strengthened it specifically to block the technique that triggered that shutdown, and the tradeoff for restoring broad access was accepting more false-positive refusals on benign requests. Seekvana's **[companion article on why Claude Fable 5 was banned](/library/ai-tools/claude-fable-5-banned)** covers that regulatory backstory in full, including the export order timeline and Anthropic's response to it.
 
-We route our own Fable 5 test prompts through the server-side `fallbacks` parameter specifically so we can see the `model` field on every response, rather than guessing from writing style which model actually answered. It's a small setup step, and it's the only way we've found to know for certain.
+We route our own Fable 5 test prompts through the server-side `fallbacks` parameter specifically so we can see the `model` field on every response, rather than guessing from writing style which model actually answered. It's a small setup step, and it's the only way we've found to know for certain. Seekvana's [guide to how to use Claude Fable 5](/library/ai-tools/how-to-use-claude-fable-5) covers this same setup step alongside broader prompting tips for long agentic sessions.
 
 <Note>
 If you're building a product on Fable 5 and predictability matters more than raw capability, ask Anthropic's docs directly about your integration's fallback behavior before you ship. Whether a refusal auto-retries on Opus 4.8 or just stops depends on which of the three retry patterns your integration uses.
