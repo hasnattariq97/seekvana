@@ -1,0 +1,156 @@
+---
+title: "CSS Classes for Beginners: How to Change Color & Font"
+description: "Learn what a CSS class is, how it differs from an id, and how to change color and font in a real CSS rule, explained simply for beginners."
+pillar: "building-with-ai"
+slug: "css-basics"
+difficulty: "beginner"
+readTime: 6
+author: "Seekvana"
+publishedAt: "2026-07-03"
+tags: ["css classes", "css basics", "beginners"]
+featured: false
+lessonModule: "06"
+lessonNumber: "06.03"
+faqs:
+  - q: "Why isn't my CSS color changing even though I saved the file?"
+    a: "Four things cause this almost every time. Your browser is showing a cached copy, so do a hard refresh (Ctrl+Shift+R, or Cmd+Shift+R on a Mac). The class in your CSS doesn't match the class on the element. An inline style or an id rule is quietly overriding your class. Or there's a typo, like a missing semicolon or closing brace, that breaks the whole rule."
+  - q: "Can one HTML element have more than one class?"
+    a: "Yes, and it's common. You separate the class names with spaces, like class=\"cta large\". The element then gets the styles from both the .cta rule and the .large rule at once. This is how real sites mix and match small reusable styles instead of writing one giant rule per element."
+  - q: "What's the difference between color and background-color in CSS?"
+    a: "The color property sets the color of the text itself, and background-color sets the fill behind it. So color white with background-color #C9633F gives you white text on a clay-colored button. Beginners mix these two up constantly, and it's usually why text disappears: the text color matches the background."
+  - q: "Do I need a class to change something's style?"
+    a: "No. You can target an HTML tag directly, like p with color gray, which styles every paragraph on the page. A class exists for when you want to style only some elements, or reuse the same look in many places. Reach for a class the moment styling every tag of one type is too broad."
+---
+
+<ArticleImage
+ src="/images/articles/building-with-ai/css-basics/cover.webp"
+ alt="A plain grey button transforming into a styled clay-colored button under a paintbrush stroke"
+/>
+
+You open an AI-generated project, find a line that reads `.btn { background-color: #2563eb; }`, and decide the blue button should be your brand color instead. You swap the hex code, save, refresh the page, and nothing happens. The button is still blue. You check the file three times, convinced you're losing your mind.
+
+You're not. You changed a real thing, but you didn't yet understand what that line was doing or why the change didn't stick. This lesson fixes that. CSS is a set of instructions that says: find this thing on the page, then change how it looks. By the end you'll be able to read a CSS rule, know what a CSS class is, and change the color and font of any element with confidence.
+
+> **Key Takeaways**
+> - Every CSS rule has the same shape: a **selector** (what to find), a **property** (what to change), and a **value** (what to change it to).
+> - A **class** is a reusable label like `.cta` you can put on any number of elements to style them all at once.
+> - A **class** styles many elements (written with a `.` in CSS); an **id** styles exactly one (written with a `#`).
+> - The three properties you'll see constantly are `color` (text color), `background-color` (fill color), and `font-size`.
+> - CSS lives in one of three places: inline on the element, in a `<style>` block, or in a separate `.css` file.
+
+---
+
+## What Is a CSS Class?
+
+A **CSS class** is a reusable label you attach to HTML elements so you can style all of them at once. You already know how to spot those elements from [reading the HTML tags themselves](/library/building-with-ai/reading-html); a class is just an extra label you hang on the ones you want to style. In your CSS you write the label with a dot in front of it, then list what should change inside curly braces. That's the whole idea: name a group, then describe how the group should look.
+
+Every rule you'll ever read follows the same three-part shape. Here's one:
+
+```css
+.cta {
+  background-color: #C9633F;
+  color: white;
+}
+```
+
+The `.cta` is the **selector**: it says "find every element with the class `cta`." Inside the braces, `background-color` is a **property** (the thing being changed) and `#C9633F` is its **value** (what to change it to). Selector, property, value. Once your eye locks onto that pattern, every CSS block on earth becomes readable, even a 500-line AI-generated stylesheet.
+
+<ArticleImage
+ src="/images/articles/building-with-ai/css-basics/css-rule-anatomy.webp"
+ alt="Three-step diagram: choose elements with a class, write a CSS rule labelled selector, property, and value, then see the styled result"
+ caption="How a CSS class works end to end: tag the elements you want with a class, write one rule from a selector plus property and value pairs, and every matching element updates at once."
+/>
+
+The class earns its keep through reuse. Think of a dress code: instead of walking up to each person individually, you say "everyone wearing a red badge, do this." You put `class="cta"` on your signup button, your pricing button, and your newsletter button, and all three pick up the same look from one rule. Style once, use everywhere.
+
+<Tip>
+When you meet an unfamiliar CSS rule, read the selector first. It tells you *what* is being styled before you worry about *how*. A selector starting with a dot is a class; one starting with a hash is an id.
+</Tip>
+
+Skip the class and you pay for it later. You'd copy the same color, padding, and font onto every button by hand, and the day you want a different shade you'd hunt through the file editing twenty separate spots instead of one. This is the paint layer of [the three that make up a webpage](/library/building-with-ai/html-css-js-basics), and classes are how you paint efficiently.
+
+## Class vs ID: One Badge or One Person
+
+A class and an id do the same job, target an element so you can style it, but they answer two different questions. A **class** is "everyone wearing this badge." An **id** is "this one specific person by name." In CSS you write a class with a dot (`.cta`) and an id with a hash (`#header`).
+
+The practical rule is simple: a class can go on any number of elements, an id is meant for exactly one. You'll have many buttons sharing `.cta`, but only one `#main-header` at the top of the page.
+
+**Class vs id at a glance**
+
+| | Class | ID |
+|---|---|---|
+| Written in CSS as | `.cta` (dot) | `#header` (hash) |
+| Written in HTML as | `class="cta"` | `id="header"` |
+| How many elements | Any number | Exactly one |
+| Use it for | Reusable styles | A single, unique element |
+
+I reach for a class by default and only use an id when something genuinely appears once, like the page header. Ids look tempting because they feel specific, but reuse an id on two elements and things quietly break. Styling gets unpredictable, and any JavaScript that grabs that id only ever finds the first one. When in doubt, use a class. You almost never lose by choosing the reusable option. The <a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Basic_selectors" target="_blank" rel="noopener noreferrer">MDN guide to basic selectors</a> lays out the full family once you want more than these two.
+
+## How Do You Change Color and Font in CSS?
+
+To change color and font, you set three properties inside a rule: `color` for the text, `background-color` for the fill behind it, and `font-size` for how big the text is. Take that same button and read the rule line by line:
+
+```css
+.cta {
+  color: white;
+  background-color: #C9633F;
+  font-size: 18px;
+}
+```
+
+`color: white` makes the button's text white. `background-color: #C9633F` fills the button with clay. `font-size: 18px` sets the text size to 18 pixels. Three lines, three visible changes. Colors can be written as names (`white`, `red`), as hex codes (`#C9633F`), or as `rgb()` values, and all three are common in code you'll read. <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/color_value" target="_blank" rel="noopener noreferrer">MDN's reference on color values</a> covers every format if you're ever unsure what one means.
+
+Before any of this works, the CSS has to actually reach the page, and it lives in one of three homes. **Inline** styles sit right on the element (`<button style="color: white;">`). A **`<style>` block** goes in the page's `<head>`. An external **`.css` file** is linked in with a `<link>` tag and is what real projects use. You don't need to write all three, you just need to recognize them when you open a file and wonder where the styling is hiding.
+
+<Warning>
+Changed a color and nothing happened? It's almost always one of these four:
+
+- Your browser cached the old file, so hard-refresh with Ctrl+Shift+R (Cmd+Shift+R on a Mac).
+- The class in your CSS doesn't match the `class` on the element.
+- An inline style or an id rule is overriding your class.
+- A typo, like a missing `;`, broke the whole rule.
+</Warning>
+
+You don't need to memorize every property. You need `color`, `background-color`, and `font-size` in your hands, plus the habit of reading the selector first, and you can already change how most things look. That's enough to start experimenting on [the Getting Started path](/paths/getting-started), and everything else you look up the moment you need it.
+
+<Steps>
+ <Step number="1" title="Style your button with a CSS class">
+ Open the `index.html` file you created in lesson 06.01.
+
+ Add a class to your button so CSS can find it: `<button class="cta">Click me</button>`
+
+ In your `<style>` block, add a rule that targets that class:
+
+ ```css
+ .cta {
+   background-color: #C9633F;
+   color: white;
+   font-size: 18px;
+   padding: 10px 20px;
+ }
+ ```
+
+ Refresh the page in your browser. Your button should now be clay-colored with white text and a larger font.
+
+ Now change one value, try a different `background-color` hex code, and refresh again to see the effect immediately. That instant feedback loop is exactly how CSS is learned.
+ </Step>
+</Steps>
+
+<Note>
+You've completed Lesson 06.03. Next up: [JavaScript Basics: making that button actually do something](/library/building-with-ai/javascript-basics) →
+</Note>
+
+<FAQ>
+ <FAQItem question="Why isn't my CSS color changing even though I saved the file?">
+ Four things cause this almost every time. Your browser is showing a cached copy, so do a hard refresh (Ctrl+Shift+R, or Cmd+Shift+R on a Mac). The class in your CSS doesn't match the class on the element. An inline style or an `id` rule is quietly overriding your class. Or there's a typo, like a missing semicolon or closing brace, that breaks the whole rule.
+ </FAQItem>
+ <FAQItem question="Can one HTML element have more than one class?">
+ Yes, and it's common. You separate the class names with spaces, like `class="cta large"`. The element then gets the styles from both the `.cta` rule and the `.large` rule at once. This is how real sites mix and match small reusable styles instead of writing one giant rule per element.
+ </FAQItem>
+ <FAQItem question="What's the difference between color and background-color in CSS?">
+ The `color` property sets the color of the text itself, and `background-color` sets the fill behind it. So `color: white` with `background-color: #C9633F` gives you white text on a clay-colored button. Beginners mix these two up constantly, and it's usually why text disappears: the text color matches the background.
+ </FAQItem>
+ <FAQItem question="Do I need a class to change something's style?">
+ No. You can target an HTML tag directly, like `p { color: gray; }`, which styles every paragraph on the page. A class exists for when you want to style only some elements, or reuse the same look in many places. Reach for a class the moment styling every tag of one type is too broad.
+ </FAQItem>
+</FAQ>
