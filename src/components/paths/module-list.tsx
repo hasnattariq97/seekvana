@@ -5,9 +5,11 @@ interface ModuleListProps {
   modules: PathModule[]
   totalTopics: number
   readSet?: string[]
+  curriculumHint?: string
+  topicFooterLabel?: string
 }
 
-export function ModuleList({ modules, totalTopics, readSet = [] }: ModuleListProps) {
+export function ModuleList({ modules, totalTopics, readSet = [], curriculumHint, topicFooterLabel }: ModuleListProps) {
   return (
     <section id="modules">
       <div className="flex items-baseline justify-between mb-2">
@@ -16,17 +18,22 @@ export function ModuleList({ modules, totalTopics, readSet = [] }: ModuleListPro
           {modules.length} modules · {totalTopics} topics
         </span>
       </div>
-      <p className="text-[13px] text-secondary mb-6 leading-relaxed">
-        <strong className="text-primary font-semibold">Every topic takes under 5 minutes.</strong>{' '}
-        Each ends with a hands-on task you can complete right now — no setup required to begin Module 00.
-      </p>
+      {curriculumHint ? (
+        <p className="text-[13px] text-secondary mb-6 leading-relaxed">{curriculumHint}</p>
+      ) : (
+        <p className="text-[13px] text-secondary mb-6 leading-relaxed">
+          <strong className="text-primary font-semibold">Every topic takes under 5 minutes.</strong>{' '}
+          Each ends with a hands-on task you can complete right now — no setup required to begin Module 00.
+        </p>
+      )}
       <div className="border border-border rounded-2xl overflow-hidden bg-surface">
-        {modules.map((module) => (
+        {modules.map((module, idx) => (
           <ModuleItem
             key={module.id}
             module={module}
-            defaultOpen={module.id === '01'}
+            defaultOpen={idx === 0}
             readSet={readSet}
+            topicFooterLabel={topicFooterLabel}
           />
         ))}
       </div>

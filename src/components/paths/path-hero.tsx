@@ -9,6 +9,12 @@ interface PathHeroProps {
   path: PathData
 }
 
+const DIFFICULTY_META: Record<'beginner' | 'intermediate' | 'advanced', { label: string; className: string }> = {
+  beginner: { label: 'Beginner', className: 'border-success/30 bg-success/10 text-success' },
+  intermediate: { label: 'Intermediate', className: 'border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400' },
+  advanced: { label: 'Advanced', className: 'border-red-500/30 bg-red-500/10 text-red-600 dark:text-red-400' },
+}
+
 const NODE_LABELS: Record<string, string> = {
   '01': 'AI Landscape',
   '02': 'Terminal',
@@ -27,9 +33,9 @@ export function PathHero({ path }: PathHeroProps) {
     <header className="pb-14 border-b border-border mb-14">
       {/* Badges */}
       <div className="flex gap-2 flex-wrap mb-5">
-        <span className="inline-flex items-center gap-1.5 text-[11.5px] font-medium px-3 py-1 rounded-full border border-success/30 bg-success/10 text-success">
+        <span className={`inline-flex items-center gap-1.5 text-[11.5px] font-medium px-3 py-1 rounded-full border ${DIFFICULTY_META[path.difficulty].className}`}>
           <span className="w-1.5 h-1.5 rounded-full bg-current" />
-          Beginner
+          {DIFFICULTY_META[path.difficulty].label}
         </span>
         <span className="inline-flex text-[11.5px] font-medium px-3 py-1 rounded-full border border-border bg-surface text-secondary">
           No experience needed
@@ -128,7 +134,7 @@ export function PathHero({ path }: PathHeroProps) {
           { icon: Layers,        value: path.modules.length, label: 'modules' },
           { icon: BookOpen,      value: path.lessonCount,    label: 'topics' },
           { icon: CheckCircle2,  value: path.lessonCount,    label: 'tasks' },
-          { icon: Clock3,        value: '3–5 hrs',           label: 'total' },
+          { icon: Clock3,        value: path.totalTimeLabel ?? '3–5 hrs', label: 'total' },
         ].map(({ icon: Icon, value, label }) => (
           <div key={label} className="flex items-center gap-2 bg-surface border border-border rounded-lg px-3.5 py-2">
             <Icon size={13} strokeWidth={1.8} className="text-accent shrink-0" />

@@ -122,7 +122,13 @@ export default async function PathPage({ params }: Props) {
 
       {/* Two-column layout */}
       <div className="grid grid-cols-1 xl:grid-cols-[1fr_276px] gap-14 pb-24">
-        <ModuleList modules={enrichedModules} totalTopics={totalTopics} readSet={readSet} />
+        <ModuleList
+          modules={enrichedModules}
+          totalTopics={totalTopics}
+          readSet={readSet}
+          curriculumHint={path.curriculumHint}
+          topicFooterLabel={path.topicFooterLabel}
+        />
         <PathSidebar
           path={path}
           completedCount={completedCount}

@@ -161,6 +161,10 @@ export interface PathModule {
 
 export interface PathData extends PathDefinition {
   subtitle?: string
+  totalTimeLabel?: string
+  outcomeLabel?: string
+  curriculumHint?: string
+  topicFooterLabel?: string
   modules: PathModule[]
   nextPath?: {
     title: string

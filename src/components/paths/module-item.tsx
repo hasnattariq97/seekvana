@@ -9,9 +9,10 @@ interface ModuleItemProps {
   module: PathModule
   defaultOpen?: boolean
   readSet?: string[]
+  topicFooterLabel?: string
 }
 
-export function ModuleItem({ module, defaultOpen = false, readSet = [] }: ModuleItemProps) {
+export function ModuleItem({ module, defaultOpen = false, readSet = [], topicFooterLabel }: ModuleItemProps) {
   const [open, setOpen] = useState(defaultOpen)
 
   const linkableTopics = module.topics.filter(t => t.articlePillar && t.articleSlug)
@@ -121,7 +122,7 @@ export function ModuleItem({ module, defaultOpen = false, readSet = [] }: Module
             })}
           </ul>
           <div className="flex justify-between items-center px-5 py-2.5 pl-[52px] border-t border-border bg-surface-subtle">
-            <span className="text-[11px] text-secondary"><span className="text-primary font-medium">Each topic</span> includes a 5-min task</span>
+            <span className="text-[11px] text-secondary"><span className="text-primary font-medium">Each topic</span> includes a {topicFooterLabel ?? '5-min task'}</span>
             <span className="text-[11px] font-semibold text-secondary">{module.topics.length} tasks</span>
           </div>
         </div>

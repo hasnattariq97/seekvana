@@ -118,7 +118,7 @@ export function PathSidebar({
               </svg>
               Total time
             </span>
-            <span className="text-[12px] font-semibold text-primary">3–5 hours</span>
+            <span className="text-[12px] font-semibold text-primary">{path.totalTimeLabel ?? '3–5 hours'}</span>
           </div>
 
           <div className="flex items-center justify-between py-[9px] border-b border-border">
@@ -138,7 +138,7 @@ export function PathSidebar({
               </svg>
               You&apos;ll build
             </span>
-            <span className="text-[12px] font-semibold text-accent">Live AI app</span>
+            <span className="text-[12px] font-semibold text-accent">{path.outcomeLabel ?? 'Live AI app'}</span>
           </div>
         </div>
       </div>
