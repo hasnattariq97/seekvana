@@ -11,6 +11,7 @@ import { ReadingProgress } from '@/components/article/reading-progress'
 import { PillarSidebar, PillarSidebarMobile } from '@/components/article/pillar-sidebar'
 import { TableOfContents } from '@/components/article/table-of-contents'
 import { ArticleFeedback } from '@/components/article/article-feedback'
+import { ShareRow } from '@/components/article/share-row'
 import { ArticleNav } from '@/components/article/article-nav'
 import type { CommentWithReplies } from '@/types/comments'
 import { ArticleComments } from '@/components/article/article-comments'
@@ -163,6 +164,7 @@ export default async function ArticlePage({ params }: PageProps) {
   }
 
   const pillarName = getPillarName(pillar)
+  const shareUrl = `https://seekvana.com/library/${pillar}/${slug}`
   const pillarArticles = getArticlesByPillar(pillar).map((a) => ({
     title: a.frontmatter.title,
     slug: a.slug,
@@ -261,6 +263,9 @@ export default async function ArticlePage({ params }: PageProps) {
                 <span aria-hidden="true">·</span>
                 <span>{frontmatter.readTime} min read</span>
               </div>
+              <div className="mt-5">
+                <ShareRow url={shareUrl} title={frontmatter.title} label="Share" />
+              </div>
               <div className="mt-6 border-t border-border" />
             </header>
 
@@ -272,6 +277,15 @@ export default async function ArticlePage({ params }: PageProps) {
             {/* Mark complete */}
             <div className="flex justify-center my-8">
               <MarkCompleteButton pillar={pillar} articleSlug={slug} initialCompleted={isCompleted} articleTitle={frontmatter.title} />
+            </div>
+
+            {/* Share */}
+            <div className="mt-10">
+              <ShareRow
+                url={shareUrl}
+                title={frontmatter.title}
+                label="Share this article"
+              />
             </div>
 
             {/* Feedback */}
