@@ -23,21 +23,21 @@ Build a new flagship learning path, **Beyond the Prompt**, filling Seekvana's cu
   "subtitle": "Everything you need to master prompt engineering, from first principles to production.",
   "description": "...",
   "difficulty": "advanced",
-  "lessonCount": 31,
   // difficulty is a strict 'beginner' | 'intermediate' | 'advanced' enum (src/lib/mdx.ts:130) —
   // set to the path's ceiling, matching the precedent of "Beginner to AI Engineer"
   // (tagged Advanced despite starting at beginner).
+  "lessonCount": 31,
   "href": "/paths/beyond-the-prompt",
-  "colorClass": "<pick one not already used by getting-started>",
+  "colorClass": "bg-teal-500",
   "modules": [
-    { "id": "foundations", "title": "Foundations", "description": "...", "topics": [ /* 8 */ ] },
-    { "id": "builder", "title": "Builder", "description": "...", "topics": [ /* 12 */ ] },
-    { "id": "production-frontier", "title": "Production & Frontier", "description": "...", "topics": [ /* 11 */ ] }
+    { "id": "11", "title": "Foundations", "description": "...", "topics": [ /* 8, ids 11.01-11.08 */ ] },
+    { "id": "12", "title": "Builder", "description": "...", "topics": [ /* 12, ids 12.01-12.12 */ ] },
+    { "id": "13", "title": "Production & Frontier", "description": "...", "topics": [ /* 11, ids 13.01-13.11 */ ] }
   ]
 }
 ```
 
-Each topic: `{ "id": "...", "title": "..." }` initially — **no `articlePillar`/`articleSlug` until that article actually ships**, matching the existing convention (`getting-started.json` lines 37-44) so nothing links to a 404.
+Module ids `11`/`12`/`13` are deliberately outside `getting-started.json`'s `00`–`10` range (see the `lessonNumber` note below). Each topic: `{ "id": "...", "title": "..." }` — no `articlePillar`/`articleSlug` field is ever added, even after the article ships (see below).
 
 **Articles** — new folder `src/content/articles/prompt-engineering/`, one `.mdx` per article. Frontmatter matches `ArticleFrontmatter` (`src/lib/mdx.ts:5-20`):
 
@@ -53,11 +53,13 @@ author: "Seekvana"
 publishedAt: "2026-MM-DD"
 tags: [...]
 featured: false
+lessonModule: "11" # "11" | "12" | "13" — matches the article's tier
+lessonNumber: "11.01" # matches the topic id exactly
 faqs: [{ q, a }]  # optional
 ---
 ```
 
-**Do not set `lessonModule`/`lessonNumber` on these articles.** `buildLessonArticleMap()` (`src/lib/mdx.ts:180-194`) keys articles by `lessonNumber` in one flat, site-wide map — `getting-started.json`'s modules 02-10 already rely on this to resolve topics like `"02.01"`. If a prompt-engineering article set `lessonNumber: "02.01"` too, it would collide with getting-started's existing topic of the same id. Wiring instead happens by hardcoding `articlePillar`/`articleSlug` directly into each topic in `beyond-the-prompt.json` (same mechanism `getting-started.json`'s module `"01"` already uses) — see the production plan below.
+**`lessonModule`/`lessonNumber` auto-link the article — no JSON edit, ever.** `buildLessonArticleMap()` (`src/lib/mdx.ts:180-194`) keys articles by `lessonNumber` in one flat, site-wide map; `getPathBySlug()`'s page (`src/app/paths/[slug]/page.tsx:35-47`) overwrites each topic's `articlePillar`/`articleSlug`/`title` from that map at render time. `getting-started.json`'s modules 02-10 already rely on exactly this. The only reason this wasn't used at first is that `getting-started` occupies `lessonNumber`s `00.xx`–`10.xx` — reusing that range here would collide with an unrelated getting-started topic sharing the same id. Numbering Beyond the Prompt's modules `11`/`12`/`13` avoids the collision, so every article auto-wires itself the moment its `lessonNumber` matches its topic id in `beyond-the-prompt.json`.
 
 **Cover images** — user produces `cover.webp` per article by hand, same as Getting Started. `coverImage` stays unset in frontmatter so the existing fallback convention (`mdx.ts:64-73`, auto-generated `cover.jpg` via `scripts/generate-og-covers.mjs`) picks it up once the file exists. Not blocking article writing.
 
@@ -74,7 +76,7 @@ Each hand-off article ends with a "go deeper" link into the target pillar.
 
 Word counts, exercises, and prerequisites per article are in `docs/prompt-craft-combined-curriculum.md` §6 — not duplicated here. ★ = flagged for the "does this still apply to reasoning models?" note.
 
-**Tier 1 — Foundations** (`beginner`, path module `"01"`)
+**Tier 1 — Foundations** (`beginner`, path module `"11"`)
 
 | # | Slug | Title |
 |---|---|---|
@@ -87,7 +89,7 @@ Word counts, exercises, and prerequisites per article are in `docs/prompt-craft-
 | 7 | `giving-the-model-room-to-think` | Giving the Model Room to Think |
 | 8 | `the-iteration-loop` | The Iteration Loop |
 
-**Tier 2 — Builder** (`intermediate`, path module `"02"`)
+**Tier 2 — Builder** (`intermediate`, path module `"12"`)
 
 | # | Slug | Title |
 |---|---|---|
@@ -104,7 +106,7 @@ Word counts, exercises, and prerequisites per article are in `docs/prompt-craft-
 | 19 | `meta-prompting-and-prompt-generation` | Meta-Prompting and Prompt Generation |
 | 20 | `prompt-security-basics` ★ | Prompt Security Basics |
 
-**Tier 3 — Production & Frontier** (`advanced`, path module `"03"`)
+**Tier 3 — Production & Frontier** (`advanced`, path module `"13"`)
 
 | # | Slug | Title |
 |---|---|---|
@@ -126,9 +128,9 @@ Word counts, exercises, and prerequisites per article are in `docs/prompt-craft-
 
 **Phase A — Infra.** Create `beyond-the-prompt.json` with all 31 topic titles (no article links yet). `getAllPaths()`/`generatePathStaticParams()` auto-discover the new file — no code change needed for `/paths` to list it. Two existing path-detail components (`PathHero`, `PathSidebar`, `ModuleList`, `ModuleItem`) hardcode `getting-started`-specific copy (difficulty badge always "Beginner", "3–5 hrs"/"5-min task" wording) that would be factually wrong for this course — these get parametrized via new optional `PathData` fields, with `getting-started.json`'s rendering unchanged. Confirm `/library/prompt-engineering` and `/paths/beyond-the-prompt` render correctly in their empty/in-progress state. `npm run build`.
 
-**Phase B — Production guide.** Write the article brief/QA doc: exact `/produce` topic string, slug, tier, word count, exercise, assessment, ★ reasoning-model-note flag, and hand-off pillar per article (batched Tier 1 → 2 → 3), plus the checklist to run after each `/deploy` (frontmatter schema check, `faqs` key check — seomachine has shipped `question`/`answer` instead of `q`/`a` before, breaking FAQPage schema silently — MDX string-prop check, path-JSON wiring).
+**Phase B — Production guide.** Write the article brief/QA doc: exact `/produce` topic string, slug, tier, `lessonModule`/`lessonNumber`, word count, exercise, assessment, ★ reasoning-model-note flag, and hand-off pillar per article (batched Tier 1 → 2 → 3), plus the checklist to run after each `/deploy` (frontmatter schema check including `lessonModule`/`lessonNumber`, `faqs` key check — seomachine has shipped `question`/`answer` instead of `q`/`a` before, breaking FAQPage schema silently — MDX string-prop check).
 
-**Phase C — Deploy loop (external, human-run).** For each article: `/produce` + `/deploy` in `seomachine`, using the Phase B guide's brief for that row. Back in this repo: run the QA checklist, add `articlePillar`/`articleSlug` to that topic in `beyond-the-prompt.json`, `npm run build`. Batched by tier with a review checkpoint after each batch before the next begins.
+**Phase C — Deploy loop (external, human-run).** For each article: `/produce` + `/deploy` in `seomachine`, using the Phase B guide's brief for that row (including its `lessonModule`/`lessonNumber`). Back in this repo: run the QA checklist, `npm run build` — no JSON edit, the `lessonNumber` auto-links it. Batched by tier with a review checkpoint after each batch before the next begins.
 
 ## Non-goals (v1)
 

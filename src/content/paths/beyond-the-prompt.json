@@ -13,55 +13,55 @@
   "topicFooterLabel": "written exercise",
   "modules": [
     {
-      "id": "01",
+      "id": "11",
       "title": "Foundations",
       "description": "The mental model, the anatomy of a prompt, and the core skills — clarity, roles, examples, formatting, and iteration.",
       "topics": [
-        { "id": "01.01", "title": "What Prompting Actually Is — and Why It Still Matters in 2026" },
-        { "id": "01.02", "title": "The Anatomy of a Prompt" },
-        { "id": "01.03", "title": "Clear and Direct: The Core Skill" },
-        { "id": "01.04", "title": "Giving the Model a Role and an Audience" },
-        { "id": "01.05", "title": "Showing vs Telling: Examples and Few-Shot" },
-        { "id": "01.06", "title": "Controlling the Output" },
-        { "id": "01.07", "title": "Giving the Model Room to Think" },
-        { "id": "01.08", "title": "The Iteration Loop" }
+        { "id": "11.01", "title": "What Prompting Actually Is — and Why It Still Matters in 2026" },
+        { "id": "11.02", "title": "The Anatomy of a Prompt" },
+        { "id": "11.03", "title": "Clear and Direct: The Core Skill" },
+        { "id": "11.04", "title": "Giving the Model a Role and an Audience" },
+        { "id": "11.05", "title": "Showing vs Telling: Examples and Few-Shot" },
+        { "id": "11.06", "title": "Controlling the Output" },
+        { "id": "11.07", "title": "Giving the Model Room to Think" },
+        { "id": "11.08", "title": "The Iteration Loop" }
       ]
     },
     {
-      "id": "02",
+      "id": "12",
       "title": "Builder",
       "description": "Patterns, reasoning techniques, context engineering, RAG-aware prompting, structured outputs, and prompt security.",
       "topics": [
-        { "id": "02.01", "title": "A Working Catalog of Prompt Patterns" },
-        { "id": "02.02", "title": "Decomposition and Prompt Chaining" },
-        { "id": "02.03", "title": "Self-Consistency and Verification" },
-        { "id": "02.04", "title": "Reducing Hallucinations" },
-        { "id": "02.05", "title": "Prompting Reasoning Models" },
-        { "id": "02.06", "title": "Context Engineering, Part 1 — Foundations" },
-        { "id": "02.07", "title": "Prompting Over Documents and Data (RAG-Aware Prompting)" },
-        { "id": "02.08", "title": "Structured Outputs and Schema-Driven Prompting" },
-        { "id": "02.09", "title": "Multimodal Prompting" },
-        { "id": "02.10", "title": "System Prompts That Scale" },
-        { "id": "02.11", "title": "Meta-Prompting and Prompt Generation" },
-        { "id": "02.12", "title": "Prompt Security Basics" }
+        { "id": "12.01", "title": "A Working Catalog of Prompt Patterns" },
+        { "id": "12.02", "title": "Decomposition and Prompt Chaining" },
+        { "id": "12.03", "title": "Self-Consistency and Verification" },
+        { "id": "12.04", "title": "Reducing Hallucinations" },
+        { "id": "12.05", "title": "Prompting Reasoning Models" },
+        { "id": "12.06", "title": "Context Engineering, Part 1 — Foundations" },
+        { "id": "12.07", "title": "Prompting Over Documents and Data (RAG-Aware Prompting)" },
+        { "id": "12.08", "title": "Structured Outputs and Schema-Driven Prompting" },
+        { "id": "12.09", "title": "Multimodal Prompting" },
+        { "id": "12.10", "title": "System Prompts That Scale" },
+        { "id": "12.11", "title": "Meta-Prompting and Prompt Generation" },
+        { "id": "12.12", "title": "Prompt Security Basics" }
       ]
     },
     {
-      "id": "03",
+      "id": "13",
       "title": "Production & Frontier",
       "description": "Agentic and multi-agent prompting, advanced reasoning frameworks, automatic optimization, evals, and shipping prompt systems in production.",
       "topics": [
-        { "id": "03.01", "title": "Context Engineering, Part 2 — Production Systems" },
-        { "id": "03.02", "title": "Agentic Prompting" },
-        { "id": "03.03", "title": "Multi-Agent Prompting and Orchestration" },
-        { "id": "03.04", "title": "Advanced Reasoning Frameworks" },
-        { "id": "03.05", "title": "Automatic Prompt Optimization" },
-        { "id": "03.06", "title": "Evaluating Prompts" },
-        { "id": "03.07", "title": "Prompt Engineering for Production" },
-        { "id": "03.08", "title": "Model-Specific Prompting" },
-        { "id": "03.09", "title": "Adversarial and Red-Team Prompting (Advanced)" },
-        { "id": "03.10", "title": "Domain Playbooks" },
-        { "id": "03.11", "title": "Prompting as It Evolves (Capstone)" }
+        { "id": "13.01", "title": "Context Engineering, Part 2 — Production Systems" },
+        { "id": "13.02", "title": "Agentic Prompting" },
+        { "id": "13.03", "title": "Multi-Agent Prompting and Orchestration" },
+        { "id": "13.04", "title": "Advanced Reasoning Frameworks" },
+        { "id": "13.05", "title": "Automatic Prompt Optimization" },
+        { "id": "13.06", "title": "Evaluating Prompts" },
+        { "id": "13.07", "title": "Prompt Engineering for Production" },
+        { "id": "13.08", "title": "Model-Specific Prompting" },
+        { "id": "13.09", "title": "Adversarial and Red-Team Prompting (Advanced)" },
+        { "id": "13.10", "title": "Domain Playbooks" },
+        { "id": "13.11", "title": "Prompting as It Evolves (Capstone)" }
       ]
     }
   ]
