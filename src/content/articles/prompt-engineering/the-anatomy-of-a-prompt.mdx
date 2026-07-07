@@ -60,7 +60,7 @@ A prompt breaks into six reusable components. Not every prompt needs all six, bu
 
 ## Role and Task: Who's Answering and What They're Doing
 
-**Role** tells the model whose perspective to answer from: a nutritionist, a blunt code reviewer, a patient teacher. Without it, the model defaults to a generic, agreeable voice that fits no audience particularly well.
+**Role** tells the model whose perspective to answer from: a nutritionist, a blunt code reviewer, a patient teacher. Without it, the model defaults to a generic, agreeable voice that fits no audience particularly well. It's also easy to overuse: [when role actually helps, and when it's just habit](/library/prompt-engineering/giving-the-model-a-role-and-an-audience) depends on the task.
 
 **Task** is the actual instruction: the one thing you want done, stated as a clear sentence, not buried in three paragraphs of throat-clearing. A model that generates text by predicting the most likely next words needs that instruction to be unambiguous. If you're fuzzy on [how the model actually gets from your words to its answer](/library/large-language-models/how-llms-work), here's the short version: it's pattern-matching against everything you gave it. A vague task just gives it more room to guess wrong.
 
