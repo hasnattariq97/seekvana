@@ -66,25 +66,33 @@ export function ShareRow({ url, title, label }: ShareRowProps) {
   ]
 
   async function handleCopy() {
+    const legacyCopy = () => {
+      const ta = document.createElement('textarea')
+      ta.value = url
+      ta.style.position = 'fixed'
+      ta.style.left = '-9999px'
+      document.body.appendChild(ta)
+      ta.focus()
+      ta.select()
+      document.execCommand('copy')
+      document.body.removeChild(ta)
+    }
+
     try {
       if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(url)
+        try {
+          await navigator.clipboard.writeText(url)
+        } catch {
+          legacyCopy()
+        }
       } else {
-        const ta = document.createElement('textarea')
-        ta.value = url
-        ta.style.position = 'fixed'
-        ta.style.left = '-9999px'
-        document.body.appendChild(ta)
-        ta.focus()
-        ta.select()
-        document.execCommand('copy')
-        document.body.removeChild(ta)
+        legacyCopy()
       }
       setCopied(true)
       if (timerRef.current) clearTimeout(timerRef.current)
       timerRef.current = setTimeout(() => setCopied(false), 2000)
     } catch {
-      // clipboard blocked (e.g. insecure context) — silently no-op
+      // clipboard fully unavailable (e.g. insecure context, execCommand blocked) — no-op
     }
   }
 
