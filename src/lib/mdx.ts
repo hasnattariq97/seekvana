@@ -59,9 +59,22 @@ export function getArticleSource(pillar: string, slug: string): {
   )
   const raw = fs.readFileSync(filePath, 'utf-8')
   const { data, content } = matter(raw)
+  const frontmatter = data as ArticleFrontmatter
+
+  // Derive the OG cover from the on-disk convention when not set explicitly.
+  // Points at the scraper-safe .jpg produced by scripts/generate-og-covers.mjs
+  // (WebP does not render reliably as an OG image on most chat apps).
+  if (!frontmatter.coverImage) {
+    const coverRel = `/images/articles/${pillar}/${slug}/cover.jpg`
+    const coverAbs = path.join(process.cwd(), 'public', coverRel)
+    if (fs.existsSync(coverAbs)) {
+      frontmatter.coverImage = coverRel
+    }
+  }
+
   return {
     source: content,
-    frontmatter: data as ArticleFrontmatter,
+    frontmatter,
     headings: extractHeadings(content),
   }
 }
