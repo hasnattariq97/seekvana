@@ -53,13 +53,11 @@ author: "Seekvana"
 publishedAt: "2026-MM-DD"
 tags: [...]
 featured: false
-lessonModule: "foundations" # | "builder" | "production-frontier"
-lessonNumber: <1-31>
 faqs: [{ q, a }]  # optional
 ---
 ```
 
-`lessonModule`/`lessonNumber` let `buildLessonArticleMap()` (`src/lib/mdx.ts:180-194`) wire the article to its path topic automatically once the topic's `articlePillar`/`articleSlug` are added to the JSON.
+**Do not set `lessonModule`/`lessonNumber` on these articles.** `buildLessonArticleMap()` (`src/lib/mdx.ts:180-194`) keys articles by `lessonNumber` in one flat, site-wide map — `getting-started.json`'s modules 02-10 already rely on this to resolve topics like `"02.01"`. If a prompt-engineering article set `lessonNumber: "02.01"` too, it would collide with getting-started's existing topic of the same id. Wiring instead happens by hardcoding `articlePillar`/`articleSlug` directly into each topic in `beyond-the-prompt.json` (same mechanism `getting-started.json`'s module `"01"` already uses) — see the production plan below.
 
 **Cover images** — user produces `cover.webp` per article by hand, same as Getting Started. `coverImage` stays unset in frontmatter so the existing fallback convention (`mdx.ts:64-73`, auto-generated `cover.jpg` via `scripts/generate-og-covers.mjs`) picks it up once the file exists. Not blocking article writing.
 
@@ -76,7 +74,7 @@ Each hand-off article ends with a "go deeper" link into the target pillar.
 
 Word counts, exercises, and prerequisites per article are in `docs/prompt-craft-combined-curriculum.md` §6 — not duplicated here. ★ = flagged for the "does this still apply to reasoning models?" note.
 
-**Tier 1 — Foundations** (`beginner`, `lessonModule: "foundations"`)
+**Tier 1 — Foundations** (`beginner`, path module `"01"`)
 
 | # | Slug | Title |
 |---|---|---|
@@ -89,7 +87,7 @@ Word counts, exercises, and prerequisites per article are in `docs/prompt-craft-
 | 7 | `giving-the-model-room-to-think` | Giving the Model Room to Think |
 | 8 | `the-iteration-loop` | The Iteration Loop |
 
-**Tier 2 — Builder** (`intermediate`, `lessonModule: "builder"`)
+**Tier 2 — Builder** (`intermediate`, path module `"02"`)
 
 | # | Slug | Title |
 |---|---|---|
@@ -106,7 +104,7 @@ Word counts, exercises, and prerequisites per article are in `docs/prompt-craft-
 | 19 | `meta-prompting-and-prompt-generation` | Meta-Prompting and Prompt Generation |
 | 20 | `prompt-security-basics` ★ | Prompt Security Basics |
 
-**Tier 3 — Production & Frontier** (`advanced`, `lessonModule: "production-frontier"`)
+**Tier 3 — Production & Frontier** (`advanced`, path module `"03"`)
 
 | # | Slug | Title |
 |---|---|---|
@@ -124,11 +122,13 @@ Word counts, exercises, and prerequisites per article are in `docs/prompt-craft-
 
 ## Production plan & phasing
 
-**Phase A — Infra.** Create `beyond-the-prompt.json` with all 31 topic titles (no article links yet). Add the path card to `/paths`. Confirm `/library/prompt-engineering` and `/paths/beyond-the-prompt` render in their empty/in-progress state. `npm run build`.
+**Article prose is not produced in this session or repo.** It's written through the separate `seomachine` workspace's pipeline (`/produce [topic]` → `/deploy [slug] [images-folder]`), one article per invocation, no batch mechanism. This repo's job is infra + a production guide that makes each `/deploy` land correctly, plus a QA/wiring pass after each one.
 
-**Phase B — Tier 1 (8 articles, hand-written).** Written directly, one at a time, to establish voice, the *principle → pattern → production* structure, and callout/exercise conventions that Tier 2/3 will follow. Each article's topic gets wired into the path JSON (`articlePillar`/`articleSlug` added) as it ships. `npm run build` after the tier completes.
+**Phase A — Infra.** Create `beyond-the-prompt.json` with all 31 topic titles (no article links yet). `getAllPaths()`/`generatePathStaticParams()` auto-discover the new file — no code change needed for `/paths` to list it. Two existing path-detail components (`PathHero`, `PathSidebar`, `ModuleList`, `ModuleItem`) hardcode `getting-started`-specific copy (difficulty badge always "Beginner", "3–5 hrs"/"5-min task" wording) that would be factually wrong for this course — these get parametrized via new optional `PathData` fields, with `getting-started.json`'s rendering unchanged. Confirm `/library/prompt-engineering` and `/paths/beyond-the-prompt` render correctly in their empty/in-progress state. `npm run build`.
 
-**Phase C — Tier 2 (12) + Tier 3 (11), parallelized.** Subagents draft each article against the Tier 1 template plus that article's brief (objective, word count, exercise, prerequisite) from the combined curriculum doc. A consistency edit pass follows — voice, the ★ reasoning-model notes, and the pillar hand-off links — before each is wired into the path JSON. `npm run build` after each tier.
+**Phase B — Production guide.** Write the article brief/QA doc: exact `/produce` topic string, slug, tier, word count, exercise, assessment, ★ reasoning-model-note flag, and hand-off pillar per article (batched Tier 1 → 2 → 3), plus the checklist to run after each `/deploy` (frontmatter schema check, `faqs` key check — seomachine has shipped `question`/`answer` instead of `q`/`a` before, breaking FAQPage schema silently — MDX string-prop check, path-JSON wiring).
+
+**Phase C — Deploy loop (external, human-run).** For each article: `/produce` + `/deploy` in `seomachine`, using the Phase B guide's brief for that row. Back in this repo: run the QA checklist, add `articlePillar`/`articleSlug` to that topic in `beyond-the-prompt.json`, `npm run build`. Batched by tier with a review checkpoint after each batch before the next begins.
 
 ## Non-goals (v1)
 
@@ -143,5 +143,5 @@ These may become their own future sub-projects once the 31 articles exist.
 ## Open items
 
 - Cover images: user's responsibility, not blocking.
-- `colorClass` for the path card: pick a value not already used by `getting-started.json`.
-- Exact per-article word counts/exercises/assessments: already fully specified in `docs/prompt-craft-combined-curriculum.md` §6 — writers should pull from there directly rather than duplicating in this spec.
+- `colorClass`: `"bg-teal-500"` — distinct from getting-started's `"bg-purple-500"`, already a known key in `PATH_COLORS` (`src/app/profile/progress/page.tsx:8-14`).
+- Exact per-article word counts/exercises/assessments: fully specified in `docs/beyond-the-prompt-production-guide.md` (produced by the implementation plan), sourced from `docs/prompt-craft-combined-curriculum.md` §6.
