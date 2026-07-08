@@ -75,7 +75,7 @@ Picking the wrong one has a real cost. Zero-shot on a format-sensitive task gets
 
 Research on few-shot prompting keeps landing on the same shape: most of the improvement happens by your second example, then gains flatten out. <a href="https://www.prompthub.us/blog/the-few-shot-prompting-guide" target="_blank" rel="noopener noreferrer">PromptHub's guide to few-shot prompting</a> puts a rough ceiling around eight examples, past which extra examples mostly add tokens without adding accuracy, and can occasionally make things worse.
 
-There's a second reason to stay lean: reasoning tasks. If your examples include a flawed step in the reasoning, like a slightly wrong arithmetic shortcut, the model can copy that flaw into new answers instead of reasoning through the problem on its own. More examples means more chances to accidentally teach the wrong habit.
+There's a second reason to stay lean: reasoning tasks. If your examples include a flawed step in the reasoning, like a slightly wrong arithmetic shortcut, the model can copy that flaw into new answers instead of reasoning through the problem on its own. More examples means more chances to accidentally teach the wrong habit. Showing the model worked reasoning steps instead of just answers is also the basis for [chain of thought prompting](/library/prompt-engineering/giving-the-model-room-to-think), covered a couple lessons ahead.
 
 <Tip>
  Start with 2-3 examples. Add a fourth only if you're still seeing inconsistent output, and stop well before you reach eight. If it's not working by example three, the problem is usually the examples' quality, not their quantity.

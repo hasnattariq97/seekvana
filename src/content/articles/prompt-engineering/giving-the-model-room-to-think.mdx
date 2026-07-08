@@ -1,0 +1,179 @@
+---
+title: "Chain of Thought Prompting: The Rules Just Changed"
+description: "Chain of thought prompting means reasoning step by step before answering. Reasoning models like o1 do this already, so the trick often backfires."
+pillar: "prompt-engineering"
+slug: "giving-the-model-room-to-think"
+difficulty: "beginner"
+readTime: 10
+author: "Seekvana"
+publishedAt: "2026-07-08"
+tags: ["chain of thought prompting", "prompt engineering", "reasoning models", "ai prompts"]
+featured: false
+lessonModule: "11"
+lessonNumber: "11.07"
+faqs:
+  - q: "Does chain of thought prompting still work on reasoning models like o1 or o3?"
+    a: "Not the way it used to. Reasoning models already break problems into steps internally before they answer, so telling them to 'think step by step' is either redundant or, on some tasks, actively counterproductive. Save the explicit instruction for standard, non-reasoning models."
+  - q: "What's the difference between chain of thought and a scratchpad?"
+    a: "Chain of thought asks the model to narrate its reasoning as part of the answer. A scratchpad gives it a separate, clearly marked space to plan before writing the real answer. They solve the same underlying problem, but a scratchpad is more structured and easier to strip out of the final output programmatically."
+  - q: "Why did my 'think step by step' prompt suddenly get worse results?"
+    a: "You likely switched to a reasoning model without realizing it. These models perform their own internal reasoning before generating a response, so an explicit step-by-step instruction can interfere with that process instead of helping it, especially on short, simple tasks."
+  - q: "Is Claude's extended thinking the same thing as chain of thought prompting?"
+    a: "No. Chain of thought is a prompting technique where you ask the model to narrate reasoning in its visible output. Extended thinking is a model capability where Claude generates real internal reasoning tokens before its answer, whether or not you ask it to. One is something you write; the other is something the model does on its own."
+---
+
+<ArticleImage
+ src="/images/articles/prompt-engineering/giving-the-model-room-to-think/cover.webp"
+ alt="Split illustration of a direct jump to a wrong answer versus a stepped path to a correct one"
+/>
+
+You had a prompt that worked. Every time you added "let's think step by step" to the end of it, the model's math checked out, its logic held together, and the answer got noticeably better. Then you pointed the exact same trick at a newer model, one built specifically to reason. The answer came back no better, sometimes worse, after a longer wait and a bigger bill.
+
+That's not a fluke, and it's not a bug in your prompt. Chain-of-thought prompting, asking a model to reason step by step before it answers, still works. But the rules for when and how changed the moment reasoning models showed up, and almost nothing written about this technique mentions the flip. This lesson covers both halves: the technique itself, and the twist nobody warns you about.
+
+> **Key Takeaways**
+> - Chain-of-thought (CoT) prompting means asking a model to reason step by step before it answers, either with a trigger phrase or worked examples
+> - On standard models, CoT reliably improves multi-step tasks like math, logic, and planning, but adds little to simple factual questions
+> - Reasoning models like OpenAI's o-series and Claude's extended thinking already reason internally, so bolting on "think step by step" is often redundant and can hurt accuracy
+> - A scratchpad, an explicit space for the model to plan before answering, is chain-of-thought's more structured cousin, useful for agentic and multi-step tool-use tasks
+> - Check which kind of model you're talking to before choosing a technique: the same instruction helps one and wastes tokens on the other
+
+---
+
+## What Is Chain-of-Thought Prompting?
+
+Chain-of-thought (CoT) prompting, also written without hyphens as chain of thought prompting, means asking a model to work through a problem in visible, intermediate steps before it states a final answer, instead of jumping straight to a conclusion. Instead of "what's 17% of 240, plus 12?" and hoping for the best, you get the model to show its arithmetic first, then land on the number.
+
+The idea comes from a 2022 research paper that tested this on large language models. Researchers found that models told to reason step by step got dramatically better at multi-step math and logic problems than models asked for a direct answer. But the effect mostly showed up once models were large enough to reason coherently in the first place. According to <a href="https://arxiv.org/abs/2201.11903" target="_blank" rel="noopener noreferrer">the original chain-of-thought research (arXiv)</a>, this reasoning ability "emerges naturally" in sufficiently large models. Smaller models sometimes produced reasoning that looked plausible but was actually wrong, which made their final answers worse, not better.
+
+That distinction matters more than most beginner guides let on: CoT isn't a universal upgrade. It's a technique that trades extra tokens and time for a shot at better reasoning, and that trade only pays off under specific conditions covered later in this lesson. Get the conditions wrong and you either pay for reasoning a simple question never needed, or ship a confident, fluent, wrong answer with no visible reasoning to catch the mistake before it reaches someone.
+
+You've already used pieces of this puzzle without naming them. [The six parts of a prompt](/library/prompt-engineering/the-anatomy-of-a-prompt) named the task as one ingredient, but never said how much room the model gets to work through that task before answering. [Controlling the output in the last lesson](/library/prompt-engineering/controlling-the-output) was about shaping the answer; this lesson is about shaping what happens right before it.
+
+## Zero-Shot vs. Few-Shot: Two Ways to Ask for Reasoning
+
+There are two ways to trigger chain-of-thought reasoning, and they differ in how much work you do up front.
+
+**Zero-shot CoT** is the simplest version: you add a short instruction, like "let's think step by step," and let the model generate its own reasoning structure from scratch. No examples required.
+
+```
+Question: A store had 84 shirts. It sold 3/7 of them on Monday
+and half of what remained on Tuesday. How many shirts are left?
+
+Let's think step by step.
+```
+
+**Few-shot CoT** goes further: you show the model one or two worked examples, each with the reasoning spelled out, before asking your real question. The model imitates that pattern.
+
+```
+Question: A bakery had 60 muffins and sold 1/4 of them in the morning.
+How many are left?
+Reasoning: 60 muffins × 1/4 = 15 sold. 60 − 15 = 45 remaining.
+Answer: 45
+
+Question: A store had 84 shirts. It sold 3/7 of them on Monday
+and half of what remained on Tuesday. How many shirts are left?
+Reasoning:
+```
+
+Few-shot CoT tends to produce more consistent, better-structured reasoning than zero-shot. That's the same principle behind [showing the model examples in the last few-shot lesson](/library/prompt-engineering/showing-vs-telling): the model has a concrete pattern to follow instead of inventing its own. The tradeoff is a longer prompt and more setup work on your end. For most day-to-day use, the one-line "let's think step by step" trigger gets you most of the benefit for a fraction of the effort. Skip it entirely on a genuinely multi-step problem, though, and you'll end up with an answer that sounds sure of itself and simply isn't.
+
+<ArticleImage
+ src="/images/articles/prompt-engineering/giving-the-model-room-to-think/zero-shot-vs-cot.webp"
+ alt="Side-by-side comparison of a direct-answer prompt getting a train-meeting-time problem wrong versus a chain-of-thought prompt getting it right"
+ caption="Same train problem, two prompts: the direct answer jumps straight to a wrong number, the step-by-step version shows its work and lands on the right one."
+/>
+
+## The Scratchpad Prompting Technique: Giving the Model a Place to Plan
+
+**Scratchpad prompting** is chain-of-thought's more structured cousin. Instead of letting the model narrate reasoning inline with its answer, you give it an explicit, clearly marked space to plan first. Then it gets a separate space for the real response.
+
+```
+Before answering, write your plan inside <scratchpad> tags.
+Then write your final answer inside <answer> tags.
+
+<scratchpad>
+[model's planning happens here]
+</scratchpad>
+
+<answer>
+[final response only]
+</answer>
+```
+
+<Tip>
+ The separation isn't just cosmetic. Because the scratchpad content sits inside its own tag, your code can strip it out programmatically before showing the answer to a user. That keeps the reasoning around for your own debugging, without cluttering the output they see.
+</Tip>
+
+This structure earns its keep on multi-step or agentic tasks: several tool calls, a plan that might need revising mid-task, or a sequence of decisions that build on each other. Anthropic's own engineering team tested this directly, giving Claude a dedicated "think" step during a multi-step airline-booking task. Task completion rose from roughly 0.37 to 0.57 on an internal benchmark, according to <a href="https://www.anthropic.com/engineering/claude-think-tool" target="_blank" rel="noopener noreferrer">Anthropic's engineering blog</a>. That's a real, measured gain, but notice the setting: sequential decisions with real stakes for getting them wrong, not a one-shot factual question.
+
+## The Modern Twist: Chain of Thought Prompting Meets Reasoning Models
+
+Here's the part that trips up almost everyone who learned prompting before 2025: **reasoning models change the advice.**
+
+Models like OpenAI's o1 and o3, DeepSeek R1, and Claude with extended thinking enabled aren't just larger versions of the models chain-of-thought prompting was built for. They're built to reason internally before producing a visible answer, generating their own hidden reasoning steps whether you ask for them or not. According to <a href="https://platform.claude.com/docs/en/build-with-claude/extended-thinking" target="_blank" rel="noopener noreferrer">Anthropic's own documentation</a>, extended thinking creates genuine internal reasoning tokens that Claude uses to work through a problem. That's not just text that narrates thinking after the fact, the way a standard model's chain-of-thought output does.
+
+That difference is exactly why bolting "think step by step" onto a reasoning-model prompt often does nothing useful, and sometimes makes things worse. <a href="https://developers.openai.com/api/docs/guides/reasoning-best-practices" target="_blank" rel="noopener noreferrer">OpenAI's reasoning best practices documentation</a> is direct about it: since these models perform reasoning internally, prompting them to "think step by step" or "explain your reasoning" is unnecessary. It recommends keeping prompts simple, direct, and specific about the end goal instead of prescribing how to get there.
+
+I've watched this trip up prompt writers who are anything but beginners, not just people new to the field. They built solid chain-of-thought habits on older models, moved to a reasoning model without noticing, and kept doing the thing that used to help. The habit is the trap, not the lack of skill.
+
+<Warning>
+ If you're not sure whether your current model is a reasoning model, check the product name or model picker before adding a CoT instruction out of habit. OpenAI's o-series, DeepSeek's R1, and any Claude request with extended thinking turned on all fall into this category. Standard chat models (GPT-4o-class, Claude without extended thinking enabled) are the ones that still benefit from an explicit nudge to reason step by step.
+</Warning>
+
+The honest takeaway isn't "chain-of-thought is dead." It's that the technique's designers built it to compensate for something standard models don't do on their own: pause and reason before answering. Reasoning models don't have that gap, so the same fix has nothing left to fix. That's a direct consequence of [how a model generates tokens in the first place](/library/large-language-models/how-llms-work). A standard model predicts its next token immediately. A reasoning model spends hidden tokens deliberating first.
+
+## When to Use Which
+
+The choice comes down to two questions: what kind of model are you using, and how many reasoning steps does the task actually need.
+
+**Chain-of-thought decision guide**
+
+| Model type | Task complexity | What to do |
+|---|---|---|
+| Standard model (GPT-4o-class, Claude, no extended thinking) | Multi-step (math, logic, planning) | Use zero-shot or few-shot CoT, or a scratchpad for agentic work |
+| Standard model | Simple factual lookup | Skip CoT, ask directly, it adds tokens with no accuracy gain |
+| Reasoning model (o1, o3, R1, Claude extended thinking) | Any complexity | Keep the prompt simple and specific about the goal, let the model reason internally |
+| Reasoning model | Very simple, one-step task | Consider a non-reasoning model instead, reasoning overhead can cost time and money for no benefit |
+
+<Note>
+ Task complexity, not model size, is what actually determines whether CoT helps on a standard model. A short factual question gets no benefit from "let's think step by step," even on a large, capable model. There's no multi-step reasoning to surface in the first place.
+</Note>
+
+---
+
+<Steps>
+ <Step number={1} title="Write and run both prompt versions">
+ This is the fastest way to see the difference for yourself instead of taking this lesson's word for it.
+
+ Reuse the 84-shirts problem from earlier in this lesson, or swap in your own multi-step problem. Write two versions of the same prompt: one that asks for a direct answer only, and one that adds "let's think step by step" before the answer. Run both against the same model.
+ </Step>
+ <Step number={2} title="Judge the difference with a rubric">
+ Compare the two outputs against three questions:
+
+ - Does the final answer actually differ between the two runs?
+ - Is the reasoning in the CoT version visible enough that you could check it for a mistake?
+ - Would you trust the direct-answer version unchecked, or does it need the reasoning to verify?
+
+ If you have access to a reasoning model (o1, o3, or Claude with extended thinking on), run the same comparison there too, and notice whether the "think step by step" instruction changes anything at all.
+ </Step>
+</Steps>
+
+<Note>
+ Done? You now know when chain of thought prompting helps and when it's dead weight on a reasoning model. You've completed Lesson 11.07. Next up: [The Iteration Loop](/library/prompt-engineering/the-iteration-loop) →
+</Note>
+
+<FAQ>
+ <FAQItem question="Does chain of thought prompting still work on reasoning models like o1 or o3?">
+ Not the way it used to. Reasoning models already break problems into steps internally before they answer, so telling them to "think step by step" is either redundant or, on some tasks, actively counterproductive. Save the explicit instruction for standard, non-reasoning models.
+ </FAQItem>
+ <FAQItem question="What's the difference between chain of thought and a scratchpad?">
+ Chain of thought asks the model to narrate its reasoning as part of the answer. A scratchpad gives it a separate, clearly marked space to plan before writing the real answer. They solve the same underlying problem, but a scratchpad is more structured and easier to strip out of the final output programmatically.
+ </FAQItem>
+ <FAQItem question="Why did my 'think step by step' prompt suddenly get worse results?">
+ You likely switched to a reasoning model without realizing it. These models perform their own internal reasoning before generating a response, so an explicit step-by-step instruction can interfere with that process instead of helping it, especially on short, simple tasks.
+ </FAQItem>
+ <FAQItem question="Is Claude's extended thinking the same thing as chain of thought prompting?">
+ No. Chain of thought is a prompting technique where you ask the model to narrate reasoning in its visible output. Extended thinking is a model capability where Claude generates real internal reasoning tokens before its answer, whether or not you ask it to. One is something you write; the other is something the model does on its own.
+ </FAQItem>
+</FAQ>

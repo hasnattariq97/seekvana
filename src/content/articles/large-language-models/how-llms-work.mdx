@@ -92,7 +92,7 @@ It picks one. Then it takes your message plus that token and asks again. Then ag
 
 That's the whole mechanism. Token by token, one at a time, until done. Every response you've ever gotten from any LLM was built this way.
 
-This is why LLMs can feel like they're thinking through a response step by step, in a sense, they are. Each token shapes what comes next. The response builds itself, each piece influenced by everything before it.
+This is why LLMs can feel like they're thinking through a response step by step, in a sense, they are. Each token shapes what comes next. The response builds itself, each piece influenced by everything before it. You can even nudge a standard model to do more of this out loud, a technique called [chain of thought prompting](/library/prompt-engineering/giving-the-model-room-to-think), though it works differently once a model is built to reason internally.
 
 It's also why they can be confidently wrong. If the most statistically likely next token is incorrect, the model still picks it. It has no way to check facts against the world. It only knows patterns.
 
