@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import {
-  ArrowRight, Clock, Target,
+  ArrowRight,
   Brain, Terminal, Monitor, GitBranch, Code2,
   Globe, Database, Cpu, Rocket, Star,
   BookOpen, Wrench, Radar,
@@ -22,10 +22,6 @@ interface PathCard {
   badgeColorClass: string;
   title: string;
   description: string;
-  curriculumHint: string;
-  timeLabel: string;
-  outcomeLabel: string;
-  sampleTopics: string[];
   imageSrc: string;
   imageAlt: string;
   modules: Module[];
@@ -41,10 +37,6 @@ const PATHS: PathCard[] = [
     badgeColorClass: "border-success/30 bg-success/10 text-success",
     title: "Getting Started",
     description: "From zero to live AI app. No experience needed.",
-    curriculumHint: "Terminal to Git to Python to backend to deploy — each module builds directly on the last, ending in a live capstone project.",
-    timeLabel: "Self-paced",
-    outcomeLabel: "A live, deployed AI app",
-    sampleTopics: ["Claude API", "Git & GitHub", "FastAPI Backends", "Deploy to Vercel"],
     imageSrc: "/images/paths/getting-started/cover.png",
     imageAlt: "Getting Started learning path — a robot's journey through 10 AI modules",
     moduleGridCols: "grid-cols-5",
@@ -69,10 +61,6 @@ const PATHS: PathCard[] = [
     badgeColorClass: "border-info/30 bg-info/10 text-info",
     title: "Beyond the Prompt",
     description: "From first prompt to production-grade prompt system.",
-    curriculumHint: "Every article runs principle → pattern → production — the idea, the pattern, and how it plays out in a real system, on one page.",
-    timeLabel: "10–14 hrs",
-    outcomeLabel: "Production-grade prompt system",
-    sampleTopics: ["Reasoning Models", "RAG-Aware Prompting", "Agentic Prompting", "Evaluating Prompts"],
     imageSrc: "/images/paths/beyond-the-prompt/cover.png",
     imageAlt: "Beyond the Prompt learning path — a robot's journey from a raw prompt to a shipped production system",
     moduleGridCols: "grid-cols-3",
@@ -123,14 +111,14 @@ export function LearningPaths() {
 
               {/* ── Two-column grid: desktop side-by-side (alternating), mobile stacked ── */}
               <div
-                className={`grid grid-cols-1 md:items-start ${
+                className={`grid grid-cols-1 ${
                   i % 2 === 0 ? "md:grid-cols-[38%_62%]" : "md:grid-cols-[62%_38%]"
                 }`}
               >
 
                 {/* Image — top on mobile, alternates side on desktop */}
                 <div
-                  className={`relative overflow-hidden h-52 md:h-[420px] order-first ${
+                  className={`relative overflow-hidden h-52 md:h-auto md:min-h-[420px] order-first ${
                     i % 2 === 0 ? "md:order-last" : "md:order-first"
                   } bg-surface-subtle`}
                 >
@@ -163,28 +151,13 @@ export function LearningPaths() {
                     <h3 className="font-fraunces text-[2rem] font-medium text-primary leading-[1.08] tracking-tight mb-2">
                       {path.title}
                     </h3>
-                    <p className="text-[13px] text-secondary leading-relaxed max-w-[30ch] mb-3">
+                    <p className="text-[13px] text-secondary leading-relaxed max-w-[30ch] mb-7">
                       {path.description}
                     </p>
-                    <p className="text-[11.5px] text-secondary/80 italic leading-relaxed max-w-[34ch] mb-4">
-                      {path.curriculumHint}
-                    </p>
-
-                    {/* Time + outcome chips */}
-                    <div className="flex flex-wrap items-center gap-2 mb-7">
-                      <span className="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded-full bg-surface-subtle border border-border text-secondary">
-                        <Clock size={11} strokeWidth={2} aria-hidden="true" />
-                        {path.timeLabel}
-                      </span>
-                      <span className="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-1 rounded-full bg-surface-subtle border border-border text-secondary">
-                        <Target size={11} strokeWidth={2} aria-hidden="true" />
-                        {path.outcomeLabel}
-                      </span>
-                    </div>
                   </div>
 
                   {/* Module grid — icon + label */}
-                  <div className="mb-6">
+                  <div className="mb-8">
                     <p className="text-[9px] font-bold uppercase tracking-[0.14em] text-secondary mb-3">
                       {path.modules.length} modules
                     </p>
@@ -213,23 +186,6 @@ export function LearningPaths() {
                             {label}
                           </span>
                         </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Sample topics */}
-                  <div className="mb-8">
-                    <p className="text-[9px] font-bold uppercase tracking-[0.14em] text-secondary mb-3">
-                      You&apos;ll learn
-                    </p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {path.sampleTopics.map((topic) => (
-                        <span
-                          key={topic}
-                          className="text-[11px] font-medium px-2.5 py-1 rounded-full bg-accent-soft text-accent"
-                        >
-                          {topic}
-                        </span>
                       ))}
                     </div>
                   </div>
