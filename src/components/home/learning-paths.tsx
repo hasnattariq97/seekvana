@@ -123,14 +123,14 @@ export function LearningPaths() {
 
               {/* ── Two-column grid: desktop side-by-side (alternating), mobile stacked ── */}
               <div
-                className={`grid grid-cols-1 ${
+                className={`grid grid-cols-1 md:items-start ${
                   i % 2 === 0 ? "md:grid-cols-[38%_62%]" : "md:grid-cols-[62%_38%]"
                 }`}
               >
 
                 {/* Image — top on mobile, alternates side on desktop */}
                 <div
-                  className={`relative overflow-hidden h-52 md:h-auto md:min-h-[420px] order-first ${
+                  className={`relative overflow-hidden h-52 md:h-[420px] order-first ${
                     i % 2 === 0 ? "md:order-last" : "md:order-first"
                   } bg-surface-subtle`}
                 >
