@@ -1,0 +1,151 @@
+---
+title: "Context Engineering: Why AI Chats Get Worse Over Time"
+description: "Context engineering is what a model actually sees each call: system, user, and tool context inside a token budget. Here's why long chats degrade."
+pillar: "prompt-engineering"
+slug: "context-engineering-part-1"
+difficulty: "intermediate"
+readTime: 9
+author: "Seekvana"
+publishedAt: "2026-07-09"
+tags: ["context engineering", "context window", "prompt engineering", "ai workflows"]
+featured: false
+lessonModule: "12"
+lessonNumber: "12.06"
+faqs:
+  - q: "Is context engineering just a fancier name for prompt engineering?"
+    a: "No. Prompt engineering is the words you type into a single message. Context engineering covers everything else the model sees alongside those words: system instructions, conversation history, and tool outputs, all fighting for the same limited space. You can write a perfect prompt and still get a bad answer if the context around it is stale or missing."
+  - q: "Why does an AI chatbot forget something I told it earlier in the same conversation?"
+    a: "Most chat apps only send a limited window of recent messages back to the model each time, so once a conversation gets long enough, your earliest instructions fall outside that window and simply aren't included anymore. The model isn't ignoring you. It genuinely never sees that message on that particular call."
+  - q: "Does a bigger context window fix context rot?"
+    a: "Not by itself. A 2025 study from Chroma tested 18 frontier models, including GPT-4.1, Claude Opus 4, and Gemini 2.5, and found every one of them got measurably worse at using information buried in the middle of a long context, regardless of how large that model's window was. More room to store text doesn't guarantee the model uses all of it equally well."
+  - q: "How do I know what's actually in my context on a given call?"
+    a: "Most chat interfaces hide this by design, but developer tools and API playgrounds let you inspect the exact payload sent on each request. If you're using a plain chat app, a reasonable proxy is to reread the last 10 to 15 messages yourself. Whatever you'd forget by that point, the model likely has, or has already dropped."
+---
+
+<ArticleImage
+  src="/images/articles/prompt-engineering/context-engineering-part-1/cover.webp"
+  alt="A minimal illustration of a window frame containing stacked blocks representing system, user, and tool context"
+/>
+
+Forty messages into a coding session, you ask the model to follow a naming convention you set at the very start. It doesn't. Not because it's being difficult: the instruction you gave at message three simply isn't part of what got sent on message forty. Nothing broke. The context just ran out of room, and something had to go.
+
+That's context engineering: the practice of managing what a model actually sees on each call, not just what you type into it. Prompt engineering is the message you send. Context engineering is everything surrounding that message: system instructions, conversation history, and tool outputs, all competing for a fixed amount of space. Get the words right and still feed the model a broken context, and you'll get a broken answer anyway.
+
+In this lesson, you'll learn what's actually inside that space, why longer conversations tend to get worse instead of better, and a simple mental model for managing it yourself.
+
+> **Key Takeaways**
+> - Context engineering manages what a model sees each call: system, user, and tool context together, not just the prompt.
+> - Every model has a fixed token budget. Once it's full, something gets trimmed, usually the oldest turns first, silently and without warning.
+> - Longer context isn't automatically better: a 2025 study found all 18 tested frontier models lost accuracy on information buried in the middle of a long context.
+> - The model doesn't remember anything between calls. It reconstructs everything from whatever context gets resent each time.
+> - A basic budgeting habit (keep, trim, drop) prevents most of the "it forgot" and "it got worse" problems you'll run into.
+
+## What Is Context Engineering?
+
+Context engineering is the discipline of deciding what information a model receives on each individual call, given that only a limited amount fits. It's the layer beneath prompt engineering: the prompt is one input inside a much bigger package the model actually processes.
+
+The distinction matters because the two skills fail differently. A weak prompt produces a vague or off-target answer even with perfect context. A weak context produces confident, well-written answers built on missing or stale information, which is a harder failure to catch.
+
+**Prompt engineering vs. context engineering**
+
+| | Prompt engineering | Context engineering |
+|---|---|---|
+| Controls | The wording of a single message | Everything sent alongside that message |
+| Scope | One turn | The whole session, every call |
+| Typical failure | Vague or ambiguous instructions | Missing, stale, or overloaded context |
+| Fix | Rewrite the message | Manage what gets kept, trimmed, or dropped |
+
+Neither replaces the other. A [well-written prompt](/library/prompt-engineering/what-prompting-actually-is) inside a poorly managed context can still fail, and a well-managed context with a sloppy prompt still underperforms. They're separate layers of the same job.
+
+## What the Model Actually Sees Each Call
+
+An AI model has no persistent memory between calls. Each time you send a message, [the entire package it can see](/library/large-language-models/how-llms-work) gets rebuilt from scratch and sent over as one request. That package has three main parts.
+
+### System Context
+
+This is the setup layer: instructions about the model's role, tone, and constraints. It's usually set once at the start of a session and resent on every call after that. It's how a [role and audience](/library/prompt-engineering/giving-the-model-a-role-and-an-audience) get established and kept consistent.
+
+### User Context
+
+This is the conversation itself: your current message plus however much prior back-and-forth the application decides to include. Most chat apps don't resend an entire history forever. Past a certain length, older turns quietly stop being included.
+
+### Tool Context
+
+When a model can [call tools](/library/agentic-ai) (searching the web, running code, querying a database), the descriptions of those tools and their recent outputs also take up space in the same package. A model deciding whether to use a tool needs that tool's definition sitting right there in context, every single call.
+
+<Mermaid chart="graph TB
+  A[Fixed Context Window] --> B[System Context]
+  A --> C[User Context]
+  A --> D[Tool Context]
+  B --> E[Sent to model]
+  C --> E
+  D --> E" />
+
+<ArticleImage
+  src="/images/articles/prompt-engineering/context-engineering-part-1/context-window-breakdown.webp"
+  alt="Infographic showing system, user, and tool context stacked inside a limited context window, with the oldest and least relevant content dropped first once space runs out"
+  caption="System, user, and tool context all compete for the same fixed token budget, and the oldest or least relevant material gets dropped first once it fills up."
+/>
+
+All three share one limited container, measured in tokens rather than words. If system instructions grow, or the conversation runs long, or tool outputs pile up, something inside that container has to shrink or disappear to make room.
+
+Skip understanding this, and every fix you try targets the wrong layer. You end up rewriting a prompt when the real problem is that the instruction you're relying on never made it into this call's context at all.
+
+I've made that exact mistake: spent twenty minutes rewording a prompt that was already fine, when the real issue was a tool result from three turns earlier that had already been dropped. Once I started checking what was actually in context before touching the wording, that specific failure mode mostly disappeared.
+
+## Why Longer Isn't Always Better
+
+The instinct once you understand token budgets is to just stuff in more: more history, more background, more detail, just to be safe. That instinct backfires.
+
+Researchers call the resulting slowdown context rot: model accuracy dropping as the amount of context grows, even when the needed information is technically still present. A related pattern is the <a href="https://arxiv.org/abs/2307.03172" target="_blank" rel="noopener noreferrer">lost-in-the-middle effect</a>. Models handle information at the very start or very end of a context well, but struggle with the same information buried in the middle.
+
+<a href="https://www.trychroma.com/research/context-rot" target="_blank" rel="noopener noreferrer">Chroma's 2025 research</a> tested 18 frontier models, including GPT-4.1, Claude 4, and Gemini 2.5, and found every single one showed this degradation as input length grew. Bigger context windows didn't prevent it. Bigger windows just mean there's more room for the problem to happen in.
+
+<Note>
+  This is why "just paste the whole document in" often produces a worse answer than a shorter, curated excerpt. Volume isn't the same as relevance, and the model has to work harder to find what matters when everything is mixed in with everything else.
+</Note>
+
+Skip this and the natural response to "the model got something wrong" becomes "add more context," which, past a certain point, actively makes the next answer worse instead of better.
+
+## Basic Window Budgeting: A Context Engineering Habit for Beginners
+
+You don't need to calculate token counts by hand to manage this well. A simple habit does most of the work: for any long-running conversation, periodically ask what should be kept, what should be trimmed, and what should be dropped entirely.
+
+- **Keep:** the current task, any constraint that's still actively relevant, and anything the model would need to avoid repeating a mistake it already made once
+- **Trim:** long tool outputs or search results you've already extracted the useful part from, summarized down to what you learned instead of the raw output
+- **Drop:** resolved side-conversations, earlier drafts once a later draft supersedes them, and instructions that only applied to a task you've already finished
+
+Skip this habit entirely and a long session slowly fills with material that's no longer useful, pushing out the material that is. That's the exact mechanism behind "it forgot what I told it" complaints: not a memory failure, but a budget that ran out and got spent on the wrong things.
+
+## Your Task
+
+<Steps>
+  <Step number={1} title="Pick a long-running AI conversation">
+    Open a chat session you've had going for at least twenty or thirty messages, in whatever tool you already use.
+  </Step>
+  <Step number={2} title="Reread the last fifteen messages">
+    Note anything the model appears to have lost track of: a formatting rule, a constraint, a detail you mentioned early on that's no longer showing up in its answers.
+  </Step>
+  <Step number={3} title="Label what's competing for space">
+    Write down, in your own words, what's likely sitting in context right now: the system setup, the recent conversation, and any tool outputs. Flag one thing you'd trim or drop if you were managing the budget yourself.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 12.06 and practiced auditing your own context stack. Next up: Context Engineering, Part 2 →
+</Note>
+
+<FAQ>
+  <FAQItem question="Is context engineering just a fancier name for prompt engineering?">
+    No. Prompt engineering is the words you type into a single message. Context engineering covers everything else the model sees alongside those words: system instructions, conversation history, and tool outputs, all fighting for the same limited space. You can write a perfect prompt and still get a bad answer if the context around it is stale or missing.
+  </FAQItem>
+  <FAQItem question="Why does an AI chatbot forget something I told it earlier in the same conversation?">
+    Most chat apps only send a limited window of recent messages back to the model each time, so once a conversation gets long enough, your earliest instructions fall outside that window and simply aren't included anymore. The model isn't ignoring you. It genuinely never sees that message on that particular call.
+  </FAQItem>
+  <FAQItem question="Does a bigger context window fix context rot?">
+    Not by itself. A 2025 study from Chroma tested 18 frontier models, including GPT-4.1, Claude Opus 4, and Gemini 2.5, and found every one of them got measurably worse at using information buried in the middle of a long context, regardless of how large that model's window was. More room to store text doesn't guarantee the model uses all of it equally well.
+  </FAQItem>
+  <FAQItem question="How do I know what's actually in my context on a given call?">
+    Most chat interfaces hide this by design, but developer tools and API playgrounds let you inspect the exact payload sent on each request. If you're using a plain chat app, a reasonable proxy is to reread the last 10 to 15 messages yourself. Whatever you'd forget by that point, the model likely has, or has already dropped.
+  </FAQItem>
+</FAQ>
