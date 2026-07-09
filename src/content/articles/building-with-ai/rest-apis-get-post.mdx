@@ -71,7 +71,7 @@ A GET request usually only needs a URL and a method. A POST request adds a body,
 
 ## What's Inside a Response
 
-A response comes back with two parts: a status code telling you what happened, and a body holding the data itself, usually formatted as [JSON](/library/building-with-ai/python-json). Miss the status code and a failed request can look identical to an empty successful one. That's the single most common source of "why isn't this working" confusion for beginners.
+A response comes back with two parts: a status code telling you what happened, and a body holding the data itself, usually formatted as [JSON](/library/building-with-ai/python-json). Miss the status code and a failed request can look identical to an empty successful one. That's the single most common source of "why isn't this working" confusion for beginners, and it's exactly what trips people up when [calling an API from JavaScript with fetch()](/library/building-with-ai/javascript-fetch-api).
 
 **Common status codes and what they mean**
 
