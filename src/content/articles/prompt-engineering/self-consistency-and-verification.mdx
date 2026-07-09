@@ -1,0 +1,137 @@
+---
+title: "Self-Consistency Prompting: Check Claude's Answers"
+description: "Self-consistency prompting means asking Claude the same question a few times and comparing answers to catch mistakes before they cost you."
+pillar: "prompt-engineering"
+slug: "self-consistency-and-verification"
+difficulty: "intermediate"
+readTime: 9
+author: "Seekvana"
+publishedAt: "2026-07-09"
+tags: ["self-consistency prompting", "llm as judge", "prompt engineering", "ai basics"]
+featured: false
+lessonModule: "12"
+lessonNumber: "12.03"
+faqs:
+  - q: "Why does Claude give me a different answer when I ask the same question twice?"
+    a: "Claude doesn't retrieve a fixed answer, it generates one word at a time based on probability, so small differences can compound into a different final answer. This is normal, not a bug. It's exactly why self-consistency, asking the same question a few times and comparing, is worth doing on anything that matters."
+  - q: "Can I trust Claude when it says its own answer is correct?"
+    a: "Not fully. A model reviewing its own work tends to favor what it already wrote, a pattern called self-preference bias. Self-critique catches real mistakes, but treat a self-graded 'looks good' as a first pass, not a verdict, especially on code or math."
+  - q: "Is LLM-as-judge the same thing as asking Claude to double-check its work?"
+    a: "They're related but not identical. Self-critique means the same model reviews its own answer. LLM-as-judge means a separate prompt, sometimes even a separate model, compares two or more outputs and picks the stronger one. The separation is what makes judging less biased than self-review."
+  - q: "Do I need to do this for every prompt I write?"
+    a: "No. Save it for anything with real stakes: numbers you'll act on, code you'll run, claims you'll repeat to someone else. For a first draft of a tweet or a quick summary, one answer is fine. Match the checking to what's actually riding on the answer."
+---
+
+<ArticleImage
+  src="/images/articles/prompt-engineering/self-consistency-and-verification/cover.webp"
+  alt="Several divergent dotted paths on a cream background converging into a single checkmark, in the Seekvana editorial style"
+/>
+
+You ask Claude to calculate something, a shipping cost split three ways, a tax deduction, a percentage change. It answers fast and sounds sure of itself. You paste the answer into the email you're about to send, then some instinct makes you ask the exact same question again. This time the number is different.
+
+Nothing crashed. Nothing threw an error. The model just landed on a different answer the second time, and now you don't know which one to believe. That gap, between "sounds confident" and "is actually right," is exactly what self-consistency prompting and LLM-as-judge verification are for.
+
+> **Key Takeaways**
+> - Claude's answers are generated probabilistically, so re-asking the same question can produce a genuinely different result, this is normal, not a glitch
+> - Self-consistency means asking the same question a few times and going with the answer that shows up most, like polling a small panel instead of trusting one vote
+> - Self-critique means asking Claude to review its own answer, useful, but weakened by self-preference bias, a model tends to approve what it already wrote
+> - LLM-as-judge uses a separate prompt to score or compare outputs, which is a more reliable check than self-review because the judge isn't defending its own work
+
+---
+
+## Why One Answer From an LLM Isn't Always the Right One
+
+Claude doesn't look up answers in a table the way a calculator does. It [predicts the next word, then the next, based on probabilities learned during training](/library/large-language-models/how-llms-work). For most everyday questions those probabilities are lopsided enough that you get the same answer every time. That's not true for anything with a few steps of reasoning: math, logic puzzles, multi-part comparisons. There, the probabilities can be close enough that a slightly different path through the words produces a different final answer.
+
+This is the same idea covered in <a href="https://www.promptingguide.ai/techniques/consistency" target="_blank" rel="noopener noreferrer">Chain-of-Thought prompting research</a>: a single reasoning path is one sample from many possible paths, not a guaranteed correct one. If you already broke a task into smaller prompts using [decomposition and prompt chaining](/library/prompt-engineering/decomposition-and-prompt-chaining), you've seen this too. Each step in a chain is a chance for the model to drift, and drift compounds.
+
+I still ask Claude the same question twice on anything I'm about to send to someone else, purely out of habit at this point. It's caught real mistakes often enough that the ten extra seconds feels cheap by comparison.
+
+Skip this and you'll treat the first answer as gospel, including on the one question where the model happened to pick the wrong path. That's the failure mode the rest of this lesson fixes.
+
+## Self-Consistency Prompting: Ask the Same Question Multiple Times
+
+Self-consistency prompting is the simplest fix: instead of trusting one answer, generate a few and see where they agree. Think of it like asking three friends the same trivia question independently and going with whatever two of them say, rather than trusting whichever friend answered first.
+
+Here's a rewritten version of a classic self-consistency example. Ask Claude this exact prompt three separate times, in three separate messages:
+
+<Note>
+Copy this exact prompt into three separate new conversations, not three follow-ups in one thread, so each attempt reasons independently: "A bakery had 24 cupcakes. All but 9 were sold. How many cupcakes does the bakery have left? Think through it step by step before answering."
+</Note>
+
+Most people rush past "all but 9" and answer 15 (subtracting instead of reading the phrase correctly). The correct answer is 9, that's the number left after all the others sold. If you run this three times, you'll likely see at least two runs land on 9 and possibly one land on 15. The majority answer, 9, is the one to trust.
+
+That's the whole technique: sample multiple times, take the answer that shows up most. Skip this on a task with real stakes and you're betting the outcome on whichever single path the model happened to sample first, correct or not.
+
+## Self-Critique: Asking Claude to Check Its Own Answer
+
+The second layer is cheaper than running a prompt three times: just ask Claude to review what it already wrote. A simple version looks like "Review your answer above. Check the math and flag anything that might be wrong." This catches real mistakes, arithmetic slips, a missed constraint, a contradiction between two paragraphs.
+
+<Tip>
+Self-critique works better when you ask for something specific to check ("verify each number adds up") rather than a vague "is this good?" A vague question gets a vague, usually approving, answer.
+</Tip>
+
+Here's the catch: a model reviewing its own work is a bit like grading its own homework. Researchers call this self-preference bias. It shows up as Claude saying "looks correct" about a paragraph it just wrote, even when a fresh set of eyes would catch the issue immediately. This isn't Claude being dishonest, it's a structural weak point in asking anything to evaluate the thing it just produced. Self-critique is worth doing, it just isn't the final word.
+
+## What Is LLM-as-Judge?
+
+LLM-as-judge is a technique where a separate prompt, sometimes a separate model, scores or compares two AI outputs against criteria you set, instead of the model reviewing its own answer. This separation avoids self-preference bias: the judge has nothing invested in either output, so its verdict is more reliable than self-critique.
+
+LLM-as-judge fixes the grading-your-own-homework problem by splitting the roles. One prompt generates an answer, or two competing answers. A separate prompt, with no attachment to either output, scores or compares them against criteria you set. <a href="https://www.confident-ai.com/blog/why-llm-as-a-judge-is-the-best-llm-evaluation-method" target="_blank" rel="noopener noreferrer">This separation is what makes LLM-as-judge more reliable than self-review</a>, the judge has nothing invested in either answer.
+
+There are two common setups:
+
+**Pointwise vs pairwise LLM-as-judge**
+
+| Mode | What you give the judge | What you get back | Best for |
+|---|---|---|---|
+| Pointwise | One output plus scoring criteria | A score or pass/fail verdict | Checking a single draft against a bar (accuracy, tone, completeness) |
+| Pairwise | Two outputs side by side | A pick of the stronger one, with reasoning | Choosing between two rewrites, two summaries, two code fixes |
+
+Here's what pairwise looks like in practice: write two different drafts of an email, then start a fresh conversation and paste both in with this prompt: "Which of these two emails is clearer and more persuasive? Explain your reasoning before picking one." That fresh conversation is the judge. It never wrote either draft, so it has no reason to defend one over the other.
+
+Skip this step and you're often stuck choosing between two versions of something with no real way to tell which one is stronger, other than your own gut, which is exactly the situation a second opinion is supposed to fix.
+
+## When This Is Worth the Extra Cost
+
+None of this is free. Running a prompt three times costs roughly three times the tokens and time of running it once, and adding a judge step is another full prompt on top. For a quick summary or a first-draft tweet, that overhead isn't worth it, one answer is fine.
+
+Reach for self-consistency prompting, self-critique, or an LLM-as-judge pass when the output has real consequences: a number that goes into a report, code you're about to run, a factual claim you'll repeat to a client. The cost of a second check is a few extra seconds and a bit of API spend. The cost of shipping the wrong number is usually much higher.
+
+That combination, self-consistency and verification, is the difference between an answer that sounds right and one you've actually checked.
+
+<ArticleImage
+  src="/images/articles/prompt-engineering/self-consistency-and-verification/verification-workflow.webp"
+  alt="Three-step workflow diagram: asking the same question multiple times, picking the majority answer, then using Claude as a judge to verify the result, with a checklist of when to use these checks and when not to overdo it"
+  caption="The full verification workflow: sample multiple answers, pick the majority, then let a judge prompt settle it, reserved for numbers, code, and claims that actually matter."
+/>
+
+<Steps>
+  <Step number={1} title="Run one prompt three times and compare">
+    Pick a real question you actually need answered, not the cupcake example above, ideally something with a calculation or a few logical steps. Ask Claude the same question in three separate new conversations, and write down each answer.
+
+    If two or more agree, that's your self-consistency answer. If all three disagree, that's a sign the question needs to be simplified or broken into smaller steps.
+  </Step>
+  <Step number={2} title="Ask Claude to critique its best answer">
+    Take whichever answer won the majority vote in Step 1. In that same conversation, ask: "Review this answer and check it for errors, be specific about what you checked." Note what it catches, and note that its "looks correct" isn't the final word.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 12.03. Next up: the next lesson in Module 12 →
+</Note>
+
+<FAQ>
+  <FAQItem question="Why does Claude give me a different answer when I ask the same question twice?">
+    Claude doesn't retrieve a fixed answer, it generates one word at a time based on probability, so small differences can compound into a different final answer. This is normal, not a bug. It's exactly why self-consistency, asking the same question a few times and comparing, is worth doing on anything that matters.
+  </FAQItem>
+  <FAQItem question="Can I trust Claude when it says its own answer is correct?">
+    Not fully. A model reviewing its own work tends to favor what it already wrote, a pattern called self-preference bias. Self-critique catches real mistakes, but treat a self-graded "looks good" as a first pass, not a verdict, especially on code or math.
+  </FAQItem>
+  <FAQItem question="Is LLM-as-judge the same thing as asking Claude to double-check its work?">
+    They're related but not identical. Self-critique means the same model reviews its own answer. LLM-as-judge means a separate prompt, sometimes even a separate model, compares two or more outputs and picks the stronger one. The separation is what makes judging less biased than self-review.
+  </FAQItem>
+  <FAQItem question="Do I need to do this for every prompt I write?">
+    No. Save it for anything with real stakes: numbers you'll act on, code you'll run, claims you'll repeat to someone else. For a first draft of a tweet or a quick summary, one answer is fine. Match the checking to what's actually riding on the answer.
+  </FAQItem>
+</FAQ>
