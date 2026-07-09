@@ -1,0 +1,147 @@
+---
+title: "Decomposition and Prompt Chaining Explained Simply"
+description: "Prompt chaining feeds one prompt's output into the next. This lesson covers when to chain versus asking once, plus how to build your own 3-step chain."
+pillar: "prompt-engineering"
+slug: "decomposition-and-prompt-chaining"
+difficulty: "intermediate"
+readTime: 10
+author: "Seekvana"
+publishedAt: "2026-07-09"
+tags: ["prompt chaining", "task decomposition", "prompt engineering", "ai workflows"]
+featured: false
+lessonModule: "12"
+lessonNumber: "12.02"
+faqs:
+  - q: "Can I run chain steps in parallel instead of one after another?"
+    a: "Yes, when the steps don't depend on each other. If you're summarizing five separate documents before combining them, run all five summarization prompts at once instead of waiting for each to finish. Only make steps run in sequence when a later step genuinely needs an earlier step's output."
+  - q: "How many steps can a prompt chain have before it stops working well?"
+    a: "There's no hard limit, but every extra step adds a place where something can go wrong, and most real tasks need two to five steps, not ten. If you're past five and still adding more, you're probably decomposing too finely. Try merging adjacent steps that don't need to be checked separately."
+  - q: "What's the difference between prompt chaining and an AI agent?"
+    a: "A prompt chain is a fixed sequence you design in advance: step one always feeds step two, no exceptions. An agent decides its own next step as it goes, sometimes skipping steps or looping back based on what it finds. Chaining is the simpler, more predictable tool, which is exactly why it's worth learning first."
+  - q: "Do I need special software to chain prompts, or can I do it by hand?"
+    a: "You can chain prompts by hand, copying one response into the next prompt yourself, and that's the right way to learn it. Once you're chaining the same sequence repeatedly, tools that automate the handoff save time, but they're a convenience layer on top of the same idea you're learning here."
+---
+
+<ArticleImage
+  src="/images/articles/prompt-engineering/decomposition-and-prompt-chaining/cover.webp"
+  alt="A three-link chain made of simple geometric shapes with arrows showing flow from one link to the next, representing prompt chaining"
+/>
+
+You ask for a full research summary in one message: find the sources, pull the key points, organize them, write the summary. The first two sections come back fine. By the third, the model has quietly dropped half your instructions and started repeating itself. It didn't get dumber mid-answer. It just ran out of attention to spend on a single, overloaded prompt.
+
+That's the problem decomposition and prompt chaining solve. Decomposition means splitting one big task into smaller, ordered subtasks. Chaining means feeding the output of one prompt into the next as its input, so each step only has to handle one job. In this lesson, you'll learn how to decompose a task, when chaining actually beats asking once, and how to build a working 3-step chain of your own.
+
+> **Key Takeaways**
+> - Decomposition splits a big task into ordered subtasks; chaining connects those subtasks by feeding each one's output into the next one's input.
+> - A single overloaded prompt doesn't fail randomly: it satisfies every instruction partially and none of them fully, because the model has to spread its attention across everything at once.
+> - Chain when you need to check or fix an intermediate step. Ask once when a single prompt already gets you most of the way there.
+> - The most useful chain shape for everyday work is draft, then review against criteria, then refine: three steps, each with one clear job.
+> - Chains fail at the seams, not in the middle of a step, so the fix for a broken chain is almost always in what one step hands to the next.
+
+---
+
+## What Is Prompt Chaining?
+
+Prompt chaining is running a sequence of prompts where each one's output becomes the next one's input, instead of asking an AI model to do everything in a single pass. Two patterns from [the previous lesson's catalog](/library/prompt-engineering/a-working-catalog-of-prompt-patterns) touch on this: decomposition and chain-of-thought both work by breaking a task apart instead of solving it whole. <a href="https://www.promptingguide.ai/techniques/prompt_chaining" target="_blank" rel="noopener noreferrer">Prompt Engineering Guide's writeup on chaining</a> shows a similar split in action: one prompt extracts relevant quotes from a document, a second prompt uses those quotes to compose the final answer.
+
+Chaining is what happens once you've decomposed a task and actually wire the pieces together. Step one produces something concrete: a list, a draft, a set of extracted facts. Step two takes that exact output and does the next job with it. Nothing gets held in the model's head between steps. It gets written down and handed off, which is the whole point.
+
+Skip this distinction and you'll copy-paste chain examples from a guide without knowing why they're shaped the way they are, then wonder why your version falls apart the moment your task looks slightly different from the example.
+
+## How to Decompose a Task Into Steps
+
+Decomposing a task well means answering two questions before you write a single prompt: what are the distinct jobs inside this task, and what does each job need to produce for the next job to use it?
+
+Take the research-summary example from the opening. Decomposed, it's three jobs: find and list the sources, pull the key points from each one, and write a summary from those points. Each job is small enough that a model can give it full attention, which is exactly what a single overloaded prompt can't do. When a prompt carries too many instructions at once, the model doesn't pick the most important one and nail it. It averages across all of them instead, satisfying everything partially and nothing fully.
+
+The part people skip is defining the handoff. If step one just says "find some sources" with no format, step two has nothing reliable to parse. Decide the shape of each step's output while you're still decomposing, not after you've already written the prompts.
+
+I write the handoff sentence before I write a single prompt, every time, because it's the one habit that's saved me from the most broken chains: "step one must produce a numbered list of sources, nothing else."
+
+<Note>
+  A subtask you can't describe in one sentence is usually two subtasks wearing a trench coat. Split it before you write the prompt, not after it comes back wrong.
+</Note>
+
+## When to Chain Prompts vs. When to Just Ask Once
+
+**Chain when you need to inspect or control an intermediate step; ask once when a single prompt already gets you most of the way there.** That's the real test, and it's narrower than "use chaining for anything complex," which is the advice in most guides on this topic.
+
+Modern models already do a lot of [multi-step reasoning](/library/prompt-engineering/giving-the-model-room-to-think) internally before they answer. <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/chain-prompts" target="_blank" rel="noopener noreferrer">Anthropic's prompt engineering documentation</a> puts it plainly: explicit chaining is still useful specifically when you need to inspect intermediate outputs or enforce a particular pipeline structure, not as a default for every hard task. If you don't need to see or check what happens in the middle, asking once and letting the model reason through it internally is often faster and just as reliable. Chaining a task that doesn't need it just adds steps.
+
+**A quick decision test**
+
+| If this is true | Do this |
+|---|---|
+| You need to verify or fix an early step before the next one runs | Chain |
+| A mistake in an early step would be expensive or embarrassing to ship | Chain |
+| One prompt already gets you 90% of the way, and you're polishing the last 10% | Ask once |
+| You're chaining a task that has no real handoff between steps | Ask once |
+
+## Building a 3-Step Chain: A Worked Example
+
+The most common chaining pattern for everyday work is self-correction: draft, review against criteria, then refine. Here's what that looks like as an actual 3-step chain for writing a short product announcement.
+
+<ArticleImage
+  src="/images/articles/prompt-engineering/decomposition-and-prompt-chaining/prompt-chaining-one-task-three-steps.webp"
+  alt="Diagram of a 3-step prompt chain: draft a dark mode announcement, review it against three criteria with one flagged as failing, then refine it into a passing final version, next to a comparison of one overloaded prompt versus three focused chained steps"
+  caption="The same 3-step chain from the walkthrough below: draft, review against criteria, refine, next to why that beats asking once."
+/>
+
+<Mermaid chart="graph LR
+  A[Step 1: Draft the announcement] --> B[Step 2: Review against criteria]
+  B --> C[Step 3: Refine using the review]" />
+
+**Step 1, Draft.** Prompt: "Write a 100-word announcement for a new dark mode feature. Audience: existing users. Tone: friendly, direct." Output: a rough draft, nothing more.
+
+**Step 2, Review.** Feed step 1's exact draft back in: "Review this announcement against three criteria: does it name the feature clearly, does it say who it's for, is it under 100 words? List what passes and what doesn't." Output: a short list of pass/fail judgments, not a rewrite.
+
+**Step 3, Refine.** Feed both the original draft and step 2's review into a final prompt: "Rewrite this announcement, fixing everything flagged as failing in the review below." Output: the finished announcement.
+
+Each step's output is exactly what the next step needs, nothing extra. That's the whole mechanism. Scale the same three-step shape up to a longer report or a bigger coding task, and it still works, because you're still just handing off one clear thing at a time.
+
+## What Goes Wrong When a Chain Breaks
+
+Chains fail at the seams between steps, not inside a single step. The most common break: step one produces its output in a slightly different shape than you expected, and step two, which was written assuming a specific format, quietly uses garbage input without complaining about it.
+
+Say step 1 in the example above returns the draft wrapped in a sentence like "Here's a draft for you:" instead of just the draft. Feed that straight into step 2's review prompt, and the model now reviews "Here's a draft for you: [actual draft]" as if that whole string were the announcement, judging a sentence that was never meant to be evaluated.
+
+<Warning>
+  Before you trust a chain, actually read what step one produced, not just whether it produced something. A step that returns 200 words of the wrong thing still "succeeds" by every technical measure.
+</Warning>
+
+The fix is always the same: tell each step exactly what shape to output, and check that shape before it feeds the next step. That one habit prevents almost every broken chain you'll run into.
+
+---
+
+## Your Task
+
+<Steps>
+  <Step number={1} title="Pick a multi-part task">
+    Choose a real task you'd normally cram into one prompt: an email that needs a specific tone and structure, a short report with research and a conclusion, or anything with two or more distinct jobs inside it.
+  </Step>
+  <Step number={2} title="Decompose it into 3 steps">
+    Write down the three jobs inside your task, in order, and one sentence for each describing exactly what that step's output should contain for the next step to use.
+  </Step>
+  <Step number={3} title="Run the chain by hand">
+    In whatever AI chat tool you're already using, run each of the three prompts in order, copying the previous step's real output into the next prompt yourself. Note anywhere the handoff broke, like a step returning the wrong format.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 12.02 and built a working prompt chain from scratch. Next up: [Self-Consistency and Verification](/library/prompt-engineering/self-consistency-and-verification), lesson 12.03 →
+</Note>
+
+<FAQ>
+  <FAQItem question="Can I run chain steps in parallel instead of one after another?">
+    Yes, when the steps don't depend on each other. If you're summarizing five separate documents before combining them, run all five summarization prompts at once instead of waiting for each to finish. Only make steps run in sequence when a later step genuinely needs an earlier step's output.
+  </FAQItem>
+  <FAQItem question="How many steps can a prompt chain have before it stops working well?">
+    There's no hard limit, but every extra step adds a place where something can go wrong, and most real tasks need two to five steps, not ten. If you're past five and still adding more, you're probably decomposing too finely. Try merging adjacent steps that don't need to be checked separately.
+  </FAQItem>
+  <FAQItem question="What's the difference between prompt chaining and an AI agent?">
+    A prompt chain is a fixed sequence you design in advance: step one always feeds step two, no exceptions. An agent decides its own next step as it goes, sometimes skipping steps or looping back based on what it finds. Chaining is the simpler, more predictable tool, which is exactly why it's worth learning first.
+  </FAQItem>
+  <FAQItem question="Do I need special software to chain prompts, or can I do it by hand?">
+    You can chain prompts by hand, copying one response into the next prompt yourself, and that's the right way to learn it. Once you're chaining the same sequence repeatedly, tools that automate the handoff save time, but they're a convenience layer on top of the same idea you're learning here.
+  </FAQItem>
+</FAQ>
