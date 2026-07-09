@@ -1,0 +1,137 @@
+---
+title: "Prompting Reasoning Models: What Actually Changes Now"
+description: "Reasoning models like o3 and DeepSeek R1 need different prompts than chatbots. Here's what to drop, what to keep, and why chain-of-thought can hurt."
+pillar: "prompt-engineering"
+slug: "prompting-reasoning-models"
+difficulty: "beginner"
+readTime: 7
+author: "Seekvana"
+publishedAt: "2026-07-09"
+tags: ["reasoning models", "prompt engineering", "chain of thought", "o3", "deepseek r1"]
+featured: false
+lessonModule: "12"
+lessonNumber: "12.05"
+faqs:
+  - q: "Do reasoning models even need prompt engineering?"
+    a: "Yes, but a different kind. You're not scaffolding the reasoning anymore, since the model does that internally. Your job shifts to stating the goal clearly, naming real constraints, and setting how much the model should think, not walking it through steps."
+  - q: "What happens if I use few-shot examples with o3?"
+    a: "It often backfires. OpenAI's own guidance says reasoning models often don't need few-shot examples and recommends trying a plain, example-free prompt first. Extra examples can nudge the model toward copying a pattern instead of reasoning through your actual problem."
+  - q: "Is DeepSeek R1 prompted the same way as OpenAI's o-series?"
+    a: "Mostly yes: minimal, direct prompts work best on both. One real difference is DeepSeek R1 shows its reasoning in visible <think> tags, so you can watch what it's doing, while OpenAI's o-series hides those reasoning tokens entirely."
+  - q: "Can I still use chain-of-thought with a regular chat model?"
+    a: "Yes, that's exactly where it belongs. Chat models like GPT-4o don't reason internally by default, so asking them to think step by step still helps. The rule only flips once you're on a model built with reasoning already wired in."
+---
+
+<ArticleImage
+  src="/images/articles/prompt-engineering/prompting-reasoning-models/cover.webp"
+  alt="A tangled path next to a single straight arrow, representing old prompting habits versus direct prompts for reasoning models"
+/>
+
+You paste your usual prompt into the new model: "Let's think step by step. Take a deep breath and work through this carefully." It's the exact wording that always made ChatGPT sharper. This time the answer comes back slower, padded with reasoning you didn't ask for, and somehow worse than if you'd just asked the question straight.
+
+Nothing's broken. You're prompting a reasoning model, and the habit that helped on a regular chat model is now working against you.
+
+**Reasoning models**, OpenAI's o-series, DeepSeek R1, Claude with extended thinking turned on, already run an internal reasoning process before they answer. Telling them to "think step by step" on top of that adds redundant instructions that can crowd out the model's own process instead of improving it. The fix is prompting them with less: a clear, direct statement of the problem, minimal scaffolding, and explicit control over how much thinking you actually want.
+
+> **Key Takeaways**
+> - Chain-of-thought phrases like "think step by step" and few-shot examples often *reduce* accuracy on reasoning models, the opposite of their effect on regular chat models
+> - Reasoning models want a clearly stated goal and real constraints, not a walkthrough of the steps to get there
+> - Depth of reasoning is controlled through settings like `reasoning_effort`, not through prose like "think harder"
+> - The old chain-of-thought habit isn't wrong, it's just scoped to chat models and simple tasks now
+
+## What Is a Reasoning Model?
+
+A reasoning model is built to run its own internal chain of reasoning before producing an answer, instead of generating a response token by token with no deliberation step in between. OpenAI's o-series and DeepSeek R1 are the clearest examples, and Claude can do the same thing when extended thinking is switched on.
+
+A regular [large language model](/library/large-language-models/how-llms-work) like GPT-4o goes straight from your prompt to an answer. A reasoning model pauses first, works through the problem in its own reasoning tokens, then answers. That pause is the same "room to think" you built into your prompts back in [Giving the Model Room to Think](/library/prompt-engineering/giving-the-model-room-to-think), except now the model brings that room itself, uninvited.
+
+Mixing the two up is the actual mistake this lesson exists to fix: treat a reasoning model like a chat model and you'll spend extra tokens and time on instructions the model was never missing in the first place.
+
+I still catch myself typing "think step by step" out of pure muscle memory before I remember which model I'm talking to. Old habits don't update just because the model underneath did.
+
+<Note>
+  Anthropic's Claude Opus 4.8 and Claude Sonnet 5 now handle this with adaptive thinking: instead of you manually setting a token budget, Claude decides how much to think based on how complex your request actually is.
+</Note>
+
+## Why Chain-of-Thought Actively Hurts These Models
+
+Skip this and you'll keep pasting prompts that quietly make your reasoning-model answers worse.
+
+Chain-of-thought prompting, phrases like "think step by step," "explain your reasoning," or "take a deep breath," was built to force a chat model into showing its work, because chat models don't reason on their own. Reasoning models already do that internally, so the same instructions become redundant scaffolding sitting on top of a process that's already running.
+
+<Note>
+  <a href="https://platform.openai.com/docs/guides/reasoning-best-practices" target="_blank" rel="noopener noreferrer">OpenAI's own prompting guidance</a> says reasoning models often don't need few-shot examples to produce good results, and recommends trying a prompt without any examples first. Extra examples can push the model toward copying a pattern instead of reasoning through the actual problem in front of it.
+</Note>
+
+The practical cost shows up two ways: wasted reasoning tokens (and money) on instructions the model didn't need, and occasionally a worse answer, because your scaffolding overrides a reasoning path the model would have found on its own.
+
+## What to Do Instead: Minimal, Direct Prompting
+
+**Before (chat-model habit):**
+"Take a deep breath and think through this step by step. First, identify the problem. Then, consider possible causes. Then, work through each one carefully before answering. Here's the bug: [code]."
+
+**After (reasoning-model prompt):**
+"Here's the bug: [code]. What's causing it?"
+
+State the problem clearly, name any real constraints, and let the model figure out its own steps. That's the exact shift the community keeps landing on once they notice extra hand-holding isn't helping: stop narrating the process and just hand over the problem.
+
+This feels wrong the first few times. You're used to instructions helping. On a reasoning model, over-instructing is closer to backseat-driving a process that's already competent without you.
+
+<ArticleImage
+  src="/images/articles/prompt-engineering/prompting-reasoning-models/old-habits-vs-new-approach.webp"
+  alt="Comparison chart of old chat-model prompting habits like chain-of-thought and few-shot examples versus the new direct approach for reasoning models"
+  caption="Old prompts try to teach the model how to think. New prompts just tell it what to achieve and what to avoid."
+/>
+
+<Tip>
+  If you want a middle ground, one technique called Chain-of-Draft caps each reasoning step at around five words instead of banning structure outright, and <a href="https://www.helicone.ai/blog/prompt-thinking-models" target="_blank" rel="noopener noreferrer">early testing</a> found it cut token usage by up to 80 percent while keeping accuracy close to full chain-of-thought.
+</Tip>
+
+## Controlling How Much a Model Thinks
+
+If "think harder" doesn't work, how do you actually make a reasoning model spend more effort on a hard problem? Not with prose. Every major reasoning model gives you an actual dial for this, separate from your prompt text.
+
+**How reasoning depth is controlled, by model**
+
+| Model | Depth control | What it looks like |
+|---|---|---|
+| OpenAI o-series | `reasoning_effort` parameter | low / medium / high, set in the API call |
+| <a href="https://platform.claude.com/docs/en/build-with-claude/adaptive-thinking" target="_blank" rel="noopener noreferrer">Claude (extended thinking)</a> | `effort` (adaptive thinking) | Claude decides how much to think based on task complexity |
+| DeepSeek R1 | Visible `<think>` tags | reasoning is streamed and visible, not hidden |
+
+Setting `reasoning_effort` to high on a one-line factual question just burns your reasoning budget for nothing. Save the higher settings for problems that genuinely need five or more reasoning steps, and let simple questions run on low or default effort.
+
+## When You Still Need Step-by-Step
+
+This rule has a scope, and it's easy to overgeneralize. Strip chain-of-thought out of every prompt you write and you'll actually make chat models worse, since a model that doesn't reason internally still needs to be told to show its work. Chain-of-thought prompting is still exactly the right move on a regular chat model, and on genuinely simple tasks even a reasoning model doesn't need much of a nudge either way. Claude with extended thinking turned off also behaves more like a chat model. Step-by-step guidance still helps there.
+
+The dividing line isn't "is this a fancy new model," it's whether the model reasons internally by default. If yes, prompt it directly. If no, chain-of-thought is still doing real work, and it pairs well with the verification habits from [Reducing Hallucinations](/library/prompt-engineering/reducing-hallucinations), since a chat model working through steps out loud is still worth double-checking.
+
+<Steps>
+  <Step number={1} title="Compare a chat model and a reasoning model on the same prompt">
+    Pick one real problem you actually need solved. Something with a few moving parts works best: a bug in a short piece of code, or a decision with three or four factors to weigh.
+
+    Run it twice. First on a regular chat model with a chain-of-thought preamble ("think step by step, take your time"). Then on a reasoning model with just the bare problem, no preamble.
+
+    Write down which answer was more useful, and roughly how much longer the reasoning-model version took to think versus the chat-model version.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 12.05. Next up: continue in the [Master Agentic AI path](/paths/master-agentic-ai) →
+</Note>
+
+<FAQ>
+  <FAQItem question="Do reasoning models even need prompt engineering?">
+    Yes, but a different kind. You're not scaffolding the reasoning anymore, since the model does that internally. Your job shifts to stating the goal clearly, naming real constraints, and setting how much the model should think, not walking it through steps.
+  </FAQItem>
+  <FAQItem question="What happens if I use few-shot examples with o3?">
+    It often backfires. OpenAI's own guidance says reasoning models often don't need few-shot examples and recommends trying a plain, example-free prompt first. Extra examples can nudge the model toward copying a pattern instead of reasoning through your actual problem.
+  </FAQItem>
+  <FAQItem question="Is DeepSeek R1 prompted the same way as OpenAI's o-series?">
+    Mostly yes: minimal, direct prompts work best on both. One real difference is DeepSeek R1 shows its reasoning in visible <code>&lt;think&gt;</code> tags, so you can watch what it's doing, while OpenAI's o-series hides those reasoning tokens entirely.
+  </FAQItem>
+  <FAQItem question="Can I still use chain-of-thought with a regular chat model?">
+    Yes, that's exactly where it belongs. Chat models like GPT-4o don't reason internally by default, so asking them to think step by step still helps. The rule only flips once you're on a model built with reasoning already wired in.
+  </FAQItem>
+</FAQ>
