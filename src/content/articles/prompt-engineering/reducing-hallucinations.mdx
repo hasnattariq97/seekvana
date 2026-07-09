@@ -1,0 +1,120 @@
+---
+title: "Reducing Hallucinations: Ground Claude's Answers in Evidence"
+description: "Hallucinations happen when Claude answers without a source. Evidence-first prompting, quote the source first, then answer, cuts fabrication fast."
+pillar: "prompt-engineering"
+slug: "reducing-hallucinations"
+difficulty: "intermediate"
+readTime: 8
+author: "Seekvana"
+publishedAt: "2026-07-09"
+tags: ["reducing hallucinations", "evidence-first prompting", "grounding ai answers", "large-language-models"]
+featured: false
+lessonModule: "12"
+lessonNumber: "12.04"
+faqs:
+  - q: "Is hallucination the same thing as lying?"
+    a: "No. Lying requires knowing the truth and saying something else on purpose. Claude generates the next likely word based on patterns, and sometimes those patterns produce a confident, well-formed sentence that isn't true. There's no intent behind it, which is exactly why you can't just ask it to stop and expect that to work."
+  - q: "Can evidence-first prompting fully eliminate hallucinations?"
+    a: "No technique eliminates them completely, that's a known limitation of how these models generate text, not a bug waiting for a patch. Evidence-first prompting sharply reduces fabrication on any question you can ground in a real source, but for questions with no source to quote from, some risk remains. Combine it with the checks from the previous lesson for anything that matters."
+  - q: "What if the source document doesn't actually contain the answer?"
+    a: "That's the best-case outcome, not a failure. A grounded prompt forces Claude to say so instead of guessing, because there's nothing in the text to quote. If you ever see Claude answer a question your source doesn't cover without flagging that gap, that's the fabrication this lesson is teaching you to catch."
+  - q: "Does this only work with long documents, or can I use it on short prompts too?"
+    a: "It works at any length. Even a two-sentence source pasted into a prompt gives Claude something concrete to quote from instead of its own memory. The technique scales down fine, a short source with a quote requirement beats a long source with no requirement at all."
+---
+
+<ArticleImage
+  src="/images/articles/prompt-engineering/reducing-hallucinations/cover.webp"
+  alt="A glowing quotation mark dissolving into fog on a cream background, in the Seekvana editorial style"
+/>
+
+You ask Claude to pull a statistic for a report you're writing, and it hands you a number with a source attached: a study, a year, an author. It reads cleanly, so you drop it into the report and move on. Later, a coworker asks for the link. You go looking. The study doesn't exist.
+
+Nothing in the response looked off. No hedging, no "I'm not sure." That's what makes this failure mode dangerous: it sounds exactly as confident as a real answer. Evidence-first prompting is the fix, and it's simpler than it sounds.
+
+> **Key Takeaways**
+> - Hallucination isn't Claude lying, it's the model generating a plausible-sounding sentence with nothing real backing it up
+> - Evidence-first (quote-then-answer) prompting means pasting your source into the prompt and requiring Claude to quote the relevant line before it answers
+> - Grounding a prompt in a real document sharply cuts fabrication because the model has actual text to work from instead of its own memory
+> - You can still test for fabrication on purpose, by asking a question your source doesn't cover and checking whether Claude admits it doesn't know
+
+---
+
+## What Is Hallucination in AI?
+
+**Hallucination** in AI is when a model produces a fluent, confident-sounding answer that has no real fact behind it, a fabricated statistic, a citation to a study that doesn't exist, a quote nobody said. It isn't lying on purpose. Claude doesn't pull facts from a lookup table, it [predicts the next word based on probabilities learned during training](/library/large-language-models/how-llms-work), the same mechanism covered in the self-consistency lesson. Most of the time those probabilities line up with reality closely enough that you never notice, hallucination is what happens when they don't.
+
+<a href="https://support.claude.com/en/articles/8525154-claude-is-providing-incorrect-or-misleading-responses-what-s-going-on" target="_blank" rel="noopener noreferrer">Anthropic's own support documentation is direct about this</a>: Claude can display quotes that look authoritative and sound convincing, but aren't grounded in fact. This isn't a glitch that a future update quietly fixes. It's a structural consequence of how the model generates language one token at a time, with no built-in way to check itself against the real world unless you give it something to check against.
+
+Skip this and you'll treat every confident-sounding answer as verified, including the one time it invented a source. That's the exact failure this lesson exists to prevent.
+
+## Evidence-First Prompting: Quote Before You Answer
+
+The fix is to stop asking Claude to answer from memory and start asking it to answer from a source you provide. **Evidence-first prompting** (also called quote-then-answer) means pasting the relevant source text into your prompt and instructing Claude to quote the exact passage it's relying on before it gives its answer.
+
+<Note>
+A working template: "Using only the document below, answer the question. First quote the exact sentence you're relying on, then give your answer. If the document doesn't contain the answer, say so instead of guessing." Paste your source text after that, then your question.
+</Note>
+
+The quote requirement is doing the real work here. It's much harder for a model to fabricate a quote from a real document sitting right in the prompt than to fabricate a citation from memory, because the fabricated quote has to actually match text that's visible a few lines up. If it doesn't match, you'll spot it immediately.
+
+<a href="https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations" target="_blank" rel="noopener noreferrer">Anthropic's platform docs recommend this same grounding approach</a> for reducing hallucinations in production systems: give the model the source material directly, and require it to tie its answer back to specific text rather than general knowledge.
+
+## Grounding a Real Prompt in a Source Document
+
+Here's the difference in practice. Say you have a product FAQ doc, and you ask Claude a plain question about it with no source attached: "What's the refund window for this product?" Without a document to check, Claude answers from general patterns about how refund policies usually work, and it might land on 30 days when your actual policy says 14.
+
+Now paste the actual FAQ text into the prompt with the evidence-first template from above. Claude has to quote the real line ("Refunds are available within 14 days of purchase") before answering. The quote and the answer either match the source or they don't, and you can check that match in about two seconds.
+
+**Why grounded beats ungrounded, side by side**
+
+| | Ungrounded prompt | Evidence-first prompt |
+|---|---|---|
+| What Claude works from | Patterns from training data | The exact text you provided |
+| Can you verify the answer? | Only by checking elsewhere yourself | Yes, the quote is right there in the response |
+| Risk on a question with no clear answer | Claude guesses confidently | Claude can say "not covered" |
+
+I paste the source doc into the prompt even for questions I'm fairly sure I know the answer to, mostly because the two seconds it takes to check the quote is cheaper than being wrong in a document someone else reads.
+
+## Testing for Fabrication on Purpose
+
+The best way to trust this technique is to try to break it. Take a source document and ask Claude a question it genuinely doesn't answer, something adjacent but absent, like asking a refund-policy FAQ about a warranty term it never mentions.
+
+<Tip>
+Ask the bait question with the evidence-first template still in place. A grounded prompt should respond with something like "the document doesn't cover this" rather than inventing an answer. If it invents one anyway, that's a real signal to tighten your prompt or double-check with the self-critique and LLM-as-judge techniques from the previous lesson.
+</Tip>
+
+This is the same instinct as [self-consistency and verification](/library/prompt-engineering/self-consistency-and-verification): don't trust the first confident-sounding answer, test it. Evidence-first prompting catches a different failure mode than self-consistency does. Self-consistency catches answers that are *inconsistent* across tries. Evidence-first prompting catches answers that are confidently wrong with no source at all, consistent or not.
+
+<ArticleImage
+  src="/images/articles/prompt-engineering/reducing-hallucinations/grounding-workflow.webp"
+  alt="Evidence-first prompting in three steps, give a source, require a quote, answer from evidence, shown against a without/with comparison using an iPhone release date question and a fabrication test using a Steve Jobs question the source doesn't cover"
+  caption="Give Claude a source, require a quote, then let it answer from that quote. The iPhone example shows a fabricated date without this step and a checkable one with it."
+/>
+
+<Steps>
+  <Step number={1} title="Ground a real prompt in a source document">
+    Pick a real document you have on hand, a policy page, a README, a set of notes, and a genuine question it answers. Use the evidence-first template: ask Claude to quote the exact line it's relying on, then answer. Check that the quote actually appears in your source.
+  </Step>
+  <Step number={2} title="Bait it with a question the document doesn't cover">
+    In the same conversation, ask a related question your document never actually answers. Watch whether Claude admits the gap or invents something. Write down which one happened.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 12.04. Next up: [Module 12 continues](/library/prompt-engineering) →
+</Note>
+
+<FAQ>
+  <FAQItem question="Is hallucination the same thing as lying?">
+    No. Lying requires knowing the truth and saying something else on purpose. Claude generates the next likely word based on patterns, and sometimes those patterns produce a confident, well-formed sentence that isn't true. There's no intent behind it, which is exactly why you can't just ask it to stop and expect that to work.
+  </FAQItem>
+  <FAQItem question="Can evidence-first prompting fully eliminate hallucinations?">
+    No technique eliminates them completely, that's a known limitation of how these models generate text, not a bug waiting for a patch. Evidence-first prompting sharply reduces fabrication on any question you can ground in a real source, but for questions with no source to quote from, some risk remains. Combine it with the checks from the previous lesson for anything that matters.
+  </FAQItem>
+  <FAQItem question="What if the source document doesn't actually contain the answer?">
+    That's the best-case outcome, not a failure. A grounded prompt forces Claude to say so instead of guessing, because there's nothing in the text to quote. If you ever see Claude answer a question your source doesn't cover without flagging that gap, that's the fabrication this lesson is teaching you to catch.
+  </FAQItem>
+  <FAQItem question="Does this only work with long documents, or can I use it on short prompts too?">
+    It works at any length. Even a two-sentence source pasted into a prompt gives Claude something concrete to quote from instead of its own memory. The technique scales down fine, a short source with a quote requirement beats a long source with no requirement at all.
+  </FAQItem>
+</FAQ>
