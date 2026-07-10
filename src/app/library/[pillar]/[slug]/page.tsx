@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const { frontmatter } = getArticleSource(pillar, slug)
     const url = `https://seekvana.com/library/${pillar}/${slug}`
     return {
-      title: frontmatter.title,
+      title: { absolute: frontmatter.title },
       description: frontmatter.description,
       alternates: { canonical: url },
       openGraph: {
