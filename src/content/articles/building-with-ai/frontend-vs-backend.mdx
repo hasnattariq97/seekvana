@@ -1,0 +1,127 @@
+---
+title: "Frontend vs Backend Explained for Beginners: Full Guide"
+description: "Frontend vs backend explained simply: frontend is what users see, backend handles data and API keys. Learn how both work together in AI apps."
+pillar: "building-with-ai"
+slug: "frontend-vs-backend"
+difficulty: "beginner"
+readTime: 6
+author: "Seekvana"
+publishedAt: "2026-07-10"
+tags: ["frontend vs backend", "what is frontend and backend", "how ai apps are structured", "api key security"]
+featured: false
+lessonModule: "06"
+lessonNumber: "06.09"
+faqs:
+  - q: "Can a frontend ever talk to an AI API directly, without a backend?"
+    a: "Technically yes, but you should never do it in a real project. Any API key placed in frontend code ships to every visitor's browser, where it can be read with the same Network tab you learned about last lesson. A backend exists specifically to keep that key private."
+  - q: "Do I need to learn both frontend and backend to build with AI?"
+    a: "Not to start. Plenty of builders focus on one side and use a simple template or framework for the other. But understanding what each side does still matters, even if you only ever write one of them. You'll always be working next to the other."
+  - q: "Is the backend the same thing as the server?"
+    a: "Close enough for now. The backend is the code and logic that runs on a server, handling requests and holding secrets like API keys. People often use backend and server interchangeably, and for a beginner that's a fine mental shortcut."
+  - q: "What happens if the backend goes down but the frontend is still up?"
+    a: "The page loads, but nothing that requires data works. Buttons might be visible, styling looks fine, but any request to the backend, like sending a chat message, will fail or hang. That's why backend uptime matters even though users never see it directly."
+---
+
+{/* IMAGE PROMPT: Editorial flat illustration showing a clear left-to-right pipeline: person icon, browser window (frontend), server icon (backend), AI brain icon (Claude), arrow looping back to person, warm cream background (#FAF8F3), clay accent (#C9633F) on the backend server, clean diagram style, no text in image | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+
+<ArticleImage
+  src="/images/articles/building-with-ai/frontend-vs-backend/cover.webp"
+  alt="A left-to-right pipeline showing a person, a browser, a server, and an AI brain icon, representing how a request travels from user to AI and back"
+/>
+
+You paste your Anthropic API key straight into your chat widget's JavaScript so it can call Claude. It works, the widget replies, you feel great about it. Then you open the [Network tab](/library/building-with-ai/browser-devtools) from last lesson, or someone else does, and there's your key sitting in plain text for anyone to copy.
+
+That's the exact mistake this lesson exists to prevent. The frontend is what a user sees and touches in their browser. The backend is the part working behind the scenes, and it's the only place a secret like an API key should ever live. Here's what each one actually does, and why keeping them separate is not optional once real users and real API keys are involved.
+
+> **Key Takeaways**
+> - The frontend is everything that runs in the user's browser: HTML, CSS, and JavaScript
+> - The backend is server-side code that handles data, logic, and anything that needs to stay private
+> - Every AI chat message travels frontend → backend → AI API → backend → frontend
+> - An API key placed in frontend code is visible to anyone who opens the browser's Network tab
+> - The backend exists specifically to be the one place a secret key is safe
+
+---
+
+## What Is the Frontend? (And How It Differs from the Backend)
+
+The frontend is everything running inside the user's browser. It's HTML for structure, CSS for style, and JavaScript for behavior, the same three layers you learned about earlier in this module. All of it ships to whoever opens the page.
+
+Anything that lives in the frontend is visible to the user, no exceptions. Every line of JavaScript your browser runs can be read with View Page Source or the DevTools tabs from last lesson. If a value is sitting inside frontend code, anyone who opens that page can see it too.
+
+That's not a flaw. It's just what "frontend" means: code that ships to, and runs on, someone else's computer. <a href="https://aws.amazon.com/compare/the-difference-between-frontend-and-backend/" target="_blank" rel="noopener noreferrer">AWS describes this split</a> the same way: frontend is the client side, backend is everything that happens on the server.
+
+## What Is the Backend?
+
+The backend is code that runs on a server you control, not on the user's machine. It handles the work a user should never see directly: looking things up in a database, checking permissions, and calling other APIs on the app's behalf.
+
+Remember the waiter-and-kitchen model from [what an API is](/library/building-with-ai/what-is-an-api)? The frontend is the dining room, where the customer sits and places an order. The backend is the kitchen, where the actual work happens, out of sight. And the kitchen holds something the customer never sees: the restaurant's private recipe. For an AI app, that recipe is the API key.
+
+Nothing in the backend ships to the user's browser. It stays on your server, which is exactly why secrets belong there. Put an API key in the frontend instead, and it's no longer a secret. It's just text sitting in a file every visitor's browser already downloaded.
+
+## How a Chat Message Actually Travels
+
+Here's the full round trip for something as simple as sending one message to an AI chat app:
+
+- **User types a message** → sent to the frontend
+- **Frontend sends a [POST request](/library/building-with-ai/rest-apis-get-post)** → carries the message as its body, straight to the backend
+- **Backend calls the Claude API** → attaches the secret API key that only the backend has
+- **Claude generates a response** → sends it back to the backend
+- **Backend forwards the response** → to the frontend
+- **Frontend displays it** → to the user
+
+The user never talks to Claude's API directly, not even once. Every AI chat interface you've used, no matter which company built it, runs this same handoff. The frontend only ever talks to your own backend, and your backend is the only thing that ever talks to the AI provider. That handoff is how every AI app is structured, whether it's a simple chatbot or a full product.
+
+The first time I built something like this, I skipped the backend entirely and called the AI API straight from a browser script, just to see it work faster. It did work, for about a day, until the key showed up in a public repo and someone else's usage bill started climbing on my account. That's the mistake this whole flow exists to prevent.
+
+## Why the API Key Never Lives in the Frontend
+
+This is the part that turns into a real incident if skipped. An API key proves to Claude, or any AI provider, that a request comes from an account allowed to use it. That account also pays for every call the key makes.
+
+<Warning>
+If an API key ships inside frontend JavaScript, anyone who opens the Network tab or views the page's source can copy it. From there, they can make unlimited calls that your account pays for, and you'll have no way to tell their requests from your real users'.
+</Warning>
+
+This is exactly why [.env files and .gitignore](/library/building-with-ai/git-gitignore) matter as much as they do. Keep a key in a `.env` file on your backend server, never commit it to a public repo, never send it to the browser, and it stays private. Paste that same key directly into a frontend script, and it's a public key the moment the page loads.
+
+The fix is always the same shape: the frontend asks your backend to do the work, and only the backend holds the key that talks to the AI provider. <a href="https://auth0.com/blog/api-key-security-for-ai-agents/" target="_blank" rel="noopener noreferrer">Auth0's own security guidance</a> puts it plainly: embedding a key in a frontend application means any user can find it just by viewing the page source. Once you can explain the difference between frontend and backend in one sentence, you're ready to build safely: the frontend never gets the key.
+
+{/* IMAGE PROMPT: Editorial flat illustration of a padlock and key sitting safely inside a server icon, with a browser window shown separately and unable to reach it, warm cream background (#FAF8F3), clay accent (#C9633F) on the padlock, clean and reassuring, no text in image | FILENAME: api-key-security.webp | DIMENSIONS: 1600x950 */}
+
+<ArticleImage
+  src="/images/articles/building-with-ai/frontend-vs-backend/api-key-security.webp"
+  alt="A padlock and key kept safely inside a server icon, separate from a browser window that cannot reach it, representing how a backend keeps an API key private"
+  caption="An API key that only ever lives on the backend server is never exposed to a user's browser, unlike one pasted directly into frontend JavaScript."
+/>
+
+---
+
+## Your Task
+
+<Steps>
+  <Step number={1} title="Draw the request flow for an AI chat app">
+    On paper or in a notes app, draw five boxes left to right: User, Frontend, Backend, AI model, and back to User.
+
+    Draw an arrow between each box in the direction data actually flows when someone sends a message in an AI chat app.
+
+    Label each arrow with what's being sent: for example, "user's message" between User and Frontend, "prompt + API key" between Backend and AI model, "Claude's response" going back through Backend, and "displayed text" from Frontend back to User.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 06.09. Next up: Prompting and code, how prompting connects to what you send an AI model.
+</Note>
+
+<FAQ>
+  <FAQItem question="Can a frontend ever talk to an AI API directly, without a backend?">
+    Technically yes, but you should never do it in a real project. Any API key placed in frontend code ships to every visitor's browser, where it can be read with the same Network tab you learned about last lesson. A backend exists specifically to keep that key private.
+  </FAQItem>
+  <FAQItem question="Do I need to learn both frontend and backend to build with AI?">
+    Not to start. Plenty of builders focus on one side and use a simple template or framework for the other. But understanding what each side does still matters, even if you only ever write one of them. You'll always be working next to the other.
+  </FAQItem>
+  <FAQItem question="Is the backend the same thing as the server?">
+    Close enough for now. The backend is the code and logic that runs on a server, handling requests and holding secrets like API keys. People often use backend and server interchangeably, and for a beginner that's a fine mental shortcut.
+  </FAQItem>
+  <FAQItem question="What happens if the backend goes down but the frontend is still up?">
+    The page loads, but nothing that requires data works. Buttons might be visible, styling looks fine, but any request to the backend, like sending a chat message, will fail or hang. That's why backend uptime matters even though users never see it directly.
+  </FAQItem>
+</FAQ>
