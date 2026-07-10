@@ -7,12 +7,6 @@
   "lessonCount": 101,
   "href": "/paths/getting-started",
   "colorClass": "bg-purple-500",
-  "nextPath": {
-    "title": "Master Agentic AI",
-    "slug": "master-agentic-ai",
-    "lessonCount": 14,
-    "difficulty": "intermediate"
-  },
   "modules": [
     {
       "id": "01",
