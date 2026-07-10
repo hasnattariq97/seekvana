@@ -1,0 +1,170 @@
+---
+title: "Structured Outputs: Get JSON You Can Actually Trust"
+description: "Structured outputs use schema-constrained decoding to guarantee valid JSON from an LLM, unlike JSON mode alone. Here's how to build one."
+pillar: "prompt-engineering"
+slug: "structured-outputs-prompting"
+difficulty: "intermediate"
+readTime: 8
+author: "Seekvana"
+publishedAt: "2026-07-10"
+tags: ["structured outputs", "json schema", "function calling", "prompt engineering"]
+featured: false
+lessonModule: "12"
+lessonNumber: "12.08"
+faqs:
+  - q: "Is JSON mode the same thing as structured outputs?"
+    a: "No. JSON mode only guarantees the response is valid JSON, it says nothing about its shape. Structured outputs go further: they guarantee the response matches a specific schema you define, so every field you need is there, in the right type, every time."
+  - q: "Do I need to use Pydantic or Zod to use structured outputs?"
+    a: "No, those are conveniences, not requirements. You can hand-write a JSON Schema directly and pass it to the API. Pydantic and Zod just let you define that schema as a class in Python or TypeScript instead of raw JSON, which most developers find faster to read and maintain."
+  - q: "Why would a model still refuse to follow my schema?"
+    a: "Safety refusals take priority over schema enforcement. If a model decides a request is unsafe to answer, it returns a refusal instead of schema-shaped output, no matter how strict your schema is. This is intentional: the schema constrains what a normal answer looks like, it doesn't override the model's other guardrails."
+  - q: "Does adding a schema slow down or cost more per request?"
+    a: "A little, yes. The provider adds extra system-prompt tokens explaining the format, which costs slightly more per call. Still, that small cost usually beats the alternative. Without a schema, enough calls come back in the wrong shape that you end up paying for retries and cleanup anyway, and that adds up to more tokens than paying the schema tax up front."
+---
+
+<ArticleImage
+  src="/images/articles/prompt-engineering/structured-outputs-prompting/cover.webp"
+  alt="Editorial illustration of scattered text funneling down into a clean, labeled JSON block"
+/>
+
+A lead-capture pipeline pulls a name and email out of a chat transcript, drops it into a webhook, and moves on. It's worked for weeks. Then one call comes back with `"full_name"` instead of `"name"`, the webhook doesn't recognize the field, and the lead just vanishes. Nothing crashed. Nothing logged an error. The model did exactly what it was asked: return the info as JSON. It just didn't promise the field would be called the same thing twice.
+
+That's the gap structured outputs close. Asking a model to "respond in JSON" only guarantees valid syntax, not a specific shape. Structured outputs and schema-driven [prompting](/library/prompt-engineering/what-prompting-actually-is) mean handing the model an actual contract, a JSON Schema describing exact field names, types, and requirements, and having the model's response constrained at the token level so it cannot violate that contract.
+
+In this lesson, you'll learn why plain JSON requests aren't reliable enough for production, the three levels of reliability between "asking nicely" and "guaranteed," and how to build and test a schema-constrained extraction yourself. This builds directly on [controlling how a model formats its output](/library/prompt-engineering/controlling-the-output): a schema is the strictest form of that control, the same way [keeping RAG answers grounded](/library/prompt-engineering/rag-aware-prompting) is the strictest form of controlling what a model is even allowed to talk about.
+
+> **Key Takeaways**
+> - Plain JSON mode guarantees valid syntax only, not a consistent shape, so field names and structure can shift between calls even when every response is technically valid JSON.
+> - Structured outputs use constrained decoding, blocking any token that would break the schema, which is why Anthropic reports schema-compliant responses even under heavy production load.
+> - Writing a schema is a form of prompting: you're specifying a contract instead of a sentence.
+> - Even strict schemas aren't unbreakable: safety refusals and token limits can still produce output that doesn't match your shape.
+
+## What Is Schema-Driven Prompting?
+
+Schema-driven prompting means describing the exact shape you want a model's output to take, field names, types, and which fields are required, and having that description enforced rather than just requested. It's still prompting. You're just writing the instruction as a structured contract instead of a sentence.
+
+A JSON Schema is the format most providers use for this contract. It looks like this for a simple lead-extraction task:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" },
+    "email": { "type": "string" },
+    "wants_demo": { "type": "boolean" }
+  },
+  "required": ["name", "email", "wants_demo"],
+  "additionalProperties": false
+}
+```
+
+`additionalProperties: false` matters here. Without it, the model is free to add extra fields you never asked for, which quietly reintroduces the same inconsistency problem you were trying to avoid.
+
+## Why "Just Say JSON" Isn't Enough
+
+Ask a model to "respond in JSON" and most providers will genuinely give you syntactically valid JSON back. The problem shows up in the shape, not the syntax.
+
+Run the same extraction prompt five times without a schema. You can get `"name"` on one run and `"full_name"` on the next. An email might arrive as a plain string one time and nested inside a `"contact"` object the next. Nothing about that violates "respond in JSON." But it breaks any code downstream that expected a consistent structure.
+
+That inconsistency isn't rare. As <a href="https://towardsdatascience.com/structured-outputs-with-llms-json-mode-function-calling-and-when-to-use-each/" target="_blank" rel="noopener noreferrer">one detailed comparison of JSON mode, function calling, and structured outputs</a> puts it, JSON mode "does guarantee that the output is valid JSON, but it does not guarantee a specific structure." At any real volume, that gap between valid and consistent is where pipelines quietly break.
+
+Skip schema enforcement and the failure mode isn't a crash you can catch in testing. It's a slow, silent shape drift that shows up as missing data three weeks later.
+
+<ArticleImage
+  src="/images/articles/prompt-engineering/structured-outputs-prompting/unpredictable-to-unbreakable.webp"
+  alt="Comparison showing plain JSON mode producing inconsistent field names and nesting versus structured outputs producing the same shape on every run"
+  caption="Plain JSON mode still lets fields drift between runs, structured outputs lock the shape so every run comes back identical."
+/>
+
+## The Three Levels of Structured Output Reliability
+
+Getting structured data out of a model isn't one technique, it's a ladder. Each rung trades a bit more setup for a lot more guarantee.
+
+**Structured output reliability, low to high**
+
+| Level | Method | How it's enforced | Reliability |
+|---|---|---|---|
+| 1 | Prompt-only ("respond in JSON") | Instruction only, no enforcement | Valid JSON, shape not guaranteed |
+| 2 | Function calling / tool use | Model fills a defined tool schema | High, but not schema-guaranteed on every provider |
+| 3 | Native structured output | Constrained decoding blocks invalid tokens | Schema-compliant by construction |
+
+Level 3, native structured output, works by <a href="https://platform.claude.com/docs/en/build-with-claude/structured-outputs" target="_blank" rel="noopener noreferrer">compiling your schema into a grammar the decoder enforces at every token</a>, not by hoping the model remembers the instruction. If the schema says a field is a boolean, the decoder simply never lets the model generate a token that isn't `true` or `false` in that position.
+
+<Note>
+  Level 2 and Level 3 aren't always separate steps. Anthropic's strict tool use and OpenAI's structured outputs both apply the same constrained-decoding idea to function calling, so a well-defined tool schema often gets you Level 3 guarantees for free.
+</Note>
+
+## Building a Schema-Constrained Extraction
+
+Here's the same lead-extraction example, this time as an actual API call using Claude's structured outputs.
+
+```python
+response = client.messages.create(
+    model="claude-sonnet-5",
+    max_tokens=1024,
+    messages=[{
+        "role": "user",
+        "content": "Extract from: Jordan Lee (jordan@example.com) wants a demo."
+    }],
+    output_config={
+        "format": {
+            "type": "json_schema",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "name": {"type": "string"},
+                    "email": {"type": "string"},
+                    "wants_demo": {"type": "boolean"}
+                },
+                "required": ["name", "email", "wants_demo"],
+                "additionalProperties": False
+            }
+        }
+    }
+)
+```
+
+Run that ten times and you get the same three fields, same names, same types, every single time. No regex cleanup, no "hope it parsed" retry logic. The schema is the prompt for the shape, the message is the prompt for the content.
+
+## What Still Breaks (Edge Cases)
+
+Schema enforcement is a huge reliability jump, not a guarantee against every failure. Three things still slip through even with strict mode enabled.
+
+<Warning>
+  Safety refusals override schema enforcement. If a model decides a request shouldn't be answered, it returns a refusal instead of schema-shaped output, so your code still needs to check for that case explicitly. A token limit cutting a response short before the JSON closes is a second real failure mode, and enum values differing only in capitalization from what your schema expects is a third.
+</Warning>
+
+I've shipped a pipeline that passed every test case in staging and then failed in production the first time a real user's message tripped a refusal, because none of the test inputs ever needed one. Structured outputs remove the shape-drift failure, not every failure. Testing edge cases, not just the happy path, is what separates a demo from something you can trust.
+
+## Your Task
+
+<Steps>
+  <Step number={1} title="Write a schema for a real extraction">
+    Pick something you'd actually want structured data from, an email, a support ticket, a product review, and write a JSON Schema with 3 to 5 fields, marking which ones are required.
+  </Step>
+  <Step number={2} title="Run it through a model with structured output enabled">
+    Send your schema and one real example through Claude, GPT, or Gemini's structured output feature and confirm the response matches your schema exactly.
+  </Step>
+  <Step number={3} title="Break it on purpose">
+    Feed the model an input that's ambiguous or missing information for one required field, and see what it does. Note whether it guesses, leaves the field oddly filled, or something else you didn't expect.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 12.08 and built your own schema-constrained extraction. Next up: the next lesson in this module, coming soon →
+</Note>
+
+<FAQ>
+  <FAQItem question="Is JSON mode the same thing as structured outputs?">
+    No. JSON mode only guarantees the response is valid JSON, it says nothing about its shape. Structured outputs go further: they guarantee the response matches a specific schema you define, so every field you need is there, in the right type, every time.
+  </FAQItem>
+  <FAQItem question="Do I need to use Pydantic or Zod to use structured outputs?">
+    No, those are conveniences, not requirements. You can hand-write a JSON Schema directly and pass it to the API. Pydantic and Zod just let you define that schema as a class in Python or TypeScript instead of raw JSON, which most developers find faster to read and maintain.
+  </FAQItem>
+  <FAQItem question="Why would a model still refuse to follow my schema?">
+    Safety refusals take priority over schema enforcement. If a model decides a request is unsafe to answer, it returns a refusal instead of schema-shaped output, no matter how strict your schema is. This is intentional: the schema constrains what a normal answer looks like, it doesn't override the model's other guardrails.
+  </FAQItem>
+  <FAQItem question="Does adding a schema slow down or cost more per request?">
+    A little, yes. The provider adds extra system-prompt tokens explaining the format, which costs slightly more per call. Still, that small cost usually beats the alternative. Without a schema, enough calls come back in the wrong shape that you end up paying for retries and cleanup anyway, and that adds up to more tokens than paying the schema tax up front.
+  </FAQItem>
+</FAQ>
