@@ -122,11 +122,16 @@ export default async function ArticlePage({ params }: PageProps) {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   )
-  const { data: rawComments } = await supabase
-    .from('comments')
-    .select('*')
-    .eq('article_id', `${pillar}/${slug}`)
-    .order('created_at', { ascending: false })
+  const serverSupabase = await createServerClient()
+
+  const [{ data: rawComments }, { data: { user: currentUser } }] = await Promise.all([
+    supabase
+      .from('comments')
+      .select('*')
+      .eq('article_id', `${pillar}/${slug}`)
+      .order('created_at', { ascending: false }),
+    serverSupabase.auth.getUser(),
+  ])
 
   const allRows = rawComments ?? []
   const topLevel = allRows.filter((c) => !c.parent_id)
@@ -136,30 +141,26 @@ export default async function ArticlePage({ params }: PageProps) {
     replies: replies.filter((r) => r.parent_id === c.id),
   }))
 
-  const serverSupabase = await createServerClient()
-  const { data: { user: currentUser } } = await serverSupabase.auth.getUser()
-
   let isSaved = false
-  if (currentUser) {
-    const { data: savedRow } = await serverSupabase
-      .from('reading_list')
-      .select('id')
-      .eq('user_id', currentUser.id)
-      .eq('pillar', pillar)
-      .eq('article_slug', slug)
-      .single()
-    isSaved = !!savedRow
-  }
-
   let isCompleted = false
   if (currentUser) {
-    const { data: readRow } = await serverSupabase
-      .from('article_reads')
-      .select('id')
-      .eq('user_id', currentUser.id)
-      .eq('pillar', pillar)
-      .eq('article_slug', slug)
-      .single()
+    const [{ data: savedRow }, { data: readRow }] = await Promise.all([
+      serverSupabase
+        .from('reading_list')
+        .select('id')
+        .eq('user_id', currentUser.id)
+        .eq('pillar', pillar)
+        .eq('article_slug', slug)
+        .single(),
+      serverSupabase
+        .from('article_reads')
+        .select('id')
+        .eq('user_id', currentUser.id)
+        .eq('pillar', pillar)
+        .eq('article_slug', slug)
+        .single(),
+    ])
+    isSaved = !!savedRow
     isCompleted = !!readRow
   }
 
