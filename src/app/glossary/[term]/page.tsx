@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!result) return {}
   const { frontmatter } = result
   return {
-    title: `${frontmatter.term} — AI Glossary — Seekvana`,
+    title: { absolute: `${frontmatter.term} — AI Glossary — Seekvana` },
     description: frontmatter.shortDef,
     alternates: {
       canonical: `https://seekvana.com/glossary/${term}`,
