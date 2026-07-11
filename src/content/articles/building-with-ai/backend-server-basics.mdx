@@ -126,7 +126,7 @@ Nothing about the pattern changes. The route still listens, the function still r
 
 <FAQ>
   <FAQItem question="Is a backend server the same thing as a database?">
-    No. A backend server is the program that receives requests and decides what to do. A database is where data gets stored so it survives after the request ends. Your backend often talks to a database, but it isn't one. Think of the backend as the worker and the database as the filing cabinet it reaches into.
+    No. A backend server is the program that receives requests and decides what to do. A [database](/library/building-with-ai/what-is-a-database) is where data gets stored so it survives after the request ends. Your backend often talks to a database, but it isn't one. Think of the backend as the worker and the database as the filing cabinet it reaches into.
   </FAQItem>
   <FAQItem question="Do I need to know async/await to use FastAPI?">
     Not to get started. You'll see `async def` in a lot of FastAPI tutorials, but a plain `def` route works exactly the same way for simple examples like the one in this lesson. Async matters once your server is juggling many slow operations at once, worth learning later, not required on day one.

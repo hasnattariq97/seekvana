@@ -1,0 +1,108 @@
+---
+title: "What Is a Database, Explained Simply for Beginners"
+description: "A database stores an app's information so it persists between requests. This lesson covers tables, rows, and your first Supabase project."
+pillar: "building-with-ai"
+slug: "what-is-a-database"
+difficulty: "beginner"
+readTime: 6
+author: "Seekvana"
+publishedAt: "2026-07-10"
+tags: ["database", "supabase", "what is a database", "database for beginners"]
+featured: false
+lessonModule: "07"
+lessonNumber: "07.03"
+faqs:
+  - q: "Is Supabase the same thing as a database?"
+    a: "Not quite. Supabase is a hosted platform that gives you a real Postgres database plus extras like authentication and file storage, without having to install or manage any of it yourself. The database itself is Postgres. Supabase is the friendly wrapper around it."
+  - q: "Do I need to know SQL to use a database?"
+    a: "Not on day one. Supabase's Table Editor lets you create tables and add rows by clicking, no SQL required. You'll start reading basic SQL queries in the next lesson, but you can explore your first database entirely through the interface."
+  - q: "What happens to my data if I close my laptop?"
+    a: "Nothing. That's the entire point of a database. Unlike your backend server's memory, which clears out the moment it restarts, data in Supabase lives on Supabase's servers, not yours. Close your laptop, come back tomorrow, and every row is still there."
+  - q: "Can a database store things other than text and numbers?"
+    a: "Yes, though this lesson sticks to text and numbers since that covers almost everything a beginner project needs. Databases can also store dates, true/false values, and, with the right setup, references to files like images stored elsewhere. You'll meet a few of those types naturally as you build."
+---
+
+<ArticleImage src="/images/articles/building-with-ai/what-is-a-database/cover.webp" alt="Illustration of a stocked pantry beside a chef's cooking station, representing a database beside a backend server" />
+
+You restart the FastAPI server from the last lesson, and it's like it never existed. Any message it "handled" is gone. Refresh the page, and there's nothing to show it ever ran at all.
+
+A database is the fix for that. It's where an app stores information so it survives after a single request ends, after a server restarts, even after months pass. In this lesson, you'll see what a database actually is, spin up your first one with Supabase, and connect it directly to how AI agents "remember" things.
+
+> **Key Takeaways**
+> - A database stores information so it survives after a request ends, something your backend server alone can't do.
+> - Supabase gives you a real, hosted Postgres database without installing or managing anything yourself.
+> - Databases organize data into tables, each table a lot like a spreadsheet: rows for records, columns for fields.
+> - An AI agent's "memory" is really just an agent reading from and writing to a database, nothing more mystical than that.
+
+---
+
+## Why Your Backend Doesn't Remember Anything
+
+Go back to the FastAPI server from [the last lesson](/library/building-with-ai/backend-languages-overview). It handles a request, sends back a response, and then forgets everything. Stop the server and restart it, and any information it touched along the way is gone, because it was never stored anywhere, only held briefly while the code ran.
+
+That's a real problem the moment an app needs to remember anything past one request: a user's account, a shopping cart, a conversation. Without somewhere to put that information, every restart wipes the slate clean. A database is that somewhere.
+
+## What a Database Actually Is
+
+A database is a system for storing information so it persists, and can be searched and updated later, independent of whatever server or script happens to be running at the time.
+
+Think of your backend as a chef cooking to order. It's fast, capable, and does real work; but it has no pantry of its own. A database is the pantry and fridge next to that chef, the place ingredients (data) are kept so cooking doesn't start from nothing every single time. The chef reaches in when it needs something, and puts things back when it's done.
+
+<a href="https://www.coursera.org/articles/what-is-database" target="_blank" rel="noopener noreferrer">Coursera's overview of databases</a> describes them the same way: an organized collection of information that can be searched, sorted, and updated, independent of any one program using it. That's the whole concept. Everything else is detail.
+
+## What Is Supabase?
+
+Supabase is the database this course uses: a hosted Postgres database with a friendly web interface, so you don't have to install or manage a database server yourself. Postgres itself is a specific, extremely common type of database. Chances are you've already used an app running on top of it without knowing it was there.
+
+The appeal for a beginner is exactly that gap between power and setup effort. A real Postgres database, running somewhere reliable, reachable from your FastAPI backend in a few lines of code, with a web interface you can click through instead of a terminal you have to configure. That tradeoff is why <a href="https://supabase.com/docs/guides/getting-started" target="_blank" rel="noopener noreferrer">Supabase's own getting-started docs</a> lean so heavily on the dashboard for a first project.
+
+I default to Supabase for almost every beginner project I help set up, and it's rarely about features. It's that a student can go from "I need a database" to looking at real rows of data in about two minutes, no installation step in between to lose momentum on.
+
+## Tables, Rows, and Columns
+
+Open Supabase's Table Editor and it looks almost exactly like a spreadsheet, because that's basically what it is: a spreadsheet that scales to millions of rows without slowing down. A database is organized into **tables**, each table built from **columns** (the fields every record shares, like `name` or `email`) and **rows** (one record per row, like one user or one message).
+
+<ArticleImage src="/images/articles/building-with-ai/what-is-a-database/table-rows-columns.webp" alt="Diagram showing a backend without a database losing data on restart versus with a database saving it, plus a messages table with id, user, message, and created_at columns" caption="A messages table broken into rows (records) and columns (fields), the same shape Supabase's Table Editor shows you." />
+
+<Note>
+Supabase auto-generates an `id` column for every new table, a unique number for each row. You'll use it constantly once you start connecting tables to each other, so it's worth noticing now even before it matters.
+</Note>
+
+Skip this structure and every later SQL lesson gets harder to follow, because SQL is really just a way of asking questions about rows and columns.
+
+## How AI Agents Use Databases to "Remember"
+
+Here's the payoff for all of this: when people say an <a href="/library/agentic-ai">AI agent</a> has "memory," they don't mean anything mystical is happening inside the model. They mean the backend behind that agent is reading rows out of a database before calling the model, and writing new rows back in after.
+
+A chat app that "remembers" your last conversation is doing exactly what you just saw in the Table Editor: storing each message as a row, then pulling those rows back out the next time you show up. No database, no memory, no matter how capable the model itself is.
+
+<Steps>
+  <Step number={1} title="Create your first Supabase project">
+    Go to <a href="https://supabase.com" target="_blank" rel="noopener noreferrer">supabase.com</a> and create a free account.
+
+    Click "New Project," give it a name (something like "my-first-database"), set a database password, and save it somewhere safe. Choose a region close to you.
+
+    Wait a minute or two while it provisions. Once it's ready, click "Table Editor" in the left sidebar.
+
+    Explore the interface. Notice it looks like a spreadsheet: this is where every table, and every row of data, in your project will live from here on.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 07.03.
+</Note>
+
+<FAQ>
+  <FAQItem question="Is Supabase the same thing as a database?">
+    Not quite. Supabase is a hosted platform that gives you a real Postgres database plus extras like authentication and file storage, without having to install or manage any of it yourself. The database itself is Postgres. Supabase is the friendly wrapper around it.
+  </FAQItem>
+  <FAQItem question="Do I need to know SQL to use a database?">
+    Not on day one. Supabase's Table Editor lets you create tables and add rows by clicking, no SQL required. You'll start reading basic SQL queries in the next lesson, but you can explore your first database entirely through the interface.
+  </FAQItem>
+  <FAQItem question="What happens to my data if I close my laptop?">
+    Nothing. That's the entire point of a database. Unlike your backend server's memory, which clears out the moment it restarts, data in Supabase lives on Supabase's servers, not yours. Close your laptop, come back tomorrow, and every row is still there.
+  </FAQItem>
+  <FAQItem question="Can a database store things other than text and numbers?">
+    Yes, though this lesson sticks to text and numbers since that covers almost everything a beginner project needs. Databases can also store dates, true/false values, and, with the right setup, references to files like images stored elsewhere. You'll meet a few of those types naturally as you build.
+  </FAQItem>
+</FAQ>
