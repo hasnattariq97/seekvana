@@ -88,6 +88,8 @@ Expert personas cost accuracy specifically on math, coding, and fact-heavy quest
 
 This connects back to [how the model works under the hood](/library/large-language-models/how-llms-work) — it's predicting the next likely token, not pulling a verified fact from a database. A persona shifts which tokens look "likely" toward expert-sounding phrasing, which is not the same thing as shifting toward correct phrasing.
 
+If you're not sure whether a task needs a role at all, [how AI can draft that role for you](/library/prompt-engineering/meta-prompting-and-prompt-generation) usually surfaces the answer faster than guessing — it tends to skip the persona entirely on tasks where the research above shows one would only hurt.
+
 ## Combining Role and Audience the Right Way
 
 The two tools stack cleanly because they solve different problems. Take: "You are a patient science teacher, explaining this to a curious ten-year-old." That single line sets the model's voice (teacher) and its calibration (a ten-year-old's vocabulary and pace) at the same time.
@@ -133,7 +135,7 @@ Done? You've completed Lesson 11.04.
  It's not dangerous, but it's not free either. On tone, writing, and creative tasks a habitual role rarely hurts. On factual, math, or coding tasks, an unnecessary expert persona can measurably lower accuracy, so "just in case" isn't a good enough reason to add one.
  </FAQItem>
  <FAQItem question="What's the difference between a role prompt and a system prompt?">
- A system prompt is a separate message slot most APIs give you to set behavior before the conversation starts. A role prompt is the specific technique of writing "You are a..." inside that message or inside your regular prompt. You can put a role in a system prompt, but a system prompt can also just contain plain instructions with no role at all.
+ A system prompt is a separate message slot most APIs give you to set behavior before the conversation starts. A role prompt is the specific technique of writing "You are a..." inside that message or inside your regular prompt. You can put a role in a system prompt, but a system prompt can also just contain plain instructions with no role at all, see [building a system prompt that scales](/library/prompt-engineering/system-prompts-that-scale) for the full structure.
  </FAQItem>
  <FAQItem question="How do I know if a role is helping or just adding noise?">
  Run the same task twice, once with the role and once without, and compare the two answers side by side. If the only difference is tone or word choice, the role is doing its job. If the plain version is actually more accurate or more useful, the role was noise, not help.

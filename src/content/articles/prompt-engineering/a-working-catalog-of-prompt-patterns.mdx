@@ -63,7 +63,7 @@ The Persona pattern assigns the model a role, like "act as a patient senior supp
   caption="Same instruction, one more constraint. Without the Template pattern locking in the shape, the reply goes generic. With Persona and Template combined, it stays specific and structured."
 />
 
-That's why they're almost always paired: Persona gives you the voice, Template gives you the shape, and together they produce output that sounds right and is structured right, instead of just one or the other.
+That's why they're almost always paired: Persona gives you the voice, Template gives you the shape, and together they produce output that sounds right and is structured right, instead of just one or the other. Move both patterns into a standing instruction instead of a one-off prompt, and you've got the beginning of a [reusable system prompt](/library/prompt-engineering/system-prompts-that-scale).
 
 ## The Few-Shot and Chain-of-Thought Patterns
 
@@ -119,6 +119,8 @@ Knowing eight names doesn't help under a deadline if you can't tell which one ap
 | Your own question might be broader than you first framed it | Cognitive Verifier |
 
 Most real prompts end up stacking two or three of these, not running one in isolation. Persona plus Template for anything customer-facing. Few-Shot plus Chain-of-Thought for anything genuinely hard. Start with whichever single pattern matches your task best, then add a second only once you've seen where the first one falls short.
+
+Once you're reaching for the same pattern combination on every new task, it's worth [letting AI draft that combination for you](/library/prompt-engineering/meta-prompting-and-prompt-generation) instead of assembling it by hand each time.
 
 ## Your Task
 
