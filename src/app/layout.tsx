@@ -9,6 +9,7 @@ import { AuthModal } from "@/components/auth/auth-modal";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { ProgressBar } from "@/components/providers/progress-bar";
 import { SideFeedback } from "@/components/feedback/side-feedback";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import 'katex/dist/katex.min.css'
 
@@ -94,6 +95,7 @@ export default function RootLayout({
             </AuthProvider>
           </SearchProvider>
         </ThemeProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
