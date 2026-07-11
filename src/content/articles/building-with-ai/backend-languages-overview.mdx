@@ -1,0 +1,140 @@
+---
+title: "FastAPI vs Express.js for Beginners: Key Differences"
+description: "FastAPI and Express.js do the same backend job, just different syntax. See the FastAPI vs Express.js beginner comparison and how to choose."
+pillar: "building-with-ai"
+slug: "backend-languages-overview"
+difficulty: "beginner"
+readTime: 5
+author: "Seekvana"
+publishedAt: "2026-07-10"
+tags: ["backend", "express", "fastapi vs express"]
+featured: false
+lessonModule: "07"
+lessonNumber: "07.02"
+faqs:
+  - q: "Is FastAPI or Express.js better for beginners?"
+    a: "Neither is objectively better, they do the identical job with different syntax. FastAPI has a gentler learning curve if you already know Python, and it writes request validation and docs for you. Express is the natural pick if you're already comfortable with JavaScript. Pick based on the language you know, not which one wins a benchmark."
+  - q: "Can I switch from FastAPI to Express later without relearning everything?"
+    a: "Yes. The underlying concepts, routes, requests, responses, don't change between frameworks, only the syntax does. Once you've matched up `app.get()` and `@app.get()` in your head, as this lesson shows, picking up the other framework later is mostly learning new keywords for something you already understand."
+  - q: "Is Node.js the same as Express?"
+    a: "No. Node.js is the JavaScript runtime, the program that lets JavaScript run outside a browser, on a server. Express is a framework that runs on top of Node.js to make building a backend faster. You need Node.js to run Express, but Node.js by itself doesn't give you routes or a built-in way to handle requests."
+  - q: "Do I need to learn both FastAPI and Express to build AI apps?"
+    a: "No. Most projects pick one backend language and stick with it. This course uses FastAPI because it pairs naturally with Python AI tools like the Claude API. Knowing Express exists, and roughly how it reads, is enough until a specific project actually calls for it."
+---
+
+{/* IMAGE PROMPT: Editorial flat illustration of two parallel identical pipelines, one labelled with a Python-style icon and one with a JavaScript-style icon, both leading to the same output box, warm cream background, clay accent (#C9633F) on the shared output, clean symmetrical layout, no text in image | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+
+<ArticleImage src="/images/articles/building-with-ai/backend-languages-overview/cover.webp" alt="Two parallel pipelines, one Python and one JavaScript, leading into the same output box" />
+
+You just got your first FastAPI server running, and now a tutorial or a job posting shows you a Node.js backend instead, `app.get()` instead of `@app.get()`, curly braces instead of colons. For a second it looks like a different job entirely, and you wonder if you just spent an hour learning the wrong thing.
+
+You didn't. FastAPI (Python) and Express.js (JavaScript, running on Node.js) both do the exact same job, receive a request, run some code, send back a response. The syntax is different. The concept from the last lesson hasn't changed at all.
+
+> **Key Takeaways**
+> - FastAPI and Express.js both receive a request, process it, and send back a response, the same job, described in different languages.
+> - `app.get('/', ...)` in Express is the same "route" concept as `@app.get("/")` in FastAPI, just written in JavaScript instead of Python.
+> - Neither framework is "better", the right pick depends on what language the rest of your project already uses.
+> - Python/FastAPI is common for AI-heavy backends; Node/Express is common when the whole stack is already JavaScript.
+
+---
+
+## What "Backend Language" Actually Means Here
+
+A backend language isn't really a separate skill, it's a different syntax wrapped around the same three-step job: receive, process, respond. Skip this idea and every new framework you meet looks like starting over from zero, when really you're just relearning how to spell something you already understand.
+
+Two languages show up constantly in AI projects: Python, usually with <a href="https://fastapi.tiangolo.com/" target="_blank" rel="noopener noreferrer">FastAPI</a>, and JavaScript, usually with <a href="https://expressjs.com/" target="_blank" rel="noopener noreferrer">Express.js</a> running on Node.js. You already used [the FastAPI server you built](/library/building-with-ai/backend-server-basics) in the last lesson. This one shows you the Express equivalent, side by side, so the next time you see it, it reads as familiar instead of foreign.
+
+## The Express.js Version of Your FastAPI Server
+
+Here's the FastAPI hello-world server from last lesson:
+
+```python
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/")
+def read_root():
+    return {"message": "Hello from your backend"}
+```
+
+And here's the same server, written in Express.js:
+
+```javascript
+const express = require('express');
+const app = express();
+
+app.get('/', (req, res) => {
+  res.json({ message: 'Hello from your backend' });
+});
+
+app.listen(3000);
+```
+
+Read them side by side and the shape is identical: create an app, define what happens at a route, start the server listening. Different words, same four moves.
+
+## Matching the Pieces
+
+**FastAPI to Express, piece by piece**
+
+| What it does | FastAPI | Express.js |
+|---|---|---|
+| Create the app | `app = FastAPI()` | `const app = express()` |
+| Define a route | `@app.get("/")` | `app.get('/', (req, res) => {...})` |
+| Send the response | `return {"message": "..."}` | `res.json({ message: "..." })` |
+| Start the server | `uvicorn main:app --reload` | `app.listen(3000)` |
+
+`app.get('/', ...)` is the same route concept as `@app.get("/")`. Both tell the server "when a GET request hits this path, run this code." `res.json({...})` sends back the same kind of response as FastAPI's `return {...}`, just spelled differently.
+
+`app.listen(3000)` starts the server the same way `uvicorn` does. It just runs from inside your JavaScript file instead of a separate command.
+
+{/* IMAGE PROMPT: Editorial flat infographic comparing FastAPI and Express.js side by side across four steps, create app, define route, send response, start server, with matching code snippets and icons, warm cream background, clay accent (#C9633F) on the VS badge and icons, clean and diagrammatic, includes text labels | FILENAME: fastapi-vs-express-comparison.webp | DIMENSIONS: 1536x1024 */}
+
+<ArticleImage src="/images/articles/building-with-ai/backend-languages-overview/fastapi-vs-express-comparison.webp" alt="Side-by-side comparison of FastAPI and Express.js code for creating an app, defining a route, sending a response, and starting the server" caption="Same four steps, same result, just different syntax between FastAPI and Express.js." />
+
+Miss this mapping and every Node.js codebase you open looks like an unrelated language. See it once, and you're just reading the same job in a different accent.
+
+## Python/FastAPI or Node/Express: Which Should You Use?
+
+Practical guidance, no benchmark needed. Python and FastAPI are common when the backend is doing AI-heavy work, calling the Claude API, running data processing, the kind of code this course builds toward.
+
+Node.js and Express are common when [the whole stack](/library/building-with-ai/frontend-vs-backend), frontend and backend, is JavaScript end to end, so the team never has to switch languages.
+
+<Tip>
+I still reach for FastAPI first on anything AI-related, mostly because Python's AI libraries are more mature. That's a preference built from what I'm building, not a rule about which framework wins.
+</Tip>
+
+Neither is the "right" answer in the abstract. Pick based on what the rest of your project already uses. If you're not sure yet, FastAPI is exactly right for where this stretch of the [Getting Started path](/paths/getting-started) is headed.
+
+<Steps>
+  <Step number={1} title="Compare a real Express.js example">
+    Open the <a href="https://expressjs.com/en/starter/hello-world/" target="_blank" rel="noopener noreferrer">official Express.js hello-world example</a> (the same doc this lesson used above).
+
+    In the code you find, identify three things:
+
+    1. The route, the URL path being defined, like `/` or `/users`
+    2. The method, is it `.get`, `.post`, or something else?
+    3. What gets sent back in the response
+
+    Compare it to the FastAPI example from the last lesson. Write one sentence noting which parts matched even though the syntax looks different.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 07.02.
+</Note>
+
+<FAQ>
+  <FAQItem question="Is FastAPI or Express.js better for beginners?">
+    Neither is objectively better, they do the identical job with different syntax. FastAPI has a gentler learning curve if you already know Python, and it writes request validation and docs for you. Express is the natural pick if you're already comfortable with JavaScript. Pick based on the language you know, not which one wins a benchmark.
+  </FAQItem>
+  <FAQItem question="Can I switch from FastAPI to Express later without relearning everything?">
+    Yes. The underlying concepts, routes, requests, responses, don't change between frameworks, only the syntax does. Once you've matched up `app.get()` and `@app.get()` in your head, as this lesson shows, picking up the other framework later is mostly learning new keywords for something you already understand.
+  </FAQItem>
+  <FAQItem question="Is Node.js the same as Express?">
+    No. Node.js is the JavaScript runtime, the program that lets JavaScript run outside a browser, on a server. Express is a framework that runs on top of Node.js to make building a backend faster. You need Node.js to run Express, but Node.js by itself doesn't give you routes or a built-in way to handle requests.
+  </FAQItem>
+  <FAQItem question="Do I need to learn both FastAPI and Express to build AI apps?">
+    No. Most projects pick one backend language and stick with it. This course uses FastAPI because it pairs naturally with Python AI tools like the Claude API. Knowing Express exists, and roughly how it reads, is enough until a specific project actually calls for it.
+  </FAQItem>
+</FAQ>
