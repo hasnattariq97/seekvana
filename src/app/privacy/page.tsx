@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy — Seekvana',
+  title: 'Privacy Policy',
   description: 'How Seekvana collects, uses, and protects your personal information, including our use of cookies and advertising.',
 }
 

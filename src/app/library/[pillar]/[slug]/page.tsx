@@ -75,7 +75,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       },
     }
   } catch {
-    return { title: 'Article — Seekvana' }
+    return { title: 'Article' }
   }
 }
 

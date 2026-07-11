@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'About — Seekvana',
+  title: 'About',
   description: 'Seekvana is a free AI learning platform built by a non-technical founder who went from zero to automating his workday with AI agents — and wants to help everyone do the same.',
 }
 

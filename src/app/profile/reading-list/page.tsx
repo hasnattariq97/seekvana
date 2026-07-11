@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase-server'
 import { getAllArticles } from '@/lib/mdx'
 import { ReadingListClient } from './reading-list-client'
 
-export const metadata = { title: 'Reading List — Seekvana' }
+export const metadata = { title: 'Reading List' }
 
 export default async function ReadingListPage() {
   const supabase = await createClient()

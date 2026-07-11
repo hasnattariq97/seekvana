@@ -7,7 +7,7 @@ import {
 import type { ArticleRead } from '@/lib/profile'
 import { ProfileDashboard } from '@/components/profile/profile-dashboard'
 
-export const metadata = { title: 'My Profile — Seekvana' }
+export const metadata = { title: 'My Profile' }
 
 export default async function ProfilePage() {
   const supabase = await createClient()

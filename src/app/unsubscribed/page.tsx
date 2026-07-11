@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 export const metadata: Metadata = {
-  title: 'Unsubscribed — Seekvana',
+  title: 'Unsubscribed',
   description: "You've been removed from the Seekvana newsletter.",
   robots: { index: false },
 }
