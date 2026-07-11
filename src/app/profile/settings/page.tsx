@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase-server'
 import { SettingsClient } from './settings-client'
 
-export const metadata = { title: 'Settings — Seekvana' }
+export const metadata = { title: 'Settings' }
 
 export default async function SettingsPage() {
   const supabase = await createClient()

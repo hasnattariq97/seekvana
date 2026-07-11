@@ -5,7 +5,7 @@ import { PILLARS } from '@/lib/pillars'
 import { getAllArticles } from '@/lib/mdx'
 
 export const metadata: Metadata = {
-  title: 'Library — Seekvana',
+  title: 'Library',
   description: 'Every AI topic in one place — from foundations to agentic systems. Browse all 9 content pillars.',
   alternates: { canonical: 'https://seekvana.com/library' },
   openGraph: {

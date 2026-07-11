@@ -26,9 +26,9 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { pillar } = await params
   const meta = PILLAR_MAP[pillar]
-  if (!meta) return { title: 'Seekvana' }
+  if (!meta) return { title: 'Not Found' }
   return {
-    title: `${meta.name} — Seekvana`,
+    title: meta.name,
     description: meta.description,
     alternates: { canonical: `https://seekvana.com/library/${pillar}` },
     openGraph: {

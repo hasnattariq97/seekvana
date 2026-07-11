@@ -3,7 +3,7 @@ import { getAllGlossaryTerms } from '@/lib/mdx'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'AI Glossary — Seekvana',
+  title: 'AI Glossary',
   description: 'Clear definitions of AI terms — from LLMs to agents, embeddings to fine-tuning.',
   alternates: { canonical: 'https://seekvana.com/glossary' },
 }

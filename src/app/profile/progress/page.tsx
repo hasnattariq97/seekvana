@@ -3,7 +3,7 @@ import { calculatePathProgress } from '@/lib/profile'
 import type { ArticleRead, PathProgress } from '@/lib/profile'
 import Link from 'next/link'
 
-export const metadata = { title: 'Learning Progress — Seekvana' }
+export const metadata = { title: 'Learning Progress' }
 
 const PATH_COLORS: Record<string, string> = {
   'bg-purple-500': '#8B5CF6',

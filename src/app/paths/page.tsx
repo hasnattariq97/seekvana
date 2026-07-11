@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { getAllPaths } from '@/lib/mdx'
 
 export const metadata: Metadata = {
-  title: 'Learning Paths — Seekvana',
+  title: 'Learning Paths',
   description: 'Structured learning journeys from AI beginner to advanced builder. Pick a path and start today.',
   alternates: { canonical: 'https://seekvana.com/paths' },
   openGraph: {

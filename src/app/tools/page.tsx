@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'AI Tools — Seekvana',
+  title: 'AI Tools',
   description: 'Reviews and comparisons of the best AI tools, models, and platforms.',
   alternates: { canonical: 'https://seekvana.com/tools' },
 }
