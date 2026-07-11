@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getAllArticles, getAllPaths, getAllGlossaryTerms } from "@/lib/mdx";
+import { getAllArticles, getAllPaths, getAllGlossaryTerms, getArticlesByPillar } from "@/lib/mdx";
 import { PILLARS } from "@/lib/pillars";
 
 export const revalidate = 3600;
@@ -18,7 +18,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  const pillarEntries: MetadataRoute.Sitemap = PILLARS.map((p) => ({
+  // Skip pillars with zero published articles — those pages are noindexed
+  // (thin content) and shouldn't be listed in the sitemap either.
+  const pillarEntries: MetadataRoute.Sitemap = PILLARS.filter(
+    (p) => getArticlesByPillar(p.slug).length > 0
+  ).map((p) => ({
     url: `${BASE_URL}/library/${p.slug}`,
     lastModified: new Date(),
     changeFrequency: "weekly",

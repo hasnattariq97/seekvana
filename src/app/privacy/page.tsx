@@ -73,8 +73,8 @@ export default function PrivacyPage() {
                 Google Ads Settings
               </a>
               . You can also opt out of third-party vendor personalised advertising by visiting{' '}
-              <a href="https://www.aboutads.info" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">
-                aboutads.info
+              <a href="https://youradchoices.com" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">
+                youradchoices.com
               </a>
               {' '}or{' '}
               <a href="https://www.youronlinechoices.eu" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">
