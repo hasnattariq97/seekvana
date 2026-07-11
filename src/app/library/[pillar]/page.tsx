@@ -27,6 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { pillar } = await params
   const meta = PILLAR_MAP[pillar]
   if (!meta) return { title: 'Not Found' }
+  const articles = getArticlesByPillar(pillar)
   return {
     title: meta.name,
     description: meta.description,
@@ -36,6 +37,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: meta.description,
       url: `https://seekvana.com/library/${pillar}`,
     },
+    // Thin/empty pillar pages shouldn't be indexed until they have real articles —
+    // avoids Google judging the site on near-empty "check back soon" content.
+    ...(articles.length === 0 && { robots: { index: false, follow: true } }),
   }
 }
 
