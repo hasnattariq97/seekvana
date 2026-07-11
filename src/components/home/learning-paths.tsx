@@ -106,8 +106,9 @@ export function LearningPaths() {
               <Link
                 href={path.href}
                 className="absolute inset-0 z-20 rounded-2xl focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-inset focus-visible:outline-none"
-                aria-label={`Start ${path.title} learning path`}
-              />
+              >
+                <span className="sr-only">{path.title} learning path</span>
+              </Link>
 
               {/* ── Two-column grid: desktop side-by-side (alternating), mobile stacked ── */}
               <div
