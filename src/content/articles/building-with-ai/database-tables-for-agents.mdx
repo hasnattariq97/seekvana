@@ -10,7 +10,7 @@ publishedAt: "2026-07-10"
 tags: ["databases", "ai agents", "sql", "agent memory"]
 featured: false
 lessonModule: "07"
-lessonNumber: "07.06"
+lessonNumber: "07.07"
 faqs:
   - q: "Do I need a separate table for every conversation?"
     a: "No. One messages table can hold every conversation, as long as each row also stores which conversation it belongs to, usually a session or user id column. You filter with WHERE to pull back only the rows for the right conversation, the same table serves everyone."
@@ -55,7 +55,7 @@ Skip this and a beginner ends up inventing a weirder schema: extra columns the A
 
 ## How AI Agents Use Databases to Remember Conversations
 
-AI agents use databases by writing every message to a table as it happens, then reading that table back before each new request, that round trip is the entire memory mechanism. Every time a user sends a message, INSERT a new row into `messages`. That's how agents store conversation history: one INSERT per turn. Every time the agent needs that history back, SELECT the rows back out, filtered with WHERE to the right conversation. That covers both the next Claude API call and just showing the user their own past turns.
+AI agents use databases by writing every message to a table as it happens, then reading that table back before each new request, that round trip is the entire memory mechanism. Every time a user sends a message, INSERT a new row into `messages`. That's how agents store conversation history: one INSERT per turn. Every time the agent needs that history back, SELECT the rows back out, filtered with [WHERE to the right conversation](/library/building-with-ai/sql-select-insert-where). That covers both the next Claude API call and just showing the user their own past turns.
 
 ```sql
 INSERT INTO messages (role, content) VALUES ('user', 'What is an AI agent?');
@@ -118,7 +118,7 @@ Ready to see how this table, your Python code, and the Claude API all connect en
 </Steps>
 
 <Note>
-  Done? You've completed Lesson 07.06.
+  Done? You've completed Lesson 07.07.
 </Note>
 
 <FAQ>
