@@ -1,0 +1,130 @@
+---
+title: "How Frontend, Backend, Database Connect in One Request"
+description: "See how frontend, backend, and database connect in one request: a chat message travels through all three layers and back, traced in seven concrete steps."
+pillar: "building-with-ai"
+slug: "three-layers-connected"
+difficulty: "beginner"
+readTime: 7
+author: "Seekvana"
+publishedAt: "2026-07-10"
+tags: ["frontend backend database", "full stack architecture", "request lifecycle"]
+featured: false
+lessonModule: "07"
+lessonNumber: "07.08"
+faqs:
+  - q: "Does the frontend ever talk to the database directly?"
+    a: "No, and it never should. The frontend only ever talks to the backend over HTTP. The backend is the only piece with a connection to the database. This isn't just convention, it's a security boundary: your database credentials live in the backend's environment variables, never in code that ships to a browser."
+  - q: "What happens if the backend crashes in the middle of a request?"
+    a: "The user just sees an error or a stuck loading spinner. Nothing gets corrupted, because a database write either finishes or it doesn't. If the crash happens before the INSERT runs, that message simply never got saved, and the reader can just try sending it again."
+  - q: "Why does the backend SELECT the conversation history every single time instead of remembering it?"
+    a: "Because the backend itself has no memory between requests. Each request starts fresh, with no idea what happened last time. The database is what remembers. That's exactly why lesson 07.07 built a messages table in the first place."
+  - q: "Is this the same architecture behind ChatGPT and Claude.ai?"
+    a: "Yes, at the core, it is exactly this pattern: a frontend chat interface, a backend that runs the request, and a database that stores every message. The scale is different, with load balancers and caching layers in front, but the three-layer loop you just traced is the real thing underneath."
+---
+
+{/* IMAGE PROMPT: Editorial flat illustration of a full horizontal pipeline: person → browser → server → database (with a loop back to server) → AI brain icon → back to server → back to browser → person, warm cream background, clay accent (#C9633F) tracing the full path, clean and complete, no text in image. | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+
+<ArticleImage
+  src="/images/articles/building-with-ai/three-layers-connected/cover.webp"
+  alt="A pipeline showing a message traveling from a person through a browser, server, and database, out to an AI brain icon, and back again"
+/>
+
+You type "What is RAG?" into a chat box and hit send. For a half-second, nothing visible happens. Then an answer appears, and somehow it's still there if you close the tab and come back an hour later.
+
+Here's what actually happened in that half-second: your message crossed three separate systems in a loop, seven times over. That's how frontend, backend, and database connect on every single request, and nothing about that loop is new to you. You've built a piece of every layer in it over the last two modules. This lesson just wires the pieces together.
+
+> **Key Takeaways**
+> - A single chat message makes a round trip through the frontend, the backend, and the database, in that order and back
+> - The backend saves both the user's message and the AI's reply as separate rows in the database, which is why the conversation survives a page refresh
+> - The frontend never talks to the database directly. It only ever talks to the backend
+> - The API key that calls Claude lives on the backend only, never in code the browser can see
+> - This exact loop, one LLM call per request, is the same core pattern behind ChatGPT and Claude.ai
+
+---
+
+## What Happens When You Hit Send? Frontend, Backend, and Database in Order
+
+One request touches all three layers, in this order: frontend, then backend, then database, then back out the same way. Walk through it one step at a time, using the exact tools you've already built.
+
+Here's the request lifecycle, step by step:
+
+1. **You type and hit send** (frontend). The HTML/CSS/JavaScript from Module 06 captures your message.
+2. **The frontend sends a POST request** to the backend with your message as the body, the same request/response pattern from [the frontend/backend diagram](/library/building-with-ai/frontend-vs-backend), now with a real payload attached.
+3. **The FastAPI backend from lesson 07.01 receives the request** and INSERTs your message into the [messages table](/library/building-with-ai/database-tables-for-agents) as a new row.
+4. **The backend SELECTs recent rows** from that same table to rebuild the conversation history, then packs them into the messages array format from Module 05 and sends that to the Claude API.
+5. **Claude responds**, and the backend INSERTs that reply into the messages table too. Both sides of the exchange are now saved.
+6. **The backend sends Claude's reply back** to the frontend as the response body.
+7. **The frontend displays it** on your screen.
+
+Every single arrow in that list is something you've already built or read about. Nothing new got introduced here, this lesson is pure wiring.
+
+Two of those seven steps are database writes — step 3 and step 5 — and one is a database read, step 4. That's the whole footprint a chat message leaves behind. This whole exchange follows the same <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview" target="_blank" rel="noopener noreferrer">HTTP request/response cycle</a> your browser uses for every page load, just with a chat message as the payload instead of a webpage.
+
+{/* IMAGE PROMPT: Editorial flat illustration zoomed into a single backend box, showing a message being inserted into a database table, then selected back out and passed into a Claude API call icon, warm cream background, clay accent (#C9633F) on the insert/select arrows, clean and technical, no text in image. | FILENAME: request-loop.webp | DIMENSIONS: 1000x600 */}
+
+<ArticleImage
+  src="/images/articles/building-with-ai/three-layers-connected/request-loop.webp"
+  alt="A zoomed diagram showing steps three through five: the backend inserting a message, selecting history, and sending it to the Claude API"
+  caption="Steps three through five are where the backend does its actual work: save the new message, pull the history, then call Claude."
+/>
+
+The FastAPI backend from step 3 is just running the same kind of route you wrote in lesson 07.01, described in <a href="https://fastapi.tiangolo.com/tutorial/" target="_blank" rel="noopener noreferrer">FastAPI's own tutorial docs</a>, now with a real database call inside it instead of a hardcoded reply.
+
+## Why the Database Makes the Conversation Persistent
+
+<Note>
+  Close the tab. Restart your laptop. Come back tomorrow. The conversation is still there, because it never lived in the backend's memory in the first place.
+</Note>
+
+The backend itself forgets everything the moment it finishes responding. It has no memory between one request and the next — by design, it's just a program that wakes up, does one job, and goes back to sleep.
+
+What actually persists is rows in a table. Every message you've ever sent through this app is sitting in Supabase as a row with an `id`, a `role`, and `content` — exactly the shape from lesson 07.07. "The AI remembering you" is really just step 4 above: a SELECT query pulling those rows back out.
+
+If your backend restarted right now, mid-conversation, you wouldn't lose anything. The next message you send would trigger a fresh SELECT and pull the same history out of the database. That's possible because Postgres — the database <a href="https://supabase.com/docs/guides/database/overview" target="_blank" rel="noopener noreferrer">running underneath Supabase</a> — writes every row to disk, not to memory.
+
+## Where Does the API Key Actually Live?
+
+The API key that calls Claude belongs on the backend only, never in any file that ships to the browser. I once put a Claude API key directly in a piece of frontend JavaScript, thinking it was fine because "it's just a variable." It wasn't.
+
+I opened my browser's dev tools, checked the page source, and there it was in plain text — visible to literally anyone who loaded the page.
+
+<Tip>
+  Keep the Claude API key in the backend's `.env` file (Module 04/06.09) only. The frontend never sees it, and it doesn't need to. It just sends a plain message and waits for a plain response.
+</Tip>
+
+That's the real reason the three-layer split exists, and not just as an organizational habit. The backend is the only layer with secrets: your API key, your database credentials, all of it. The frontend is public by definition — anyone can view its source. Keep anything sensitive on the side of the wall the reader can't see.
+
+---
+
+<Steps>
+  <Step number={1} title="Trace a message through all three layers">
+    Using the numbered journey from this lesson as a guide, write out each of the seven steps in your own words, for a message you imagine typing into an AI chat app.
+
+    For each step, note which layer it happens in: Frontend, Backend, or Database.
+
+    When you're done, count how many steps touch the database. The answer is three: one INSERT for your message, one SELECT to build the history, and one INSERT for the AI's response.
+
+    This trace, how frontend, backend, and database connect on a single request, is the mental model behind every AI chat product you will ever use or build.
+  </Step>
+</Steps>
+
+If you want the wider map this lesson sits inside, the [Getting Started path](/paths/getting-started) lays out every step from here to your first agent.
+
+<Note>
+  Done? You've completed Lesson 07.08.
+</Note>
+
+<FAQ>
+  <FAQItem question="Does the frontend ever talk to the database directly?">
+    No, and it never should. The frontend only ever talks to the backend over HTTP. The backend is the only piece with a connection to the database. This isn't just convention, it's a security boundary: your database credentials live in the backend's environment variables, never in code that ships to a browser.
+  </FAQItem>
+  <FAQItem question="What happens if the backend crashes in the middle of a request?">
+    The user just sees an error or a stuck loading spinner. Nothing gets corrupted, because a database write either finishes or it doesn't. If the crash happens before the INSERT runs, that message simply never got saved, and the reader can just try sending it again.
+  </FAQItem>
+  <FAQItem question="Why does the backend SELECT the conversation history every single time instead of remembering it?">
+    Because the backend itself has no memory between requests. Each request starts fresh, with no idea what happened last time. The database is what remembers. That's exactly why lesson 07.07 built a messages table in the first place.
+  </FAQItem>
+  <FAQItem question="Is this the same architecture behind ChatGPT and Claude.ai?">
+    Yes, at the core, it is exactly this full-stack architecture: a frontend chat interface, a backend that runs the request, and a database that stores every message. The scale is different, with load balancers and caching layers in front, but the three-layer loop you just traced is the real thing underneath.
+  </FAQItem>
+</FAQ>

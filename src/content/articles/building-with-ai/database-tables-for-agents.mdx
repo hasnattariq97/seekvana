@@ -63,7 +63,7 @@ INSERT INTO messages (role, content) VALUES ('user', 'What is an AI agent?');
 SELECT role, content FROM messages WHERE session_id = 'abc123' ORDER BY id;
 ```
 
-That SELECT result becomes the `messages` array you build in Python and hand to the Claude API. The database is the persistent version of that list, it survives after the script ends, the in-memory list never did.
+That SELECT result becomes the `messages` array you build in Python and hand to the Claude API. The database is the persistent version of that list, it survives after the script ends, the in-memory list never did. See [how this fits the full request](/library/building-with-ai/three-layers-connected) alongside the frontend and backend.
 
 <ArticleImage src="/images/articles/building-with-ai/database-tables-for-agents/messages-flow-diagram.webp" alt="Diagram showing a user message inserted into a messages table, then selected back out and sent to the Claude API" caption="The full round trip: INSERT saves each new message, SELECT loads the history back, and that history becomes the array sent to Claude." />
 
