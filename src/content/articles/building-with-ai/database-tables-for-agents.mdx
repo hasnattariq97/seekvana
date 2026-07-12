@@ -103,19 +103,26 @@ Ready to see how this table, your Python code, and the Claude API all connect en
 
 ---
 
-<Steps>
-  <Step number={1} title="Create a messages table and insert rows">
-    In your Supabase project's Table Editor, click "New Table." Name it `messages`. Add columns: `id` (int8, primary key, auto-increment, Supabase sets this up by default), `role` (text), `content` (text). Save the table.
+<Quiz
+  question="Which three columns does a basic messages table need?"
+  options="id, role, content|||id, name, email|||role, content, timestamp only, no id|||user_id, message, response"
+  correct="0"
+  explanation="A messages table needs id (a unique row number, auto-generated), role (user or assistant), and content (what was said). That's the same three fields as the Python message dict sent to the Claude API, just stored as a row instead of a variable."
+/>
 
-    Click into the table and manually add two rows using the "Insert row" button:
+<Quiz
+  question="Every time a user sends a new message, what should the agent do?"
+  options="Run a SELECT to check if the table exists|||INSERT a new row into the messages table|||Delete the oldest row to save space|||Update the existing row with the new content"
+  correct="1"
+  explanation="Every new message gets its own INSERT. That's the write half of the mechanism: one row per turn, so nothing gets overwritten and the full history stays intact."
+/>
 
-    Row 1: role = "user", content = "What is an AI agent?"
-
-    Row 2: role = "assistant", content = "An AI agent is a system that acts autonomously."
-
-    Confirm both rows appear in the table view. You've just built the exact structure that stores a real conversation's history.
-  </Step>
-</Steps>
+<Quiz
+  question="A database row reads back as {id: 1, role: 'user', content: 'Hi'}. What does the matching Python dict look like?"
+  options='{"id": 1, "role": "user", "content": "Hi"}|||{"role": "user", "content": "Hi"}|||{"user": "Hi"}|||{"content": "Hi", "id": 1}'
+  correct="1"
+  explanation="The id stays behind, the database needed it to keep rows distinct, but the Claude API never asks for it. Only role and content make the trip into the messages array."
+/>
 
 <Note>
   Done? You've completed Lesson 07.07.
