@@ -52,7 +52,11 @@ Think of your backend as a chef cooking to order. It's fast, capable, and does r
 
 ## What Is Supabase?
 
-Supabase is the database this course uses: a hosted Postgres database with a friendly web interface, so you don't have to install or manage a database server yourself. Postgres itself is a specific, extremely common type of database. Chances are you've already used an app running on top of it without knowing it was there.
+Supabase is the database this course uses: a hosted Postgres database with a friendly web interface, so you don't have to install or manage a database server yourself. Chances are you've already used an app running on top of Postgres without knowing it was there.
+
+Postgres, short for PostgreSQL, is a **relational database**: the tables, rows, and columns you're about to meet below, plus a guarantee that related tables stay consistent with each other. It's one of the most trusted databases in the world for a reason. When you move money between two accounts and the process crashes halfway, Postgres won't leave one account debited and the other uncredited, it either finishes the whole change or rolls it back entirely. You query it with **SQL**, the language you'll start writing in the next lesson.
+
+Postgres isn't the only kind of database out there. SQLite is also relational and also uses SQL, but it lives in a single file on your machine with no server, that's why it's common in mobile apps and small scripts, not projects with many people writing to it at once. MongoDB stores flexible, document-shaped data instead of strict tables. Redis just maps a key to a value, built for speed, not structure. Postgres sits in the middle: strict enough to trust with real data, flexible enough (through extensions) to also store documents or even AI embeddings when you need to.
 
 The appeal for a beginner is exactly that gap between power and setup effort. A real Postgres database, running somewhere reliable, reachable from your FastAPI backend in a few lines of code, with a web interface you can click through instead of a terminal you have to configure. That tradeoff is why <a href="https://supabase.com/docs/guides/getting-started" target="_blank" rel="noopener noreferrer">Supabase's own getting-started docs</a> lean so heavily on the dashboard for a first project, and it's exactly what <a href="/library/building-with-ai/supabase-setup">the full project setup walkthrough</a> covers step by step.
 
