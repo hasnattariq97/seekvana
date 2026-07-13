@@ -151,6 +151,10 @@ One more habit worth building in: every time a judge or a user catches a real fa
 
 If you're building this discipline into a broader [agentic AI](/library/agentic-ai) system, the same golden-dataset approach applies to every prompt a tool-calling step depends on, not just a single classifier.
 
+<Note>
+  Done? You've completed Lesson 13.06.
+</Note>
+
 <FAQ>
   <FAQItem question="How many examples do I actually need in a golden dataset before it's useful?">
     Twenty to thirty is enough to start, and more valuable than that number suggests, if every case was chosen because it once broke your prompt or represents a real edge case. A hundred random production logs teach you less than twenty deliberately hard cases. Expand later; don't stall waiting to build a huge set first.
@@ -165,7 +169,3 @@ If you're building this discipline into a broader [agentic AI](/library/agentic-
     No, it's the other half of the same loop. Automatic prompt optimization needs a score to know which candidate won; evaluating prompts is how you build that score honestly. Skip this step and an optimizer will happily overfit to whatever flawed measurement you hand it.
   </FAQItem>
 </FAQ>
-
-<Note>
-  Done? You've completed Lesson 13.06.
-</Note>
