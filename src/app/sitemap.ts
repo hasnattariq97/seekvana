@@ -16,6 +16,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(a.frontmatter.publishedAt),
     changeFrequency: "monthly",
     priority: 0.8,
+    ...(a.frontmatter.coverImage
+      ? { images: [`${BASE_URL}${a.frontmatter.coverImage}`] }
+      : {}),
   }));
 
   // Skip pillars with zero published articles — those pages are noindexed
