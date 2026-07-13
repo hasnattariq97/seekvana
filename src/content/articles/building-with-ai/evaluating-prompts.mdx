@@ -61,22 +61,7 @@ Think of it the same way you'd think about a code test suite. Nobody writes unit
 
 ## Building Your 20-Case Regression Sheet for Evaluating Prompts
 
-Here's how to build one without any framework, just a spreadsheet and the prompt you're already testing.
-
-<Steps>
-  <Step number={1} title="Pull 8-10 common scenarios">
-    List the inputs your prompt handles most often in real use. For a support-ticket classifier, that's typical billing questions, typical bug reports, typical "just checking in" messages. Write the input and the correct expected label or output for each.
-  </Step>
-  <Step number={2} title="Add 5-8 edge cases">
-    Pull from your own history: inputs that once confused the prompt, ambiguous wording, very short or very long messages, anything a real user has actually sent that isn't a clean textbook example.
-  </Step>
-  <Step number={3} title="Add 3-5 adversarial cases">
-    Inputs designed to push the prompt toward the wrong answer on purpose, things phrased to look like one category while actually belonging to another. These are the cases most likely to catch a regression that "reads fine" but scores worse.
-  </Step>
-  <Step number={4} title="Label every row by hand">
-    For each of your 20-30 rows, write the correct output yourself, or with a colleague who knows the domain. This human label is your ground truth. Nothing downstream matters if this step is sloppy.
-  </Step>
-</Steps>
+Here's how to build one without any framework, just a spreadsheet and the prompt you're already testing. It comes down to four moves: pull 8-10 common scenarios from real use, add 5-8 edge cases from your own history, add 3-5 adversarial cases designed to push the prompt toward the wrong answer, then label every row by hand so you have real ground truth to score against. You'll walk through this exact build as the hands-on task at the end of this lesson.
 
 Twenty to thirty rows is the right size to start. It's small enough to build in an afternoon and re-run in seconds, and it's exactly the range where the classic mistake gets made: teams either stop at five cases that don't cover anything hard, or try to build two hundred cases upfront and never finish. Start small, deliberate, and expand only when a new failure shows you a gap.
 
@@ -150,6 +135,23 @@ As your team grows, this naturally becomes an actual gate: a pull request that t
 One more habit worth building in: every time a judge or a user catches a real failure in production, add that exact case to your golden dataset with the correct label. That's how a 20-case sheet earns its keep over a year instead of going stale the week you built it. Evaluating prompts this way turns a one-time gut check into a test you can run again every time the prompt changes.
 
 If you're building this discipline into a broader [agentic AI](/library/agentic-ai) system, the same golden-dataset approach applies to every prompt a tool-calling step depends on, not just a single classifier.
+
+## Your Task: Build Your Own Regression Sheet
+
+<Steps>
+  <Step number={1} title="Pull 8-10 common scenarios">
+    List the inputs your prompt handles most often in real use. For a support-ticket classifier, that's typical billing questions, typical bug reports, typical "just checking in" messages. Write the input and the correct expected label or output for each.
+  </Step>
+  <Step number={2} title="Add 5-8 edge cases">
+    Pull from your own history: inputs that once confused the prompt, ambiguous wording, very short or very long messages, anything a real user has actually sent that isn't a clean textbook example.
+  </Step>
+  <Step number={3} title="Add 3-5 adversarial cases">
+    Inputs designed to push the prompt toward the wrong answer on purpose, things phrased to look like one category while actually belonging to another. These are the cases most likely to catch a regression that "reads fine" but scores worse.
+  </Step>
+  <Step number={4} title="Label every row by hand">
+    For each of your 20-30 rows, write the correct output yourself, or with a colleague who knows the domain. This human label is your ground truth. Nothing downstream matters if this step is sloppy.
+  </Step>
+</Steps>
 
 <Note>
   Done? You've completed Lesson 13.06.
