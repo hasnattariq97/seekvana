@@ -110,7 +110,7 @@ The part worth remembering isn't the syntax. It's that `trainset` and `metric` a
 
 A prompt that only lives in a chat window can get rewritten on a whim with no real cost. A prompt wired into <a href="/library/agentic-ai">agentic systems</a>, a support flow, or anything a real user depends on is different: every change is a change to production behavior, whether you tested it or not.
 
-Skip the eval step and three things go wrong. First, a "cleanup" edit silently breaks an edge case nobody re-checked, the way the support bot in the opening did. Second, you burn API spend re-running a prompt change across thousands of calls with no evidence it actually helped. Finally, when something regresses, you have no before/after number to point to. You end up debugging by memory instead of by data.
+Skip the eval step and three things go wrong. First, a "cleanup" edit silently breaks an edge case nobody re-checked, the way the support bot in the opening did. Second, you burn API spend re-running a prompt change across thousands of calls with no evidence it actually helped. Finally, when something regresses, you have no before/after number to point to. You end up debugging by memory instead of by data. A [proper regression sheet](/library/building-with-ai/evaluating-prompts) turns that five-example eval set into something you can trust at scale.
 
 <Warning>
   A prompt change with no eval score attached is a guess wearing a confident sentence. Treat any "I cleaned this up" edit to a production prompt the same way you'd treat a code change: it doesn't ship until something measures it.
