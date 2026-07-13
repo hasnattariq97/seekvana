@@ -1,0 +1,135 @@
+---
+title: "What Is Claude Code? Terminal AI Coding Explained"
+description: "What is Claude Code? Anthropic's terminal-based AI coding assistant, explained: what it does, when to use it, and how it compares to other tools."
+pillar: "building-with-ai"
+slug: "claude-code-terminal-ai"
+difficulty: "beginner"
+readTime: 6
+author: "Seekvana"
+publishedAt: "2026-07-17"
+tags: ["claude code", "terminal ai coding assistant", "claude code tutorial for beginners"]
+featured: false
+lessonModule: "08"
+lessonNumber: "08.01"
+faqs:
+  - q: "Do I need to know how to code to use Claude Code?"
+    a: "No, but it helps to be comfortable reading what it did. Claude Code can create a working file from a plain English request with zero coding knowledge, like the task at the end of this lesson. As your projects grow, understanding the code it writes matters more, which is exactly why Module 05 exists."
+  - q: "Is Claude Code the same thing as Claude.ai?"
+    a: "No. Claude.ai is a chat website for conversations. Claude Code is a separate tool that installs on your computer, opens inside your terminal, and can actually read, write, and run files in a real project folder. They're both built by Anthropic, but one talks, the other builds."
+  - q: "Can Claude Code work with languages other than Python?"
+    a: "Yes. Claude Code isn't tied to one language. It works with Python, JavaScript, HTML and CSS, and most other common languages, since it reads and writes plain text files and runs the commands your project already uses."
+  - q: "What happens if Claude Code makes a mistake in my project?"
+    a: "You review what it changed before it's final, and if something's off, you can tell it to undo the change or fix it, the same way you'd correct a person. Later lessons on Git (Module 04's skills, reused throughout this module) give you an extra safety net for undoing AI-made changes cleanly."
+---
+
+<ArticleImage
+  src="/images/articles/building-with-ai/claude-code-terminal-ai/cover.webp"
+  alt="A terminal window with a conversational chat bubble emerging from the command line"
+  priority
+  isCover
+/>
+
+You open your browser to pick an AI coding tool and find ten tabs open, ten different opinions, and no idea which one to install first. That's normal. There are now a dozen credible options, and freezing on the choice is the most common way to waste an afternoon before you've written a single line.
+
+Claude Code is a good place to start, and not because it's "the best" one. It's terminal-based, which means it needs no separate editor install: it just works inside the terminal you already set up in Module 02. I still reach for it first on most real projects, mostly out of habit, but that's exactly the kind of personal preference this module wants you to develop for yourself. This lesson explains what it actually is, when to reach for it, and where it's honest about its limits, so you can move on to the rest of Module 08 with one tool already making sense. If you haven't installed it yet, [the full install walkthrough](/library/building-with-ai/install-claude-code) covers that step by step, this lesson focuses on what it is and when to use it.
+
+> **Key Takeaways**
+> - Claude Code is an AI coding assistant that lives in your terminal and reads, writes, and runs files in a real project
+> - It's built for tasks that span multiple files or need commands run, not just one line of autocomplete
+> - It requires an Anthropic API key or Claude subscription, there's no free-forever tier
+> - It has no built-in visual diff or file tree, some people will prefer a GUI tool covered later in this module
+> - Ten more tools are coming in this module, so this is a first stop, not the final answer
+
+---
+
+## What Is Claude Code?
+
+Claude Code is an AI coding assistant that runs directly inside your terminal. You describe what you want in plain English, and it reads your project's files, writes or edits code, and runs commands like tests or git operations, then tells you what it did.
+
+It isn't a chat window sitting next to your editor. It's a tool you talk to that can actually take action on your files, closer to <a href="https://code.claude.com/docs/en/overview" target="_blank" rel="noopener noreferrer">Anthropic's own description</a> of an agent that reads your codebase and executes real development tasks. If you've already read about <a href="https://github.com/anthropics/claude-code" target="_blank" rel="noopener noreferrer">how it handles git workflows</a>, that's the same idea in practice: describe the goal, it plans and executes the steps.
+
+If skipping this concept sounds tempting because "AI will just figure it out," here's the real cost: without understanding what Claude Code actually does versus a plain chatbot, you'll ask it for things it isn't built for, or worse, trust changes to your files you never actually reviewed.
+
+## Not a Chat Window Bolted to an Editor
+
+Autocomplete tools finish the line you're already typing. Claude Code works differently: you describe a goal, and it plans the steps to get there across as many files as the task needs.
+
+Say you ask it to "add error handling to every API call in this project." An autocomplete tool can't do that, it only sees the line you're on. Claude Code can search your whole project, find each API call, make the edits, and report back what changed.
+
+That distinction matters for a very practical reason: if you go into this module expecting every tool to behave like autocomplete, you'll be confused the first time you see [how agents decide their next step](/library/building-with-ai/where-agents-live) play out inside your own project. Claude Code is genuinely agentic: it decides what to do next based on what it finds, not just what you typed a second ago.
+
+## When to Reach for Claude Code
+
+Reach for it when a task spans multiple files, needs a command run (tests, a build, a git commit), or is easier to describe in English than to type out by hand. Think of it less like autocomplete and more like handing a task to a junior developer, you explain the goal, they figure out the steps, and you check the result.
+
+Skip it, or at least don't rely on it alone, for tasks where you want to see every keystroke happen visually as you type: that's what the editor-based tools later in this module are built for.
+
+Pick the wrong tool for the job and you feel it fast. Use Claude Code for a one-line typo fix and you've overcomplicated a five-second edit. Avoid it for a genuine multi-file refactor and you'll spend an hour doing by hand what it could have planned in a minute.
+
+## The Honest Tradeoff
+
+Claude Code has no built-in visual file tree or diff view by default: you see changes described in the terminal, not highlighted side by side in a GUI. Some people find that faster once they're used to it. Others genuinely prefer seeing everything laid out visually, which is a real reason to try Cursor later in this module before committing to one tool.
+
+It also isn't free to use. It needs either an Anthropic API key with usage-based billing or a Claude subscription, the same account setup Module 03 and Module 05 already walked you through for your `.env` file.
+
+<Note>
+  If you already followed the API key setup in Module 05, you're one command away from trying Claude Code, you don't need a new account for it.
+</Note>
+
+Skipping this tradeoff section and installing blind is how people end up surprised by either the terminal-only interface or an unexpected bill, neither of which should be a surprise by the time you finish this lesson. And if any of this still feels early, the [Getting Started path](/paths/getting-started) is there to revisit the fundamentals before pushing further into Module 08.
+
+Enough reading about Claude Code, time to actually run it.
+
+<ArticleImage
+  src="/images/articles/building-with-ai/claude-code-terminal-ai/agentic-vs-autocomplete.webp"
+  alt="Side-by-side comparison of a terminal chat bubble representing agentic AI versus ghost-text autocomplete"
+  caption="Claude Code's conversational, multi-file approach on the left versus line-by-line autocomplete on the right."
+/>
+
+---
+
+## Your Task
+
+<Steps>
+  <Step number={1} title="Have your first conversation with Claude Code">
+    Already installed? Skip to the next paragraph. If not, install Claude Code first by following the setup instructions at claude.com/claude-code, that's a separate five-minute step on its own, not part of this task's timer.
+
+    Open your terminal and create a fresh folder to experiment in:
+
+    ```bash
+    mkdir claude-code-test
+    cd claude-code-test
+    ```
+
+    Run:
+
+    ```bash
+    claude
+    ```
+
+    Once it starts, type a simple request: "Create a file called hello.txt with the text 'Hello from Claude Code'."
+
+    Watch what happens, it should create the file and tell you what it did. Run `cat hello.txt` (or open the file in any text editor) to confirm the text is really there.
+
+    You just delegated a real coding task to Claude Code in plain English, right from your terminal.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 08.01.
+</Note>
+
+<FAQ>
+  <FAQItem question="Do I need to know how to code to use Claude Code?">
+    No, but it helps to be comfortable reading what it did. Claude Code can create a working file from a plain English request with zero coding knowledge, like the task above. As your projects grow, understanding the code it writes matters more, which is exactly why Module 05 exists.
+  </FAQItem>
+  <FAQItem question="Is Claude Code the same thing as Claude.ai?">
+    No. Claude.ai is a chat website for conversations. Claude Code is a separate tool that installs on your computer, opens inside your terminal, and can actually read, write, and run files in a real project folder. They're both built by Anthropic, but one talks, the other builds.
+  </FAQItem>
+  <FAQItem question="Can Claude Code work with languages other than Python?">
+    Yes. Claude Code isn't tied to one language. It works with Python, JavaScript, HTML and CSS, and most other common languages, since it reads and writes plain text files and runs the commands your project already uses.
+  </FAQItem>
+  <FAQItem question="What happens if Claude Code makes a mistake in my project?">
+    You review what it changed before it's final, and if something's off, you can tell it to undo the change or fix it, the same way you'd correct a person. Later lessons on Git give you an extra safety net for undoing AI-made changes cleanly.
+  </FAQItem>
+</FAQ>
