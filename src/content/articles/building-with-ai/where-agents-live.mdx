@@ -84,16 +84,40 @@ This is what the rest of Seekvana, the Agentic AI pillar, is about. You now have
 ---
 
 <Steps>
-  <Step number={1} title="Sketch a simple agent architecture">
-    On paper or in a notes app, sketch three boxes: Frontend, Backend, Database, same as lesson 07.08.
+  <Step number={1} title="Detect a tool_use response in code">
+    Create a file called `check_tool_use.py` with this content:
 
-    Inside the Backend box, draw a small loop with three labelled steps: "LLM call," "tool call," "check if done."
+    ```python
+    response = {
+        "stop_reason": "tool_use",
+        "content": [
+            {
+                "type": "tool_use",
+                "name": "web_search",
+                "input": {"query": "AI agent frameworks 2026"}
+            }
+        ]
+    }
 
-    Pick one example tool an agent might use (a web search, a calculator, a database lookup) and label where in the loop it would run.
+    if response["stop_reason"] == "tool_use":
+        tool_call = response["content"][0]
+        print(f"Claude wants to call: {tool_call['name']}")
+        print(f"With input: {tool_call['input']}")
+    else:
+        print("Claude gave a final answer, no tool needed.")
+    ```
 
-    Label an arrow from the loop into the Database box for "save conversation," and an arrow out to the Frontend box for "final answer."
+    Run it: `python check_tool_use.py`
 
-    This sketch is the architecture behind almost every AI agent you'll encounter from here on.
+    You should see:
+    ```
+    Claude wants to call: web_search
+    With input: {'query': 'AI agent frameworks 2026'}
+    ```
+
+    Now change `"stop_reason"` to `"end_turn"` and re-run it. You should see the else branch print instead.
+
+    This `if response["stop_reason"] == "tool_use"` check is the entire branch that separates a chatbot from an agent, everything else in this lesson's loop hangs off this one line.
   </Step>
 </Steps>
 
