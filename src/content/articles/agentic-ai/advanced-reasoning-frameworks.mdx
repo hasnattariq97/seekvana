@@ -1,0 +1,163 @@
+---
+title: "Advanced Reasoning Frameworks: ToT, GoT, and Reflexion"
+description: "Tree of Thoughts, Graph of Thoughts, Reflexion, and least-to-most prompting compared, plus when the extra cost is actually worth paying."
+pillar: "agentic-ai"
+slug: "advanced-reasoning-frameworks"
+difficulty: "advanced"
+readTime: 10
+author: "Seekvana"
+publishedAt: "2026-07-13"
+tags: ["tree of thoughts", "graph of thoughts", "reflexion", "least-to-most prompting", "ai reasoning", "advanced"]
+featured: false
+lessonModule: "13"
+lessonNumber: "13.04"
+faqs:
+  - q: "Is Tree of Thoughts the same thing as chain-of-thought prompting?"
+    a: "No. Chain-of-thought asks a model to reason step by step down one path. Tree of Thoughts explores several possible paths at once, scores them, and backtracks away from dead ends. Chain-of-thought is a single line; Tree of Thoughts is a search."
+  - q: "Do I need a library like LangGraph to use these frameworks?"
+    a: "No, not to start. A basic Tree of Thoughts or Reflexion loop is just a few prompts and a bit of code: generate, evaluate, keep or discard, repeat. Frameworks like LangGraph help once you're managing many branches or agents at production scale, but you can hand-build a small version with plain API calls first."
+  - q: "Are reflection and Reflexion the same thing?"
+    a: "Not exactly. Casual 'reflection' usually means asking a model to glance back at its own answer once. Reflexion is a specific, named framework: an actor model attempts a task, a critique step scores what went wrong, and that critique gets carried forward as memory into the next attempt. Reflexion is reflection with structure and persistence."
+  - q: "Do frontier reasoning models make these frameworks obsolete?"
+    a: "Partly. Models with built-in extended thinking already run something like an internal search before answering, so a hand-built Tree of Thoughts on top of one is often redundant. These frameworks still earn their cost when you need to see the reasoning, control the search yourself, or you're pairing a cheap model with an expensive judge."
+---
+
+<ArticleImage
+  src="/images/articles/agentic-ai/advanced-reasoning-frameworks/cover.webp"
+  alt="Illustration of branching reasoning paths converging toward a single checkmark"
+/>
+
+An agent plans a three-city trip: flights that connect, a hotel that's free those nights, a rental car returned before the last flight. You ask it with a single, well-written prompt, and it comes back confident, fully booked, wrong. The hotel is only free for two of the three nights. Nothing crashed. The model just walked straight down one line of reasoning and never checked whether an earlier step broke a later one.
+
+That's the ceiling of plain chain-of-thought: one path, no backtracking, no second look. Advanced reasoning frameworks, Tree of Thoughts, Graph of Thoughts, Reflexion, and least-to-most prompting, are four different fixes for that ceiling. Each one costs more than a single prompt. This lesson walks through what each one actually does, and how to tell when that extra cost is worth paying.
+
+> **Key Takeaways**
+> - Chain-of-thought reasons down one path with no way back; these four frameworks add search, structure, or self-correction on top of it
+> - Tree of Thoughts explores several reasoning branches and prunes the weak ones, taking GPT-4's Game of 24 puzzle success rate from about 4% to about 74% in the original benchmark
+> - Graph of Thoughts adds one thing Tree of Thoughts can't do: merge two good partial answers into one better one
+> - Reflexion is not the same as casually asking a model to double-check itself, it's a structured critique-and-retry loop with memory carried across attempts
+> - Every one of these frameworks multiplies your model calls, so the real skill is knowing when a single good prompt is already enough
+
+---
+
+## What Are Advanced Reasoning Frameworks (and Why CoT Isn't Enough)?
+
+**Chain-of-thought (CoT) prompting** asks a model to show its reasoning step by step before answering. It's cheap, fast, and it genuinely helps on multi-step problems. But it only ever walks one line of reasoning. If step two is subtly wrong, everything built on top of it is wrong too, and the model has no built-in way to notice or go back.
+
+Advanced reasoning frameworks all attack that same weakness from different angles: some explore multiple paths at once instead of one, some let a model catch and fix its own mistakes mid-task, and some restructure a hard problem into a sequence of easier ones. None of them replace chain-of-thought. They wrap around it.
+
+If you've read the lesson on [prompting reasoning models](/library/prompt-engineering/prompting-reasoning-models) already, you know that models with built-in extended thinking already run something like an internal search before they answer. That changes when these external frameworks are worth adding on top, more on that in the decision section below. What breaks if you skip this distinction: you'll reach for an expensive multi-branch framework on a task a single reasoning-model prompt already handles, and burn budget for nothing.
+
+---
+
+## Tree of Thoughts: Exploring Multiple Reasoning Paths
+
+**Tree of Thoughts (ToT)** has the model generate several different next steps instead of just one, score each with an evaluator, keep the promising ones, and drop the rest. It's search, not a straight line: the model can look a few steps ahead, notice a branch is going nowhere, and back out of it before committing.
+
+Go back to the trip-planning example. A single CoT pass locks in the hotel choice first and only discovers the conflict with the flight dates three steps later, when it's too late to fix cleanly. A ToT-style approach checks two or three hotel-and-flight combinations in parallel, scores each for whether all three constraints hold, and keeps the one that actually works.
+
+The original Tree of Thoughts research demonstrated just how large that difference can be. On the Game of 24 math puzzle, GPT-4 using a single chain-of-thought prompt solved it correctly about 4% of the time. The same model wrapped in a Tree of Thoughts search solved it about 74% of the time, according to <a href="https://arxiv.org/abs/2305.10601" target="_blank" rel="noopener noreferrer">the paper introducing the technique</a>. That's not a small tuning improvement. That's the difference between a method that mostly fails and one that mostly works, on a task where a single wrong early guess dooms the whole answer.
+
+<Note>
+That accuracy jump isn't free. Exploring three branches and scoring each one can mean ten or more model calls for a single answer, instead of one. Save Tree of Thoughts for problems where a single wrong early step is expensive to undo, like planning, puzzles with hard constraints, or multi-step math, not for a straightforward question a plain prompt already answers well.
+</Note>
+
+Tree of Thoughts is a close cousin of [self-consistency prompting](/library/prompt-engineering/self-consistency-and-verification), but the two aren't identical. Self-consistency asks the same question several times independently and votes on the most common answer. Tree of Thoughts is a real search: it looks ahead, evaluates partial progress, and prunes as it goes, instead of just polling finished answers at the end.
+
+<ArticleImage
+  src="/images/articles/agentic-ai/advanced-reasoning-frameworks/reasoning-frameworks-comparison.webp"
+  alt="Four diagrams comparing a single reasoning line, a branching tree, a merging graph, and a self-correcting feedback loop"
+  caption="A single chain-of-thought line versus a branching tree, a merging graph, and a self-correcting loop, one shape per framework."
+/>
+
+---
+
+## Graph of Thoughts: When Branches Need to Merge
+
+Tree of Thoughts has one structural limit: once a branch splits off, it stays separate. It can be scored and kept or dropped, but two good partial branches can never be combined into something better than either alone.
+
+**Graph of Thoughts (GoT)** removes that limit by letting thoughts connect as an arbitrary graph instead of a strict tree. A thought can branch, sure, but it can also merge with another thought, loop back to revisit an earlier idea, or feed into more than one later step. That single capability, aggregation, is what a tree structure genuinely cannot do.
+
+Picture the trip-planning problem again, but now split across two agents: one nails the flights, the other nails the hotel and car. In a tree, you'd have to pick one branch or the other. In a graph, you merge both partial solutions into a single itinerary that satisfies every constraint at once, instead of restarting from scratch or settling for whichever branch happened to score higher.
+
+**Graph of Thoughts is worth reaching for when a hard problem genuinely splits into sub-parts that get solved separately and then need to be combined**, document synthesis from multiple sources, code that needs pieces written independently and merged, or any task where the best answer is a combination of two partial ones, not a single winning branch. If your problem doesn't actually decompose that way, Graph of Thoughts adds complexity without adding value, and Tree of Thoughts is the simpler, cheaper choice.
+
+---
+
+## Reflexion: Learning From Your Own Mistakes Mid-Task
+
+Here's a naming trap worth clearing up first: casually asking a model to "reflect" on its own answer once, glance back and check for mistakes, is not the same thing as **Reflexion**. Reflexion is a specific, named framework with three real parts: an actor that attempts the task, a critique step that scores what actually went wrong, and a memory that carries that critique into the next attempt. It's reflection with structure and persistence, not a one-off gut check.
+
+A coding agent hits a `TypeError: 'NoneType' object is not subscriptable` on attempt one. A plain model might just apologize and try something different at random. A Reflexion-style loop is different: the critique step identifies specifically that a function is returning `None` in an edge case the code didn't handle, writes that lesson down, and carries it forward. Attempt two doesn't just try again, it tries again with the actual root cause in view.
+
+The <a href="https://arxiv.org/abs/2303.11366" target="_blank" rel="noopener noreferrer">Reflexion paper</a> tested this on HumanEval, a standard coding benchmark. A model using the Reflexion loop reached 91% pass rate, ahead of GPT-4's own 80% on the same benchmark with no self-critique step. The gap between those two numbers is entirely the critique-and-retry step: same underlying model capability, the only difference is whether it remembers what went wrong on the last attempt.
+
+<Tip>
+Reflexion earns its cost on tasks with a clear, checkable outcome: code that either passes tests or doesn't, a game with a win or loss state, a plan that either satisfies every constraint or doesn't. On open-ended tasks with no clean signal for "this attempt failed," the critique step has nothing solid to grab onto, and the extra retries mostly waste calls.
+</Tip>
+
+This same pattern, an agent critiquing and revising its own output, is the single-agent version of what happens in [multi-agent orchestration](/library/agentic-ai/multi-agent-prompting-and-orchestration), where multiple agents debate and critique each other's work instead of one agent critiquing itself. If a task is complex enough to be split across roles, that multi-agent version is often the stronger next step up from Reflexion.
+
+---
+
+## Least-to-Most Prompting: Solve the Easy Part First
+
+**Least-to-most prompting** takes a hard problem and splits it into a short chain of genuinely easier subproblems, then solves them one at a time in order, feeding each answer forward into the next. It's a two-stage process, as described in <a href="https://arxiv.org/abs/2205.10625" target="_blank" rel="noopener noreferrer">the original least-to-most prompting paper</a>: first decompose the question, then solve the pieces in sequence, using each earlier answer as context for the next.
+
+Where this differs from ordinary [prompt chaining](/library/prompt-engineering/decomposition-and-prompt-chaining) is the ordering guarantee. Prompt chaining breaks a task into steps because that's a sensible way to structure the work. Least-to-most specifically orders those steps from simplest to hardest, so the model never has to solve a piece harder than anything it's already handled, which is exactly where plain chain-of-thought tends to fail on problems tougher than its own examples.
+
+Take a billing question with three layered parts: what plan a customer is on, what their usage was that period, and what they owe after a mid-cycle upgrade. Solved all at once, a model can easily drop the upgrade proration. Solved least-to-most, the first pass just identifies the plan and dates, the second pass calculates usage against that plan, and the third pass applies the proration using both earlier answers. Each step is small enough to get right, and the model is never asked to jump straight to the hardest part cold.
+
+**Least-to-most prompting is worth using when a task cleanly decomposes into a strict sequence, where each step depends on the one before it.** It doesn't add much when the subtasks are actually independent of each other, that's a better fit for standard prompt chaining or just handling them in parallel.
+
+---
+
+## So Which One Do You Actually Use?
+
+None of these frameworks is a default. Each one adds real cost, in tokens, latency, or both, and the wrong pick is often worse than plain chain-of-thought on the same task. I've seen teams reach for Tree of Thoughts on a task a single well-written prompt already handled correctly nine times out of ten, then get confused when the API bill jumped and the accuracy barely moved. Use the comparison below as a starting filter, then check the decision rule underneath it.
+
+**Advanced reasoning frameworks compared**
+
+| Framework | What it adds over CoT | Best for | Extra cost |
+|---|---|---|---|
+| Tree of Thoughts | Explores multiple paths, scores and prunes | Puzzles, planning, hard math with one clear right answer | High (multiple branches x evaluation calls) |
+| Graph of Thoughts | Lets branches merge, loop back, and combine | Tasks that split into parts and need recombining | High, plus more complex bookkeeping |
+| Reflexion | Critiques its own attempt, remembers the lesson, retries | Tasks with a clear pass/fail signal (code, games, checkable plans) | Moderate to high (multiple full attempts) |
+| Least-to-most | Orders a hard problem into easier sequential steps | Problems that decompose into a strict dependency chain | Low to moderate (a few sequential calls) |
+
+If a native reasoning model is already available for the task, try that first, with a plain, direct prompt. These models already run an internal search-like process before answering, so a hand-built Tree of Thoughts on top of one is often paying twice for the same thing. Reach for an external framework when you need to see the reasoning happen (transparency), control the search yourself, or you're pairing a cheaper model with a more expensive judge step. If a single well-written prompt already gets the answer right most of the time, that's the signal to stop, not to add a framework on top for the sake of it.
+
+---
+
+## Your Task
+
+<Steps>
+  <Step number={1} title="Benchmark Tree of Thoughts against a single-pass prompt">
+    Pick one genuinely hard task with a clear right answer, a logic puzzle, a small scheduling problem with three or four constraints, or a math word problem you'd expect a model to get wrong on the first try.
+
+    Run it twice. First, a single, direct chain-of-thought prompt: "Solve this step by step." Record the answer and whether it's correct.
+
+    Second, a simple Tree of Thoughts pass by hand: ask the model to propose three different approaches to the first step, briefly evaluate which one seems most promising, continue with that one, and repeat for the next step. Record the answer, whether it's correct, and roughly how many total prompts that took.
+
+    Compare the two: did accuracy improve enough to justify the extra calls? Write one sentence stating your decision rule for this specific type of task going forward.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 13.04.
+</Note>
+
+<FAQ>
+  <FAQItem question="Is Tree of Thoughts the same thing as chain-of-thought prompting?">
+    No. Chain-of-thought asks a model to reason step by step down one path. Tree of Thoughts explores several possible paths at once, scores them, and backtracks away from dead ends. Chain-of-thought is a single line; Tree of Thoughts is a search.
+  </FAQItem>
+  <FAQItem question="Do I need a library like LangGraph to use these frameworks?">
+    No, not to start. A basic Tree of Thoughts or Reflexion loop is just a few prompts and a bit of code: generate, evaluate, keep or discard, repeat. Frameworks like LangGraph help once you're managing many branches or agents at production scale, but you can hand-build a small version with plain API calls first.
+  </FAQItem>
+  <FAQItem question="Are reflection and Reflexion the same thing?">
+    Not exactly. Casual "reflection" usually means asking a model to glance back at its own answer once. Reflexion is a specific, named framework: an actor model attempts a task, a critique step scores what went wrong, and that critique gets carried forward as memory into the next attempt. Reflexion is reflection with structure and persistence.
+  </FAQItem>
+  <FAQItem question="Do frontier reasoning models make these frameworks obsolete?">
+    Partly. Models with built-in extended thinking already run something like an internal search before answering, so a hand-built Tree of Thoughts on top of one is often redundant. These frameworks still earn their cost when you need to see the reasoning, control the search yourself, or you're pairing a cheap model with an expensive judge.
+  </FAQItem>
+</FAQ>

@@ -88,6 +88,8 @@ Instead of one agent producing an answer and moving on, a debate or critique pat
 
 In plain terms: it's agents checking each other's homework. A writer agent produces a draft, a critic agent reads it looking specifically for unsupported claims, and the writer revises based on that critique before the draft ships. That's a lighter, cheaper version of full multi-agent debate, and it's often enough for content-style tasks.
 
+A single agent can run a version of this same critique-and-retry loop on itself instead of needing a second agent, which is exactly what [Reflexion](/library/agentic-ai/advanced-reasoning-frameworks) does.
+
 Skip this step and the writer agent becomes its own only reviewer, which means the one failure mode most likely to slip through, a confident but unsupported claim, has nobody left to catch it.
 
 ## Worked Example: A 3-Agent Research-and-Write Flow
