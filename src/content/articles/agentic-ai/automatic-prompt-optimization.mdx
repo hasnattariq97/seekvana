@@ -49,6 +49,18 @@ This is the same shift as <a href="https://www.promptingguide.ai/techniques/ape"
 
 That's the whole mental shift this lesson asks you to make: your prompt is a parameter you tune against data, the same way you'd tune a setting in code, not prose you polish until it feels right.
 
+## What an APE Run Actually Looks Like
+
+Here's a concrete version of the APE loop, not just the concept. Say you're building a prompt that classifies support tickets as "billing," "bug," or "other."
+
+You start with one instruction: "Classify this support ticket." You ask a model to generate five rewordings of that instruction, for example: "Read this ticket and label it billing, bug, or other," "Categorize the following customer message into exactly one of three buckets," and three more variants. That's the generate step.
+
+Next, you run all five candidate instructions against the same ten real tickets you've already labeled by hand, the ones you know the correct category for. Each candidate produces ten predictions. You score each candidate as a percentage correct against your known answers, for example candidate 3 gets 9/10 while candidate 1 gets 6/10. That's the test step.
+
+APE then keeps the highest-scoring candidate, "Categorize the following customer message into exactly one of three buckets," and discards the rest, even though candidate 1 might read more naturally to a human. The win isn't about which instruction sounds best. It's about which one produced the most correct labels on data you already trust.
+
+This is the exact shape you'll reproduce by hand in this lesson's task below, just with five examples instead of ten and one rewrite instead of five.
+
 ## How the Optimization Loop Works
 
 Every automatic prompt optimization system, from a five-line script to a full DSPy pipeline, runs the same three-step loop.
@@ -70,6 +82,29 @@ At production scale, this is what DSPy's <a href="https://dspy.ai/api/optimizers
   alt="Diagram showing four prompt candidates tested and scored against the same examples, with the highest-scoring candidate selected as the winner"
   caption="The generate, test, select loop: candidates are scored against the same examples, and the score, not a person's preference, picks the winner."
 />
+
+## What Running This in DSPy Looks Like
+
+You don't need DSPy to learn this lesson's task, but seeing the same three-step loop as real code makes it less abstract. A minimal DSPy setup for the ticket-classifying prompt above looks roughly like this:
+
+```python
+import dspy
+
+classify = dspy.Predict("ticket_text -> category")
+
+def is_correct(example, prediction, trace=None):
+    return prediction.category == example.category
+
+optimizer = dspy.MIPROv2(metric=is_correct)
+optimized_classify = optimizer.compile(
+    classify,
+    trainset=labeled_tickets,  # your ten hand-labeled examples
+)
+```
+
+`labeled_tickets` is just your hand-labeled examples in DSPy's format, the same ten tickets from the APE walkthrough above. `is_correct` is the scoring rule, the same pass/fail check you'd run by hand. `MIPROv2.compile()` is the part that replaces you: it generates instruction variants, tests each one against `labeled_tickets` using `is_correct`, and hands back `optimized_classify`, a version of the prompt that scored best. Same generate, test, select loop, just running unattended across more candidates than you'd realistically try by hand.
+
+The part worth remembering isn't the syntax, it's that `trainset` and `metric` are doing the same job your five examples and your pass/fail column do in the manual task below. A framework without a real eval set is still just a guess, automated faster.
 
 ## Why This Matters Once Prompts Are Part of a Real System
 
