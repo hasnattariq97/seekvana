@@ -13,7 +13,7 @@ lessonModule: "13"
 lessonNumber: "13.05"
 faqs:
   - q: "Do I need to learn DSPy to do automatic prompt optimization?"
-    a: "No. DSPy is one framework that automates the loop at scale, but the underlying idea, generate candidates, test them against examples, keep the winner, works with nothing more than a spreadsheet and a few API calls. Start manual. Reach for a framework once you're optimizing the same prompt every week."
+    a: "No. DSPy is one framework that automates the loop at scale. But the underlying idea, generate candidates, test them against examples, keep the winner, works with nothing more than a spreadsheet and a few API calls. Start manual. Reach for a framework once you're optimizing the same prompt every week."
   - q: "How many examples do I need before an eval score means anything?"
     a: "Five to ten well-chosen examples beat fifty random ones. Pick cases that actually broke your prompt before, not easy ones it already handles. A tiny, targeted eval set catches real regressions faster than a large, lazy one."
   - q: "What's the difference between automatic prompt optimization and just asking an AI to improve my prompt?"
@@ -47,17 +47,17 @@ Automatic prompt optimization means treating your prompt's wording as something 
 
 This is the same shift as <a href="https://www.promptingguide.ai/techniques/ape" target="_blank" rel="noopener noreferrer">Automatic Prompt Engineer (APE)</a>, one of the earliest systems to formalize it. APE has a language model generate a batch of candidate instructions, runs each one against a task, and keeps whichever candidate scores highest on held-out examples. Nobody hand-picked the winner; the scores did.
 
-That's the whole mental shift this lesson asks you to make: your prompt is a parameter you tune against data, the same way you'd tune a setting in code, not prose you polish until it feels right.
+That's the whole mental shift this lesson asks you to make. Your prompt is a parameter you tune against data, the same way you'd tune a setting in code, not prose you polish until it feels right.
 
 ## What an APE Run Actually Looks Like
 
 Here's a concrete version of the APE loop, not just the concept. Say you're building a prompt that classifies support tickets as "billing," "bug," or "other."
 
-You start with one instruction: "Classify this support ticket." You ask a model to generate five rewordings of that instruction, for example: "Read this ticket and label it billing, bug, or other," "Categorize the following customer message into exactly one of three buckets," and three more variants. That's the generate step.
+You start with one instruction: "Classify this support ticket." You ask a model to generate five rewordings of that instruction. Two examples: "Read this ticket and label it billing, bug, or other" and "Categorize the following customer message into exactly one of three buckets." Three more variants follow the same pattern. That's the generate step.
 
 Next, you run all five candidate instructions against the same ten real tickets you've already labeled by hand, the ones you know the correct category for. Each candidate produces ten predictions. You score each candidate as a percentage correct against your known answers, for example candidate 3 gets 9/10 while candidate 1 gets 6/10. That's the test step.
 
-APE then keeps the highest-scoring candidate, "Categorize the following customer message into exactly one of three buckets," and discards the rest, even though candidate 1 might read more naturally to a human. The win isn't about which instruction sounds best. It's about which one produced the most correct labels on data you already trust.
+APE then keeps the highest-scoring candidate: "Categorize the following customer message into exactly one of three buckets." It discards the rest, even though candidate 1 might read more naturally to a human. The win isn't about which instruction sounds best. It's about which one produced the most correct labels on data you already trust.
 
 This is the exact shape you'll reproduce by hand in this lesson's task below, just with five examples instead of ten and one rewrite instead of five.
 
@@ -75,7 +75,7 @@ Every automatic prompt optimization system, from a five-line script to a full DS
   Start with five to ten examples, not fifty. A small, well-chosen eval set that includes the cases your prompt has actually failed on catches more real problems than a large, easy one.
 </Tip>
 
-At production scale, this is what DSPy's <a href="https://dspy.ai/api/optimizers/MIPROv2/" target="_blank" rel="noopener noreferrer">MIPROv2 optimizer</a> automates. It bootstraps example candidates from your own data, generates several instruction variants, and uses a search process to find the combination of instruction plus examples that scores best, all without a person manually comparing outputs. Skip the eval step and you're back to guessing which of ten rewrites is actually better, one comparison at a time, by memory. You don't need DSPy to learn the idea, but it's worth knowing the same three-step loop is what's running underneath it.
+At production scale, this is what DSPy's <a href="https://dspy.ai/api/optimizers/MIPROv2/" target="_blank" rel="noopener noreferrer">MIPROv2 optimizer</a> automates. It bootstraps example candidates from your own data. Then it generates several instruction variants and searches for the combination of instruction plus examples that scores best, all without a person manually comparing outputs. Skip the eval step and you're back to guessing which of ten rewrites is actually better, one comparison at a time, by memory. You don't need DSPy to learn the idea, but it's worth knowing the same three-step loop is what's running underneath it.
 
 <ArticleImage
   src="/images/articles/agentic-ai/automatic-prompt-optimization/optimization-loop.webp"
@@ -102,15 +102,15 @@ optimized_classify = optimizer.compile(
 )
 ```
 
-`labeled_tickets` is just your hand-labeled examples in DSPy's format, the same ten tickets from the APE walkthrough above. `is_correct` is the scoring rule, the same pass/fail check you'd run by hand. `MIPROv2.compile()` is the part that replaces you: it generates instruction variants, tests each one against `labeled_tickets` using `is_correct`, and hands back `optimized_classify`, a version of the prompt that scored best. Same generate, test, select loop, just running unattended across more candidates than you'd realistically try by hand.
+`labeled_tickets` is just your hand-labeled examples in DSPy's format, the same ten tickets from the APE walkthrough above. `is_correct` is the scoring rule, the same pass/fail check you'd run by hand. `MIPROv2.compile()` is the part that replaces you. It generates instruction variants, tests each one against `labeled_tickets` using `is_correct`, and hands back `optimized_classify`: a version of the prompt that scored best. Same generate, test, select loop. It just runs unattended across more candidates than you'd realistically try by hand.
 
-The part worth remembering isn't the syntax, it's that `trainset` and `metric` are doing the same job your five examples and your pass/fail column do in the manual task below. A framework without a real eval set is still just a guess, automated faster.
+The part worth remembering isn't the syntax. It's that `trainset` and `metric` are doing the same job your five examples and your pass/fail column do in the manual task below. A framework with no real eval set is still just a guess, automated faster.
 
 ## Why This Matters Once Prompts Are Part of a Real System
 
 A prompt that only lives in a chat window can get rewritten on a whim with no real cost. A prompt wired into <a href="/library/agentic-ai">agentic systems</a>, a support flow, or anything a real user depends on is different: every change is a change to production behavior, whether you tested it or not.
 
-Skip the eval step and three things go wrong. A "cleanup" edit silently breaks an edge case nobody re-checked, the way the support bot in the opening did. You burn API spend re-running a prompt change across thousands of calls with no evidence it actually helped. When something regresses, you have no before/after number to point to. You end up debugging by memory instead of by data.
+Skip the eval step and three things go wrong. First, a "cleanup" edit silently breaks an edge case nobody re-checked, the way the support bot in the opening did. Second, you burn API spend re-running a prompt change across thousands of calls with no evidence it actually helped. Finally, when something regresses, you have no before/after number to point to. You end up debugging by memory instead of by data.
 
 <Warning>
   A prompt change with no eval score attached is a guess wearing a confident sentence. Treat any "I cleaned this up" edit to a production prompt the same way you'd treat a code change: it doesn't ship until something measures it.
@@ -144,7 +144,7 @@ This is also where the habits from <a href="/library/prompt-engineering/self-con
 
 <FAQ>
   <FAQItem question="Do I need to learn DSPy to do automatic prompt optimization?">
-    No. DSPy is one framework that automates the loop at scale, but the underlying idea, generate candidates, test them against examples, keep the winner, works with nothing more than a spreadsheet and a few API calls. Start manual. Reach for a framework once you're optimizing the same prompt every week.
+    No. DSPy is one framework that automates the loop at scale. But the underlying idea, generate candidates, test them against examples, keep the winner, works with nothing more than a spreadsheet and a few API calls. Start manual. Reach for a framework once you're optimizing the same prompt every week.
   </FAQItem>
   <FAQItem question="How many examples do I need before an eval score means anything?">
     Five to ten well-chosen examples beat fifty random ones. Pick cases that actually broke your prompt before, not easy ones it already handles. A tiny, targeted eval set catches real regressions faster than a large, lazy one.
