@@ -94,6 +94,8 @@ I opened my browser's dev tools, checked the page source, and there it was in pl
 
 That's the real reason the three-layer split exists, and not just as an organizational habit. The backend is the only layer with secrets: your API key, your database credentials, all of it. The frontend is public by definition — anyone can view its source. Keep anything sensitive on the side of the wall the reader can't see.
 
+This same backend box is also [where AI agents actually run](/library/building-with-ai/where-agents-live), as a loop wrapped around the exact Claude API call described above.
+
 ---
 
 <Steps>

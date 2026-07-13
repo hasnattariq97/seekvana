@@ -1,0 +1,117 @@
+---
+title: "Where Do AI Agents Run in an App? Inside the Backend"
+description: "Where do AI agents run in an app? Inside the backend you already built, as a loop that calls the LLM and tools until the task is done."
+pillar: "building-with-ai"
+slug: "where-agents-live"
+difficulty: "beginner"
+readTime: 7
+author: "Seekvana"
+publishedAt: "2026-07-10"
+tags: ["ai agent architecture", "where do ai agents run", "llm call vs tool call"]
+featured: false
+lessonModule: "07"
+lessonNumber: "07.09"
+faqs:
+  - q: "Is an AI agent a separate service from the backend?"
+    a: "No. An agent is a pattern of code running inside your existing backend, not a separate server or service. The same FastAPI or Express app that handles a normal chat request also runs the agent loop. There's no extra box to deploy."
+  - q: "Does the frontend need to change to support an agent?"
+    a: "Almost never. The frontend still sends one request and waits for one response, exactly like a plain chatbot. The tool-calling loop happens entirely on the backend before that single response goes out, so the frontend code doesn't know or care how many LLM calls happened underneath."
+  - q: "What if the agent's loop never decides it's done?"
+    a: "This is a real failure mode, not a hypothetical one: without a hard cap, a misbehaving loop will keep calling tools and burning API credits indefinitely. Most production agent loops include a maximum round count (say, 10) as a safety backstop, independent of whatever logic decides the task is finished."
+  - q: "Can the database be skipped for a simple agent?"
+    a: "Technically yes for a single request/response cycle with no memory, but you lose conversation history the moment the user refreshes the page. Any agent meant to remember earlier messages needs the same INSERT/SELECT pattern from lesson 07.07, tool calls or not."
+---
+
+{/* IMAGE PROMPT: Editorial flat illustration of a backend server box containing a circular loop icon (LLM call → tool → LLM call), connected outward to a chat frontend on one side and a database cylinder on the other, warm cream background, clay accent (#C9633F) on the loop inside the server, clean architectural diagram, no text in image. | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+
+<ArticleImage src="/images/articles/building-with-ai/where-agents-live/cover.webp" alt="A backend server box containing a looping arrow between an LLM call and a tool call, connected to a frontend chat box and a database cylinder" />
+
+It's 11pm, your chat app just answered a question by actually looking something up instead of guessing, and you go to find the "agent" in your code so you can show a friend. You can't find it. There's no `agent.py` file, no separate agent server running on its own port, nothing labeled "agent" at all. That's not a bug in your project. That's the whole point of this lesson.
+
+So where do AI agents run in an app? Not in a separate box. An agent runs inside the backend you already built in lesson 07.01, as a loop, sitting right where a single Claude API call used to sit in a plain chatbot. Everything in this lesson zooms into step 4 of [the three-layer request flow](/library/building-with-ai/three-layers-connected), the moment the backend talks to Claude, and shows you exactly what changes when that one call becomes a loop.
+
+> **Key Takeaways**
+> - An agent is a pattern of backend code, not a separate service, server, or architectural box
+> - The difference between a chatbot and an agent is one LLM call versus a loop of LLM calls checking for `stop_reason == "tool_use"`
+> - Tools (web search, database queries, calculators) run as real code on the backend, never inside the model itself
+> - The frontend never sees individual tool calls, it just waits and gets the final answer like any other request
+
+---
+
+## Chatbot vs Agent: One Call vs a Loop
+
+The distinction below is worth pinning down properly, since it's easy to blur, see [Chatbot vs Agent](/library/agentic-ai/chatbot-vs-agent) for the deeper dive once you're past this lesson.
+
+A plain chatbot is the simplest possible version of step 4: the backend gets a user message, sends it to Claude, gets one response back, and sends that response to the frontend. One LLM call, done. That's everything you built through Module 07 so far.
+
+An **agent** changes what happens after that first call. Instead of always returning a final answer, Claude can respond with `stop_reason == "tool_use"`, essentially saying "I need more information before I can answer this." If you skip this branch, your agent silently behaves like a plain chatbot that occasionally gives worse answers, because it never gets the chance to look anything up.
+
+I've shipped a version of this where I checked the response text for phrases like "I would need to search" instead of checking `stop_reason` properly, and it missed cases constantly. Check the field the API actually gives you, not a guess about the wording.
+
+## What Happens Inside the Loop
+
+{/* IMAGE PROMPT: Editorial flat illustration of a simple looping diagram with three labelled stages: LLM call, tool call, check if done, arranged in a circle with an arrow returning to LLM call, warm cream background, clay accent (#C9633F) on the arrows, clean and minimal, no text in image. | FILENAME: agent-loop-diagram.webp | DIMENSIONS: 1200x675 */}
+
+<ArticleImage src="/images/articles/building-with-ai/where-agents-live/agent-loop-diagram.webp" alt="A circular diagram showing three stages: LLM call, tool call, and check if done, with an arrow looping back to LLM call" caption="The agent loop: an LLM call that may trigger a tool call, feeding back into another LLM call until the model returns a final answer." />
+
+When Claude returns `tool_use`, the backend runs this sequence, same `while` loop shape from lesson 05.05:
+
+1. Run the requested tool: a web search, a database query, a calculation, whatever real code the tool actually is
+2. Send the tool's result back to Claude as part of the conversation
+3. Claude either asks for another tool, or returns a final answer
+4. If it's a final answer, exit the loop. If not, repeat from step 1
+
+Skip step 4's exit check and you get a real production problem: the loop runs forever, burning API calls and money with nothing to show for it. Most real agents cap the loop at a fixed number of rounds (ten is common) as a hard backstop, independent of whatever logic decides the task is done.
+
+The tool itself is never AI. A web search tool is a function that calls a search API. A database tool is the SELECT/WHERE query from lesson 07.06. Claude decides *when* to call a tool and *what* to call it with, your backend code does the actual calling.
+
+## Where Does Agent Logic Actually Live?
+
+Agent logic lives entirely inside the backend, as a loop wrapped around the same LLM call from lesson 07.01. Frontend sends one request, same as always. Backend runs the loop (LLM call, check `tool_use`, run tool, LLM call again, repeat) as many times as needed. Database stores the conversation the same way it did in lesson 07.07, one row per message, tool calls included if you want that history preserved.
+
+The frontend never sees any of the intermediate rounds. It sends one POST request and gets one response back, exactly like the plain chatbot in lesson 07.01. If your agent takes three tool calls to answer a question, the frontend waits a little longer for that one response. It doesn't need a single line of new code to "support" an agent, because from its point of view, nothing changed.
+
+<Tip>
+If you're building this for real: log every round of the loop (which tool ran, what it returned) somewhere you can read later. The first time an agent loops five times instead of the one you expected, that log is the only way to see why.
+</Tip>
+
+## You Now Have Every Piece You Need
+
+Look back at what got you here. The terminal from Module 02. Git from Module 04. Python, dictionaries, and that same [while loop](/library/building-with-ai/python-loops) from Module 05. The request/response pattern and JSON from Module 06. The backend server, the database, and the full three-layer journey from this module. None of it was wasted, and none of it was separate from what an agent is. An agent is just those pieces, arranged into one loop, doing the thing you've been building toward the whole time.
+
+This is what the rest of Seekvana, the Agentic AI pillar, is about. You now have every piece you need to start. Keep going on [your path](/paths/getting-started) when you're ready for what comes next.
+
+---
+
+<Steps>
+  <Step number={1} title="Sketch a simple agent architecture">
+    On paper or in a notes app, sketch three boxes: Frontend, Backend, Database, same as lesson 07.08.
+
+    Inside the Backend box, draw a small loop with three labelled steps: "LLM call," "tool call," "check if done."
+
+    Pick one example tool an agent might use (a web search, a calculator, a database lookup) and label where in the loop it would run.
+
+    Label an arrow from the loop into the Database box for "save conversation," and an arrow out to the Frontend box for "final answer."
+
+    This sketch is the architecture behind almost every AI agent you'll encounter from here on.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 07.09.
+</Note>
+
+<FAQ>
+  <FAQItem question="Is an AI agent a separate service from the backend?">
+    No. An agent is a pattern of code running inside your existing backend, not a separate server or service. The same FastAPI or Express app that handles a normal chat request also runs the agent loop. There's no extra box to deploy.
+  </FAQItem>
+  <FAQItem question="Does the frontend need to change to support an agent?">
+    Almost never. The frontend still sends one request and waits for one response, exactly like a plain chatbot. The tool-calling loop happens entirely on the backend before that single response goes out, so the frontend code doesn't know or care how many LLM calls happened underneath.
+  </FAQItem>
+  <FAQItem question="What if the agent's loop never decides it's done?">
+    This is a real failure mode, not a hypothetical one: without a hard cap, a misbehaving loop will keep calling tools and burning API credits indefinitely. Most production agent loops include a maximum round count (say, 10) as a safety backstop, independent of whatever logic decides the task is finished.
+  </FAQItem>
+  <FAQItem question="Can the database be skipped for a simple agent?">
+    Technically yes for a single request/response cycle with no memory, but you lose conversation history the moment the user refreshes the page. Any agent meant to remember earlier messages needs the same INSERT/SELECT pattern from lesson 07.07, tool calls or not.
+  </FAQItem>
+</FAQ>
