@@ -121,7 +121,8 @@
         { "id": "07.05", "title": "Connecting your Python script to Supabase" },
         { "id": "07.06", "title": "The 3-layer AI app architecture — frontend, backend, model" },
         { "id": "07.07", "title": "Storing conversation history in a database" },
-        { "id": "07.08", "title": "Authentication basics — users, tokens, sessions" }
+        { "id": "07.08", "title": "Authentication basics — users, tokens, sessions" },
+        { "id": "07.09", "title": "Where do AI agents run in an app?" }
       ]
     },
     {
