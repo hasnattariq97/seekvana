@@ -63,7 +63,7 @@ Chain-of-thought prompting, phrases like "think step by step," "explain your rea
   <a href="https://platform.openai.com/docs/guides/reasoning-best-practices" target="_blank" rel="noopener noreferrer">OpenAI's own prompting guidance</a> says reasoning models often don't need few-shot examples to produce good results, and recommends trying a prompt without any examples first. Extra examples can push the model toward copying a pattern instead of reasoning through the actual problem in front of it.
 </Note>
 
-The practical cost shows up two ways: wasted reasoning tokens (and money) on instructions the model didn't need, and occasionally a worse answer, because your scaffolding overrides a reasoning path the model would have found on its own.
+The practical cost shows up two ways: wasted reasoning tokens (and money) on instructions the model didn't need, and occasionally a worse answer, because your scaffolding overrides a reasoning path the model would have found on its own. Once you're tracking that cost across a real user base, [prompt engineering for production](/library/building-with-ai/prompt-engineering-for-production) covers the budgeting and caching side of the same problem.
 
 ## What to Do Instead: Minimal, Direct Prompting
 
