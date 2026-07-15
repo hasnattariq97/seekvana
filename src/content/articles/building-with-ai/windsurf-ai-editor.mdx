@@ -1,0 +1,128 @@
+---
+title: "What Is Windsurf AI Editor? Cursor's Rival Explained"
+description: "Windsurf AI editor is a VS Code fork with an autonomous Cascade agent that plans multi-file changes. See its 2026 pricing and how it compares to Cursor."
+pillar: "building-with-ai"
+slug: "windsurf-ai-editor"
+difficulty: "beginner"
+readTime: 5
+author: "Seekvana"
+publishedAt: "2026-07-17"
+tags: ["windsurf", "ai code editor", "windsurf vs cursor", "cascade"]
+featured: false
+lessonModule: "08"
+lessonNumber: "08.03"
+faqs:
+  - q: "Is Windsurf free?"
+    a: "Windsurf has a free plan, but since a March 2026 pricing change it's a limited daily and weekly quota, not unlimited use. Tab autocomplete stays free and unlimited on every plan; only Cascade and premium chat models draw down your quota, which typically covers two to three days of active use before you hit the wall."
+  - q: "Is Windsurf better than Cursor?"
+    a: "Neither is objectively better. Windsurf's Cascade mode works more autonomously and supports more IDEs, while Cursor gives you more control over each step and has a slightly faster autocomplete engine. Which one feels better depends on how much you want to approve versus delegate."
+  - q: "Does Windsurf work with editors other than its own app?"
+    a: "Yes. Windsurf plugs into more than 40 IDEs, including JetBrains, Vim, Neovim, and Xcode, on top of its own standalone editor. Cursor, by contrast, is only available as its own VS Code fork."
+  - q: "Do I need to learn Windsurf if I already use Cursor?"
+    a: "Not urgently. They cover the same core job, so there's no need to switch just to switch. Try Windsurf's free trial once to see if its autonomous Cascade mode fits how you like to work, then stick with whichever one you reach for without thinking."
+---
+
+<ArticleImage
+  src="/images/articles/building-with-ai/windsurf-ai-editor/cover.webp"
+  alt="Two nearly identical AI code editor windows side by side, representing Windsurf and Cursor"
+/>
+
+You ask Cursor to refactor three files. It stops after each one to show you the diff and wait for a nod. That's normal, that's how Cursor works. But what if you wanted to describe the whole job once and let the editor just run with it?
+
+That's the pitch behind the Windsurf AI editor: a VS Code fork, same family as [Zed from the last lesson](/library/building-with-ai/zed-ai-editor) and [Cursor's three AI modes](/library/building-with-ai/install-cursor), built around an agent mode called Cascade. Cascade can plan and carry out multi-step changes across a codebase with less back-and-forth than Cursor's default flow. Windsurf also ships the same chat, inline edit, and model-picker features you already saw in Cursor.
+
+> **Key Takeaways**
+> - Windsurf and Cursor are close siblings: both are VS Code forks with AI chat, inline edit, and a choice of underlying model.
+> - Cascade is Windsurf's standout feature: an autonomous agent mode that plans and executes multi-file changes with less step-by-step approval than Cursor.
+> - As of a March 2026 pricing change, Windsurf's free plan is a quota, not unlimited use, and its Pro tier now costs the same $20 a month as Cursor's.
+> - Windsurf supports 40+ editors and IDEs (JetBrains, Vim, Neovim, Xcode), while Cursor only runs as its own VS Code-based app.
+> - The real choice isn't price anymore. It's whether you want an editor that works with you or one that runs ahead of you.
+
+---
+
+## What Windsurf Shares With Cursor
+
+Skip this section if you already remember Cursor's three AI modes well from lesson 03.02. Windsurf feels immediately familiar the moment you open it: same file tree, same command palette, same general layout.
+
+It has a chat panel for asking questions about your codebase and requesting changes, plus inline assist for editing a selected block in place. And like Cursor, you're not locked into one AI model. You can point Windsurf at Claude, GPT, or other providers depending on what you're working on.
+
+Skip understanding what's actually new here, and you'll just be using Cursor's three AI modes under a different name. You'd miss the one feature that makes Windsurf worth trying at all.
+
+## What Is Cascade?
+
+Cascade is Windsurf's agent mode, and it's the reason this lesson exists instead of just saying "it's Cursor with a different logo."
+
+Cursor shows you a diff after each small step and waits for approval. Cascade works differently. Give it a goal, like "add error handling across every API route in this folder," and it carries out the whole multi-file change in one pass, checking in less often along the way. It reads across your codebase, decides what needs to change, edits the files, and can run commands like tests, all before handing the result back to you.
+
+I still open the final diff by hand before accepting anything Cascade did, out of habit more than suspicion. That autonomy is the trade-off worth understanding up front: hand Cascade a big, vague request without reviewing what it touched, and you can end up with a sweeping change buried in files you weren't watching.
+
+<Note>
+  Cascade doesn't remove your ability to review changes, it just asks less often by default. Reviewing the final diff before accepting is still worth doing on anything beyond a trivial edit.
+</Note>
+
+## What Does It Actually Cost in 2026?
+
+A lot of older tutorials get this wrong. Windsurf used to be pitched as "the free alternative to Cursor." That's no longer accurate.
+
+On March 19, 2026, Windsurf retired its old credit-based free plan. It replaced that plan with daily and weekly usage quotas, according to <a href="https://www.cloudzero.com/blog/windsurf-pricing/" target="_blank" rel="noopener noreferrer">CloudZero's pricing breakdown</a>. Tab autocomplete is still free and unlimited on every plan. But Cascade and premium chat models draw down your quota, and in practice that free allowance covers roughly two to three days of active use before you hit the wall.
+
+**Windsurf vs Cursor pricing, mid-2026**
+
+| Plan | Windsurf | Cursor |
+|---|---|---|
+| Free | Quota-limited (~2–3 days of Cascade use) | Similar limited free tier |
+| Pro | $20/month | $20/month |
+| Team | $40/seat | Comparable per-seat pricing |
+
+Skip checking current pricing before you start, and you'll plan around a "generous free tier" that quietly stopped existing months ago. You'll find out mid-project instead of mid-research.
+
+<Tip>
+  Whichever editor you pick, check its official <a href="https://windsurf.com/compare/windsurf-vs-cursor" target="_blank" rel="noopener noreferrer">pricing and comparison page</a> before committing. AI coding tool pricing has changed fast through 2026, and a review from even six months ago can already be out of date.
+</Tip>
+
+## How to Actually Decide
+
+Since price is now roughly a wash, the real decision comes down to feel. Cursor rewards people who want to review every step. Windsurf rewards people happy to describe a goal and let Cascade run further before checking back in.
+
+The only reliable way to know which suits you is to try both. Install both free trials, give each the exact same small task, and pay attention to which one felt like it understood what you actually wanted.
+
+Skip trying both yourself, and pick based on whichever tool a video called "the winner." You'll end up choosing someone else's workflow preference instead of your own.
+
+If any of this still feels early, the [Getting Started path](/paths/getting-started) is there to revisit the fundamentals before you go further into Module 08.
+
+---
+
+## Your Task
+
+<Steps>
+  <Step number="1" title="Compare Windsurf and Cursor on the same task">
+    Download the Windsurf AI editor from windsurf.com and install it.
+
+    Open the same project folder you used with Zed in lesson 08.02, or any small project you have handy if you don't still have it.
+
+    Give Windsurf the exact same request you'd give any AI editor, for example: "add a docstring to this function."
+
+    Compare: how did the AI chat's tone differ from what you saw in Zed or Cursor? Did it ask clarifying questions? Did the diff view look different?
+
+    **Write one sentence on which felt more comfortable to you.** There's no correct answer here.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 08.03.
+</Note>
+
+<FAQ>
+  <FAQItem question="Is Windsurf free?">
+    Windsurf has a free plan, but since a March 2026 pricing change it's a limited daily and weekly quota, not unlimited use. Tab autocomplete stays free and unlimited on every plan; only Cascade and premium chat models draw down your quota, which typically covers two to three days of active use before you hit the wall.
+  </FAQItem>
+  <FAQItem question="Is Windsurf better than Cursor?">
+    Neither is objectively better. Windsurf's Cascade mode works more autonomously and supports more IDEs, while Cursor gives you more control over each step and has a slightly faster autocomplete engine. Which one feels better depends on how much you want to approve versus delegate.
+  </FAQItem>
+  <FAQItem question="Does Windsurf work with editors other than its own app?">
+    Yes. Windsurf plugs into more than 40 IDEs, including JetBrains, Vim, Neovim, and Xcode, on top of its own standalone editor. Cursor, by contrast, is only available as its own VS Code fork.
+  </FAQItem>
+  <FAQItem question="Do I need to learn Windsurf if I already use Cursor?">
+    Not urgently. They cover the same core job, so there's no need to switch just to switch. Try Windsurf's free trial once to see if its autonomous Cascade mode fits how you like to work, then stick with whichever one you reach for without thinking.
+  </FAQItem>
+</FAQ>
