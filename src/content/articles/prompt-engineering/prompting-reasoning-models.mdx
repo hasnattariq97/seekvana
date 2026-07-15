@@ -45,7 +45,7 @@ A reasoning model is built to run its own internal chain of reasoning before pro
 
 A regular [large language model](/library/large-language-models/how-llms-work) like GPT-4o goes straight from your prompt to an answer. A reasoning model pauses first, works through the problem in its own reasoning tokens, then answers. That pause is the same "room to think" you built into your prompts back in [Giving the Model Room to Think](/library/prompt-engineering/giving-the-model-room-to-think), except now the model brings that room itself, uninvited.
 
-Mixing the two up is the actual mistake this lesson exists to fix: treat a reasoning model like a chat model and you'll spend extra tokens and time on instructions the model was never missing in the first place.
+Mixing the two up is the actual mistake this lesson exists to fix: treat a reasoning model like a chat model and you'll spend extra tokens and time on instructions the model was never missing in the first place. It's the same underlying lesson as [model-specific prompting](/library/prompt-engineering/model-specific-prompting) more broadly: what works on one model can actively hurt on another, whether the difference is reasoning versus chat, or Claude versus GPT versus Gemini.
 
 I still catch myself typing "think step by step" out of pure muscle memory before I remember which model I'm talking to. Old habits don't update just because the model underneath did.
 
