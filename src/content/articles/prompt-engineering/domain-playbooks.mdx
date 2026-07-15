@@ -1,0 +1,142 @@
+---
+title: "Domain Playbooks: Adapt Prompt Recipes to Your Work"
+description: "A prompt that nails code review won't work for a client email. Learn the domain playbook method for adapting prompt recipes to any task."
+pillar: "prompt-engineering"
+slug: "domain-playbooks"
+difficulty: "intermediate"
+readTime: 7
+author: "Seekvana"
+publishedAt: "2026-07-16"
+tags: ["prompt engineering", "domain playbooks", "prompt templates", "advance"]
+featured: false
+lessonModule: "13"
+lessonNumber: "13.10"
+faqs:
+  - q: "What is a prompt playbook?"
+    a: "A prompt playbook is a set of reusable prompt templates, one per task type, where the structure stays fixed and only the details change. Instead of writing a fresh prompt from scratch every time, you pick the recipe that matches your task and fill in the blanks."
+  - q: "Can I use the same prompt template across different AI models?"
+    a: "Mostly, yes, but expect to retune it. The recipe's shape (role, context, constraints, format) carries over, but how much explicit instruction each model needs to follow it varies, which is exactly what you tuned for in the model-specific prompting lesson."
+  - q: "How do I turn a one-off prompt into a reusable template?"
+    a: "Take a prompt that worked well, then replace the specific details (the file name, the audience, the dataset) with labeled placeholders in brackets. Save it somewhere searchable, and note which model and settings it was tuned for."
+  - q: "What's the biggest mistake people make reusing prompts across tasks?"
+    a: "Copying a prompt that worked for one domain into a completely different one without changing what it emphasizes. A coding prompt leans on constraints and edge cases; a writing prompt leans on audience and tone. Reuse the shape, not the exact wording."
+---
+
+<ArticleImage
+  src="/images/articles/prompt-engineering/domain-playbooks/cover.webp"
+  alt="One prompt branching into five domain-specific recipe icons for coding, writing, data, research, and professional work"
+/>
+
+You write a prompt that gets a clean, working code review out of the model. It nails the task. Feeling good, you paste that same prompt into a request for a client-facing summary, just swapping the topic.
+
+What comes back is stiff, jargon-heavy, and nothing you'd actually send to a client. The prompt didn't get worse. The task changed, and the recipe that works for code isn't the recipe that works for writing.
+
+That's what a domain playbook fixes: a small set of prompt recipes, one per kind of task, so you stop reusing the wrong shape for the job in front of you. By the end of this lesson, you'll have five working recipes and know how to build your own.
+
+> **Key Takeaways**
+> - Every prompt is built from the same four ingredients: role, context, constraints, and format, but each domain leans on a different one hardest
+> - Coding prompts lean on constraints and edge cases; writing prompts lean on audience and tone; data analysis benefits from staged, multi-step prompting
+> - Research prompts work best when you force a comparison format; professional prompts need an explicit review-loop step
+> - A playbook is just a working prompt saved with its variable parts labeled, so you can reuse the shape without rewriting it from scratch
+
+---
+
+## Why the Same Prompt Doesn't Work for Every Domain
+
+Every prompt you've built in this module, whether it used role prompting, constraints, or chain-of-thought, is really made of four ingredients: who the model should act as, what context it has, what rules it must follow, and what shape the answer should take.
+
+What changes between domains is which ingredient carries the most weight. Code needs airtight constraints. Writing needs a clear audience. Research needs a forced comparison format. Same four ingredients, different dial turned up.
+
+Skip this and you'll keep <a href="https://cloud.google.com/discover/what-is-prompt-engineering" target="_blank" rel="noopener noreferrer">reusing one general-purpose template</a> everywhere, and every task outside its home domain will come back flat, generic, or just wrong for the job.
+
+You already know how to test a prompt for weak spots from the [adversarial prompting lesson](/library/prompt-engineering/adversarial-and-red-team-prompting). A playbook is where that testing pays off, because you're refining a recipe you'll reuse, not a one-off prompt.
+
+## The Coding Recipe
+
+For code, the model needs a role ("act as a senior engineer reviewing this pull request"), then explicit constraints: language and version, performance requirements, and which edge cases to handle.
+
+Vague coding prompts ("write a function that validates emails") get code that looks right and breaks the first time someone pastes in an email with a plus sign or an uncommon domain.
+
+The fix is naming the edge cases up front: empty input, malformed strings, unusually long input. Constraints are the coding recipe's heaviest ingredient, and skipping them is how silent bugs ship.
+
+## The Writing/Marketing Recipe
+
+Writing prompts need the audience and length specified before anything else. "Write about supervised learning" and "explain supervised learning in 150 words for a business analyst with no technical background" produce completely different drafts.
+
+Tone matters just as much as audience. A prompt that doesn't name a tone defaults to something generic and corporate, the kind of copy nobody wants to publish as-is.
+
+Miss this and you'll spend more time rewriting the output than you would have spent writing the first draft yourself.
+
+## The Data Analysis Recipe
+
+Data tasks reward a staged approach: clarify, confirm, complete. First ask the model to clarify which method fits your data ("what's an appropriate way to handle these outliers?"). Then confirm the tradeoffs of that method. Only then ask it to complete the code, building on the same <a href="https://www.codecademy.com/learn/prompt-engineering-for-analytics/modules/prompt-engineering-for-analytics/cheatsheet" target="_blank" rel="noopener noreferrer">prompt-anatomy basics for analytics tasks</a> covered elsewhere.
+
+One-shot prompts ("write code to clean this dataset") skip the clarify and confirm steps. The model picks a method without checking it against your actual data, and you get a confident-sounding answer built on an assumption nobody validated.
+
+The staged version costs three prompts instead of one but catches the bad assumption before it becomes a bad result.
+
+## The Research Recipe
+
+Research prompts work best when you force a table as the output format: compare items across named criteria and put the answer in rows and columns, not paragraphs.
+
+**Free-form vs. forced-format research prompts**
+
+| Prompt style | What you get | Best for |
+|---|---|---|
+| "Tell me about these three options" | Loose prose, hard to compare | Early brainstorming |
+| "Compare these three options across cost, setup time, and support, as a table" | Structured rows you can scan and cite | Any decision you need to act on |
+
+Unstructured research prompts return something that reads fine but is hard to compare or fact-check, since nothing forces the model to commit to a specific claim per criterion.
+
+## The Professional Work Recipe
+
+Professional tasks, like a stakeholder email or an internal report, need explicit stakes and a review-loop step: ask the model to draft, then ask it to review its own draft against a specific risk (getting a number wrong, sounding too casual, missing a deadline mention).
+
+This recipe borrows from agentic workflow patterns covered in the [agentic AI pillar](/library/agentic-ai): draft, then check, then revise, rather than accepting the first output.
+
+Skip the review-loop step and you'll ship a report with a tone problem or a factual slip nobody caught, because nothing in the prompt asked the model to check its own work.
+
+<ArticleImage
+  src="/images/articles/prompt-engineering/domain-playbooks/playbook-comparison.webp"
+  alt="Side-by-side comparison of all five domain playbooks, showing each recipe's focus area, an example prompt start, and the four shared prompt ingredients"
+  caption="The five recipes side by side: same four ingredients (role, context, constraints, format), a different one weighted heaviest per domain."
+/>
+
+## How to Build Your Own Playbook
+
+Once a prompt works, capture it. Take the exact wording, then replace the specific details, the file name, the audience, the dataset, with labeled placeholders in brackets: `[language]`, `[audience]`, `[dataset name]`.
+
+Save it somewhere you'll actually find it again, following the <a href="https://www.kdnuggets.com/prompt-engineering-templates-that-work-7-copy-paste-recipes-for-llms" target="_blank" rel="noopener noreferrer">copy-paste recipe format</a>, with a note on which model and settings you tuned it for, since model behavior differs enough that a recipe built for one model may need retuning for another, which is what the [model-specific prompting lesson](/library/prompt-engineering/model-specific-prompting) covers in more depth.
+
+A playbook isn't a bigger prompt. It's five or six small, labeled recipes you stop rebuilding from scratch.
+
+I keep mine in a plain text file, ugly, unsorted, and still faster than starting cold every time. You don't need a fancy system, just somewhere you'll actually look.
+
+---
+
+<Steps>
+  <Step number={1} title="Adapt one recipe to your own domain">
+    Pick a real task you need done this week, work-related, a hobby project, whatever's actually on your list, and identify which domain it's closest to: coding, writing, data, research, or professional work.
+
+    Take that domain's recipe from this lesson and fill in the blanks for your real task. Run it, then check the output against that recipe's heaviest ingredient: did you specify constraints and edge cases (coding), audience and tone (writing), clarify-confirm-complete (data), forced comparison format (research), or a review-loop step (professional)?
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 13.10.
+</Note>
+
+<FAQ>
+  <FAQItem question="What is a prompt playbook?">
+    A prompt playbook is a set of reusable prompt templates, one per task type, where the structure stays fixed and only the details change. Instead of writing a fresh prompt from scratch every time, you pick the recipe that matches your task and fill in the blanks.
+  </FAQItem>
+  <FAQItem question="Can I use the same prompt template across different AI models?">
+    Mostly, yes, but expect to retune it. The recipe's shape (role, context, constraints, format) carries over, but how much explicit instruction each model needs to follow it varies, which is exactly what you tuned for in the model-specific prompting lesson.
+  </FAQItem>
+  <FAQItem question="How do I turn a one-off prompt into a reusable template?">
+    Take a prompt that worked well, then replace the specific details (the file name, the audience, the dataset) with labeled placeholders in brackets. Save it somewhere searchable, and note which model and settings it was tuned for.
+  </FAQItem>
+  <FAQItem question="What's the biggest mistake people make reusing prompts across tasks?">
+    Copying a prompt that worked for one domain into a completely different one without changing what it emphasizes. A coding prompt leans on constraints and edge cases; a writing prompt leans on audience and tone. Reuse the shape, not the exact wording.
+  </FAQItem>
+</FAQ>
