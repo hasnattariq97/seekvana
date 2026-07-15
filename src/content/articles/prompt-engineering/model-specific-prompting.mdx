@@ -117,6 +117,8 @@ Running Llama, Mistral, or Qwen locally through something like Ollama changes th
 
 Practically, that means shorter and more direct prompts, with explicit examples, work better than the conversational, somewhat forgiving style that hosted models tolerate. Think of it less like talking to a well-trained assistant and more like giving very precise instructions to someone capable but literal. A vague instruction that a hosted model would gracefully interpret can send a local open model straight off-task.
 
+That lighter safety layer also means open models need more of your own [adversarial testing](/library/prompt-engineering/adversarial-and-red-team-prompting) before you trust them with real users, since they won't catch as many hostile prompts on their own.
+
 <Warning>
   Don't assume a prompt that works well on a small local model will scale up cleanly to a larger one in the same family. Model size changes instruction-following reliability even within the same architecture, so retest before you trust it in production.
 </Warning>

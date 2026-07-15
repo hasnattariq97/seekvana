@@ -97,6 +97,8 @@ You don't need an enterprise security team to meaningfully reduce this risk. Thr
 
 These are the same fundamentals the <a href="https://genai.owasp.org/llmrisk/llm01-prompt-injection/" target="_blank" rel="noopener noreferrer">OWASP Gen AI Security Project</a> lists as the top risk facing LLM applications today, and the same starting point recommended in their own <a href="https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html" target="_blank" rel="noopener noreferrer">prompt injection prevention cheat sheet</a>. Everything past this point (guardrail models, dedicated filtering layers) builds on top of these three habits. It doesn't replace them.
 
+Once these habits are in place, the next step is [red-teaming your own system](/library/prompt-engineering/adversarial-and-red-team-prompting) instead of just hoping an attacker never tries the one thing you didn't think of.
+
 If you've read about [system prompts that scale](/library/prompt-engineering/system-prompts-that-scale) or how [meta-prompting](/library/prompt-engineering/meta-prompting-and-prompt-generation) helps you draft better instructions, this is the missing piece: a well-structured prompt is also a more secure one, almost by accident. The same clarity that makes a prompt reliable is what makes it harder to hijack.
 
 This matters even more once your AI can take actions on its own, like calling tools or browsing on your behalf. [Agentic AI systems](/library/agentic-ai) that read external content and can also act on it are exactly where prompt injection turns into real-world consequences instead of just a weird reply.
