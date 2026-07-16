@@ -1,0 +1,136 @@
+---
+title: "Bolt.new vs v0.dev: Generate a Full App From a Prompt"
+description: "Bolt.new and v0.dev turn a text prompt into a working app in seconds. Here's what each does, and when a generated app is actually a good starting point."
+pillar: "building-with-ai"
+slug: "bolt-v0-app-generators"
+difficulty: "beginner"
+readTime: 6
+author: "Seekvana"
+publishedAt: "2026-07-17"
+tags: ["bolt.new", "v0.dev", "ai app generator", "prompt to app"]
+featured: false
+lessonModule: "08"
+lessonNumber: "08.09"
+faqs:
+  - q: "Is Bolt.new free to use?"
+    a: "Bolt.new has a free tier with a limited daily token allowance, then paid plans once you need more generations or larger projects. Because every prompt resends your whole project as context, costs can climb faster than you'd expect on bigger apps, so check current pricing before committing to a plan."
+  - q: "Can I export the code from Bolt.new or v0.dev and keep working on it elsewhere?"
+    a: "Yes. Both let you export or push the generated project to GitHub, so you can open it in Cursor, Claude Code, or any editor and keep building. That handoff is exactly how most people use these tools: generate a starting point, then take over by hand."
+  - q: "Do I need to know how to code to use Bolt.new or v0.dev?"
+    a: "No, you can generate something that runs without writing a line of code yourself. But understanding at least the basics of HTML, CSS, and JavaScript makes a real difference once you want to fix a bug or change something the prompt didn't quite get right."
+  - q: "Why did my generated app break after a few follow-up prompts?"
+    a: "Every new prompt adds to a growing pile of context and previous attempts, and errors can compound instead of resolve, especially in a large project. If a fix-it prompt makes things worse twice in a row, it's often faster to open the code yourself and make the small change directly."
+---
+
+{/* IMAGE PROMPT: Editorial flat illustration of a text prompt box transforming instantly into a fully rendered app window with buttons and layout, warm cream background, clay accent (#C9633F) on the transformation spark, clean and magical but grounded, no text in image. | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+
+<ArticleImage
+  src="/images/articles/building-with-ai/bolt-v0-app-generators/cover.webp"
+  alt="A text prompt box transforming into a fully rendered app window"
+/>
+
+You type one sentence, "build a simple to-do list app," and thirty seconds later there's a real, clickable app sitting in your browser. No editor to open, no terminal command to run, no file to save. That's the whole pitch of prompt-to-app tools, and it's the most dramatic thing you'll see in this entire module.
+
+Bolt.new vs v0.dev is the comparison most people land on first, since they're the two best-known tools in this category. Bolt.new generates a running full-stack app, frontend and often backend together, straight in your browser. v0.dev, built by Vercel, started out generating polished frontend components and has been expanding toward full apps too. The first time I watched one of these generate a working app from a single sentence, I still opened the code afterward to see what it had actually written, and that habit is the whole point of this lesson. Both tools skip local setup entirely, and both are useful, as long as you know what they're actually good for.
+
+> **Key Takeaways**
+> - Bolt.new and v0.dev turn a plain-English prompt into a running app, with no local install required
+> - Bolt.new leans full-stack (frontend and backend scaffolding); v0.dev started frontend-first and generates React and Tailwind CSS code
+> - Both are excellent for prototypes and mockups, not a substitute for understanding the code they produce
+> - Costs can climb fast because every follow-up prompt resends your whole project as context
+> - You can export or push the generated code to GitHub and keep building it in a real editor
+
+---
+
+## What Is Bolt.new?
+
+<a href="https://bolt.new" target="_blank" rel="noopener noreferrer">Bolt.new</a> is a browser-based AI app builder from StackBlitz that turns a text description into a working, full-stack application you can see and click around immediately. It runs Node.js directly inside your browser tab using a technology called <a href="https://webcontainers.io" target="_blank" rel="noopener noreferrer">WebContainers</a>, so there's nothing to install on your computer.
+
+You open bolt.new, type what you want in the chat panel, "build a simple to-do list app," and Bolt scaffolds the files, writes the code, and shows you a live preview running right next to the chat. Ask for a change and it edits the code and refreshes the preview again.
+
+The interface has three parts working together: a code editor showing exactly what got generated, a chat panel where you describe changes, and a live preview where you see the app running in real time. You can also click into individual files and edit them by hand if you want more control than the chat gives you.
+
+{/* IMAGE PROMPT: Editorial flat illustration of a browser window split into three panes labeled by icon only (code brackets, chat bubble, play button), warm cream background, clay accent (#C9633F) on the play button pane, clean and instructive, no text in image. | FILENAME: bolt-three-pane-interface.webp | DIMENSIONS: 1200x675 */}
+
+<ArticleImage
+  src="/images/articles/building-with-ai/bolt-v0-app-generators/bolt-three-pane-interface.webp"
+  alt="A browser window divided into three panes: code editor, chat, and live preview"
+  caption="Bolt.new's interface shows the generated code, the chat where you describe changes, and a live preview side by side."
+/>
+
+<Tip>
+  If a prompt didn't quite work, get specific instead of just repeating yourself. "Make the delete button red" gets a better result than "fix the button."
+</Tip>
+
+## What Is v0.dev?
+
+v0.dev is an AI tool from Vercel that generates working frontend code, usually React components styled with Tailwind CSS, from a plain-English description. Describe a screen, "a pricing page with three tiers," and v0 generates real, working component code you can preview and then drop into a project. This is one place a quick v0.dev tutorial pays off fast: most of what you need to know is just describing the screen you want, one prompt at a time.
+
+v0.dev started out narrower than Bolt.new. It focused on generating clean, well-structured UI rather than a full running application. That's still its strongest use case: a landing page, a dashboard layout, a form, ready to plug into an existing codebase. It has since expanded toward handling backend pieces and full-project generation too, so the old "v0 only does frontend" rule of thumb is looser than it used to be.
+
+Where v0 still stands out is polish. It's built by the team behind Next.js and Vercel's deployment platform, so the code it produces tends to follow conventions a working frontend developer would already recognize. That matters if you plan to hand the result to a real project later.
+
+## Bolt.new vs v0.dev: What's Actually Different
+
+Both tools do the same basic trick, prompt in, running app out, but they lean toward different jobs. Bolt.new is built for "give me a whole working thing," v0.dev is built for "give me a great-looking piece I can use."
+
+**Bolt.new vs v0.dev at a glance**
+
+| | Bolt.new | v0.dev |
+|---|---|---|
+| Best for | Full working app, fast | Polished UI components |
+| Output | Frontend + backend scaffolding | React + Tailwind CSS code |
+| Runs where | Fully in-browser (WebContainers) | Generates code, preview in-browser |
+| Built by | StackBlitz | Vercel |
+| Good starting point for | Prototype, internal tool, quick MVP | Landing page, dashboard, frontend flow |
+
+If you want to see an entire idea exist as a clickable thing today, start with Bolt.new. If you already have a project and just need a well-built screen to drop into it, start with v0.dev.
+
+## Where Bolt.new and v0.dev Fall Short
+
+These tools are excellent for testing whether an idea is even worth building, good or bad, in under a minute. What they are not is a replacement for understanding your own code, and that matters more than it sounds like it should.
+
+<Warning>
+  Because tools like Bolt.new resend your whole project as context with every new prompt, costs can climb quickly on bigger apps. A failed generation can still use up your usage allowance even when the result is broken. If a fix-it prompt makes things worse twice in a row, open the file yourself and make the small change by hand instead of prompting a third time.
+</Warning>
+
+This is the same lesson from [HTML, CSS, and JavaScript basics](/library/building-with-ai/html-css-js-basics). Reading code you didn't write yourself is a real skill. It's the thing that turns a generated prototype into something you can trust, extend, or debug when it breaks in a way the prompt box can't fix. A good next step after generating something in Bolt.new or v0.dev is opening the result in [Kilo Code](/library/building-with-ai/kilo-code) and asking it to walk you through what was actually built.
+
+---
+
+## Your Task
+
+The fastest bolt.new tutorial is just doing this once yourself.
+
+<Steps>
+  <Step number="1" title="Generate an app from a single prompt">
+    Go to bolt.new in your browser. No install needed.
+
+    Type: "Build a simple to-do list app."
+
+    Watch what gets generated. Within a minute, a working app with input fields and buttons should appear, live, in the browser.
+
+    Try adding a task and marking it complete to confirm it actually works.
+
+    Note one thing that surprised you about how fast or how complete the result was.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 08.09.
+</Note>
+
+<FAQ>
+  <FAQItem question="Is Bolt.new free to use?">
+    Bolt.new has a free tier with a limited daily token allowance, then paid plans once you need more generations or larger projects. <a href="https://v0.app/pricing" target="_blank" rel="noopener noreferrer">v0.dev's pricing page</a> shows a similar pattern (a small free credit allowance, then paid tiers), so check current pricing on both before committing to a plan.
+  </FAQItem>
+  <FAQItem question="Can I export the code from Bolt.new or v0.dev and keep working on it elsewhere?">
+    Yes. Both let you export or push the generated project to GitHub, so you can open it in Cursor, Claude Code, or any editor and keep building. That handoff is exactly how most people use these tools: generate a starting point, then take over by hand.
+  </FAQItem>
+  <FAQItem question="Do I need to know how to code to use Bolt.new or v0.dev?">
+    No, you can generate something that runs without writing a line of code yourself. But understanding at least the basics of HTML, CSS, and JavaScript makes a real difference once you want to fix a bug or change something the prompt didn't quite get right, which is the real answer to the Bolt.new vs v0.dev question: neither removes the need to read code, they just delay it.
+  </FAQItem>
+  <FAQItem question="Why did my generated app break after a few follow-up prompts?">
+    Every new prompt adds to a growing pile of context and previous attempts, and errors can compound instead of resolve, especially in a large project. If a fix-it prompt makes things worse twice in a row, it's often faster to open the code yourself and make the small change directly.
+  </FAQItem>
+</FAQ>
