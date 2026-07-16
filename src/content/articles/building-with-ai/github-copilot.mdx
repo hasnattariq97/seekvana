@@ -1,0 +1,128 @@
+---
+title: "What Is GitHub Copilot? A Beginner's 2026 Guide"
+description: "GitHub Copilot adds AI-powered autocomplete and chat to your existing editor, unlike standalone tools like Cursor. Here's how it works and what it costs."
+pillar: "building-with-ai"
+slug: "github-copilot"
+difficulty: "beginner"
+readTime: 5
+author: "Seekvana"
+publishedAt: "2026-07-17"
+tags: ["github copilot", "ai coding tools", "vs code"]
+featured: false
+lessonModule: "08"
+lessonNumber: "08.04"
+faqs:
+  - q: "Is GitHub Copilot the same as ChatGPT?"
+    a: "No. ChatGPT is a general-purpose chat assistant you talk to in a browser tab. GitHub Copilot lives inside your code editor, watches the file you're actually working on, and suggests code directly at your cursor. Some of Copilot's chat features are powered by similar underlying models, but the product itself is built specifically for writing and editing code in context."
+  - q: "Does GitHub Copilot work with Python?"
+    a: "Yes. Copilot works with most popular languages, including Python, JavaScript, TypeScript, Go, Java, and many others. It tends to be strongest in languages with a lot of public code to learn from, which includes Python, so beginners following a Python-heavy course path are well covered."
+  - q: "Can GitHub Copilot see my whole project or just one file?"
+    a: "Copilot primarily reads the file you have open, plus some surrounding context from other open tabs and your project structure. It doesn't have full awareness of your entire codebase the way a dedicated AI IDE like Cursor can, which is one reason its suggestions occasionally miss context that a human teammate would catch."
+  - q: "Do I need to know how to code before using GitHub Copilot?"
+    a: "You'll get more value out of Copilot if you can read and evaluate the code it suggests, since it isn't always right. It's a strong companion while you're learning, but it works best paired with the reading skills covered earlier in this course, not as a replacement for understanding what your code does."
+---
+
+{/* IMAGE PROMPT: Editorial flat illustration of a code editor with faint greyed-out ghost text appearing ahead of a blinking cursor, suggesting autocomplete, warm cream background, clay accent (#C9633F) on the cursor, clean and subtle, no text in image. | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+
+<ArticleImage
+  src="/images/articles/building-with-ai/github-copilot/cover.webp"
+  alt="Code editor showing faint grey ghost text suggestion appearing ahead of the cursor"
+/>
+
+You're halfway through typing a function name in VS Code when grey text appears out of nowhere, finishing the line before you do. It looks right. You pause, finger over Tab, wondering if you should trust it or if it's about to hand you a bug wearing a disguise.
+
+That grey text is GitHub Copilot. So what is GitHub Copilot, exactly? It's an AI extension that adds itself directly into an editor you already use, watching what you type and offering to finish it for you. Here's exactly what it is, how it works, and what it costs to use in 2026.
+
+> **Key Takeaways**
+> - GitHub Copilot is an extension you add to an existing editor (VS Code, JetBrains, others), not a standalone AI editor like Cursor or Windsurf
+> - Its core feature is inline autocomplete: grey "ghost text" suggestions you accept with Tab
+> - Copilot Chat adds a separate chat panel for asking questions and requesting changes
+> - As of mid-2026, GitHub Copilot Free gives 2,000 completions a month with no cost; paid plans start at $10/month
+> - New Copilot Business sign-ups have been paused for smaller organizations since April 2026, so double-check current plan availability before assuming a tier is open
+
+---
+
+## What Is GitHub Copilot, Exactly?
+
+**GitHub Copilot** is an AI coding assistant built by GitHub. It installs as an extension inside an editor you already use, so it never replaces that editor. It reads the code and comments in your current file and suggests completions, whole functions, or answers to direct questions.
+
+The distinction that matters most for this module: Cursor and [Windsurf's AI-native editor](/library/building-with-ai/windsurf-ai-editor) ask you to switch to an entirely new editor. Copilot is the opposite move: you keep your current [VS Code setup](/library/building-with-ai/install-vs-code) exactly as it is and add AI on top of it.
+
+## How Copilot's Autocomplete Actually Works
+
+Here's Copilot autocomplete explained in plain terms: as you type, Copilot reads the context in your file, including any comments describing what you're trying to do, and predicts what comes next. The prediction shows up as grey "ghost text" right where your cursor is. Press Tab to accept it, or keep typing to ignore it and write your own version instead.
+
+This is Copilot's original and most famous feature, and it's genuinely useful for repetitive patterns: boilerplate, common function shapes, and code you've written a dozen times before.
+
+It's worth being honest about the catch, though: Copilot's suggestions aren't always right. Developers who've used it for a while report that some suggestions look syntactically correct but do the wrong thing entirely, especially once you get past the simple, repetitive cases. I still read every suggestion before pressing Tab, out of habit built from the times a confident-looking line quietly did the opposite of what I actually needed. That small pause, reading before accepting, is what keeps this tool useful instead of risky.
+
+## Copilot Chat: Beyond Ghost Text
+
+Autocomplete was Copilot's original feature. Later, GitHub added a chat panel that works a lot like [Cursor's chat mode](/library/building-with-ai/install-cursor). You can ask questions about your code, request a specific change across a function, or get an explanation of something confusing, all without leaving your editor.
+
+Copilot Chat is genuinely useful when a plain autocomplete suggestion isn't enough. Say "refactor this function to handle an empty list" in plain English, and Chat handles it: no line-by-line fixing required. That's a separate conversation from the ghost-text suggestions running quietly in the background. Skip Chat entirely and you'll end up doing multi-step edits the slow way, accepting one small autocomplete suggestion at a time instead of describing the whole change once.
+
+## What GitHub Copilot Costs in 2026
+
+Pricing is where a lot of outdated advice floats around, so here's what's actually current. GitHub moved all Copilot plans to usage-based billing in June 2026. Separately, it paused new self-serve Business sign-ups for smaller organizations starting April 22, 2026, with no announced reopening date, per <a href="https://docs.github.com/en/copilot/get-started/plans" target="_blank" rel="noopener noreferrer">GitHub's current plans page</a>.
+
+**GitHub Copilot plans as of mid-2026**
+
+| Plan | Cost | What you get |
+|---|---|---|
+| Copilot Free | $0 | 2,000 code completions/month, limited chat, auto-selected models only |
+| Copilot Student | $0 (verified students) | Unlimited completions, AI credit allowance |
+| Copilot Pro | $10/month | Unlimited completions, model choice, monthly AI credits |
+| Copilot Pro+ | $39/month | Everything in Pro, plus a higher AI credit allowance and premium model access |
+| Copilot Business | $19/seat/month | Team management, policy controls, broader model catalog; new self-serve sign-ups for smaller orgs currently paused |
+
+If you're starting from zero today, Copilot Free is the realistic no-cost entry point: 2,000 completions a month before you'd need to consider a paid tier. Always check the current plans page before signing up, since pricing and availability have shifted more than once in 2026 already.
+
+## GitHub Copilot vs Cursor and Windsurf
+
+Here's the honest way to think about this: Copilot, Cursor, and Windsurf all do similar things on the surface: suggest code, answer questions, edit on request. But they solve a different problem for you as the user.
+
+Cursor and Windsurf ask you to adopt a new editor built specifically around AI, with deeper project-wide awareness and more autonomous multi-file editing. Copilot asks you to change nothing about your setup and layers AI onto whatever you already use. If you're not ready to leave VS Code, or your team has already standardized on it, Copilot is the lower-friction way in. If you want an editor that was designed around AI from day one and don't mind switching, Cursor or Windsurf go further. Pick Copilot for a project that really needed Cursor's project-wide awareness and you'll notice the gap fast, stuck accepting one-line suggestions when what you needed was a coordinated change across five files.
+
+## Is GitHub Copilot Right for You?
+
+Copilot is the right pick if you like your current editor and don't want to change your workflow. You just add autocomplete-style AI assistance on top of what you already have. It's a weaker fit if you're comfortable jumping into a different tool and want deeper, more autonomous project-wide help, since Cursor and Windsurf were built around that from day one.
+
+Either way, nothing here is permanent. Most people end up trying more than one of these tools before settling on a favorite, and that's the whole point of this module.
+
+Try this quick GitHub Copilot tutorial for beginners to see it for yourself:
+
+<Steps>
+  <Step number={1} title="Install Copilot and watch autocomplete work">
+    In VS Code, open the Extensions panel (the icon with four squares in the left sidebar) and search for "GitHub Copilot." Install it and sign in with a GitHub account, starting a free trial if prompted.
+
+    Open a new Python file and start typing a function name that suggests an obvious purpose, like:
+
+    ```python
+    def calculate_average(numbers):
+    ```
+
+    Pause after the colon and press Enter. Watch for greyed-out suggested code to appear, then press Tab to accept it or keep typing to ignore it.
+
+    This ghost-text pattern is Copilot's signature feature. You'll recognize it now in any editor that has it enabled.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 08.04.
+</Note>
+
+<FAQ>
+  <FAQItem question="Is GitHub Copilot the same as ChatGPT?">
+    No. ChatGPT is a general-purpose chat assistant you talk to in a browser tab. GitHub Copilot lives inside your code editor, watches the file you're actually working on, and suggests code directly at your cursor. Some of Copilot's chat features are powered by similar underlying models, but the product itself is built specifically for writing and editing code in context.
+  </FAQItem>
+  <FAQItem question="Does GitHub Copilot work with Python?">
+    Yes. Copilot works with most popular languages, including Python, JavaScript, TypeScript, Go, Java, and many others. It tends to be strongest in languages with a lot of public code to learn from, which includes Python, so beginners following a Python-heavy course path are well covered.
+  </FAQItem>
+  <FAQItem question="Can GitHub Copilot see my whole project or just one file?">
+    Copilot primarily reads the file you have open, plus some surrounding context from other open tabs and your project structure. It doesn't have full awareness of your entire codebase the way a dedicated AI IDE like Cursor can, which is one reason its suggestions occasionally miss context that a human teammate would catch.
+  </FAQItem>
+  <FAQItem question="Do I need to know how to code before using GitHub Copilot?">
+    You'll get more value out of Copilot if you can read and evaluate the code it suggests, since it isn't always right. It's a strong companion while you're learning, but it works best paired with the reading skills covered earlier in this course, not as a replacement for understanding what your code does.
+  </FAQItem>
+</FAQ>
