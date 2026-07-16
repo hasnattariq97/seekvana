@@ -1,0 +1,119 @@
+---
+title: "What Is Kilo Code AI Extension? Full Breakdown"
+description: "Wondering what the Kilo Code AI extension is? It's a free, open-source coding agent for VS Code and JetBrains with 500+ models. See how it works."
+pillar: "building-with-ai"
+slug: "kilo-code"
+difficulty: "beginner"
+readTime: 5
+author: "Seekvana"
+publishedAt: "2026-07-17"
+tags: ["kilo code", "ai coding tools", "open source vs code ai agent"]
+featured: false
+lessonModule: "08"
+lessonNumber: "08.08"
+faqs:
+  - q: "Is Kilo Code free to use?"
+    a: "The Kilo Code extension itself is free and open-source under the MIT license. You bring your own API key and pay your model provider directly, the same setup as Cline in the last lesson. Or, if you'd rather not manage a key yourself, you can buy optional prepaid credits from Kilo at no markup."
+  - q: "What are Kilo Code's modes?"
+    a: "Kilo Code splits its work into five modes: Code, Plan, Ask, Debug, and Review. Ask mode is the one worth learning first, since it's built for exactly the explain-this-code moment covered in this lesson, without letting the agent touch your files."
+  - q: "Is Kilo Code better than Cline?"
+    a: "Neither is strictly better, they solve slightly different problems. Cline, from the last lesson, leans fully autonomous with fewer configuration choices. Kilo Code gives you more control over models and modes, which means more setup, but also more flexibility once you know what you're doing."
+  - q: "Does Kilo Code work well in JetBrains IDEs?"
+    a: "Yes, and more solidly than some other tools in this module. Kilo Code shipped a native JetBrains plugin that's now generally available on the marketplace, so PyCharm and IntelliJ users get the same core features as the VS Code extension."
+---
+
+<ArticleImage
+  src="/images/articles/building-with-ai/kilo-code/cover.webp"
+  alt="A code editor with a small robot icon managing several open file tabs at once"
+/>
+
+You just finished the Cline lesson, installed it, and asked it to fix a bug. It worked quietly in the background and rewrote three files while you watched. That's great when you trust it completely. It's a little unsettling the first time you don't, and you realize there's no easy way to just ask it "wait, explain what you're about to do" without it also doing the thing.
+
+You want an AI tool that can explain a confusing function when you ask it to. You also want it to make a real multi-file change when you're ready, just not with the full hands-off autonomy of Cline. That middle ground has a name.
+
+What is Kilo Code? It's a free, open-source AI coding agent for VS Code and JetBrains that combines autocomplete, chat, and multi-file agent tasks, connected to whichever of 500-plus models you choose.
+
+In this lesson you'll learn how it compares to the tools you've already met, and where its real tradeoffs are. By the end you'll know if it's worth installing today.
+
+> **Key Takeaways**
+> - Kilo Code is a free, open-source (MIT) AI coding agent for VS Code and JetBrains, also available as a CLI
+> - It supports 500+ models through your own API key, more provider choice than Cline
+> - It splits work into five modes, Code, Plan, Ask, Debug, and Review, instead of one general chat window
+> - The honest tradeoff: more configuration and a real learning curve, and its line-by-line autocomplete lags behind dedicated tools like Copilot
+> - Its JetBrains plugin is now natively supported and generally available, a genuine strength for PyCharm and IntelliJ users
+
+## What Is Kilo Code?
+
+Kilo Code is a free, <a href="https://github.com/Kilo-Org/kilocode" target="_blank" rel="noopener noreferrer">open-source coding agent</a> you install as an extension in VS Code or JetBrains, or run from your terminal as a CLI. It plans tasks, edits multiple files, runs terminal commands, and checks its own work, more than a next-line suggestion tool.
+
+It has over 26,000 GitHub stars and calls itself an all-in-one agentic engineering platform. That's a mouthful, but it just means it's built to handle a whole task, not just one line of code.
+
+Like Cline, it connects to a model of your choice using your own API key. Unlike Cline, it supports over 500 models across dozens of providers, and lets you switch models mid-task depending on what you're doing.
+
+## How Kilo Code Compares to Copilot and Cline
+
+[Copilot's ghost-text approach](/library/building-with-ai/github-copilot) is simple by design: install it, and suggestions appear as you type. Kilo Code isn't trying to win at that game. Its autocomplete works, but it's not the reason to reach for it.
+
+Kilo Code sits closer to [Cline from the last lesson](/library/building-with-ai/cline-vscode) on the agentic side, it plans and executes multi-step changes across files too. The real difference is how it organizes that work. Instead of one continuous chat, it splits into five distinct modes: Code for making changes, Plan for breaking a task down first, Ask for explanations without touching your files, Debug for chasing down errors, and Review for checking work against your project's own conventions.
+
+Instead of one general-purpose agent, you tell Kilo Code up front what kind of help you want, and it behaves accordingly.
+
+## Kilo Code's Honest Tradeoff: More Power, More to Learn
+
+Here's what skipping this section costs you: installing Kilo Code and expecting it to feel like Copilot out of the box. It won't. Expect real setup time, choosing models and learning the five modes. It's a more configurable tool than a turnkey one, and that's the tradeoff.
+
+There's a cost tradeoff too. Paying per token instead of a flat subscription is transparent, but it rewards discipline. Run an expensive model on a trivial one-line fix, and you can end up paying more than Copilot's flat monthly fee would have cost.
+
+<Note>
+  If you want fast, zero-configuration autocomplete and nothing else, Copilot from lesson 08.04 is still the simpler choice. Reach for Kilo Code when you specifically want multi-file agent work with model flexibility, and you're willing to spend a little time learning its modes.
+</Note>
+
+<ArticleImage
+  src="/images/articles/building-with-ai/kilo-code/kilo-code-modes.webp"
+  alt="Five labeled badges representing Kilo Code's Code, Plan, Ask, Debug, and Review modes"
+  caption="Kilo Code splits its work into five modes, each suited to a different kind of task."
+/>
+
+## Kilo Code on JetBrains
+
+If you're on PyCharm, IntelliJ, or another JetBrains IDE, Kilo Code is a genuine strength in this module. Its <a href="https://blog.kilo.ai/p/kilo-code-goes-native-on-jetbrains" target="_blank" rel="noopener noreferrer">native JetBrains plugin</a> is now generally available on the marketplace, built directly for JetBrains rather than ported over from VS Code as an afterthought.
+
+That's worth naming plainly, since a few other tools in this module either skip JetBrains entirely or treat it as a secondary option. If JetBrains is your daily editor, Kilo Code is one of the more complete choices covered so far.
+
+## Your Task
+
+Follow this quick Kilo Code tutorial for beginners to see Ask mode explain real code in under five minutes. Want the full course map instead? The [Getting Started path](/paths/getting-started) lays out every lesson in order.
+
+<Steps>
+  <Step number={1} title="Install Kilo Code and connect your API key">
+    Install the "Kilo Code" extension in VS Code (or the JetBrains plugin, if that's your editor) from its marketplace.
+
+    Open Kilo Code's settings and connect it to your Anthropic API key, the same `ANTHROPIC_API_KEY` from your `.env` file in Module 05.
+  </Step>
+  <Step number={2} title="Use Ask mode to explain a function">
+    Open your own copy of the `ask_claude` function from [Module 05's functions lesson](/library/building-with-ai/python-functions) in a real file. Don't have it handy? Any short function you've written works just as well.
+
+    Switch Kilo Code to Ask mode, highlight the function, and ask it to explain what the function does and why the `model` parameter has a default value.
+
+    Write down one thing the answer clarified that you hadn't already understood.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 08.08.
+</Note>
+
+<FAQ>
+  <FAQItem question="Is Kilo Code free to use?">
+    The Kilo Code extension itself is free and open-source under the MIT license. You bring your own API key and pay your model provider directly, the same setup as Cline in the last lesson. Or, if you'd rather not manage a key yourself, you can buy optional prepaid credits from Kilo at no markup.
+  </FAQItem>
+  <FAQItem question="What are Kilo Code's modes?">
+    Kilo Code splits its work into five modes: Code, Plan, Ask, Debug, and Review. Ask mode is the one worth learning first, since it's built for exactly the explain-this-code moment covered in this lesson, without letting the agent touch your files.
+  </FAQItem>
+  <FAQItem question="Is Kilo Code better than Cline?">
+    Neither is strictly better, they solve slightly different problems. Cline, from the last lesson, leans fully autonomous with fewer configuration choices. Kilo Code gives you more control over models and modes, which means more setup, but also more flexibility once you know what you're doing.
+  </FAQItem>
+  <FAQItem question="Does Kilo Code work well in JetBrains IDEs?">
+    Yes, and more solidly than some other tools in this module. Kilo Code shipped a native JetBrains plugin that's now generally available on the marketplace, so PyCharm and IntelliJ users get the same core features as the VS Code extension.
+  </FAQItem>
+</FAQ>
