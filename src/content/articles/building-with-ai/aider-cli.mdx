@@ -1,0 +1,136 @@
+---
+title: "What Is Aider AI Coding Tool? Git-Native Explained"
+description: "What is Aider AI coding tool? It's a free terminal tool that auto-commits every AI edit to Git, so you always know what changed and why."
+pillar: "building-with-ai"
+slug: "aider-cli"
+difficulty: "beginner"
+readTime: 6
+author: "Seekvana"
+publishedAt: "2026-07-17"
+tags: ["aider", "ai coding tools", "git native ai coding assistant"]
+featured: false
+lessonModule: "08"
+lessonNumber: "08.07"
+faqs:
+  - q: "Is Aider free to use?"
+    a: "The Aider AI coding tool itself is completely free and open-source. What isn't free is the AI model behind it. Aider connects to a provider like Anthropic, OpenAI, or DeepSeek using your own API key, and that provider bills you per token, the same cost model as Cline in the last lesson."
+  - q: "Does Aider work inside VS Code?"
+    a: "Not as an extension. Aider runs entirely in your terminal, so it works with any editor, including VS Code, Vim, or a bare SSH session, because it never lives inside one specific editor's window. If you want an agent that lives inside VS Code's sidebar, that's what Cline is for."
+  - q: "What happens if Aider makes a bad edit?"
+    a: "Type /undo and Aider instantly reverts its last change, no manual Git commands required. Because every AI edit is its own separate commit, you can also just use git log or git revert like you learned in Module 04 if you want to roll back further than the last step."
+  - q: "Can I use Aider with a model other than Claude?"
+    a: "Yes. Aider isn't locked to one provider. You can point it at Claude, GPT-4o, Gemini, DeepSeek, or even a free local model through Ollama, and switch between them per session without changing how you use the tool."
+---
+
+<ArticleImage
+  src="/images/articles/building-with-ai/aider-cli/cover.webp"
+  alt="A terminal window with a git commit history timeline extending from it, the newest commit highlighted"
+/>
+
+You let an AI tool rewrite a function. It looks fine. You move on. Two days later something's broken, and you have no idea which of the last five AI edits caused it, because none of them left a trace you can point to.
+
+What is Aider AI coding tool? It's a free, open-source tool that runs in your terminal and fixes exactly that problem: every change it makes gets its own Git commit, automatically, with a message describing what changed. In this lesson you'll learn how that auto-commit workflow works and how to run your first Aider session. By the end you'll know when to reach for it instead of Cline.
+
+> **Key Takeaways**
+> - Aider is a free, open-source AI coding tool that runs entirely in your terminal, not inside a specific editor
+> - Every AI-made edit becomes its own Git commit with a descriptive message, automatically
+> - Typing `/undo` instantly reverts the last AI change, no manual Git commands needed
+> - It works with 30+ model providers, including Claude, GPT-4o, Gemini, and free local models
+> - It's the strongest pick when you want a clean, reviewable history of every AI change, separate from your own
+
+## What Is Aider AI Coding Tool?
+
+Aider is a free, <a href="https://github.com/Aider-AI/aider" target="_blank" rel="noopener noreferrer">open-source AI coding assistant</a> (Apache-2.0 license) you run from the command line inside an existing Git repository. You point it at a few files, describe what you want changed in plain English, and it edits the code directly, committing each change to Git as it goes, according to the <a href="https://aider.chat/" target="_blank" rel="noopener noreferrer">official Aider documentation</a>.
+
+That last part is the whole reason it exists. Aider doesn't just make edits and leave you to sort out what happened. It commits its own changes with clear messages, separate from anything you typed yourself, so your project's history stays honest about who changed what.
+
+## Why Aider's Git-Native Workflow Matters
+
+Remember [the commit workflow from Module 04](/library/building-with-ai/git-core-workflow)? Every real change gets its own commit with a message. `git log` tells the true story of a project, and `git revert` can undo exactly one mistake. Aider just automates that same discipline for AI edits.
+
+Whenever Aider edits a file, it commits that change with a descriptive message before doing anything else. If you already had uncommitted changes sitting in that file, Aider commits those separately first, so your own work and its work never get tangled into one confusing commit, per <a href="https://aider.chat/docs/git.html" target="_blank" rel="noopener noreferrer">Aider's git integration docs</a>.
+
+<Note>
+Run `git log` after any Aider session and you'll see its commits sitting right next to your own, each one labeled with what it changed. That's the same log you learned to read in Module 04, just with a new contributor.
+</Note>
+
+<ArticleImage
+  src="/images/articles/building-with-ai/aider-cli/aider-git-workflow.webp"
+  alt="Diagram of Aider's git-native workflow: task, proposed change, approval, auto-commit, and clean history, with a git log timeline and an undo callout"
+  caption="Every step from your request to Aider's auto-commit leaves a labeled entry in git log, and a bad one is a single /undo away."
+/>
+
+The first time I let an AI tool touch a real project without this kind of trail, I spent twenty minutes untangling which line broke a working script. I don't have that problem with Aider, because every change already has its own labeled commit waiting in `git log`. Skip this and an AI edit feels risky, since you can't tell what it touched or how to walk it back. Know it, and a bad edit is a one-line `/undo` or `git revert` away, never a mystery.
+
+## Aider vs Claude Code vs Cline: Where It Fits
+
+All three are AI coding agents, but they live in different places and solve slightly different jobs. [the Cline extension](/library/building-with-ai/cline-vscode), covered last lesson, is a VS Code extension, so it only works inside that one editor. Aider and Claude Code both run in your terminal, but Claude Code is locked to Anthropic's models, while Aider works with any provider you want.
+
+**Aider vs Claude Code vs Cline**
+
+| | Aider | Claude Code | Cline |
+|---|---|---|---|
+| Where it runs | Any terminal, any editor | Terminal | VS Code extension only |
+| Model choice | 30+ providers, or local | Claude only | 30+ providers, or local |
+| Git behavior | Auto-commits every edit | Manual commits (you decide) | Manual commits (you decide) |
+| Best for | Focused, single-file tasks with a clean history | Large multi-file refactors | Visual step-by-step approval inside VS Code |
+| Cost | Free, pay per API call | Included in Claude plans, or pay per API call | Free, pay per API call |
+
+Pick Aider when you want a fast, editor-agnostic tool for a specific fix and a Git history you can trust without thinking about it. Pick Claude Code when the task spans many interdependent files. Pick Cline when you want to watch every step inside VS Code before it happens. Grab the wrong one and you'll either overpay for a simple fix or watch a big refactor stall because your tool can't hold enough of the codebase in view at once.
+
+## How to Install and Run Aider
+
+This Aider tutorial for beginners takes about five minutes if you already have Python installed from Module 05.
+
+```bash
+python -m pip install aider-install
+aider-install
+```
+
+Then navigate into any Git repository and run `aider`. It'll ask which model provider to use; paste in the API key you already saved back in [Module 05's `.env` setup](/library/building-with-ai/python-dotenv).
+
+On small edits, Aider sometimes shows you the whole file as the diff instead of just the changed lines. It's not a bug, just something that throws people off the first few times, until you get used to skimming past the unchanged parts.
+
+## Your Task
+
+Time to see Aider's auto-commit behavior for yourself, using the same repo you set up back in Module 04.
+
+<Steps>
+  <Step number="1" title="Run Aider inside your Git repo">
+    Install Aider:
+
+    ```bash
+    python -m pip install aider-install
+    aider-install
+    ```
+
+    Navigate into your `my-first-repo` folder from Module 04 (or any git-tracked project), then run:
+
+    ```bash
+    aider
+    ```
+
+    Ask it to make a small, safe change: "add a comment at the top of README.md explaining what this repo is for."
+
+    Review the diff it proposes, approve it, then run `git log`. You should see a new commit Aider created automatically, with a clear message describing exactly what it changed.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 08.07.
+</Note>
+
+<FAQ>
+  <FAQItem question="Is Aider free to use?">
+    The Aider AI coding tool itself is completely free and open-source. What isn't free is the AI model behind it. Aider connects to a provider like Anthropic, OpenAI, or DeepSeek using your own API key, and that provider bills you per token, the same cost model as Cline in the last lesson.
+  </FAQItem>
+  <FAQItem question="Does Aider work inside VS Code?">
+    Not as an extension. Aider runs entirely in your terminal, so it works with any editor, including VS Code, Vim, or a bare SSH session, because it never lives inside one specific editor's window. If you want an agent that lives inside VS Code's sidebar, that's what Cline is for.
+  </FAQItem>
+  <FAQItem question="What happens if Aider makes a bad edit?">
+    Type /undo and Aider instantly reverts its last change, no manual Git commands required. Because every AI edit is its own separate commit, you can also just use git log or git revert like you learned in Module 04 if you want to roll back further than the last step.
+  </FAQItem>
+  <FAQItem question="Can I use Aider with a model other than Claude?">
+    Yes. Aider isn't locked to one provider. You can point it at Claude, GPT-4o, Gemini, DeepSeek, or even a free local model through Ollama, and switch between them per session without changing how you use the tool.
+  </FAQItem>
+</FAQ>
