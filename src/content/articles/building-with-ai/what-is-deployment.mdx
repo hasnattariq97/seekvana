@@ -1,0 +1,122 @@
+---
+title: "What Is Deployment? Taking Code From Laptop to Live"
+description: "Deployment means moving your code off your laptop onto a server that stays on, giving it a public URL anyone can visit. Here's how it works."
+pillar: "building-with-ai"
+slug: "what-is-deployment"
+difficulty: "beginner"
+readTime: 8
+author: "Seekvana"
+publishedAt: "2026-07-24"
+tags: ["what is deployment", "deployment explained for beginners", "how apps go live"]
+featured: false
+lessonModule: "09"
+lessonNumber: "09.01"
+faqs:
+  - q: "Is deployment the same thing as hosting?"
+    a: "They're closely related but not identical. Hosting is the ongoing service, a company renting you space on their always-on servers, while deployment is the act of putting your specific code onto that hosting. It's like an apartment and moving in: the apartment (hosting) exists either way, moving in (deployment) is the specific action of putting your things there."
+  - q: "Do I need to learn DevOps before I can deploy my first project?"
+    a: "No. DevOps is a broader, more advanced discipline about automating and managing deployment at scale, usually for teams running many services at once. The platforms this course uses handle nearly all of that complexity for you, so a solo beginner deploying one project needs almost none of it to get started."
+  - q: "What happens to the code on my laptop after I deploy it?"
+    a: "Nothing. Deployment copies your code to a server, it doesn't move or delete anything locally. Your laptop keeps its own working copy exactly as it was, which is also why you can keep developing and testing changes locally before pushing a new deployment."
+  - q: "Does deploying a project cost money?"
+    a: "Usually not at the beginner stage. Every platform covered in this module offers a genuinely free tier for small projects, and lesson 09.13 covers exactly what those free tiers include and when a project might outgrow one. For now, expect deployment itself to cost nothing."
+---
+
+{/* IMAGE PROMPT: Editorial flat illustration of a laptop on the left connected by a road/path to a glowing server building on the right, with a small "live" signal radiating from the building, warm cream background, clay accent (#C9633F) on the signal, clean and directional, no text in image. | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+
+<ArticleImage src="/images/articles/building-with-ai/what-is-deployment/cover.webp" alt="A laptop connected by a winding road to a glowing server building with a live signal radiating outward" />
+
+Your FastAPI server from lesson 07.01 answers every request perfectly. Your HTML page from lesson 06.01 loads instantly and does exactly what you built it to do. Then a friend asks to see it. The only honest answer is that they can't, not unless they're standing behind you looking at your screen. Right now, none of it exists anywhere but your laptop.
+
+That gap is what deployment closes. **Deployment** is the process of moving your code off your own machine and onto a computer that stays on permanently, with a public address anyone can visit. Think of it like the difference between building something in your garage and opening it as a shop on a real street. The garage version works exactly the same way, but only you can walk in. Deployment moves it to the street: a permanent address, open all the time, reachable by anyone who knows where to look.
+
+Nothing about your code changes when you deploy it. Your FastAPI server still runs the same way `uvicorn` ran it locally. Your HTML page still loads the same way it did when you opened `index.html` in a browser. What changes is where it lives, and who besides you can reach it.
+
+> **Key Takeaways**
+> - Deployment means copying your code onto a server you don't own, one that stays on permanently instead of just while your laptop is
+> - Your code runs exactly the same after deployment, `uvicorn` or a browser tab just gets replaced by a hosting company's servers
+> - A deployed app gets a public URL, turning something only you could open into something anyone with the link can visit
+> - Module 09 covers this in stages: which platforms to use, how the process actually works, and how to keep secrets safe once your code is public-facing
+
+---
+
+## What Does "Deployment" Actually Mean?
+
+So what does deploy actually mean, and how does an app go live from a laptop that only you can reach? Start with the plain version: deployment is copying your finished code onto someone else's computer, one that's built to stay running all day, every day, and handing it a public address. That's the entire concept. Everything else in this module is detail on top of that one idea. Skip this part and the platform-specific steps in the next few lessons will feel like following instructions blindly instead of understanding what each click actually does.
+
+{/* IMAGE PROMPT: Editorial flat illustration, four-step deployment flow, you build it on your laptop, you deploy it to a hosting platform, the server runs it around the clock, it's live at a public URL, warm cream background, clay accent (#C9633F), clean and directional, arrows connecting each step. | FILENAME: deployment-four-steps.webp | DIMENSIONS: 1600x950 */}
+
+<ArticleImage src="/images/articles/building-with-ai/what-is-deployment/deployment-four-steps.webp" alt="A four-step infographic showing code moving from a laptop to a server to a live public URL, labeled You Build It, You Deploy It, The Server Runs It, and It's Live" caption="The full deployment flow in four steps: write and test code on your laptop, send it to a server, the server keeps it running around the clock, and the app goes live at a public URL." />
+
+The "someone else's computer" part is a real, physical machine sitting in a data center, owned and maintained by a hosting company like the platforms you'll meet in the next few lessons. It's not magic, and it's not "the cloud" in some abstract sense (I've never liked that word, it makes something very concrete sound like weather). It's a computer, just like yours, except it never sleeps and it's always connected to the internet.
+
+Once your code is there, that server runs it the exact same way your laptop did. If it's [the backend running your agent](/library/building-with-ai/where-agents-live), the server starts it with the same `uvicorn` command you'd type locally. If it's a static HTML page, the server just hands out the file whenever a browser asks for it, the same job your laptop was doing when you opened `index.html` directly.
+
+If you want the more technical rundown at any point, <a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Client-side_tools/Deployment" target="_blank" rel="noopener noreferrer">MDN's guide to deployment</a> covers the build-and-push mechanics in more depth than this lesson needs right now.
+
+The last piece is the URL. Deployment gives your code an address, something like `your-project.vercel.app`, that points directly at wherever your code now lives. Type that address into any browser, anywhere in the world, and you reach the same app you built. That's the whole transformation: garage to storefront, laptop to server, private to public.
+
+That first address is free, but it's also generic, handed out by whichever platform you deploy to. A real product usually trades it in later for something cleaner, like `yourproject.com` instead of `yourproject-a8f3k2.vercel.app`. That's a separate step from deployment itself (this course covers it later, once you've got something worth naming), so don't worry about it yet. For now, the platform-provided address does exactly what a URL needs to do: it points somewhere real.
+
+## Why Your Laptop Isn't Enough
+
+Here's the part that makes deployment necessary instead of optional: your laptop was never built to be a server. It sleeps when you close the lid. It disconnects when you leave the house. It shares your home Wi-Fi's address with every other device in the house, which usually isn't even reachable from outside your network in the first place.
+
+Right now, running your FastAPI server locally means three things all have to stay true at once:
+
+- Your laptop is on
+- Your terminal is still running `uvicorn`
+- You haven't closed it
+
+The moment any one of those stops, your app is gone. Not broken, not slow, just completely unreachable, because there's nothing left running anywhere.
+
+Even leaving your laptop on all the time wouldn't fix it. Your home router sits between your laptop and the internet, and by default it's built to keep outside traffic out, not invite it in. Someone in another city typing your home IP address into their browser almost never reaches anything, because your router quietly drops that request before it ever gets to your machine. Getting around that on purpose (port forwarding, dynamic DNS, and similar tricks) is possible, but it's fragile, insecure by default, and exactly the kind of maintenance burden a real hosting company already solves for you.
+
+<Note>
+That distinction, between a <a href="https://www.pagerduty.com/resources/engineering/learn/what-is-production-environment/" target="_blank" rel="noopener noreferrer">development environment and a production environment</a>, is one you'll hear constantly once you start deploying for real. A local dev server and a production server run the exact same code. The difference isn't what the code does, it's whether the machine underneath it is designed to stay on and be reachable by strangers.
+</Note>
+
+This is also why "it works on my machine" is such a common and mostly harmless problem during development, and such a serious one once you deploy. On your laptop, only you are testing it, so quirks stay invisible. Once it's live, anyone can hit it, at any hour, from any device, which is exactly why the next several lessons spend real time making sure what goes live actually works the way it did locally.
+
+## What Happens Next in This Module
+
+Now that you know what deployment means, the rest of Module 09 is about doing it for real, one piece at a time.
+
+You'll start with the two platforms this course uses by name for frontend files and a running backend process (lessons 09.03 and 09.04). After that comes a quick tour of the wider landscape of alternatives. Frontend and backend deploy differently, and the very next lesson breaks down exactly why, before you deploy either one. That order matters: understanding the split first means neither platform feels arbitrary when you actually click "deploy" on it.
+
+After that, you'll learn the actual workflow professional teams use: connect your GitHub repository to a platform once, and every `git push` from then on triggers a new deployment automatically, no manual upload step, ever (lesson 09.07).
+
+Then comes the part every beginner eventually needs and nobody explains well: your deployed backend still needs real API keys to function, the same `ANTHROPIC_API_KEY` you've kept safely out of GitHub since lesson 04.07's `.gitignore` lesson. Lesson 09.08 shows you exactly where that value goes once your code is public-facing, and why the protection you already learned still holds.
+
+None of this happens in one lesson, and it isn't supposed to. Deployment has a few distinct pieces: choosing where your code lives, connecting the workflow, and keeping secrets safe. This module walks through each one with the project you've already built, so by the end, it's live instead of local. This lesson is part of the [Getting Started path](/paths/getting-started), the same sequence that's gotten you this far.
+
+---
+
+<Steps>
+  <Step number={1} title="Explain deployment in one sentence">
+    Imagine explaining deployment to a friend who has never coded. Write exactly one sentence describing what deployment means, using an analogy if it helps (a garage becoming a shop, a draft becoming a published book, pick your own).
+
+    Read it back. Would it make sense to someone with zero technical background? If not, simplify it further.
+
+    This is the same skill as writing a good README from Module 04: clarity over precision.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 09.01.
+</Note>
+
+<FAQ>
+  <FAQItem question="Is deployment the same thing as hosting?">
+    They're closely related but not identical. Hosting is the ongoing service, a company renting you space on their always-on servers, while deployment is the act of putting your specific code onto that hosting. It's like an apartment and moving in: the apartment (hosting) exists either way, moving in (deployment) is the specific action of putting your things there.
+  </FAQItem>
+  <FAQItem question="Do I need to learn DevOps before I can deploy my first project?">
+    No. DevOps is a broader, more advanced discipline about automating and managing deployment at scale, usually for teams running many services at once. The platforms this course uses handle nearly all of that complexity for you, so a solo beginner deploying one project needs almost none of it to get started.
+  </FAQItem>
+  <FAQItem question="What happens to the code on my laptop after I deploy it?">
+    Nothing. Deployment copies your code to a server, it doesn't move or delete anything locally. Your laptop keeps its own working copy exactly as it was, which is also why you can keep developing and testing changes locally before pushing a new deployment.
+  </FAQItem>
+  <FAQItem question="Does deploying a project cost money?">
+    Usually not at the beginner stage. Every platform covered in this module offers a genuinely free tier for small projects, and lesson 09.13 covers exactly what those free tiers include and when a project might outgrow one. For now, expect deployment itself to cost nothing.
+  </FAQItem>
+</FAQ>
