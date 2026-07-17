@@ -1,0 +1,122 @@
+---
+title: "How to Deploy to Vercel for Beginners (Free & Fast)"
+description: "Learn how to deploy to Vercel for beginners: connect GitHub, import your repo, and get a free, live .vercel.app URL in about a minute."
+pillar: "building-with-ai"
+slug: "deploy-to-vercel"
+difficulty: "beginner"
+readTime: 6
+author: "Seekvana"
+publishedAt: "2026-07-24"
+tags: ["how to deploy to vercel", "vercel tutorial beginners", "deploy static site vercel", "vercel free tier"]
+featured: false
+lessonModule: "09"
+lessonNumber: "09.03"
+faqs:
+  - q: "Is Vercel really free?"
+    a: "Yes. Vercel's Hobby plan is genuinely free with no credit card required, and it's the right tier for learning projects. It comes with real limits, such as 100GB of bandwidth a month, and it's for personal, non-commercial use. If you ever hit a limit, the project pauses until the next cycle instead of charging you, so there's no surprise bill."
+  - q: "Can I deploy to Vercel without GitHub?"
+    a: "Yes. Vercel Drop lets you drag a project folder straight into your browser and deploy it, no GitHub needed, and there's also a command-line tool for deploying from your terminal. GitHub is just the recommended path here because it unlocks auto-deploy: once connected, every push updates your live site automatically."
+  - q: "Why does my Vercel site show a 404 after a successful deploy?"
+    a: "Almost always one of two things. Either your main file is capitalized as Index.html when it should be lowercase index.html (Vercel's servers are case-sensitive even though your laptop probably isn't), or the output directory setting points at the wrong folder. Rename the file to lowercase or leave the default settings, then push again."
+  - q: "How long does a Vercel deployment take?"
+    a: "Your first deploy of a simple static site usually finishes in about a minute. After that, each new deployment triggered by a git push is often faster, frequently live in 10 to 30 seconds, because Vercel only has to rebuild what changed. You can watch the progress in your Vercel dashboard as it happens."
+---
+
+{/* IMAGE PROMPT: Editorial flat illustration of a GitHub repository icon connected by a single click/arrow to a Vercel triangle logo shape, which then produces a live globe/URL icon, warm cream background, clay accent (#C9633F) on the connecting arrow, clean and fast-feeling, no text in image. | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+
+<ArticleImage src="/images/articles/building-with-ai/deploy-to-vercel/cover.webp" alt="A GitHub repository icon connected by a single arrow to a Vercel triangle, which produces a live globe and URL icon" />
+
+Your `index.html` from Module 06 loads perfectly. The layout is right, the styling holds, everything works, on your laptop. Then you close the lid and it's gone. You text the file to a friend and it opens as a broken local page with missing images, not a real website. The page is finished. Nobody but you can reach it.
+
+This lesson closes that gap. You'll learn how to deploy to Vercel, the platform this course uses for frontend files, and get that same page live on a public URL anyone can open, in about a minute, for free. Vercel is the default recommendation here for one reason: it takes you from "code on my laptop" to "live link I can send anyone" faster than almost anything else.
+
+> **Key Takeaways**
+> - Deploying to Vercel means connecting your GitHub account, letting Vercel copy your files onto its always-on servers, and getting back a public URL ending in `.vercel.app`
+> - Vercel's free Hobby tier needs no credit card and handles learning projects comfortably
+> - Once connected, every `git push` triggers a new deployment automatically, no manual upload step, ever
+> - A build that says "success" but shows a 404 is usually a capitalized filename or wrong output folder, not a broken deploy
+
+---
+
+## What Vercel Does When You Deploy
+
+Before the clicks, the mental model, because knowing what's actually happening is the difference between following steps blindly and being able to fix things when they go sideways.
+
+When you deploy to Vercel, three plain things happen. Vercel connects to [your GitHub account](/library/building-with-ai/git-vs-github), the same GitHub you set up in Module 04. It copies the files from one of your repositories onto its own servers, computers in a data center that never sleep and are always connected to the internet. Then it hands you a public address, something like `your-project.vercel.app`, that points directly at those files.
+
+That's the whole thing. A copy, an always-on host, and a URL. This is exactly [what deployment means](/library/building-with-ai/what-is-deployment) from lesson 09.01, made concrete on one specific platform. Nothing about your code changes. The same `index.html` a browser opened on your laptop is the same file Vercel now serves to anyone who visits the link.
+
+If you skip this model and just memorize the buttons, the first time a deploy misbehaves you'll be stuck. If you understand that Vercel is copying files and serving them, a 404 stops being scary and starts being a question you can answer: is the file where Vercel expects it? The official <a href="https://vercel.com/docs/deployments" target="_blank" rel="noopener noreferrer">Vercel deployments documentation</a> walks through the same flow if you want the formal version.
+
+## How to Deploy to Vercel, Step by Step
+
+Here's the fastest path from a static page on your laptop to a live URL. The short version: push your files to GitHub, import the repo into Vercel, and click Deploy. Vercel does the rest and gives you a link in about a minute.
+
+{/* IMAGE PROMPT: Six-step infographic of the Vercel deploy process, push code to GitHub, sign in to Vercel with GitHub, import your repository, leave default settings, wait for the deployment, get your live URL, plus an auto-deploy strip along the bottom, warm cream background, clay accent (#C9633F), editorial flat style. | FILENAME: deploy-to-vercel-steps.webp | DIMENSIONS: 1640x960 */}
+
+<ArticleImage src="/images/articles/building-with-ai/deploy-to-vercel/deploy-to-vercel-steps.webp" alt="Six-step infographic showing how to deploy to Vercel: push to GitHub, sign in with GitHub, import your repository, leave default settings, wait about a minute, and get a live .vercel.app URL, with an auto-deploy loop along the bottom" caption="The whole deploy in six steps: push to GitHub, sign in, import your repo, keep the defaults, wait about a minute, and open your live .vercel.app URL. Every later git push updates it automatically." />
+
+Here's exactly what you do, in order:
+
+1. Make sure your `index.html` is pushed to a GitHub repository. This is the [git add, commit, and push](/library/building-with-ai/git-core-workflow) workflow from lesson 04.03. Vercel deploys from GitHub, so if the code isn't there yet, there's nothing to import.
+2. Go to vercel.com and create a free account. Sign in with GitHub, which links the two automatically. No credit card is asked for on this tier.
+3. Click **Add New**, then **Project**, and select the repository you just pushed.
+4. Click **Deploy** and accept the default settings. For a plain static site, you usually don't need to change anything.
+5. Wait about a minute. Vercel gives you a live URL ending in `.vercel.app`. Open it in any browser.
+
+That's it. The page that only you could see is now reachable by anyone with the link. The step people miss is the first one: Vercel imports from GitHub, so a repo that isn't pushed yet is the most common reason "nothing shows up." Everything else is accepting defaults. And to be clear on cost, the free tier really is free here, no trial clock, no card, as Vercel's <a href="https://vercel.com/pricing" target="_blank" rel="noopener noreferrer">pricing page</a> spells out.
+
+## Auto-Deploy: The Part That Changes How You Work
+
+Deploying once is useful. What makes Vercel genuinely change your workflow is what happens after: **auto-deploy**.
+
+Once your repository is connected, every single `git push` to it triggers a brand-new deployment automatically. Change a heading, push, and Vercel rebuilds and swaps in the new version, usually live within seconds to a minute. You never "upload" anything again. Your live site simply tracks your GitHub repo.
+
+I still remember how strange this felt the first time. I'd expected deployment to be a careful, manual ritual I'd dread repeating. Instead, editing a live website became identical to saving my work: change code, push, done. That's the loop you'll use from now on, and it's part of the same [Getting Started path](/paths/getting-started) that's carried you through every module so far.
+
+Here's the stake if you don't internalize it: beginners who don't know about auto-deploy either re-drag their files every time, which is slow and error-prone, or they get scared to touch a site once it's live, in case they break it. Neither is necessary. The push you already know is the deploy. If a push ever breaks the live version, Vercel keeps a history of past deployments, so you can roll back to a working one in a couple of clicks.
+
+## What "Free" Actually Means on Vercel
+
+"Free" always deserves a straight answer, so here it is. Vercel's Hobby tier is genuinely free, with no credit card and no expiry. For a learning project, a portfolio, or a small tool you share with friends, you will almost certainly never pay a cent.
+
+It does have real limits, worth knowing so nothing surprises you: around 100GB of bandwidth a month and caps on things like function calls, and it's meant for personal, non-commercial use. The important part is what happens when you hit a limit. Vercel pauses the affected feature, usually for about 30 days until it resets, rather than sending you a bill. There's no overage charge waiting to ambush you, which is exactly the reassurance a first-time deployer needs.
+
+One more honest heads-up, because it trips up nearly everyone once. Sometimes your build shows "success" but the live page returns a 404. Don't panic, and don't assume you broke something deep. The usual culprit is a capitalized filename: Vercel's servers are case-sensitive, so `Index.html` and `index.html` are two different files to them, even though your laptop treated them as the same. Rename it to lowercase `index.html`, or leave Vercel's default settings alone, push again, and it resolves. Knowing this in advance turns a confusing evening into a ten-second fix.
+
+<Tip>
+If you'd rather not use GitHub at all for a quick test, Vercel Drop lets you drag a folder straight into your browser to deploy it. GitHub is still the better default here, because it's what unlocks the auto-deploy loop above.
+</Tip>
+
+---
+
+<Steps>
+  <Step number={1} title="Deploy your first page to Vercel">
+    Make sure your `index.html` from lesson 06.01 is pushed to a GitHub repository. If you need a refresher on `git add`, `git commit`, and `git push`, revisit lesson 04.03.
+
+    Go to vercel.com and create a free account, signing in with GitHub.
+
+    Click **Add New**, then **Project**, select your repository, and click **Deploy**, accepting the default settings.
+
+    Wait about a minute. Vercel gives you a live URL ending in `.vercel.app`. Open it in your browser. Your page is now live on the internet, reachable by anyone with the link.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 09.03.
+</Note>
+
+<FAQ>
+  <FAQItem question="Is Vercel really free?">
+    Yes. Vercel's Hobby plan is genuinely free with no credit card required, and it's the right tier for learning projects. It comes with real limits, such as 100GB of bandwidth a month, and it's for personal, non-commercial use. If you ever hit a limit, the project pauses until the next cycle instead of charging you, so there's no surprise bill.
+  </FAQItem>
+  <FAQItem question="Can I deploy to Vercel without GitHub?">
+    Yes. Vercel Drop lets you drag a project folder straight into your browser and deploy it, no GitHub needed, and there's also a command-line tool for deploying from your terminal. GitHub is just the recommended path here because it unlocks auto-deploy: once connected, every push updates your live site automatically.
+  </FAQItem>
+  <FAQItem question="Why does my Vercel site show a 404 after a successful deploy?">
+    Almost always one of two things. Either your main file is capitalized as Index.html when it should be lowercase index.html (Vercel's servers are case-sensitive even though your laptop probably isn't), or the output directory setting points at the wrong folder. Rename the file to lowercase or leave the default settings, then push again.
+  </FAQItem>
+  <FAQItem question="How long does a Vercel deployment take?">
+    Your first deploy of a simple static site usually finishes in about a minute. After that, each new deployment triggered by a git push is often faster, frequently live in 10 to 30 seconds, because Vercel only has to rebuild what changed. You can watch the progress in your Vercel dashboard as it happens.
+  </FAQItem>
+</FAQ>
