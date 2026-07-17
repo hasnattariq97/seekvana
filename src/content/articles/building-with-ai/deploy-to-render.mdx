@@ -1,0 +1,138 @@
+---
+title: "How to Deploy FastAPI to Render (Free, for Beginners)"
+description: "How to deploy FastAPI to Render's free tier: the exact build and start commands, why it works when Vercel doesn't, and the cold-start catch to expect."
+pillar: "building-with-ai"
+slug: "deploy-to-render"
+difficulty: "beginner"
+readTime: 6
+author: "Seekvana"
+publishedAt: "2026-07-24"
+tags: ["deployment", "render", "fastapi", "python backend", "web hosting"]
+featured: false
+lessonModule: "09"
+lessonNumber: "09.04"
+faqs:
+  - q: "Why is my Render app so slow the first time I open it?"
+    a: "That slow first load is Render's free tier waking your server back up, not a broken deploy. Free web services go to sleep after 15 minutes with no traffic, and the next visit has to boot the process back up, which takes about 30 to 60 seconds. Every visit after that is fast, until it goes idle again."
+  - q: "Do I need a Dockerfile to deploy FastAPI to Render?"
+    a: "No. Render detects a Python project automatically and installs your dependencies from requirements.txt, so a plain FastAPI app needs no Dockerfile at all. Docker is an option if you want full control over the environment later, but for the hello-world server from Module 07 it's unnecessary."
+  - q: "What do I put in requirements.txt for a FastAPI app?"
+    a: "At minimum, two lines: fastapi and uvicorn. FastAPI is the framework your code imports, and uvicorn is the server that actually runs it. Render reads this file during the build and installs both. If you import any other package in your code, add it here too, or the deploy will fail with a missing-module error."
+  - q: "Why does Render say 'No open ports detected'?"
+    a: "It means your app isn't listening on the port Render assigned it. Render picks the port dynamically and passes it in as the $PORT variable, so your start command must include --host 0.0.0.0 --port $PORT. If you hardcode a port like 8000 instead, Render can't reach your app and reports no open ports."
+---
+
+{/* IMAGE PROMPT: Editorial flat illustration of a server icon that dims to a low-power sleep state and then lights back up as a request arrow arrives, representing a backend waking from sleep, warm cream background (#FAF8F3), clay accent (#C9633F) on the "awake" glow, clean and clear, no text in image. | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+
+<ArticleImage
+  src="/images/articles/building-with-ai/deploy-to-render/cover.webp"
+  alt="A server icon dimming to a sleep state and lighting back up when a request arrives"
+/>
+
+You finish your first Render deploy, copy the fresh `.onrender.com` link, and send it to a friend to show off. They open it, and the page just spins. Ten seconds. Thirty. Almost a full minute of nothing. Your stomach drops: the deploy must be broken. It isn't, and by the end of this lesson you'll know exactly why that happens.
+
+To deploy FastAPI to Render, you connect your GitHub repo, tell Render to build with `pip install -r requirements.txt` and start with `uvicorn main:app --host 0.0.0.0 --port $PORT`, and it runs your server on an always-on machine at a public URL. Render works for this when a static host like Vercel doesn't, because a FastAPI server isn't a file to hand out, it's a program that has to stay awake and listen. This lesson takes the hello-world server from Module 07 live.
+
+> **Key Takeaways**
+> - Render keeps a real Python process running, which is exactly why it can host a FastAPI backend and a static host like Vercel can't
+> - Two settings do the whole job: build command `pip install -r requirements.txt`, start command `uvicorn main:app --host 0.0.0.0 --port $PORT`
+> - `$PORT` must stay a variable, not a fixed number, because Render picks the port itself, hardcode one and you get "No open ports detected"
+> - The free tier sleeps after 15 minutes idle, so the next visit waits 30 to 60 seconds while it wakes, that's expected, not a failed deploy
+
+---
+
+## Why Vercel Couldn't Run Your FastAPI Server
+
+Here's the cleanest way to hold the difference in your head: Vercel hands out files, and Render keeps a program running. A static host is a librarian passing you a book that already exists. Your [FastAPI server](/library/building-with-ai/backend-server-basics) is not a book, it's a clerk who has to be sitting at the desk every time someone walks up, ready to answer.
+
+That's the exact split from the [backend deployment](/library/building-with-ai/frontend-backend-fullstack-deployment) lesson, and this is where it stops being theory. A FastAPI app is a live process. It boots up, opens a connection, and waits for requests, indefinitely. Vercel's model is built around serving static files fast and running tiny functions that finish in a blink, not around babysitting a process that never exits.
+
+So if you push a FastAPI server to a pure static host, nothing loads, and there's no red error telling you why. The machine simply has nowhere to actually run your code. Render is built for the opposite job: it starts your process and keeps it alive, which is why it's the backend half of this course.
+
+## How Do You Deploy FastAPI to Render?
+
+You connect your GitHub repository to Render, set two commands, and click deploy. Render installs your dependencies, runs your start command, and hands you a live `onrender.com` URL, usually within a couple of minutes. That's the whole shape of it.
+
+The mental model is the same GitHub connection you already used for the frontend, with one real change. Instead of copying static files, Render reads your `requirements.txt`, installs what's listed, and then actually runs your server. For the Module 07 app, that file is just two lines:
+
+**requirements.txt**
+
+```
+fastapi
+uvicorn
+```
+
+Then you give Render two commands. The build command installs those packages. The start command launches your app:
+
+```
+Build:  pip install -r requirements.txt
+Start:  uvicorn main:app --host 0.0.0.0 --port $PORT
+```
+
+The one part worth slowing down on is `$PORT`. You never pick a port number yourself here. Render decides which port to use and passes it in through that `$PORT` variable, so your job is just to point uvicorn at it. Think of it as letting Render pick the door number and telling your app to stand at whichever door it's given.
+
+<Note>
+Leave `$PORT` as a variable. If you hardcode a fixed number like `8000`, the build can still succeed, but Render can't reach your app on the port it expected, and you'll get a "No open ports detected" failure that looks scarier than it is.
+</Note>
+
+From then on, every [git push](/library/building-with-ai/git-core-workflow) to that repo redeploys automatically, the same way your frontend host works. Render's own <a href="https://render.com/docs/deploy-fastapi" target="_blank" rel="noopener noreferrer">deploy a FastAPI app guide</a> lists these exact settings if you want to check them against the source.
+
+{/* IMAGE PROMPT: Editorial flat illustration showing a left-to-right deploy flow: a GitHub repository icon, an arrow to a build step labelled with a pip/package icon, an arrow to a run step labelled with a play/server icon, ending in a live globe with an onrender.com URL tag, warm cream background (#FAF8F3), clay accent (#C9633F) on the final live URL, clean and directional, no text beyond simple labels. | FILENAME: render-deploy-flow.webp | DIMENSIONS: 1600x950 */}
+
+<ArticleImage
+  src="/images/articles/building-with-ai/deploy-to-render/render-deploy-flow.webp"
+  alt="A deploy flow from a GitHub repository, through a build step and a run step, to a live onrender.com URL"
+  caption="Push to GitHub, Render builds and runs your app, and it goes live at an onrender.com URL."
+/>
+
+## Your Free Server Falls Asleep, and That's Fine
+
+Now back to that spinning page. On Render's free tier, a web service that goes 15 minutes without a single request spins itself down to save resources. It doesn't disappear, it powers off and waits. The next person to visit triggers a wake-up, and booting the process back up takes roughly 30 to 60 seconds.
+
+That's the slow first load. It isn't your code, it isn't a failed build, and it isn't something you configured wrong. It's the free tier doing exactly what it promises: free compute in exchange for not staying awake around the clock. Every request after the wake-up is fast, right up until it sits idle long enough to nod off again.
+
+I've watched people lose a whole evening to this: a 40-second first load looks like a failure, so they start re-pushing perfectly good code trying to fix a problem that was never there. Knowing it's coming is the entire fix. If you eventually need it always-on, Render's paid Starter tier removes spin-down for a few dollars a month, worth it once a project actually matters, and genuinely skippable while you're learning. Render documents the exact <a href="https://render.com/docs/free" target="_blank" rel="noopener noreferrer">free tier spin-down behavior</a> if you want the specifics.
+
+If any earlier piece feels shaky, [the Getting Started path](/paths/getting-started) walks the whole build-and-deploy arc again from the top.
+
+---
+
+## Your Task
+
+<Steps>
+  <Step number={1} title="Deploy your FastAPI hello world to Render">
+    Push your `main.py` from lesson 07.01 to a GitHub repository, and add a `requirements.txt` file next to it containing two lines:
+
+    ```
+    fastapi
+    uvicorn
+    ```
+
+    Go to <a href="https://render.com" target="_blank" rel="noopener noreferrer">render.com</a>, create a free account, and connect your GitHub. Click **New Web Service**, select your repository, and set the start command to:
+
+    ```
+    uvicorn main:app --host 0.0.0.0 --port $PORT
+    ```
+
+    Click deploy and watch the build logs scroll by until it finishes. Open the `onrender.com` URL Render gives you and confirm you see the same JSON message you saw locally, except this time it's live on the internet.
+  </Step>
+</Steps>
+
+<Note>
+Done? You've completed Lesson 09.04.
+</Note>
+
+<FAQ>
+  <FAQItem question="Why is my Render app so slow the first time I open it?">
+    That slow first load is Render's free tier waking your server back up, not a broken deploy. Free web services go to sleep after 15 minutes with no traffic, and the next visit has to boot the process back up, which takes about 30 to 60 seconds. Every visit after that is fast, until it goes idle again.
+  </FAQItem>
+  <FAQItem question="Do I need a Dockerfile to deploy FastAPI to Render?">
+    No. Render detects a Python project automatically and installs your dependencies from requirements.txt, so a plain FastAPI app needs no Dockerfile at all. Docker is an option if you want full control over the environment later, but for the hello-world server from Module 07 it's unnecessary.
+  </FAQItem>
+  <FAQItem question="What do I put in requirements.txt for a FastAPI app?">
+    At minimum, two lines: fastapi and uvicorn. FastAPI is the framework your code imports, and uvicorn is the server that actually runs it. Render reads this file during the build and installs both. If you import any other package in your code, add it here too, or the deploy will fail with a missing-module error.
+  </FAQItem>
+  <FAQItem question="Why does Render say 'No open ports detected'?">
+    It means your app isn't listening on the port Render assigned it. Render picks the port dynamically and passes it in as the $PORT variable, so your start command must include --host 0.0.0.0 --port $PORT. If you hardcode a port like 8000 instead, Render can't reach your app and reports no open ports.
+  </FAQItem>
+</FAQ>

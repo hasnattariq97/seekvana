@@ -57,7 +57,7 @@ Backend deployment means putting an actual running program, like the FastAPI ser
 
 That constant activity is exactly why backend free tiers tend to be tighter than frontend ones. A file host pays almost nothing to store a page nobody's viewing right now. A backend host is paying to keep your program awake and ready, whether anyone's using it or not.
 
-I've watched this exact mistake happen more than once: someone tries to run a live Python process on a plain static file host, and nothing ever loads. A file server has nowhere to actually execute your code. <a href="https://aws.amazon.com/what-is/cloud-server/" target="_blank" rel="noopener noreferrer">AWS's explainer on what a cloud server is</a> is a good plain-English reference if the "always-on process" idea still feels fuzzy.
+I've watched this exact mistake happen more than once: someone tries to run a live Python process on a plain static file host, and nothing ever loads. A file server has nowhere to actually execute your code. Lesson 09.04 walks through the fix, how to [deploy a backend to Render](/library/building-with-ai/deploy-to-render) so a real process stays running. <a href="https://aws.amazon.com/what-is/cloud-server/" target="_blank" rel="noopener noreferrer">AWS's explainer on what a cloud server is</a> is a good plain-English reference if the "always-on process" idea still feels fuzzy.
 
 ## What Is Full-Stack Deployment?
 
