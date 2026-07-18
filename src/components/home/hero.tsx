@@ -166,6 +166,7 @@ function HeroVisual() {
         src="/seekvana-scene.png"
         alt="A friendly AI robot holding a laptop, sitting on a stack of books surrounded by coffee, a plant, and a notebook"
         fill
+        sizes="(max-width: 768px) 100vw, 672px"
         className="object-contain"
         priority
         style={{
