@@ -93,6 +93,8 @@ That's the slow first load. It isn't your code, it isn't a failed build, and it 
 
 I've watched people lose a whole evening to this: a 40-second first load looks like a failure, so they start re-pushing perfectly good code trying to fix a problem that was never there. Knowing it's coming is the entire fix. If you eventually need it always-on, Render's paid Starter tier removes spin-down for a few dollars a month, worth it once a project actually matters, and genuinely skippable while you're learning. Render documents the exact <a href="https://render.com/docs/free" target="_blank" rel="noopener noreferrer">free tier spin-down behavior</a> if you want the specifics.
 
+Your server is live, but if it talks to a database, that piece has its own story. [Supabase in production](/library/building-with-ai/supabase-production-database) explains why you didn't have to deploy that part at all.
+
 If any earlier piece feels shaky, [the Getting Started path](/paths/getting-started) walks the whole build-and-deploy arc again from the top.
 
 ---
