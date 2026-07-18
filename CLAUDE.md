@@ -30,6 +30,15 @@ npm run lint     # ESLint
 - Numbers → string: `correct="1"` (parseInt in component)
 - Children → named prop: `<Mermaid chart="graph LR ..." />` not `<Mermaid>{...}</Mermaid>`
 
+**Cache Components (PPR) is ON sitewide (`cacheComponents: true`).** It is not per-route — one non-compliant route **breaks the whole build**. Every new route must keep its shell static and isolate dynamic work, so it builds as `◐` Partial Prerender, not `ƒ Dynamic`. Rules:
+- **Page/layout body = static shell only.** Never call `createClient` (from `@/lib/supabase-server`), `await cookies()`, `headers()`, or `auth.getUser()` directly in `page.tsx`/`layout.tsx`. Put cookie/auth/personalized DB reads in an async **island** component wrapped in `<Suspense fallback={<Skeleton/>}>`. Pattern: `src/lib/profile-data.ts`, `src/lib/article-data.ts`, `src/components/profile/*-island.tsx`.
+- **Don't read `params`/`searchParams` outside a Suspense boundary** — access them inside a Suspense'd child (see `src/app/u/[username]/page.tsx`).
+- **Shared/public/non-personalized data:** cache with `'use cache'` + `cacheLife()` + `cacheTag()`, cookie-free anon client. No cookies/headers/params/`Math.random`/`Date.now`/`new Date()` inside a `use cache` function. Invalidate on writes with `revalidateTag`/`updateTag` if freshness matters.
+- **Layout-tree client components using `usePathname`/`useSearchParams`** must be wrapped in `<Suspense>`.
+- **No `Math.random()`/`Date.now()` in prerendered client-component render** — use `useId()` for ids.
+- **Zero-CLS skeletons:** fallback must match the island footprint (inner-only if the page shell provides the wrapper).
+- Flag-on local build of ~200+ pages OOMs at default heap — build with `NODE_OPTIONS=--max-old-space-size=8192` (Vercel unaffected).
+
 ## MDX frontmatter (exact format required)
 
 ```yaml
