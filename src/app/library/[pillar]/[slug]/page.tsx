@@ -87,6 +87,10 @@ function buildArticleJsonLd(
   pillar: string,
   slug: string
 ) {
+  const url = `https://seekvana.com/library/${pillar}/${slug}`
+  const image = frontmatter.coverImage
+    ? `https://seekvana.com${frontmatter.coverImage}`
+    : 'https://seekvana.com/og-image.png'
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -101,11 +105,55 @@ function buildArticleJsonLd(
       '@type': 'Organization',
       name: 'Seekvana',
       url: 'https://seekvana.com',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://seekvana.com/icon-512.png',
+        width: 512,
+        height: 512,
+      },
     },
     datePublished: frontmatter.publishedAt,
-    url: `https://seekvana.com/library/${pillar}/${slug}`,
-    image: 'https://seekvana.com/og-image.png',
+    // No separate modified date in frontmatter; equal to publishedAt means
+    // "unmodified since publish" — a truthful value Google accepts.
+    dateModified: frontmatter.publishedAt,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': url,
+    },
+    url,
+    image,
     keywords: frontmatter.tags.join(', '),
+  }
+}
+
+function buildBreadcrumbJsonLd(
+  frontmatter: ArticleFrontmatter,
+  pillar: string,
+  slug: string
+) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Library',
+        item: 'https://seekvana.com/library',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: getPillarName(pillar),
+        item: `https://seekvana.com/library/${pillar}`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: frontmatter.title,
+        item: `https://seekvana.com/library/${pillar}/${slug}`,
+      },
+    ],
   }
 }
 
@@ -136,7 +184,10 @@ export default async function ArticlePage({ params }: PageProps) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: (() => {
-            const schemas: object[] = [buildArticleJsonLd(frontmatter, pillar, slug)]
+            const schemas: object[] = [
+              buildArticleJsonLd(frontmatter, pillar, slug),
+              buildBreadcrumbJsonLd(frontmatter, pillar, slug),
+            ]
             if (frontmatter.faqs && frontmatter.faqs.length > 0) {
               schemas.push({
                 '@context': 'https://schema.org',

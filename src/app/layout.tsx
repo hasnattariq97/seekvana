@@ -77,6 +77,30 @@ export default function RootLayout({
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-CX5PQDJSZD"></script>
         <script dangerouslySetInnerHTML={{ __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CX5PQDJSZD');` }} />
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4583972977988838" crossOrigin="anonymous"></script>
+        {/* Site-level structured data. No SearchAction — there is no /search
+            results page yet (search is a modal); add it once /search exists. */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([
+              {
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                name: "Seekvana",
+                url: "https://seekvana.com",
+                logo: "https://seekvana.com/icon-512.png",
+                description:
+                  "Learn Agentic AI and all things AI — clear, well-sourced articles for everyone from beginners to advanced builders.",
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                name: "Seekvana",
+                url: "https://seekvana.com",
+              },
+            ]),
+          }}
+        />
       </head>
       <body className="bg-canvas min-h-screen antialiased" suppressHydrationWarning>
         <ThemeProvider
