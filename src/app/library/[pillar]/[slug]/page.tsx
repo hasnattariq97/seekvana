@@ -1,9 +1,9 @@
+import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import remarkGfm from 'remark-gfm'
-import { createClient } from '@supabase/supabase-js'
 import { getArticleSource, getAllArticles, getArticlesByPillar, type ArticleFrontmatter } from '@/lib/mdx'
 import { getPillarName } from '@/lib/pillars'
 import { getMDXComponents } from '@/components/mdx/mdx-components'
@@ -13,12 +13,15 @@ import { TableOfContents } from '@/components/article/table-of-contents'
 import { ArticleFeedback } from '@/components/article/article-feedback'
 import { ShareRow } from '@/components/article/share-row'
 import { ArticleNav } from '@/components/article/article-nav'
-import type { CommentWithReplies } from '@/types/comments'
-import { ArticleComments } from '@/components/article/article-comments'
 import { PostArticleNewsletter } from '@/components/newsletter/post-article-newsletter'
-import { BookmarkButton } from '@/components/article/bookmark-button'
-import { MarkCompleteButton } from '@/components/article/mark-complete-button'
-import { createClient as createServerClient } from '@/lib/supabase-server'
+import { ArticleCommentsSection } from '@/components/article/article-comments-section'
+import { ArticleBookmarkState } from '@/components/article/article-bookmark-state'
+import { ArticleCompletionState } from '@/components/article/article-completion-state'
+import {
+  BookmarkButtonSkeleton,
+  MarkCompleteSkeleton,
+  CommentsSkeleton,
+} from '@/components/article/article-islands-skeletons'
 
 interface PageProps {
   params: Promise<{ pillar: string; slug: string }>
@@ -118,52 +121,6 @@ export default async function ArticlePage({ params }: PageProps) {
 
   const { source, frontmatter, headings } = articleData
 
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
-  const serverSupabase = await createServerClient()
-
-  const [{ data: rawComments }, { data: { user: currentUser } }] = await Promise.all([
-    supabase
-      .from('comments')
-      .select('*')
-      .eq('article_id', `${pillar}/${slug}`)
-      .order('created_at', { ascending: false }),
-    serverSupabase.auth.getUser(),
-  ])
-
-  const allRows = rawComments ?? []
-  const topLevel = allRows.filter((c) => !c.parent_id)
-  const replies = allRows.filter((c) => c.parent_id)
-  const comments: CommentWithReplies[] = topLevel.map((c) => ({
-    ...c,
-    replies: replies.filter((r) => r.parent_id === c.id),
-  }))
-
-  let isSaved = false
-  let isCompleted = false
-  if (currentUser) {
-    const [{ data: savedRow }, { data: readRow }] = await Promise.all([
-      serverSupabase
-        .from('reading_list')
-        .select('id')
-        .eq('user_id', currentUser.id)
-        .eq('pillar', pillar)
-        .eq('article_slug', slug)
-        .single(),
-      serverSupabase
-        .from('article_reads')
-        .select('id')
-        .eq('user_id', currentUser.id)
-        .eq('pillar', pillar)
-        .eq('article_slug', slug)
-        .single(),
-    ])
-    isSaved = !!savedRow
-    isCompleted = !!readRow
-  }
-
   const pillarName = getPillarName(pillar)
   const shareUrl = `https://seekvana.com/library/${pillar}/${slug}`
   const pillarArticles = getArticlesByPillar(pillar).map((a) => ({
@@ -243,7 +200,9 @@ export default async function ArticlePage({ params }: PageProps) {
                     {frontmatter.difficulty}
                   </span>
                 </div>
-                <BookmarkButton pillar={pillar} articleSlug={slug} initialSaved={isSaved} />
+                <Suspense fallback={<BookmarkButtonSkeleton />}>
+                  <ArticleBookmarkState pillar={pillar} slug={slug} />
+                </Suspense>
               </div>
               <h1 className="font-fraunces text-2xl sm:text-4xl md:text-5xl text-primary leading-tight text-balance">
                 {frontmatter.title}
@@ -277,7 +236,9 @@ export default async function ArticlePage({ params }: PageProps) {
 
             {/* Mark complete */}
             <div className="flex justify-center my-8">
-              <MarkCompleteButton pillar={pillar} articleSlug={slug} initialCompleted={isCompleted} articleTitle={frontmatter.title} />
+              <Suspense fallback={<MarkCompleteSkeleton />}>
+                <ArticleCompletionState pillar={pillar} slug={slug} articleTitle={frontmatter.title} />
+              </Suspense>
             </div>
 
             {/* Share */}
@@ -295,10 +256,9 @@ export default async function ArticlePage({ params }: PageProps) {
 
             {/* Comments */}
             <hr className="border-border my-8" />
-            <ArticleComments
-              articleId={`${pillar}/${slug}`}
-              initialComments={comments}
-            />
+            <Suspense fallback={<CommentsSkeleton />}>
+              <ArticleCommentsSection articleId={`${pillar}/${slug}`} />
+            </Suspense>
 
             {/* Newsletter */}
             <div className="mt-12 mb-8">
