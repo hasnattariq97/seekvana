@@ -1,5 +1,6 @@
 import { createClient as createAnonClient } from '@supabase/supabase-js'
 import { redirect } from 'next/navigation'
+import { cacheLife, cacheTag } from 'next/cache'
 import { getCurrentUser } from '@/lib/article-data'
 import type { ArticleRead } from '@/lib/profile'
 
@@ -51,13 +52,19 @@ export function matchPublicProfile(
 
 /**
  * Public profile + that user's reads, fetched via the anon client (no cookies).
- * Cookie-free so it can be cached in a later phase (add 'use cache' then — the
- * directive does not compile until cacheComponents is enabled).
+ * Cached: public data, identical for every viewer, so it is safe to serve from
+ * cache keyed by username. cacheLife('minutes') keeps it fresh enough for a
+ * low-traffic, noindex profile page while giving near-static TTFB. A not-yet-
+ * existing username caches its notFound for the cache window — acceptable here.
  * Returns null when no matching public profile exists.
  */
 export async function getPublicProfile(
   username: string
 ): Promise<{ profile: PublicProfileRow; reads: ArticleRead[] } | null> {
+  'use cache'
+  cacheLife('minutes')
+  cacheTag(`public-profile-${username}`)
+
   const supabase = anon()
 
   const { data: profiles } = await supabase

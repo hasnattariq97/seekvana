@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { getPublicProfile } from '@/lib/profile-data'
 
 function BadgeIconPublic({ id }: { id: string }) {
@@ -24,7 +25,46 @@ export const metadata = {
   robots: { index: false, follow: false },
 }
 
-export default async function PublicProfilePage({
+export default function PublicProfilePage({
+  params,
+}: {
+  params: Promise<{ username: string }>
+}) {
+  return (
+    <Suspense fallback={<PublicProfileSkeleton />}>
+      <PublicProfileContent params={params} />
+    </Suspense>
+  )
+}
+
+function PublicProfileSkeleton() {
+  return (
+    <div className="min-h-screen bg-canvas" aria-hidden="true">
+      <div className="bg-surface border-b border-border px-6 md:px-10 py-10">
+        <div className="max-w-4xl mx-auto flex items-center gap-6 flex-wrap animate-pulse">
+          <div className="w-20 h-20 rounded-full bg-surface-subtle flex-shrink-0" />
+          <div className="flex-1 min-w-0 space-y-3">
+            <div className="h-7 w-48 rounded bg-surface-subtle" />
+            <div className="h-4 w-32 rounded bg-surface-subtle" />
+            <div className="h-6 w-64 rounded-full bg-surface-subtle" />
+          </div>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 border-b border-border animate-pulse">
+        {[0, 1, 2, 3].map((i) => (
+          <div key={i} className="bg-surface py-6 text-center border-r border-border last:border-r-0">
+            <div className="h-10 w-16 rounded bg-surface-subtle mx-auto" />
+          </div>
+        ))}
+      </div>
+      <div className="max-w-4xl mx-auto px-6 md:px-10 py-8 animate-pulse">
+        <div className="h-40 rounded-xl bg-surface-subtle" />
+      </div>
+    </div>
+  )
+}
+
+async function PublicProfileContent({
   params,
 }: {
   params: Promise<{ username: string }>
