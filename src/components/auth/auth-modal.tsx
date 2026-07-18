@@ -67,6 +67,7 @@ export function AuthModal() {
   }
 
   const handleGoogle = async () => {
+    setState('loading')
     const supabase = createClient()
     const returnTo = sessionStorage.getItem('returnTo') ?? '/'
     const { error } = await supabase.auth.signInWithOAuth({
@@ -174,11 +175,18 @@ export function AuthModal() {
                     {/* Google */}
                     <button
                       onClick={handleGoogle}
-                      className="flex items-center justify-center gap-[10px] w-full py-3 px-4 rounded-xl text-[13px] font-semibold text-primary transition-colors hover:bg-surface-subtle"
+                      disabled={state === 'loading'}
+                      className="flex items-center justify-center gap-[10px] w-full py-3 px-4 rounded-xl text-[13px] font-semibold text-primary transition-colors hover:bg-surface-subtle disabled:opacity-60"
                       style={{ background: 'white', border: '1.5px solid #D0CAC1', boxShadow: '0 1px 4px rgba(26,23,20,0.07)' }}
                     >
-                      <GoogleIcon />
-                      Continue with Google
+                      {state === 'loading' ? (
+                        <svg className="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+                          <path d="M21 12a9 9 0 1 1-6.219-8.56" strokeLinecap="round" />
+                        </svg>
+                      ) : (
+                        <GoogleIcon />
+                      )}
+                      {state === 'loading' ? 'Connecting…' : 'Continue with Google'}
                     </button>
 
                     {/* Divider */}
