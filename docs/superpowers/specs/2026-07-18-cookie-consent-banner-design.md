@@ -71,7 +71,7 @@ This is a real gap against Google's own AdSense EU User Consent Policy (contract
 ## Testing
 
 - `src/lib/consent.test.ts` — unit tests for `parseConsentCookie`: valid JSON → correct object; missing cookie → `null`; malformed JSON → `null`; partial/wrong-shape JSON (e.g. `{analytics: "yes"}`) → `null` (fail closed, don't half-trust a malformed value).
-- No unit tests planned for `CookieBanner`/`ReopenPreferencesLink` themselves — this repo has no existing React component test harness (only Vitest for pure logic/server actions), and introducing one would be new infrastructure beyond this feature's scope. Verified manually instead:
+- No unit tests planned for `CookieBanner`/`ConsentGate` themselves — this repo has no existing React component test harness (only Vitest for pure logic/server actions), and introducing one would be new infrastructure beyond this feature's scope. Verified manually instead:
   - Fresh browser (no cookie): banner shows; **view page source** confirms no `gtag`/`adsbygoogle` script tags present at all (not just hidden/disabled — genuinely absent from the HTML).
   - Click Accept All: banner hides, reload confirms scripts now present in page source, cookie inspector shows the 6-month-expiry cookie.
   - Click Decline All: banner hides, scripts stay absent from page source on reload.
