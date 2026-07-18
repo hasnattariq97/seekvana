@@ -77,6 +77,13 @@ export default async function PathPage({ params }: Props) {
 
       {/* Two-column layout */}
       <div className="grid grid-cols-1 xl:grid-cols-[1fr_276px] gap-14 pb-24">
+        {/*
+          Fallback re-renders the real ModuleList/PathSidebar at zero progress rather than a
+          skeleton mock (unlike the article page's dedicated skeletons) — these components have
+          real layout (progress ring, per-topic checkmarks) that's cheaper to keep in sync by
+          reusing the components than by hand-mocking their shape. Keep these props in sync with
+          PathProgress's resolved render below.
+        */}
         <Suspense
           fallback={
             <>
