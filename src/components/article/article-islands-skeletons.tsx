@@ -32,7 +32,7 @@ export function MarkCompleteSkeleton() {
 /** Matches the ArticleComments section header + form block footprint. */
 export function CommentsSkeleton() {
   return (
-    <section aria-label="Comments loading" className="mt-10" aria-hidden="true">
+    <section className="mt-10" aria-hidden="true">
       <div className="h-6 w-40 rounded bg-surface-subtle mb-6 animate-pulse" />
       <div className="rounded-xl border border-border bg-surface p-5 space-y-4 mb-10">
         <div className="h-11 w-full rounded-lg bg-surface-subtle animate-pulse" />
