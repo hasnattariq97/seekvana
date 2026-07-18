@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase-server'
+import { getPublicProfile } from '@/lib/profile-data'
 
 function BadgeIconPublic({ id }: { id: string }) {
   const color = '#C9633F'
@@ -19,7 +19,6 @@ import {
   calculateBadges,
   calculatePathProgress,
 } from '@/lib/profile'
-import type { ArticleRead } from '@/lib/profile'
 
 export const metadata = {
   robots: { index: false, follow: false },
@@ -31,34 +30,9 @@ export default async function PublicProfilePage({
   params: Promise<{ username: string }>
 }) {
   const { username } = await params
-  const supabase = await createClient()
-
-  // Find profile by display_name slug (lowercased, spaces → hyphens)
-  const { data: profiles } = await supabase
-    .from('user_profiles')
-    .select('user_id, display_name, is_public, created_at')
-    .eq('is_public', true)
-
-  const profile = profiles?.find((p) => {
-    const slug = (p.display_name ?? '')
-      .toLowerCase()
-      .replace(/\s+/g, '-')
-      .replace(/[^a-z0-9-]/g, '')
-    return slug === username || p.user_id.startsWith(username)
-  })
-
-  if (!profile) notFound()
-
-  const { data: readsData } = await supabase
-    .from('article_reads')
-    .select('pillar, article_slug, read_at')
-    .eq('user_id', profile.user_id)
-
-  const reads: ArticleRead[] = (readsData ?? []).map((r) => ({
-    pillar: r.pillar,
-    articleSlug: r.article_slug,
-    readAt: r.read_at,
-  }))
+  const data = await getPublicProfile(username)
+  if (!data) notFound()
+  const { profile, reads } = data
 
   const streak = calculateStreak(reads)
   const pathProgress = calculatePathProgress(reads)
