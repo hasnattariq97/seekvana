@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { SearchProvider } from "@/context/search-context";
@@ -85,8 +86,10 @@ export default function RootLayout({
         >
           <SearchProvider>
             <AuthProvider>
-              <ScrollToTop />
-              <ProgressBar />
+              <Suspense fallback={null}>
+                <ScrollToTop />
+                <ProgressBar />
+              </Suspense>
               <Navbar />
               <main>{children}</main>
               <SearchModalServer />

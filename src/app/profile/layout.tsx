@@ -1,19 +1,10 @@
-import { createClient } from '@/lib/supabase-server'
-import { redirect } from 'next/navigation'
-
-export default async function ProfileLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    redirect('/?auth=required')
-  }
-
+/**
+ * Passthrough. The auth redirect that used to live here moved into each
+ * route's Suspense island (requireUser in src/lib/profile-data.ts) so the
+ * profile shells stay static under cacheComponents while the auth-gated
+ * data streams behind a skeleton. A logged-out visitor sees the skeleton
+ * for one beat, then requireUser() redirects to /?auth=required.
+ */
+export default function ProfileLayout({ children }: { children: React.ReactNode }) {
   return <>{children}</>
 }

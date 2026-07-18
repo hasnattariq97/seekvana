@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { useTheme } from 'next-themes'
 
 interface MermaidProps {
@@ -35,7 +35,8 @@ const THEME = {
 export function Mermaid({ chart }: MermaidProps) {
   const { resolvedTheme } = useTheme()
   const [svg, setSvg] = useState<string | null>(null)
-  const idRef = useRef(`mermaid-${Math.random().toString(36).slice(2, 8)}`)
+  const rid = useId()
+  const idRef = useRef('mermaid-' + rid.replace(/:/g, ''))
 
   useEffect(() => {
     if (!chart) return
