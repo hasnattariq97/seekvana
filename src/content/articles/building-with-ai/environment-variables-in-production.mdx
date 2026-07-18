@@ -1,0 +1,125 @@
+---
+title: "Environment Variables in Production: Keep API Keys Safe"
+description: "Learn how environment variables work in production so your API keys stay safe on a live server without ever touching GitHub."
+pillar: "building-with-ai"
+slug: "environment-variables-in-production"
+difficulty: "beginner"
+readTime: 6
+author: "Seekvana"
+publishedAt: "2026-07-24"
+tags: ["environment variables", "deployment", "api keys", "vercel", "render"]
+featured: false
+lessonModule: "09"
+lessonNumber: "09.08"
+faqs:
+  - q: "Why isn't my environment variable working after I deploy?"
+    a: "Two common causes. On Vercel, changes to an environment variable only apply to your next deployment, not the one currently live, so you need to redeploy. On Render, the variable may simply have never been added to that service's Environment tab, even if it works fine locally."
+  - q: "Do I need a different API key for production than for local development?"
+    a: "Not necessarily the same key, but it's good practice to use separate keys per environment where your provider supports it. That way, if a local key ever leaks, you can rotate it without touching the key your live app depends on."
+  - q: "Can someone see my environment variables if my GitHub repo is public?"
+    a: "No, not if you followed the .gitignore setup correctly. Environment variables added through a platform's dashboard live entirely outside your Git repository. They're visible only to accounts with access to that specific project on that platform, never in your code or commit history."
+  - q: "What happens to my environment variables if I switch hosting platforms?"
+    a: "They don't transfer automatically. Each platform stores its own environment variables separately, so moving from Render to a new platform means re-entering every key and value in the new dashboard before your app will work there."
+---
+
+<ArticleImage
+  src="/images/articles/building-with-ai/environment-variables-in-production/cover.webp"
+  alt="A locked vault inside a server building with a key being placed through a secure side panel"
+  priority
+  isCover
+/>
+
+Your app works perfectly on your laptop. You push it to Render, open the live URL, and it crashes with an error mentioning a key you know you set. Except you set it in `.env`, on your machine, and `.env` never left your machine, on purpose.
+
+A platform's environment variables panel, a separate secure settings screen in your hosting dashboard, is where that same key needs to go for a live server. This is the same idea as [the environment variables you set up back in Module 02](/library/building-with-ai/environment-variables-explained), just stored somewhere different. Your code still calls `os.getenv("ANTHROPIC_API_KEY")` exactly like it does locally. The value just comes from a different, more secure place once your app is live.
+
+> **Key Takeaways**
+> - Every deployment platform has its own environment variables panel, separate from your GitHub repo, where you paste secret values directly
+> - The platform injects those values into your running server at startup, so `os.getenv()` works identically in local and production code
+> - On Vercel, a changed environment variable only applies to your *next* deployment, not the one already live
+> - On Render, a missing environment variable causes the exact "works locally, crashes live" pattern this lesson opens with
+> - The key never touches GitHub, never appears in your code, and stays visible only to you and the platform holding it
+
+---
+
+## The Problem: Your .env File Never Left Your Laptop
+
+In [the `.gitignore` lesson](/library/building-with-ai/git-gitignore), you were taught to never commit `.env` to GitHub. That was correct. It's the reason your API key hasn't leaked to a public repo, and it should stay that way forever.
+
+But that same correct choice creates a gap once you deploy. Render or Vercel now runs your code on a computer you've never touched, and that computer has no `.env` file, because you never gave it one, and you never should.
+
+I've watched this exact mismatch trip up my own first deploy. The app worked every single time I tested it, then failed the moment it hit a real server, and nothing in the code itself was actually broken. Skip understanding this gap and your first deploy crashes with an authentication error that looks like a bug, when really, the server just doesn't know the key exists yet.
+
+This isn't a flaw in the plan. It's the other half of it, and this lesson closes it safely.
+
+## How Do Environment Variables Work in Production?
+
+Every hosting platform has its own environment variables panel inside its dashboard. You paste secret values directly into that panel, entirely separate from your GitHub repository. The platform then injects those values into your server's environment the moment it starts up.
+
+Your code doesn't know or care where the value came from. `os.getenv("ANTHROPIC_API_KEY")` runs exactly the same way it did with [your local `.env` setup](/library/building-with-ai/python-dotenv), whether it's reading from a file on your laptop or a dashboard entry on Render. That's precisely why the code never needs to change between local and live.
+
+<Note>
+  On Vercel specifically, adding or editing an environment variable only affects your *next* deployment. If you edit one and refresh your already-live site expecting it to update instantly, it won't, you need to trigger a new deployment first. <a href="https://vercel.com/docs/environment-variables" target="_blank" rel="noopener noreferrer">Vercel's own documentation</a> states this plainly: changes never apply to deployments that already exist, only to new ones.
+</Note>
+
+Skip this distinction and you'll spend twenty minutes convinced you saved the wrong value, when really, the value was correct and your site simply hadn't rebuilt yet.
+
+## Adding a Key on Render (or Vercel)
+
+Here's the general shape of the process, since the exact screen looks slightly different depending on your platform:
+
+1. Open your project's dashboard and find the "Environment" section (Render) or "Environment Variables" under Settings (Vercel).
+2. Click to add a new variable, and enter a key, like `ANTHROPIC_API_KEY`, and its value, your actual API key.
+3. Save. Render gives you a choice to redeploy immediately or on your next push, Vercel applies the change starting with your next deployment.
+4. Once the new deployment finishes, visit your live URL and confirm the feature that depends on that key now works.
+
+<a href="https://render.com/docs/configure-environment-variables" target="_blank" rel="noopener noreferrer">Render's own documentation</a> covers the exact same three save options in more depth, worth a read if you want to see every choice available beyond what this lesson covers.
+
+<ArticleImage
+  src="/images/articles/building-with-ai/environment-variables-in-production/local-vs-production-env.webp"
+  alt="A local .env file on a laptop and a platform's environment variables panel, both feeding the same running application"
+  caption="Local development reads from your .env file; production reads from the platform's dashboard. The code that calls os.getenv() never changes."
+/>
+
+## Why This Is Safe
+
+The same protection `.gitignore` gave you locally now extends all the way to production. Your key never touches GitHub, because it was never in a file Git tracks. It never appears anywhere in your code, because your code only ever calls `os.getenv()` and asks for a name, not a value. And it's visible only to you and the platform holding it, the same way your local `.env` file was visible only to you and your own machine.
+
+Skip this model and it's easy to assume a live server is somehow less private than your laptop. It isn't, as long as the key goes through the platform's environment panel and never through a committed file.
+
+This is the last piece of the deployment picture the [Getting Started path](/paths/getting-started) covers, security carried all the way from your terminal to a server anyone can visit.
+
+---
+
+<Steps>
+  <Step number={1} title="Add your API key as a production environment variable">
+    Go to your Render dashboard (or Vercel, if your project is there) for the backend you deployed in lesson 09.04.
+
+    Find "Environment" in the project settings.
+
+    Add a new environment variable: key = `ANTHROPIC_API_KEY`, value = your actual key, the same one from your local `.env` file in Module 05.
+
+    Save, and let the platform redeploy if prompted.
+
+    If your deployed app calls the Claude API anywhere, confirm it now works live, without a `.env` file existing anywhere on the server.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 09.08.
+</Note>
+
+<FAQ>
+  <FAQItem question="Why isn't my environment variable working after I deploy?">
+    Two common causes. On Vercel, changes to an environment variable only apply to your next deployment, not the one currently live, so you need to redeploy. On Render, the variable may simply have never been added to that service's Environment tab, even if it works fine locally.
+  </FAQItem>
+  <FAQItem question="Do I need a different API key for production than for local development?">
+    Not necessarily the same key, but it's good practice to use separate keys per environment where your provider supports it. That way, if a local key ever leaks, you can rotate it without touching the key your live app depends on.
+  </FAQItem>
+  <FAQItem question="Can someone see my environment variables if my GitHub repo is public?">
+    No, not if you followed the .gitignore setup correctly. Environment variables added through a platform's dashboard live entirely outside your Git repository. They're visible only to accounts with access to that specific project on that platform, never in your code or commit history.
+  </FAQItem>
+  <FAQItem question="What happens to my environment variables if I switch hosting platforms?">
+    They don't transfer automatically. Each platform stores its own environment variables separately, so moving from Render to a new platform means re-entering every key and value in the new dashboard before your app will work there.
+  </FAQItem>
+</FAQ>

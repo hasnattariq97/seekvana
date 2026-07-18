@@ -104,6 +104,8 @@ I've debugged this exact bug more times than I can count. Search "python dotenv"
  `load_dotenv()` won't override a variable that's already set in your environment. If you set a value both in `.env` and in your terminal or Docker config, the real environment variable wins by default. This is by design, it's what lets production platforms inject real secrets without your `.env` file getting in the way.
 </Warning>
 
+That handoff, from your local `.env` file to a platform's own secret storage, is exactly what happens the day you deploy. [Module 09 walks through how that works](/library/building-with-ai/environment-variables-in-production), once this same script is running on a live server instead of your laptop.
+
 <Note>
  Never commit `.env` to git, add it to `.gitignore` immediately. If it was ever committed, deleting the file isn't enough; the secret is still in your git history. Rotate the key.
 </Note>
