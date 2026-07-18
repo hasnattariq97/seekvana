@@ -82,6 +82,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
+// Frontmatter dates are bare YYYY-MM-DD. schema.org wants a timezone-qualified
+// ISO 8601 datetime, so pin bare dates to midnight UTC. Pure string transform
+// (no Date object) — deterministic and prerender-safe.
+function toIso8601(date: string) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(date) ? `${date}T00:00:00+00:00` : date
+}
+
 function buildArticleJsonLd(
   frontmatter: ArticleFrontmatter,
   pillar: string,
@@ -112,10 +119,10 @@ function buildArticleJsonLd(
         height: 512,
       },
     },
-    datePublished: frontmatter.publishedAt,
+    datePublished: toIso8601(frontmatter.publishedAt),
     // No separate modified date in frontmatter; equal to publishedAt means
     // "unmodified since publish" — a truthful value Google accepts.
-    dateModified: frontmatter.publishedAt,
+    dateModified: toIso8601(frontmatter.publishedAt),
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': url,
