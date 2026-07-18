@@ -26,6 +26,12 @@ export async function getArticleComments(articleId: string): Promise<CommentWith
  * Current authenticated user, deduped per request.
  * Both article islands (bookmark, completion) call this; React cache() collapses
  * them into a single auth.getUser() round-trip within one render.
+ *
+ * Intentionally does NOT catch errors itself — the article page's original
+ * inline logic never wrapped this in try/catch either. Callers that need
+ * graceful degradation on a thrown auth error (like getUserReadSet below,
+ * which mirrors the paths page's original try/catch) must catch at their
+ * own call site.
  */
 export const getCurrentUser = cache(async () => {
   const supabase = await createServerClient()
@@ -67,14 +73,20 @@ export async function getCompletedStatus(pillar: string, slug: string): Promise<
 
 /** All "<pillar>/<slug>" keys the current user has completed (for path progress). */
 export async function getUserReadSet(): Promise<string[]> {
-  const user = await getCurrentUser()
-  if (!user) return []
-  const supabase = await createServerClient()
-  const { data } = await supabase
-    .from('article_reads')
-    .select('pillar, article_slug')
-    .eq('user_id', user.id)
-  return (data ?? []).map(
-    (r: { pillar: string; article_slug: string }) => `${r.pillar}/${r.article_slug}`
-  )
+  try {
+    const user = await getCurrentUser()
+    if (!user) return []
+    const supabase = await createServerClient()
+    const { data } = await supabase
+      .from('article_reads')
+      .select('pillar, article_slug')
+      .eq('user_id', user.id)
+    return (data ?? []).map(
+      (r: { pillar: string; article_slug: string }) => `${r.pillar}/${r.article_slug}`
+    )
+  } catch {
+    // unauthenticated or error — readSet stays empty, matching the original
+    // paths/[slug]/page.tsx behavior this function replaces
+    return []
+  }
 }
