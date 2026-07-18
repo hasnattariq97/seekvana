@@ -77,8 +77,7 @@ export default function RootLayout({
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-CX5PQDJSZD"></script>
         <script dangerouslySetInnerHTML={{ __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-CX5PQDJSZD');` }} />
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4583972977988838" crossOrigin="anonymous"></script>
-        {/* Site-level structured data. No SearchAction — there is no /search
-            results page yet (search is a modal); add it once /search exists. */}
+        {/* Site-level structured data: brand entity + sitelinks search box. */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -97,6 +96,15 @@ export default function RootLayout({
                 "@type": "WebSite",
                 name: "Seekvana",
                 url: "https://seekvana.com",
+                potentialAction: {
+                  "@type": "SearchAction",
+                  target: {
+                    "@type": "EntryPoint",
+                    urlTemplate:
+                      "https://seekvana.com/search?q={search_term_string}",
+                  },
+                  "query-input": "required name=search_term_string",
+                },
               },
             ]),
           }}
