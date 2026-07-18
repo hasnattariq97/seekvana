@@ -1,4 +1,5 @@
-import { createClient } from '@/lib/supabase-server'
+import { Suspense } from 'react'
+import { getPublicProfile } from '@/lib/profile-data'
 
 function BadgeIconPublic({ id }: { id: string }) {
   const color = '#C9633F'
@@ -19,46 +20,59 @@ import {
   calculateBadges,
   calculatePathProgress,
 } from '@/lib/profile'
-import type { ArticleRead } from '@/lib/profile'
 
 export const metadata = {
   robots: { index: false, follow: false },
 }
 
-export default async function PublicProfilePage({
+export default function PublicProfilePage({
+  params,
+}: {
+  params: Promise<{ username: string }>
+}) {
+  return (
+    <Suspense fallback={<PublicProfileSkeleton />}>
+      <PublicProfileContent params={params} />
+    </Suspense>
+  )
+}
+
+function PublicProfileSkeleton() {
+  return (
+    <div className="min-h-screen bg-canvas" aria-hidden="true">
+      <div className="bg-surface border-b border-border px-6 md:px-10 py-10">
+        <div className="max-w-4xl mx-auto flex items-center gap-6 flex-wrap animate-pulse">
+          <div className="w-20 h-20 rounded-full bg-surface-subtle flex-shrink-0" />
+          <div className="flex-1 min-w-0 space-y-3">
+            <div className="h-7 w-48 rounded bg-surface-subtle" />
+            <div className="h-4 w-32 rounded bg-surface-subtle" />
+            <div className="h-6 w-64 rounded-full bg-surface-subtle" />
+          </div>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 border-b border-border animate-pulse">
+        {[0, 1, 2, 3].map((i) => (
+          <div key={i} className="bg-surface py-6 text-center border-r border-border last:border-r-0">
+            <div className="h-10 w-16 rounded bg-surface-subtle mx-auto" />
+          </div>
+        ))}
+      </div>
+      <div className="max-w-4xl mx-auto px-6 md:px-10 py-8 animate-pulse">
+        <div className="h-40 rounded-xl bg-surface-subtle" />
+      </div>
+    </div>
+  )
+}
+
+async function PublicProfileContent({
   params,
 }: {
   params: Promise<{ username: string }>
 }) {
   const { username } = await params
-  const supabase = await createClient()
-
-  // Find profile by display_name slug (lowercased, spaces → hyphens)
-  const { data: profiles } = await supabase
-    .from('user_profiles')
-    .select('user_id, display_name, is_public, created_at')
-    .eq('is_public', true)
-
-  const profile = profiles?.find((p) => {
-    const slug = (p.display_name ?? '')
-      .toLowerCase()
-      .replace(/\s+/g, '-')
-      .replace(/[^a-z0-9-]/g, '')
-    return slug === username || p.user_id.startsWith(username)
-  })
-
-  if (!profile) notFound()
-
-  const { data: readsData } = await supabase
-    .from('article_reads')
-    .select('pillar, article_slug, read_at')
-    .eq('user_id', profile.user_id)
-
-  const reads: ArticleRead[] = (readsData ?? []).map((r) => ({
-    pillar: r.pillar,
-    articleSlug: r.article_slug,
-    readAt: r.read_at,
-  }))
+  const data = await getPublicProfile(username)
+  if (!data) notFound()
+  const { profile, reads } = data
 
   const streak = calculateStreak(reads)
   const pathProgress = calculatePathProgress(reads)
