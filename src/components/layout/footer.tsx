@@ -184,10 +184,11 @@ export function Footer() {
           {[
             { label: "About", href: "/about" },
             { label: "Privacy Policy", href: "/privacy" },
+            { label: "Cookie Policy", href: "/cookies" },
             { label: "Terms of Use", href: "/terms" },
             { label: "Contact", href: "/contact" },
           ].map((l, i) => (
-            <Link key={l.href} href={l.href} className={`text-xs text-secondary hover:text-primary transition-colors px-3.5 ${i < 3 ? "border-r border-border" : ""} ${i === 0 ? "pl-0" : ""}`}>
+            <Link key={l.href} href={l.href} className={`text-xs text-secondary hover:text-primary transition-colors px-3.5 ${i < 4 ? "border-r border-border" : ""} ${i === 0 ? "pl-0" : ""}`}>
               {l.label}
             </Link>
           ))}
