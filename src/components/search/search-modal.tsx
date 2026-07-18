@@ -140,6 +140,9 @@ export function SearchModal({ data }: { data: SearchItem[] }) {
       case 'Enter':
         if (selectedIndex >= 0 && flatItems[selectedIndex]) {
           navigate(flatItems[selectedIndex].href)
+        } else if (query.trim()) {
+          // No row selected — go to the full results page for this query.
+          navigate(`/search?q=${encodeURIComponent(query.trim())}`)
         }
         break
       case 'Escape':
@@ -275,6 +278,17 @@ export function SearchModal({ data }: { data: SearchItem[] }) {
                       icon={Hash}
                     />
                   )}
+                  <button
+                    onClick={() =>
+                      navigate(`/search?q=${encodeURIComponent(debouncedQuery.trim())}`)
+                    }
+                    className="w-full flex items-center justify-between gap-3 p-3 mt-1 rounded-lg text-left text-sm text-accent hover:bg-surface-subtle transition-colors font-medium"
+                  >
+                    <span>
+                      See all results for &quot;{debouncedQuery.trim()}&quot;
+                    </span>
+                    <ArrowRight size={16} className="shrink-0" />
+                  </button>
                 </div>
               )}
             </div>
