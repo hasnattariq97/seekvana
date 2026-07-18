@@ -22,7 +22,7 @@ faqs:
     a: "Yes, by combining conditions with AND or OR. `WHERE role = 'user' AND session_id = 12` only matches rows where both are true. This lesson only covers a single condition, but the same plain-English reading applies: just read each AND/OR as another filter stacked on top of the last one."
 ---
 
-<ArticleImage src="/images/articles/building-with-ai/sql-select-insert-where/cover.webp" alt="A magnifying glass filtering a stack of cards, representing SQL WHERE clause filtering matching rows" />
+<ArticleImage src="/images/articles/building-with-ai/sql-select-insert-where/cover.webp" alt="A magnifying glass filtering a stack of cards, representing SQL WHERE clause filtering matching rows" priority isCover />
 
 Your script hits Supabase, runs a query you copied from a tutorial, and the terminal spits back a wall of red text: `syntax error at or near "user"`. You stare at the line. It looks fine. It looks exactly like the example. Except the example had quotes around `'user'` and yours doesn't, and Postgres genuinely cannot tell the difference between "the word user" and "a column named user" without them.
 

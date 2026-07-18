@@ -25,6 +25,8 @@ faqs:
 <ArticleImage
   src="/images/articles/prompt-engineering/structured-outputs-prompting/cover.webp"
   alt="Editorial illustration of scattered text funneling down into a clean, labeled JSON block"
+  priority
+  isCover
 />
 
 A lead-capture pipeline pulls a name and email out of a chat transcript, drops it into a webhook, and moves on. It's worked for weeks. Then one call comes back with `"full_name"` instead of `"name"`, the webhook doesn't recognize the field, and the lead just vanishes. Nothing crashed. Nothing logged an error. The model did exactly what it was asked: return the info as JSON. It just didn't promise the field would be called the same thing twice.

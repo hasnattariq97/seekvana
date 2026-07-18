@@ -25,6 +25,8 @@ faqs:
 <ArticleImage
   src="/images/articles/prompt-engineering/controlling-the-output/cover.webp"
   alt="Split-screen illustration of rambling unstructured text on one side and clean structured JSON on the other"
+  priority
+  isCover
 />
 
 Your script sends a support message to the model and asks for JSON back: sentiment, urgency, an action item. It gets back "Sure! Here's the analysis you requested:" followed by the JSON you actually wanted. Your parser reads the first character, sees `S` instead of `{`, and throws.
