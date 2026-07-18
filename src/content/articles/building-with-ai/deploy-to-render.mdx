@@ -75,7 +75,7 @@ The one part worth slowing down on is `$PORT`. You never pick a port number your
 Leave `$PORT` as a variable. If you hardcode a fixed number like `8000`, the build can still succeed, but Render can't reach your app on the port it expected, and you'll get a "No open ports detected" failure that looks scarier than it is.
 </Note>
 
-From then on, every [git push](/library/building-with-ai/git-core-workflow) to that repo redeploys automatically, the same way your frontend host works. Render's own <a href="https://render.com/docs/deploy-fastapi" target="_blank" rel="noopener noreferrer">deploy a FastAPI app guide</a> lists these exact settings if you want to check them against the source.
+From then on, every [git push](/library/building-with-ai/git-core-workflow) to that repo redeploys automatically, the same way your frontend host works, a pattern explained fully in [how auto-deploy actually works](/library/building-with-ai/deployment-workflow-github-to-live). Render's own <a href="https://render.com/docs/deploy-fastapi" target="_blank" rel="noopener noreferrer">deploy a FastAPI app guide</a> lists these exact settings if you want to check them against the source.
 
 {/* IMAGE PROMPT: Editorial flat illustration showing a left-to-right deploy flow: a GitHub repository icon, an arrow to a build step labelled with a pip/package icon, an arrow to a run step labelled with a play/server icon, ending in a live globe with an onrender.com URL tag, warm cream background (#FAF8F3), clay accent (#C9633F) on the final live URL, clean and directional, no text beyond simple labels. | FILENAME: render-deploy-flow.webp | DIMENSIONS: 1600x950 */}
 
