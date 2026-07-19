@@ -1,4 +1,4 @@
-import { ChevronDown } from 'lucide-react'
+import { FaqAccordion } from './faq-accordion'
 
 export interface FaqItem {
   q: string
@@ -6,10 +6,10 @@ export interface FaqItem {
 }
 
 /**
- * Renders a visible FAQ accordion AND its matching FAQPage JSON-LD from the
- * same data, so the structured data always reflects on-page content (Google
- * requires FAQ schema to match visible text). Native <details> — no client JS,
- * no hydration cost, Cache-Components-safe.
+ * Server wrapper: emits the FAQPage JSON-LD and the section heading in the
+ * initial HTML, then renders the animated client accordion. Structured data
+ * mirrors the on-page answers (Google requires the match); answers stay in the
+ * DOM inside the accordion, height-collapsed rather than unmounted.
  */
 export function FaqSection({
   faqs,
@@ -38,26 +38,10 @@ export function FaqSection({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <h2 className="font-fraunces text-2xl md:text-3xl font-medium text-primary mb-6">
+      <h2 className="mb-6 text-balance font-fraunces text-2xl font-medium text-primary md:mb-8 md:text-3xl">
         {heading}
       </h2>
-      <div className="border-t border-border">
-        {faqs.map(({ q, a }, i) => (
-          <details key={i} className="group border-b border-border">
-            <summary className="flex items-center justify-between gap-4 cursor-pointer list-none py-4 text-primary font-medium text-base md:text-lg">
-              <span>{q}</span>
-              <ChevronDown
-                className="text-secondary shrink-0 transition-transform duration-200 group-open:rotate-180"
-                size={20}
-                aria-hidden="true"
-              />
-            </summary>
-            <p className="text-secondary leading-relaxed pb-4 pr-8 max-w-prose">
-              {a}
-            </p>
-          </details>
-        ))}
-      </div>
+      <FaqAccordion faqs={faqs} />
     </section>
   )
 }
