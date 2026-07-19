@@ -98,7 +98,7 @@ Auto-deploy removes that step entirely. The same process runs identically every 
 
 A build can fail. A typo in an import, a missing dependency, a forgotten environment variable, any of these can stop a deployment from completing (you'll practice spotting exactly this in an upcoming lesson).
 
-The reassuring part: most platforms keep your previous working version live until a new deployment fully succeeds. A broken build usually doesn't take your site down, it just fails to replace what's already there.
+The reassuring part: most platforms keep your previous working version live until a new deployment fully succeeds. A broken build usually doesn't take your site down, it just fails to replace what's already there. When that happens, [reading the deployment log calmly](/library/building-with-ai/reading-deployment-logs) is the next skill worth having, it almost always names the exact line that broke.
 
 And if a deployment does succeed but introduces a bug you didn't catch, platforms like Vercel and Render keep a history of past deployments. Rolling back to the last working version is usually a couple of clicks in the dashboard, not a repeat of the whole manual upload process from before.
 
