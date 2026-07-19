@@ -1,0 +1,118 @@
+---
+title: "What Is a Domain Name and DNS? Here's How They Work"
+description: "A domain name is a rented address like seekvana.com; DNS is the phonebook that turns it into a real server location. Here's how both actually work."
+pillar: "building-with-ai"
+slug: "domains-and-dns-explained"
+difficulty: "beginner"
+readTime: 6
+author: "Seekvana"
+publishedAt: "2026-07-24"
+tags: ["domain name", "dns explained", "domains and dns", "deployment"]
+featured: false
+lessonModule: "09"
+lessonNumber: "09.11"
+faqs:
+  - q: "Do I own my domain name once I buy it?"
+    a: "No. A domain name is rented, not owned. You pay a registrar a yearly fee for the right to use that name. As long as you keep renewing it, it stays yours, but miss a renewal and someone else can register it."
+  - q: "Why does DNS matter if I already have a domain?"
+    a: "A domain by itself is just a name. It doesn't point anywhere until DNS is configured. DNS is the system that connects your domain name to the actual server your app lives on, and without it, typing your domain would go nowhere."
+  - q: "Can I use my app without a custom domain?"
+    a: "Yes. The free URL your hosting platform gave you, something like my-project-a8f3k2.vercel.app, works exactly the same as a custom domain would. A custom domain is about how it looks and feels, not whether your app functions."
+  - q: "How long does a DNS change take to work?"
+    a: "Usually anywhere from a few minutes to a few hours, occasionally up to 48 hours in rare cases. This delay is called propagation. It happens because DNS information gets cached and copied across many servers worldwide, and they all need time to catch up."
+---
+
+<ArticleImage
+  src="/images/articles/building-with-ai/domains-and-dns-explained/cover.webp"
+  alt="An open phonebook with a name on one page and a matching location pin on the facing page"
+  priority
+  isCover
+/>
+
+You just [deployed your app](/library/building-with-ai/what-is-deployment), and you're proud of it, so you send the link to a friend: `my-project-a8f3k2.vercel.app`. They squint at it. "Wait, is this actually done?" It works fine, but it doesn't look finished, and you can't quite explain why a real product gets `myproject.com` instead of a string of random characters.
+
+A domain name is a human-readable address, like seekvana.com, that you rent yearly from a company called a registrar. DNS, short for Domain Name System, is the internet's phonebook: it's what translates that readable name into the actual server address computers use to find your app. You need both, and this lesson explains what each one actually does before you set one up for real in the next lesson.
+
+> **Key Takeaways**
+> - A domain name is rented yearly from a registrar, you never own it outright
+> - DNS translates a domain name into the server address a computer actually needs
+> - The phonebook analogy: your domain is a name, DNS is what looks up the matching address
+> - Your app already works fine without a custom domain, this is about how it looks, not whether it functions
+> - Connecting a domain later is a configuration step, not a coding one
+
+## What Is a Domain Name?
+
+A **domain name** is the readable address people type into a browser instead of a long string of numbers. `seekvana.com` is a domain name. `my-project-a8f3k2.vercel.app` is also a domain name, just one your hosting platform generated for you automatically and for free.
+
+Here's the part that surprises most beginners: you don't buy a domain name outright. You rent it, yearly, from a company called a registrar, places like Namecheap or Google Domains, and confirmed via <a href="https://www.networksolutions.com/blog/can-you-buy-domain-name-forever/" target="_blank" rel="noopener noreferrer">Network Solutions' own explainer on domain ownership</a>. The rules for this come from ICANN, the organization that governs the domain system. They exist so no one can permanently lock up a name forever without paying to keep it. Skip a renewal payment, and your domain becomes available for anyone else to register, no matter how long you've had it.
+
+Skip understanding this now, and the next lesson's setup screen, a page full of unfamiliar terms like "A record" and "nameservers", will feel like it's asking you to do something new. Really it's just showing you a receipt for something you already understand: a name you're renting, pointed at your server.
+
+## What Is DNS?
+
+**DNS**, the Domain Name System, is the internet's phonebook. Computers don't actually know what "seekvana.com" means. They only know how to reach other computers by numeric IP addresses, something like `76.76.21.21`. DNS is the system that looks up a domain name and hands back the correct IP address, the same way a phonebook looks up a person's name and hands back their address.
+
+Every time someone types your domain into a browser, this lookup happens automatically, in a split second, entirely invisibly. Nobody has to remember raw server addresses. DNS handles the translation behind the scenes, for every domain, every time.
+
+Without DNS, using the internet would mean memorizing strings of numbers for every site you visit. Life would be harder too if you had to remember everyone's exact home address instead of just their name. Skip understanding DNS now, and the next lesson's talk of "records" and "nameservers" will sound like configuring something abstract instead of just telling the phonebook where your app actually lives.
+
+## How a DNS Lookup Actually Happens
+
+When someone types your future domain into their browser, a few things happen in order, all within milliseconds:
+
+1. Their device checks whether it already has the answer stored from a recent visit.
+2. If not, the request goes out to a resolver, usually run by their internet provider, which asks around on their behalf.
+3. That resolver gets pointed toward the right authoritative server, the one that actually holds your domain's records.
+4. The authoritative server replies with your server's real IP address.
+5. The browser connects to that address, and your app loads.
+
+<ArticleImage
+  src="/images/articles/building-with-ai/domains-and-dns-explained/dns-lookup-flow.webp"
+  alt="Infographic showing domain name and DNS side by side, plus the six-step DNS lookup flow from typing a domain to the site loading"
+  caption="A domain name and DNS working together, and the six-step lookup that happens every time someone visits your site."
+/>
+
+None of this is something you'll ever watch happen. It's built into how every browser and every internet connection works. It resolves fast enough that the other person just sees your site appear, as <a href="https://aws.amazon.com/route53/what-is-dns/" target="_blank" rel="noopener noreferrer">AWS's own explainer on DNS</a> puts it, a lookup process invisible enough that most people who use it daily have never heard of it.
+
+I still find it a little wild that this happens, every single time, for every domain on the internet, and yet almost nobody outside of engineering ever has to think about it. If this step ever misfires after you set up your own domain in the next lesson, that's the layer to picture: not your code, just a phonebook entry that hasn't updated yet.
+
+## Why Your App Needs Both
+
+Skip understanding this, and the next lesson (actually connecting a domain to your live app) will feel like following unexplained instructions instead of doing something you already get. A domain without DNS pointed at anything is just a name sitting unused. A server without a domain pointed at it is only reachable by its raw IP address, and almost nobody will ever type that in.
+
+<Note>
+  Connecting a domain to your deployed app is a configuration step, not a coding one. You won't be writing any code in the next lesson. You'll be telling DNS "when someone looks up this domain, send them to my server" through a settings page at your registrar.
+</Note>
+
+Your app already works perfectly well right now at its free platform URL. A custom domain name doesn't make it work better once DNS is pointed at it correctly, it just makes it look and feel like a real, standalone product instead of something still living under someone else's subdomain.
+
+Ready to actually set one up? [The Getting Started path](/paths/getting-started) has the rest of the sequence waiting. If you haven't been through it yet, [the deployment logs lesson](/library/building-with-ai/reading-deployment-logs) is worth a look first, since it's what got your app live in the first place.
+
+<Steps>
+  <Step number={1} title="Search for a domain name for a future project">
+    Go to any domain registrar, Namecheap, Google Domains, or a similar site, and search for a domain name you'd like for a future project. It doesn't need to be this course's project.
+
+    Note whether it's available, and its price per year.
+
+    Try two or three variations, different endings like `.com`, `.dev`, or `.io`, and compare prices. You don't need to buy anything, this is just to see what real domain shopping looks like before doing it for a real project.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 09.11.
+</Note>
+
+<FAQ>
+  <FAQItem question="Do I own my domain name once I buy it?">
+    No. A domain name is rented, not owned. You pay a registrar a yearly fee for the right to use that name. As long as you keep renewing it, it stays yours, but miss a renewal and someone else can register it.
+  </FAQItem>
+  <FAQItem question="Why does DNS matter if I already have a domain?">
+    A domain by itself is just a name. It doesn't point anywhere until DNS is configured. DNS is the system that connects your domain name to the actual server your app lives on, and without it, typing your domain would go nowhere.
+  </FAQItem>
+  <FAQItem question="Can I use my app without a custom domain?">
+    Yes. The free URL your hosting platform gave you, something like my-project-a8f3k2.vercel.app, works exactly the same as a custom domain would. A custom domain is about how it looks and feels, not whether your app functions.
+  </FAQItem>
+  <FAQItem question="How long does a DNS change take to work?">
+    Usually anywhere from a few minutes to a few hours, occasionally up to 48 hours in rare cases. This delay is called propagation. It happens because DNS information gets cached and copied across many servers worldwide, and they all need time to catch up.
+  </FAQItem>
+</FAQ>
