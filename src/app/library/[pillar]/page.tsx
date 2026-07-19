@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import { getArticlesByPillar } from '@/lib/mdx'
 import { PILLARS, PILLAR_MAP } from '@/lib/pillars'
+import { BreadcrumbSchema, BASE_URL } from '@/components/seo/breadcrumb-schema'
 
 interface PageProps {
   params: Promise<{ pillar: string }>
@@ -53,6 +54,12 @@ export default async function PillarPage({ params }: PageProps) {
   return (
     <div className="max-w-screen-xl mx-auto px-4 py-12">
       {/* Breadcrumb */}
+      <BreadcrumbSchema
+        items={[
+          { name: 'Library', url: `${BASE_URL}/library` },
+          { name: pillarMeta.name, url: `${BASE_URL}/library/${pillar}` },
+        ]}
+      />
       <nav className="flex items-center gap-2 text-sm text-secondary mb-8" aria-label="Breadcrumb">
         <Link href="/library" className="hover:text-accent transition-colors">Library</Link>
         <svg className="w-3 h-3 text-border" viewBox="0 0 6 10" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M1 1l4 4-4 4"/></svg>

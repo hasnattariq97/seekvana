@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Suspense } from 'react'
 import { getPathBySlug, generatePathStaticParams, buildLessonArticleMap } from '@/lib/mdx'
 import { FaqSection } from '@/components/faq/faq-section'
+import { BreadcrumbSchema, BASE_URL } from '@/components/seo/breadcrumb-schema'
 import { PathHero } from '@/components/paths/path-hero'
 import { ModuleList } from '@/components/paths/module-list'
 import { PathSidebar } from '@/components/paths/path-sidebar'
@@ -65,6 +66,12 @@ export default async function PathPage({ params }: Props) {
   return (
     <div className="max-w-[1080px] mx-auto px-7">
       {/* Breadcrumb */}
+      <BreadcrumbSchema
+        items={[
+          { name: 'Paths', url: `${BASE_URL}/paths` },
+          { name: path.title, url: `${BASE_URL}/paths/${slug}` },
+        ]}
+      />
       <nav className="flex items-center gap-1.5 pt-7 pb-0 text-[12.5px] text-secondary" aria-label="Breadcrumb">
         <Link href="/paths" className="hover:text-accent transition-colors duration-150">
           Paths

@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { BreadcrumbSchema, BASE_URL } from '@/components/seo/breadcrumb-schema'
 import { getAllGlossaryTerms } from '@/lib/mdx'
 import type { Metadata } from 'next'
 
@@ -14,6 +15,12 @@ export default async function GlossaryPage() {
   return (
     <main className="max-w-4xl mx-auto px-4 py-12">
       {/* Breadcrumb */}
+      <BreadcrumbSchema
+        items={[
+          { name: 'Home', url: `${BASE_URL}/` },
+          { name: 'Glossary', url: `${BASE_URL}/glossary` },
+        ]}
+      />
       <nav className="flex items-center gap-2 text-sm text-secondary mb-8" aria-label="Breadcrumb">
         <Link href="/" className="hover:text-accent transition-colors">Home</Link>
         <span>/</span>

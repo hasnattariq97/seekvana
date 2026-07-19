@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import remarkGfm from 'remark-gfm'
 import { getGlossaryBySlug, getAllGlossaryTerms, getAllArticles } from '@/lib/mdx'
+import { BreadcrumbSchema, BASE_URL } from '@/components/seo/breadcrumb-schema'
 import { getMDXComponents } from '@/components/mdx/mdx-components'
 
 interface Props {
@@ -58,6 +59,13 @@ export default async function GlossaryTermPage({ params }: Props) {
   return (
     <main className="max-w-4xl mx-auto px-4 py-12">
       {/* Breadcrumb */}
+      <BreadcrumbSchema
+        items={[
+          { name: 'Home', url: `${BASE_URL}/` },
+          { name: 'Glossary', url: `${BASE_URL}/glossary` },
+          { name: frontmatter.term, url: `${BASE_URL}/glossary/${term}` },
+        ]}
+      />
       <nav className="flex items-center gap-2 text-sm text-secondary mb-8" aria-label="Breadcrumb">
         <Link href="/" className="hover:text-accent transition-colors">Home</Link>
         <span>/</span>

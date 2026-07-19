@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { BreadcrumbSchema, BASE_URL } from '@/components/seo/breadcrumb-schema'
 import type { Metadata } from 'next'
 import { getAllPaths } from '@/lib/mdx'
 
@@ -25,6 +26,12 @@ export default function PathsPage() {
   return (
     <div className="max-w-screen-xl mx-auto px-4 py-12">
       <header className="mb-10">
+        <BreadcrumbSchema
+          items={[
+            { name: 'Home', url: `${BASE_URL}/` },
+            { name: 'Learning Paths', url: `${BASE_URL}/paths` },
+          ]}
+        />
         <nav className="flex items-center gap-2 text-sm text-secondary mb-6" aria-label="Breadcrumb">
           <Link href="/" className="hover:text-accent transition-colors">Home</Link>
           <svg className="w-3 h-3 text-border" viewBox="0 0 6 10" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M1 1l4 4-4 4"/></svg>

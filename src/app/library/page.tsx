@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { BreadcrumbSchema, BASE_URL } from '@/components/seo/breadcrumb-schema'
 import Image from 'next/image'
 import type { Metadata } from 'next'
 import { PILLARS } from '@/lib/pillars'
@@ -27,6 +28,12 @@ export default function LibraryPage() {
   return (
     <div className="max-w-screen-xl mx-auto px-4 py-12">
       {/* Breadcrumb */}
+      <BreadcrumbSchema
+        items={[
+          { name: 'Home', url: `${BASE_URL}/` },
+          { name: 'Library', url: `${BASE_URL}/library` },
+        ]}
+      />
       <nav className="flex items-center gap-2 text-xs text-secondary mb-7" aria-label="Breadcrumb">
         <Link href="/" className="hover:text-accent transition-colors font-medium">Home</Link>
         <svg className="w-3 h-3 text-secondary/40" viewBox="0 0 6 10" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M1 1l4 4-4 4"/></svg>
