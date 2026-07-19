@@ -8,6 +8,7 @@ import {
   Brain, Terminal, Monitor, GitBranch, Code2,
   Globe, Database, Cpu, Rocket, Star,
   BookOpen, Wrench, Radar,
+  Compass, Plug, Network, ShieldCheck, Trophy,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -69,6 +70,33 @@ const PATHS: PathCard[] = [
       { id: "11", label: "Foundations",           Icon: BookOpen },
       { id: "12", label: "Builder",                Icon: Wrench   },
       { id: "13", label: "Production & Frontier",  Icon: Radar    },
+    ],
+  },
+  {
+    slug: "inside-the-agent",
+    href: "/paths/inside-the-agent",
+    badgeLabel: "Flagship · Free",
+    badgeColorClass: "border-accent/30 bg-accent-soft text-accent",
+    title: "Inside the Agent",
+    description: "From your first tool call to autonomous agents — built where the pros build.",
+    imageSrc: "/images/paths/inside-the-agent/cover.png",
+    imageAlt: "Inside the Agent learning path — building real autonomous AI agents inside Cursor and Claude Code",
+    moduleGridCols: "grid-cols-5",
+    topicCount: 120,
+    modules: [
+      { id: "14", label: "Orientation", Icon: Compass     },
+      { id: "15", label: "Foundations", Icon: BookOpen    },
+      { id: "16", label: "Patterns",    Icon: Brain       },
+      { id: "17", label: "Tools & RAG", Icon: Wrench      },
+      { id: "18", label: "MCP",         Icon: Plug        },
+      { id: "19", label: "Memory",      Icon: Database    },
+      { id: "20", label: "Claude Code", Icon: Terminal    },
+      { id: "21", label: "Agent SDK",   Icon: Code2       },
+      { id: "22", label: "Multi-Agent", Icon: Network     },
+      { id: "23", label: "Evals & Sec", Icon: ShieldCheck },
+      { id: "24", label: "Deploy",      Icon: Rocket      },
+      { id: "25", label: "Standards",   Icon: Globe       },
+      { id: "26", label: "Capstones",   Icon: Trophy      },
     ],
   },
 ];

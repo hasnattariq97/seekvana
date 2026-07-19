@@ -122,6 +122,7 @@ export function Footer() {
           <ul className="space-y-0">
             {[
               { label: "Getting Started", href: "/paths/getting-started" },
+              { label: "Inside the Agent", href: "/paths/inside-the-agent" },
               { label: "All Paths", href: "/paths" },
               { label: "AI Foundations", href: "/library/ai-foundations" },
             ].map((l) => (

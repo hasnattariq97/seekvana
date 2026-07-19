@@ -28,6 +28,7 @@ import { cn } from "@/lib/utils";
 const LEARNING_PATHS_META = [
   { label: "Getting Started", href: "/paths/getting-started", lessons: 101, difficulty: "Beginner", dotClass: "bg-success" },
   { label: "Beyond the Prompt", href: "/paths/beyond-the-prompt", lessons: 31, difficulty: "Advanced", dotClass: "bg-info" },
+  { label: "Inside the Agent", href: "/paths/inside-the-agent", lessons: 120, difficulty: "Flagship", dotClass: "bg-accent" },
 ] as const;
 
 const PILLARS = [
