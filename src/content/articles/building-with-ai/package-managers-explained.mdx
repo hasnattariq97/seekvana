@@ -98,7 +98,7 @@ pip install anthropic # the Anthropic Python SDK
 pip install requests # a popular HTTP library
 ```
 
-When you run `pip install anthropic`, pip downloads the Anthropic SDK from PyPI and installs it so your Python scripts can import and use it.
+When you run `pip install anthropic`, pip downloads the Anthropic SDK from PyPI and installs it so your Python scripts can import and use it. This same command runs again automatically when you deploy, as part of your project's [build step](/library/building-with-ai/what-is-a-build-process).
 
 <Note>
  pip installs packages system-wide by default, meaning any Python script on your computer can use them. In Module 04, you'll learn about virtual environments, which keep packages isolated per project. For now, system-wide is fine.

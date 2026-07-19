@@ -29,7 +29,7 @@ faqs:
   isCover
 />
 
-Your app works perfectly on your laptop. You push it to Render, open the live URL, and it crashes with an error mentioning a key you know you set. Except you set it in `.env`, on your machine, and `.env` never left your machine, on purpose.
+Your app works perfectly on your laptop. You push it to Render, open the live URL, and it crashes with an error mentioning a key you know you set. Except you set it in `.env`, on your machine, and `.env` never left your machine, on purpose. If that crash shows up in your deployment log, [knowing how to read what it's telling you](/library/building-with-ai/reading-deployment-logs) turns a scary wall of text into one specific missing value.
 
 A platform's environment variables panel, a separate secure settings screen in your hosting dashboard, is where that same key needs to go for a live server. This is the same idea as [the environment variables you set up back in Module 02](/library/building-with-ai/environment-variables-explained), just stored somewhere different. Your code still calls `os.getenv("ANTHROPIC_API_KEY")` exactly like it does locally. The value just comes from a different, more secure place once your app is live.
 
@@ -86,6 +86,8 @@ Here's the general shape of the process, since the exact screen looks slightly d
 The same protection `.gitignore` gave you locally now extends all the way to production. Your key never touches GitHub, because it was never in a file Git tracks. It never appears anywhere in your code, because your code only ever calls `os.getenv()` and asks for a name, not a value. And it's visible only to you and the platform holding it, the same way your local `.env` file was visible only to you and your own machine.
 
 Skip this model and it's easy to assume a live server is somehow less private than your laptop. It isn't, as long as the key goes through the platform's environment panel and never through a committed file.
+
+The next time you redeploy, this variable gets injected during the [build step](/library/building-with-ai/what-is-a-build-process), the same "Building..." pause you've already watched happen on both Vercel and Render.
 
 This is the last piece of the deployment picture the [Getting Started path](/paths/getting-started) covers, security carried all the way from your terminal to a server anyone can visit.
 
