@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Suspense } from 'react'
 import { getPathBySlug, generatePathStaticParams, buildLessonArticleMap } from '@/lib/mdx'
+import { FaqSection } from '@/components/faq/faq-section'
 import { PathHero } from '@/components/paths/path-hero'
 import { ModuleList } from '@/components/paths/module-list'
 import { PathSidebar } from '@/components/paths/path-sidebar'
@@ -112,6 +113,12 @@ export default async function PathPage({ params }: Props) {
           />
         </Suspense>
       </div>
+
+      {path.faqs && path.faqs.length > 0 && (
+        <div className="max-w-2xl mx-auto pb-24">
+          <FaqSection faqs={path.faqs} />
+        </div>
+      )}
     </div>
   )
 }

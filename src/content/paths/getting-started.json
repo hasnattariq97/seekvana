@@ -7,6 +7,24 @@
   "lessonCount": 101,
   "href": "/paths/getting-started",
   "colorClass": "bg-purple-500",
+  "faqs": [
+    {
+      "q": "Do I need any prior experience?",
+      "a": "No — Getting Started assumes zero background and begins with the absolute fundamentals, from the terminal and Git to Python and deployment."
+    },
+    {
+      "q": "How long does it take?",
+      "a": "It's fully self-paced with no deadline — move as fast or as slowly as you like."
+    },
+    {
+      "q": "What will I be able to do by the end?",
+      "a": "Build and deploy your own live AI app from scratch, with the core developer skills to keep going on your own."
+    },
+    {
+      "q": "Is it free?",
+      "a": "Yes — the entire path is completely free."
+    }
+  ],
   "modules": [
     {
       "id": "01",

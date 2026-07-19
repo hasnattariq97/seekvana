@@ -165,6 +165,7 @@ export interface PathData extends PathDefinition {
   outcomeLabel?: string
   curriculumHint?: string
   topicFooterLabel?: string
+  faqs?: Array<{ q: string; a: string }>
   modules: PathModule[]
   nextPath?: {
     title: string

@@ -11,6 +11,28 @@
   "outcomeLabel": "Production-grade prompt system",
   "curriculumHint": "Every article runs principle → pattern → production — the idea, the pattern, and how it plays out in a real system, on one page.",
   "topicFooterLabel": "written exercise",
+  "faqs": [
+    {
+      "q": "Is this path for beginners?",
+      "a": "No — Beyond the Prompt is aimed at intermediate-to-advanced learners. You should be comfortable with the basics of prompting and working with AI models before starting."
+    },
+    {
+      "q": "What should I know before starting?",
+      "a": "A working grasp of everyday prompting and how large language models behave. If you're brand new, start with the Getting Started path first."
+    },
+    {
+      "q": "How long does it take?",
+      "a": "Roughly 10–14 hours of focused work, fully self-paced — there's no deadline."
+    },
+    {
+      "q": "What will I be able to do by the end?",
+      "a": "Build a production-grade prompt system and ship prompts that hold up in real products, using patterns, reasoning models, context engineering, RAG, agents, and evals."
+    },
+    {
+      "q": "Is it free?",
+      "a": "Yes — the entire path is completely free."
+    }
+  ],
   "modules": [
     {
       "id": "11",
