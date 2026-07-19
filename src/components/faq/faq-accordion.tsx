@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
-import { Plus } from 'lucide-react'
 import type { FaqItem } from './faq-section'
 
 // Matches the site's house easing (see learning-paths.tsx).
@@ -13,7 +12,7 @@ export function FaqAccordion({ faqs }: { faqs: FaqItem[] }) {
   const reduce = useReducedMotion()
 
   return (
-    <ul className="border-t border-border">
+    <ul className="border-t border-border" role="list">
       {faqs.map((item, i) => {
         const isOpen = openIndex === i
         return (
@@ -23,57 +22,66 @@ export function FaqAccordion({ faqs }: { faqs: FaqItem[] }) {
             whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-40px' }}
             transition={{ duration: 0.4, ease: EXPO, delay: Math.min(i * 0.05, 0.3) }}
-            className="border-b border-border"
+            className={`group/faq rounded-sm border-b border-border transition-colors duration-200 ${
+              isOpen ? 'bg-accent-soft' : 'hover:bg-surface-subtle'
+            }`}
           >
             <h3 className="m-0">
               <button
                 type="button"
                 onClick={() => setOpenIndex(isOpen ? null : i)}
                 aria-expanded={isOpen}
-                className="group flex w-full items-center justify-between gap-5 py-5 text-left"
+                className="flex w-full cursor-pointer items-start justify-between gap-4 border-none bg-transparent px-4 py-5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
               >
                 <span
-                  className={`text-base md:text-lg font-medium leading-snug transition-colors duration-200 ${
-                    isOpen ? 'text-accent' : 'text-primary group-hover:text-accent'
+                  className={`font-fraunces text-lg font-medium leading-snug transition-colors duration-150 ${
+                    isOpen ? 'text-accent-deep' : 'text-primary group-hover/faq:text-accent'
                   }`}
                 >
                   {item.q}
                 </span>
                 <span
-                  className={`grid h-8 w-8 shrink-0 place-items-center rounded-full border transition-colors duration-200 ${
-                    isOpen
-                      ? 'border-accent bg-accent-soft text-accent'
-                      : 'border-border text-secondary group-hover:border-accent/50 group-hover:text-accent'
+                  aria-hidden="true"
+                  className={`mt-0.5 shrink-0 transition-colors duration-150 ${
+                    isOpen ? 'text-accent-deep' : 'text-secondary group-hover/faq:text-accent'
                   }`}
                 >
-                  <motion.span
-                    className="grid place-items-center"
-                    animate={reduce ? undefined : { rotate: isOpen ? 45 : 0 }}
-                    transition={{ duration: 0.25, ease: EXPO }}
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    style={{
+                      transition: reduce ? undefined : 'transform 0.25s ease',
+                      transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)',
+                    }}
                   >
-                    <Plus size={16} aria-hidden="true" />
-                  </motion.span>
+                    <line x1="10" y1="4" x2="10" y2="16" />
+                    <line x1="4" y1="10" x2="16" y2="10" />
+                  </svg>
                 </span>
               </button>
             </h3>
 
-            {/* Answer stays mounted (height-collapsed, not unmounted) so its text
-                remains in the DOM for crawlers and matches the FAQPage schema. */}
-            <motion.div
-              initial={false}
-              animate={
-                reduce
-                  ? { height: isOpen ? 'auto' : 0 }
-                  : { height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }
-              }
-              transition={{ duration: reduce ? 0 : 0.32, ease: EXPO }}
-              className="overflow-hidden"
+            {/* grid-rows 0fr→1fr keeps the answer in the DOM (collapsed, not
+                unmounted) so its text stays crawlable and matches the schema. */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateRows: isOpen ? '1fr' : '0fr',
+                transition: reduce ? undefined : 'grid-template-rows 0.28s ease',
+              }}
               aria-hidden={!isOpen}
             >
-              <p className="max-w-prose pb-5 pr-10 text-[15px] leading-relaxed text-secondary md:text-base">
-                {item.a}
-              </p>
-            </motion.div>
+              <div style={{ overflow: 'hidden' }}>
+                <p className="max-w-prose px-4 pb-5 text-base leading-relaxed text-secondary">
+                  {item.a}
+                </p>
+              </div>
+            </div>
           </motion.li>
         )
       })}
