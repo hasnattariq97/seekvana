@@ -1,0 +1,130 @@
+---
+title: "Vercel & Render Free Tier Limits: When Hosting Costs"
+description: "Vercel and Render free tier limits explained: what they cap, when a hobby project hits one, and why a free tier rarely means a surprise bill."
+pillar: "building-with-ai"
+slug: "free-vs-paid-hosting-tiers"
+difficulty: "beginner"
+readTime: 6
+author: "Seekvana"
+publishedAt: "2026-07-24"
+tags: ["free tier limits", "vercel pricing", "render pricing", "hosting costs", "beginners"]
+featured: false
+lessonModule: "09"
+lessonNumber: "09.13"
+faqs:
+  - q: "Will I get a surprise bill if my free site suddenly gets popular?"
+    a: "Not on a free tier. Free plans on Vercel and Render have no payment method attached, so they physically can't charge you. When you cross a free limit, the platform pauses the feature or asks you to upgrade, it doesn't bill you. The scary hosting-bill stories you've seen almost always come from paid pay-as-you-go plans, not free ones."
+  - q: "Do I need to add a credit card to use the free tier?"
+    a: "No. Both Vercel's Hobby plan and Render's free tier let you deploy without entering any payment details. That's exactly why a free project can't produce a surprise charge: there's nothing for the platform to bill against until you deliberately add a card and choose a paid plan."
+  - q: "Why is the first request to my Render app so slow?"
+    a: "Render's free web services spin down after about 15 minutes of no traffic to save resources. The next request has to wake the service back up, which takes roughly 30 to 60 seconds. It's not broken and it's not costing you anything. Paid Render tiers stay running so they respond instantly."
+  - q: "How much traffic does it take to actually hit a free tier limit?"
+    a: "More than most beginner projects ever see. Vercel's Hobby plan includes 100 GB of bandwidth a month, enough to serve a light site tens of thousands of times. A portfolio or a tool shared with friends rarely comes close. The trigger is sustained real traffic from hundreds or thousands of regular users."
+---
+
+<ArticleImage
+  src="/images/articles/building-with-ai/free-vs-paid-hosting-tiers/cover.webp"
+  alt="A usage gauge with a large green zone and a small red zone at the end, the needle sitting comfortably inside the green"
+  priority
+  isCover
+/>
+
+You just shipped your first app for free. It's live, it works, and it cost you nothing. Then you scroll past a headline: "I woke up to a $500 hosting bill." Your stomach drops. You look back at your own tiny project, still sitting there on its free URL, and a small voice asks: is that going to happen to me?
+
+Here's the honest answer, up front: almost certainly not, and not for a long time. For a personal or hobby project, free hosting stays free far longer than most beginners expect. Free tiers cap three things (bandwidth, compute time, and build minutes), and when you hit a cap the platform either pauses the feature or asks you to upgrade. It does not quietly run up a bill behind your back. This lesson explains exactly where those free tier limits sit and what actually happens when you reach one.
+
+> **Key Takeaways**
+> - Free tiers cap three things: bandwidth (traffic), compute time (how long your backend runs), and build minutes (how often it rebuilds)
+> - Vercel's free Hobby tier includes 100 GB of bandwidth a month; Render's free tier includes 750 instance hours, 100 GB bandwidth, and 500 build minutes a month
+> - A hobby project shared with friends rarely comes close to any of these limits
+> - Cross a free limit and the platform pauses the feature or prompts an upgrade, it does not auto-charge you
+> - The surprise-bill horror stories come from paid pay-as-you-go plans, not free tiers
+
+---
+
+## When Do You Actually Have to Pay for Hosting?
+
+You start paying when your project stops being a hobby and becomes something real people use in volume, and not a moment before. For a portfolio, a personal tool, or an app you share with a handful of friends, every platform in this module stays comfortably free. The trigger for cost is sustained traffic from hundreds or thousands of regular users, which is a good problem to have and one you solve when it arrives.
+
+To put "a long time" in real terms: a light static page might be a few hundred kilobytes per visit. Against Vercel's 100 GB monthly bandwidth, that's on the order of a hundred thousand visits before the limit is even in view. Most first projects see a few dozen. The gap between what you use and what's allowed is enormous, and it's supposed to be.
+
+That's the whole answer. The rest of this lesson is just detail so you can tell whether you're at 1% of a limit or 90% of one, instead of guessing.
+
+Why does knowing this matter? Because the alternative is low-grade dread. Not knowing where the limits sit is what makes people hesitate to share their work, or waste an afternoon migrating off a free tier they were never close to outgrowing. Once you can see the actual numbers, the fear has nowhere to live.
+
+## What Free Tiers Actually Limit
+
+Free tiers don't cap "how good" your project is. They cap three specific resources, and it helps to know which is which.
+
+**Bandwidth** is how much data your site sends to visitors in a month. Every page load, image, and API response counts. The [Vercel Hobby plan](/library/building-with-ai/deploy-to-vercel) includes 100 GB a month, which sounds abstract until you realize a light static site can serve that to tens of thousands of visits before it's a concern.
+
+**Compute time** is how long your backend actively runs. This one matters most for the [Render backend](/library/building-with-ai/deploy-to-render) you deployed earlier. Render's free web services spin down after about 15 minutes of no traffic, which is also why the first request after a quiet spell takes 30 to 60 seconds to wake up. That slow first load looks like a bug, but it's the free tier saving compute, not something breaking or billing you.
+
+**Build minutes** are how much time the platform spends rebuilding your project each time you push. Every deploy runs the [build step](/library/building-with-ai/what-is-a-build-process) from the last lesson, and that time is metered. Render's free tier includes 500 build minutes a month. Since a small project's build takes a minute or two, you'd need to push dozens of times a day to feel it.
+
+Skip this section and the numbers on your dashboard are meaningless noise. Know these three, and you can read your usage at a glance.
+
+<ArticleImage
+  src="/images/articles/building-with-ai/free-vs-paid-hosting-tiers/free-tier-limits.webp"
+  alt="Vercel vs Render free tier limits compared: bandwidth, compute time, and build minutes for each, plus what happens when you hit a limit"
+  caption="Vercel and Render free tiers side by side, bandwidth, compute time, and build minutes, and what happens when you reach a limit: the platform pauses or warns you, it doesn't charge you."
+/>
+
+**Free tier limits at a glance**
+
+<ComparisonTable
+  title="Vercel Hobby vs Render Free (2026)"
+  headers="What the free tier caps|||Vercel (Hobby)|||Render (Free)"
+  rows="Bandwidth per month|||100 GB|||100 GB|||Compute / running time|||Serverless functions, generous limits|||750 instance hours per month|||Build minutes|||Included, generous|||500 minutes per month|||Sleeps when idle?|||No, static files always served|||Yes, after ~15 min (30-60s to wake)|||Credit card to start?|||No|||No|||If you exceed a limit|||Feature pauses until reset|||Service suspended until next month"
+/>
+
+## Does the Database Count Too?
+
+It's a fair worry: you deployed a frontend and a backend, but your data lives somewhere too. Does that rack up its own charges?
+
+Good news, and it echoes a point from the [Supabase in production](/library/building-with-ai/supabase-production-database) lesson: your Supabase database was never something you deployed, so it isn't billed the way your frontend and backend hosting is. It has its own free tier, with its own generous allowances (storage, and a cap on how many connections can talk to it at once). For a project at your stage, you're nowhere near either.
+
+The reason this matters: people assume "more moving parts" means "more bills." It doesn't. Each layer has its own free tier, and none of them is watching for an excuse to charge you. A full-stack hobby app can run end to end without a single paid plan.
+
+## What Happens When You Hit a Limit
+
+This is the part that should put the $500-bill fear to rest for good. As long as you haven't added a card, a free tier has no payment method attached to your account, so the platform has nothing to charge. When you cross a limit, one of two calm things happens: the affected feature pauses until your usage resets (Vercel does this, usually within about 30 days), or the service is suspended until the next month (Render's approach when you exhaust instance hours). In both cases you get a dashboard banner telling you exactly what happened.
+
+So what about those horror stories? They're real, but read the fine print. The developer who woke up to a $500 bill after a project went viral, and the one hit with thousands after a traffic spike, were both on paid, pay-as-you-go plans that bill for whatever you use. A free Hobby project can't do that. It pauses instead. The free tier's inability to charge you is the exact safety net those developers had turned off.
+
+<Warning>
+Free tiers don't auto-bill, but policies do vary and do change. Before you rely on a free tier for something that genuinely matters (a client demo, a launch), read the platform's current limits yourself: the <a href="https://vercel.com/docs/plans/hobby" target="_blank" rel="noopener noreferrer">Vercel Hobby plan docs</a> and the <a href="https://render.com/docs/free" target="_blank" rel="noopener noreferrer">Render free tier docs</a> both list exactly what's included. Reassurance is good; verifying the specific plan you're on is better.
+</Warning>
+
+The practical habit here isn't worry, it's a glance. I'll admit that on my first deployed project I checked the usage dashboard far more often than it deserved, half-expecting some number to have spiked overnight. It never did. It sat near zero for months. Open yours every so often, see how far you are from the limits, and let that be the end of it. For most beginner projects the answer stays reassuringly far away, and checking takes ten seconds.
+
+---
+
+<Steps>
+  <Step number={1} title="Check your real usage against the free limits">
+    Log into your Vercel dashboard and find the "Usage" section (usually under your account or project settings). Then do the same in your Render dashboard.
+
+    Note the free-tier limits shown for each (bandwidth, build minutes, instance hours) and your actual current usage next to them.
+
+    Now estimate: roughly how much more traffic or activity would it take to reach one of those limits? Write one sentence with your guess. For most beginner projects, the honest answer should feel reassuringly far off.
+  </Step>
+</Steps>
+
+<Note>
+Done? You've completed Lesson 09.13.
+</Note>
+
+<FAQ>
+  <FAQItem question="Will I get a surprise bill if my free site suddenly gets popular?">
+    Not on a free tier. Free plans on Vercel and Render have no payment method attached, so they physically can't charge you. When you cross a free limit, the platform pauses the feature or asks you to upgrade, it doesn't bill you. The scary hosting-bill stories you've seen almost always come from paid pay-as-you-go plans, not free ones.
+  </FAQItem>
+  <FAQItem question="Do I need to add a credit card to use the free tier?">
+    No. Both Vercel's Hobby plan and Render's free tier let you deploy without entering any payment details. That's exactly why a free project can't produce a surprise charge: there's nothing for the platform to bill against until you deliberately add a card and choose a paid plan.
+  </FAQItem>
+  <FAQItem question="Why is the first request to my Render app so slow?">
+    Render's free web services spin down after about 15 minutes of no traffic to save resources. The next request has to wake the service back up, which takes roughly 30 to 60 seconds. It's not broken and it's not costing you anything. Paid Render tiers stay running so they respond instantly.
+  </FAQItem>
+  <FAQItem question="How much traffic does it take to actually hit a free tier limit?">
+    More than most beginner projects ever see. Vercel's Hobby plan includes 100 GB of bandwidth a month, enough to serve a light site tens of thousands of times. A portfolio or a tool shared with friends rarely comes close. The trigger is sustained real traffic from hundreds or thousands of regular users.
+  </FAQItem>
+</FAQ>
