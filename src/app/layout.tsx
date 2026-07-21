@@ -68,6 +68,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <script id="cookieyes" type="text/javascript" src="https://cdn-cookieyes.com/client_data/9cefc34791140f302ee10014ced90f88/script.js"></script>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
