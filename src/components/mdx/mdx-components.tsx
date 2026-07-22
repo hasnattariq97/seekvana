@@ -10,6 +10,7 @@ import { Mermaid } from './mermaid'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs'
 import { FileTree } from './file-tree'
 import { YouTubeEmbed } from './youtube-embed'
+import { SlideEmbed } from './slide-embed'
 import { ComparisonTable } from './comparison-table'
 import { Quiz } from './quiz'
 import { Chart } from './chart'
@@ -152,6 +153,7 @@ export function getMDXComponents(): MDXComponents {
     TabsContent,
     FileTree,
     YouTubeEmbed,
+    SlideEmbed,
     ComparisonTable,
     Quiz,
     Chart,
