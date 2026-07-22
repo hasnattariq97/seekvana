@@ -1,0 +1,128 @@
+---
+title: "Prompt Engineering vs. Code: A Hands-On Comparison"
+description: "Solve the same messy data task with a single prompt and with code, then compare accuracy, consistency, and real cost yourself."
+pillar: "building-with-ai"
+slug: "project-prompt-vs-code"
+difficulty: "intermediate"
+readTime: 8
+author: "Seekvana"
+publishedAt: "2026-07-31"
+tags: ["prompt engineering", "ai vs code", "launchpad", "capstone project"]
+featured: false
+lessonModule: "10"
+lessonNumber: "10.03"
+faqs:
+  - q: "Isn't it obvious that AI is always more flexible than code?"
+    a: "Flexible, yes. More accurate or more consistent, not automatically. Flexibility means the prompt can handle input you didn't specifically plan for. It says nothing about whether the same input produces the same answer twice, which is exactly what this project asks you to check for yourself."
+  - q: "What if both versions score about the same on accuracy?"
+    a: "That's a real, common result, and it's informative. When accuracy ties, consistency and cost become the tiebreakers, and code usually wins both, since it doesn't vary between runs and doesn't cost tokens per call. Report the tie honestly rather than picking a winner to force a cleaner story."
+  - q: "Do I need to build Version B if Version A already works well?"
+    a: "Yes. A single version tells you it works, not how it compares to the alternative, and comparison is the entire point of this project. Skipping Version B turns this into project 10.01 again, a single working tool, not the judgment-building exercise this closing lesson is designed to be."
+  - q: "How many times should I rerun each version to test consistency?"
+    a: "Twice, at minimum, on every one of your 15-20 examples, since that's enough to catch the difference between deterministic and non-deterministic output. If you have time, three runs gives you a steadier read, but even two runs on the same input will surface it if Version A changes its mind."
+---
+
+<ArticleImage
+  src="/images/articles/building-with-ai/project-prompt-vs-code/cover.webp"
+  alt="A messy input document splitting into two paths, one through a code icon and one through a speech-bubble AI icon, both converging on a clean structured output beneath a small balance scale"
+/>
+
+You run your extraction script on the same folder of receipts twice. The prompt-only version gets 18 of 20 right the first time, then 16 of 20 on the exact same input the second time, no code changed, nothing updated. The code-first version gets 15 of 20 both times, same 15, every run.
+
+Which one do you actually ship? That question, not "which is smarter," is what separates people who've merely used an LLM from people who know when to reach for one. This is the prompt vs. code decision in miniature, and this project makes you answer it with your own evidence: solve the same messy task twice, once with a single well-crafted prompt and once with code doing the deterministic parts, then measure which one you'd actually trust.
+
+> **Key Takeaways**
+> - Prompting and code both usually work on messy extraction tasks; they are not equally good for the same task
+> - Version A is one well-crafted prompt handling the entire task; Version B is real code for the deterministic parts, with Claude called only where judgment is genuinely required
+> - Test both against 15-20 real examples, not 3, run each twice, and measure accuracy, consistency, and rough cost
+> - There's no universal right answer, only a defensible one backed by evidence you gathered yourself
+> - This is the last lesson of the Launchpad pre-course, and its skill is judgment, not a new tool
+
+## The Task You'll Solve Two Ways
+
+Pick one task that turns messy, inconsistent text into something clean and structured. A few real options: pulling names, dates, and amounts out of informally-written receipts or invoices; standardizing a list of differently-formatted phone numbers or addresses; sorting a batch of short customer comments into three or four sentiment categories.
+
+Whatever you pick, gather 15-20 varied real or realistic examples before you write a line of either version. Three examples will make both versions look perfect, and that's the trap. Real messiness, different formats, missing fields, weird phrasing, only shows up once you've got a proper batch to run against, and a project built on 3 easy examples proves nothing about either approach.
+
+## Version A: Just Ask Claude
+
+Write one prompt that hands Claude the raw, messy input and asks for clean, structured output directly. No parsing code at all, the model does the entire task. This is where <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview" target="_blank" rel="noopener noreferrer">Claude's own prompt engineering guidance</a> earns its keep: be specific about the output format, give the audience and constraints, and show one or two examples of exactly what "clean" looks like. A vague prompt here isn't a fair test of prompting, it's just a bad prompt, so lean fully on [writing precise prompts](/library/building-with-ai/prompting-and-code) before you run a single example through it.
+
+I've run this exact test on a folder of scanned receipts before, and the failure mode was never the obviously messy ones. It was a receipt with a handwritten tip added at the bottom that Claude sometimes folded into the total and sometimes didn't, same wording, same prompt, different runs. That's not a prompting mistake you can fix by rewording; it's the kind of inconsistency that only shows up when you rerun the same input and actually compare the two outputs side by side, which is exactly the habit this project is trying to build in you.
+
+Skip this step and you'll end up comparing a sloppy prompt against careful code, which tells you nothing about prompting itself, only about how much effort you put into each side.
+
+## Version B: Code First, AI for the Judgment Call
+
+Now write real Python: string methods, maybe basic pattern matching, to handle whatever part of the task is genuinely mechanical and deterministic. Call Claude only for the one sub-part that actually requires judgment or language understanding, classifying sentiment, say, not finding the number that looks like a date.
+
+This split matters because not every part of a messy task is equally hard. Extracting a dollar amount that always follows a `$` sign is a solved problem; a plain string check handles it with zero ambiguity and zero API cost. Deciding whether "not bad, I guess" counts as positive or neutral sentiment is not solved, that's where the model earns its call.
+
+<Note>
+Skip this narrow-scoping step and Version B collapses into Version A with extra code around it, calling Claude for everything "to be safe." That defeats the entire comparison, since you're no longer testing two different approaches, you're testing one approach with a slower wrapper.
+</Note>
+
+## What "Better" Actually Means Here
+
+Run both versions against every one of your 15-20 examples, twice each, and record three things.
+
+<ArticleImage
+  src="/images/articles/building-with-ai/project-prompt-vs-code/comparison-diagram.webp"
+  alt="Diagram showing Version A prompt-only and Version B code-first both taking the same messy input and producing structured output, with accuracy, consistency, and cost as the three measurements in between"
+  caption="Same input, two pipelines: Version A leans entirely on one prompt, Version B splits the work between deterministic code and a narrow Claude call. Accuracy, consistency, and cost decide which one earns your trust."
+/>
+
+<ComparisonTable
+  title="What to measure on each version"
+  headers="Metric|||What it tells you"
+  rows="Accuracy|||How many outputs were actually correct, checked by hand against the real answer|||Consistency|||Did the same input produce the same output both times you ran it?|||Cost / speed|||Rough token usage or wall-clock time per run, whichever is easier to observe"
+/>
+
+Accuracy alone won't settle this. A version that's slightly more accurate but changes its answer on rerun is a liability in anything you'd ship to real users. A bug report that says "it worked yesterday" is nearly impossible to debug when the code itself never changed, and that specific failure is a prompting risk, not a code risk: code given the same input always produces the same output, an LLM call is not guaranteed to.
+
+## When Should You Use a Prompt Instead of Code?
+
+Use a prompt when the task is judgment-heavy and genuinely resistant to fixed rules, classifying tone, summarizing loosely-structured writing, handling input whose format you can't fully predict in advance. Use code when the sub-task is deterministic, has a fixed shape, and would cost you nothing in accuracy to hand-write, dates, currency symbols, known formats. Most real systems, including the hybrid Version B you just built, use both at once rather than picking a single winner.
+
+Don't stop at that general rule. Your own numbers from this project, on this task, are worth more than the general rule, because they're evidence, not received wisdom. If your results disagree with the paragraph above, trust your results and go find the reason why, that disagreement is itself the more interesting lesson.
+
+## Your Task
+
+<Steps>
+  <Step number={1} title="Solve one task two ways, then compare with evidence">
+    Choose a messy text-extraction or classification task with at least 15-20 real or realistic varied examples to test against.
+
+    Build Version A: a single well-crafted prompt that does the entire task directly.
+
+    Build Version B: Python code handling the deterministic parts, calling Claude only for the part that genuinely needs judgment.
+
+    Run both versions against every example, twice each. Record how many each got right, whether rerunning the same input changed the answer, and a rough sense of cost or speed for each approach.
+
+    Write a comparison, half a page is enough, stating which version you'd actually trust in a real product for this task, backed by what you observed, not a guess.
+
+    Then answer directly: name one different task where the other version would clearly be the better choice, and explain why in one or two sentences.
+
+    Push both versions and your comparison to GitHub. This closes Module 10, and the entire Launchpad pre-course.
+  </Step>
+</Steps>
+
+You've now built a tool from a bare constraint, diagnosed a broken system, and measured two working solutions against each other instead of trusting either one on faith. That's the actual shape of real engineering judgment, not a fact you memorize once, a habit of checking rather than assuming. From here, the [rest of the path](/paths/getting-started) points toward [tools that decide and act on their own](/glossary/agent), building on every decision-point and diagnostic instinct this project arc has built in you.
+
+<Note>
+  Done? You've completed Lesson 10.03.
+</Note>
+
+<FAQ>
+  <FAQItem question="Isn't it obvious that AI is always more flexible than code?">
+    Flexible, yes. More accurate or more consistent, not automatically. Flexibility means the prompt can handle input you didn't specifically plan for. It says nothing about whether the same input produces the same answer twice, which is exactly what this project asks you to check for yourself.
+  </FAQItem>
+  <FAQItem question="What if both versions score about the same on accuracy?">
+    That's a real, common result, and it's informative. When accuracy ties, consistency and cost become the tiebreakers, and code usually wins both, since it doesn't vary between runs and doesn't cost tokens per call. Report the tie honestly rather than picking a winner to force a cleaner story.
+  </FAQItem>
+  <FAQItem question="Do I need to build Version B if Version A already works well?">
+    Yes. A single version tells you it works, not how it compares to the alternative, and comparison is the entire point of this project. Skipping Version B turns this into project 10.01 again, a single working tool, not the judgment-building exercise this closing lesson is designed to be.
+  </FAQItem>
+  <FAQItem question="How many times should I rerun each version to test consistency?">
+    Twice, at minimum, on every one of your 15-20 examples, since that's enough to catch the difference between deterministic and non-deterministic output. If you have time, three runs gives you a steadier read, but even two runs on the same input will surface it if Version A changes its mind.
+  </FAQItem>
+</FAQ>
