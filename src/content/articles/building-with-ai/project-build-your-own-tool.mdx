@@ -1,0 +1,118 @@
+---
+title: "Build Your Own AI Command Line Tool: Launchpad Project"
+description: "Build your own AI command-line tool from a goal and constraint, no steps given. Launchpad Project 1's decision-point rule and self-assessment checklist."
+pillar: "building-with-ai"
+slug: "project-build-your-own-tool"
+difficulty: "intermediate"
+readTime: 8
+author: "Seekvana"
+publishedAt: "2026-07-31"
+tags: ["ai agent project", "python cli tool", "claude api", "launchpad"]
+featured: false
+lessonModule: "10"
+lessonNumber: "10.01"
+faqs:
+  - q: "What if I can't think of a task to automate?"
+    a: "Look at something you already do by hand more than once a week that involves a small judgment call, not pure math. Sorting messy files, merging notes, or grouping similar text replies are all fair game. If nothing comes to mind immediately, that's normal. Pick the closest thing to an annoyance you've felt in the last month, even a small one."
+  - q: "Does my tool need a user interface?"
+    a: "No. A command-line tool that takes input and prints or writes output is a complete, real tool. Building a UI adds work that has nothing to do with this lesson's actual skill, which is designing the decision point. Save interface work for a later project."
+  - q: "How do I know if my decision point actually counts as agentic?"
+    a: "Ask whether your code does something different depending on what Claude's response contains. If the answer is always \"print it and stop,\" you have a script that calls an API, not an agent. If your code reads the response and picks between at least two different next actions, it counts."
+  - q: "What if my AI coding tool wrote most of the code for me?"
+    a: "That's expected and fine; the checklist item asks you to name which tool you used and say one honest sentence about how it helped or got in the way. The part that has to be yours is the design: what the tool does, where the decision point sits, and whether the result actually matches what you asked for."
+---
+
+<ArticleImage
+  src="/images/articles/building-with-ai/project-build-your-own-tool/cover.webp"
+  alt="A blank glowing rectangle on a workshop bench surrounded by scattered tools, representing an unbuilt project waiting for its design"
+/>
+
+You've finished nine modules of concepts. Now you're staring at an empty editor with no numbered steps to follow, and the honest first reaction for most people is: I don't know what to build.
+
+That reaction is the assignment, not a sign you're behind. Project 1 gives you a goal and a constraint instead of a script: design and build your own AI command-line tool in Python, using the Claude API, that automates one real, mildly annoying task and makes Claude's response actually change what your code does next. By the end, you'll have a working tool, a git history that shows how you got there, and a clear sense of what "designing" a solution actually feels like, as opposed to typing one out.
+
+> **Key Takeaways**
+> - This project gives a constraint and a goal, not a numbered build script, on purpose
+> - Your tool needs one real decision point where Claude's response changes what your code does next, not just prints a result
+> - Pick a task with a genuine judgment call in it, not something a plain script could already solve
+> - A self-assessment checklist replaces a graded rubric: functions, error handling, a hidden API key, a named AI tool, and a real commit history
+> - There's no reference solution. A working tool that matches your own design is the entire deliverable
+
+## Why This Project Has No Steps to Follow
+
+Every project before this one gave you the steps. Install this, run that, paste this function in, check the output matches. Those lessons taught you real skills, but they also taught you to follow instructions well.
+
+This project asks something different. You get a constraint (build something that uses Claude to make a decision) and a goal (automate a task you'd genuinely want automated), and the real work is deciding the steps yourself.
+
+This is the same skill lesson [where agents live](/library/building-with-ai/where-agents-live) asked you to sketch on paper: figuring out where a decision point belongs in a system. That lesson had you draw the architecture. This one has you build it, with nobody checking your sketch first.
+
+I've watched people breeze through nine modules of concepts, then freeze the second nobody hands them a numbered script. That's not a knowledge gap. It's a different muscle, the one this project is actually here to train.
+
+## What Counts as a Real Task Worth Automating
+
+Pick something you'd genuinely do by hand, repeatedly, that involves some judgment, not a task that's pure calculation a plain script could already handle.
+
+A few starting ideas, not a menu to pick from without thinking further:
+
+- A script that reads a folder of messy filenames and proposes a consistent renaming scheme
+- A script that takes a handful of saved articles as text files and produces one merged briefing document, deduplicating overlapping points
+- A script that reads a spreadsheet of survey answers and clusters similar free-text responses into themes
+
+Notice what all three have in common: none of them are "add two numbers" or "convert Celsius to Fahrenheit." Those are solved problems with deterministic answers. Pick a task like that and you'll finish in ten minutes with nothing to show for the actual skill this project is testing.
+
+## What Makes This an Agent, Not Just a Script
+
+Here's the line that separates this project from just calling an API: your code has to branch on what Claude's response actually contains, not just print it and stop.
+
+Send prompt, print result is a script. Send prompt, check what came back, and do something different depending on the answer: that's the loop this whole module has been building toward since lesson 07.08.
+
+A folder-renaming tool that asks Claude to propose names, then checks whether any proposed name would collide with an existing file before writing anything, is agentic. A tool that prints Claude's suggestion and exits is not. It's a chatbot skin around one API call.
+
+If you're picking between AI coding tools to help build this, [choosing an AI coding tool](/library/building-with-ai/choosing-ai-coding-tool) covers the tradeoffs between the main options worth knowing before you start. For the canonical reference on this exact decision-loop pattern, Anthropic's own <a href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/build-a-tool-using-agent" target="_blank" rel="noopener noreferrer">tool-use tutorial</a> walks through it directly, and their <a href="https://code.claude.com/docs/en/agent-sdk/quickstart" target="_blank" rel="noopener noreferrer">Agent SDK quickstart</a> is worth a look once you're ready to go past a hand-rolled loop.
+
+<Note>
+The decision point doesn't need to be complicated. "If Claude's confidence in this classification looks weak, ask again with more context" counts. So does "if the merged summary is longer than the original inputs combined, flag it for a human to review." Small and real beats clever and fake.
+</Note>
+
+## What "Good" Looks Like
+
+There's no rubric to submit against here, just a checklist to hold your own work up to before you call it done. Skip an item and the tool might still run, but something specific breaks.
+
+- **Uses real Python functions**, not one giant script top to bottom. Skip this and a single bug forces you to reread the whole file to find it
+- **Handles empty, missing, or malformed input** without crashing. Skip this and the first real-world file that doesn't match your assumptions takes the whole tool down
+- **Loads its API key from [a `.env` file](/library/building-with-ai/python-dotenv)**, never hardcoded, with a `.gitignore` in place before your first commit. Skip this and your key ends up sitting in plain text in a public GitHub repo the moment you push
+- **Was built with help from one of the AI coding tools from Module 08.** Name which one, and one honest sentence on how it helped or got in the way
+- **Has [a git history](/library/building-with-ai/git-core-workflow) with at least three separately committed improvements.** One dump-everything commit erases the record of how the tool actually came together, which is most of what makes a portfolio project worth looking at
+
+<Steps>
+  <Step number={1} title="Design and build your own tool">
+    Choose a real task you want automated, one with a genuine judgment call in it, not a pure calculation. Write one sentence stating exactly what the tool takes as input and what it produces as output before writing any code.
+
+    Sketch, on paper, not in code yet, where the one required decision point sits: what question does Claude answer that changes what your code does next?
+
+    Build it. Use whichever AI coding tool from Module 08 you prefer, and keep a short note on how it helped.
+
+    Test it against the checklist above: handles bad input, uses functions, key loaded via `.env` with `.gitignore` in place, at least three meaningful commits.
+
+    Push it to GitHub with a README explaining the task it solves and why you built it that way. There's no reference solution here. A working, thoughtfully built tool that matches your own design is the entire deliverable.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 10.01.
+</Note>
+
+<FAQ>
+  <FAQItem question="What if I can't think of a task to automate?">
+    Look at something you already do by hand more than once a week that involves a small judgment call, not pure math. Sorting messy files, merging notes, or grouping similar text replies are all fair game. If nothing comes to mind immediately, that's normal. Pick the closest thing to an annoyance you've felt in the last month, even a small one.
+  </FAQItem>
+  <FAQItem question="Does my tool need a user interface?">
+    No. A command-line tool that takes input and prints or writes output is a complete, real tool. Building a UI adds work that has nothing to do with this lesson's actual skill, which is designing the decision point. Save interface work for a later project.
+  </FAQItem>
+  <FAQItem question="How do I know if my decision point actually counts as agentic?">
+    Ask whether your code does something different depending on what Claude's response contains. If the answer is always "print it and stop," you have a script that calls an API, not an agent. If your code reads the response and picks between at least two different next actions, it counts.
+  </FAQItem>
+  <FAQItem question="What if my AI coding tool wrote most of the code for me?">
+    That's expected and fine; the checklist item asks you to name which tool you used and say one honest sentence about how it helped or got in the way. The part that has to be yours is the design: what the tool does, where the decision point sits, and whether the result actually matches what you asked for.
+  </FAQItem>
+</FAQ>
