@@ -188,7 +188,7 @@
       "description": "Capstone: build and deploy a live Claude chat app with Supabase logging",
       "topics": [
         { "id": "10.01", "title": "Reviewing what you've built — the full picture" },
-        { "id": "10.02", "title": "Project 1: CLI tool that summarises a webpage using Claude" },
+        { "id": "10.02", "title": "Build a Webpage Summarizer CLI Tool With Claude API" },
         { "id": "10.03", "title": "Project 2: FastAPI endpoint that wraps the Claude API" },
         { "id": "10.04", "title": "Project 3: A web UI that calls your FastAPI backend" },
         { "id": "10.05", "title": "Adding Supabase to log every conversation" },
