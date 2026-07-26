@@ -1,0 +1,144 @@
+---
+title: "How to Install Cursor AI Editor: Setup and First Tour"
+description: "Learn how to install Cursor AI editor step by step, import your VS Code settings, and use the model picker with real confidence."
+pillar: "agentic-ai"
+slug: "installing-and-touring-cursor"
+difficulty: "beginner"
+readTime: 7
+author: "Hasnat Tariq"
+authorSlug: "hasnat-tariq"
+publisher: "Seekvana"
+reviewedBy: ""
+publishedAt: "2026-07-19"
+lastUpdated: "2026-07-19"
+tags: ["cursor", "ai coding tools", "developer setup", "agentic-ai"]
+featured: false
+lessonModule: "14"
+lessonNumber: "14.02"
+faqs:
+  - q: "Is Cursor free to use?"
+    a: "Yes, Cursor has a free tier with the full editor and a limited number of AI requests. The exact quota isn't fixed anymore since Cursor moved to a credit-based system, so check your account dashboard under General for your current limit instead of trusting a number from an old blog post."
+  - q: "Does Cursor import my VS Code extensions automatically?"
+    a: "Cursor offers to import your extensions, themes, keybindings, and settings the first time you launch it, and you can also trigger the import later from Settings. Most extensions transfer cleanly, but a handful of Microsoft-only ones won't, since Cursor pulls from the Open VSX registry instead of the Microsoft Marketplace."
+  - q: "What is the Cursor model picker?"
+    a: "The model picker is the dropdown in Cursor's chat and Composer panels where you choose which AI model handles your request, including an Auto-select option that picks for you. It matters because different models trade off speed, cost, and reasoning depth, and the wrong pick for a task can mean a slower or shallower answer."
+  - q: "Can I use Cursor and VS Code at the same time?"
+    a: "Yes, they run as completely separate applications and won't interfere with each other even on the same project folder. Many developers keep both installed during a transition period and gradually move projects over to Cursor."
+---
+
+{/* IMAGE PROMPT: Warm storybook gouache illustration, cream-to-clay palette; the cream-white robot happily unpacking a glowing editor window like a new toolbox at a cozy workbench, warm lanterns, clay accents. No text in image. | FILENAME: cover.webp | DIMENSIONS: 1200×630 */}
+
+<ArticleImage src="/images/articles/agentic-ai/installing-and-touring-cursor/cover.webp" alt="A friendly cream-white robot unpacking a glowing editor window at a warm workbench" />
+
+The first time I opened Cursor, a small dialog asked: "Import from VS Code?" I clicked yes without thinking twice, and every keybinding I'd built over three years just... worked.
+
+It felt less like starting over and more like moving into a new apartment with all my furniture already in place. If you skipped straight to this lesson, [the path's opening lesson](/library/agentic-ai/what-this-path-is) explains why we insist on building [agentic AI](/library/agentic-ai) inside real editors instead of a notebook.
+
+**To install Cursor, download it from cursor.com for your operating system, run the installer, and launch it.** On first launch, sign in to unlock AI features, accept the offer to import your VS Code settings and extensions, and pick a model from the picker in the chat panel. That's the whole install. Everything else in this lesson is making sure it actually works before you build anything on top of it.
+
+> **Key Takeaways**
+> - Cursor installs from cursor.com in under five minutes on Windows, macOS, or Linux, and needs at least 8 GB of RAM for AI features to feel responsive
+> - On first launch, Cursor can one-click import your VS Code extensions, themes, keybindings, and settings, since it's built as a fork of VS Code
+> - A handful of Microsoft-published extensions won't transfer, because Cursor pulls from the Open VSX registry, not the Microsoft Marketplace
+> - The model picker lets you choose Auto-select or a specific model, and picking wrong for the task is the single most common beginner mistake in Cursor
+> - Cursor's free-tier request limit is no longer a fixed published number, so check your account dashboard instead of an old blog post
+
+---
+
+## How Do You Install Cursor AI Editor?
+
+Installing Cursor means downloading the right package for your operating system from cursor.com and running it like any other application.
+
+Go to the official <a href="https://cursor.com/download" target="_blank" rel="noopener noreferrer">Cursor download page</a> and grab the installer for your OS.
+
+1. **Windows or Linux:** run the downloaded installer and follow the prompts. On Linux, make sure `libfuse2` is installed first, or the AppImage won't launch.
+2. **macOS:** open the downloaded DMG file, drag the Cursor icon into your Applications folder, then launch it from Applications or Spotlight.
+3. **Check your specs:** you need roughly 4 GB of RAM and 2 GB of free disk space at minimum, but 8 GB of RAM makes a real difference once you're running AI features regularly, since the heavier models process in the cloud and the local agent loop stays snappier with headroom. If terminal basics or OS-level setup feel shaky, [Getting Started](/paths/getting-started) covers that ground first.
+
+Once it launches, you'll land on a clean, mostly-empty editor window. That's expected. The interesting part happens next.
+
+## What Happens the First Time You Open Cursor?
+
+The first launch walks you through account creation, a trial offer, and the VS Code import prompt, in that order.
+
+Cursor asks you to sign in with an email, Google, or GitHub account before it unlocks any AI features, and creating an account starts a 14-day Pro trial automatically. You don't need to enter payment details to start it. After sign-in, if Cursor detects an existing VS Code installation on your machine, it offers a one-click import right there in the onboarding flow.
+
+<Note>
+  If you skip the import prompt by accident, it isn't gone for good. Open Settings with Cmd+Shift+J on Mac or Ctrl+Shift+J on Windows and Linux, go to General, then Account, and you'll find the same Import option waiting under VS Code Import.
+</Note>
+
+Skipping this tour and jumping straight into a real project is exactly how a beginner ends up fighting the editor instead of the code. A missing keybinding thirty minutes into a task is a worse time to discover it than right now, in the two minutes it takes to look around.
+
+## How Do You Import VS Code Settings and Extensions into Cursor?
+
+Importing from VS Code means bringing your extensions, themes, keybindings, and user settings into Cursor with one click, either during onboarding or later from Settings.
+
+If you missed the first-launch prompt, here's the manual path:
+
+1. Open Cursor Settings with **Cmd+Shift+J** (Mac) or **Ctrl+Shift+J** (Windows/Linux).
+2. Go to **General > Account**.
+3. Click **Import** under the VS Code Import section.
+
+Alternatively, open the Extensions panel with Cmd+Shift+X or Ctrl+Shift+X, and look for an **Import from VS Code** button at the top, or the same option under the three-dot menu.
+
+What actually transfers: extensions, themes and icon packs, keybindings, and settings like font size, tab width, and formatting rules. Because Cursor shares VS Code's default shortcuts, any custom keybindings you'd built carry over without you retyping a single one.
+
+<Warning>
+  Cursor installs extensions from the Open VSX Registry, an open-source alternative maintained by the Eclipse Foundation, not Microsoft's own marketplace. Roughly 90% of extensions are published to both, but a few Microsoft-proprietary ones aren't, and those quietly won't appear after import. If you notice one missing later, that's why. It's not a bug, it's a licensing boundary you're allowed to bump into.
+</Warning>
+
+<ArticleImage src="/images/articles/agentic-ai/installing-and-touring-cursor/install-steps.webp" alt="Five-step illustrated guide to installing Cursor, signing in, importing VS Code settings, and picking a model" caption="The full install-to-first-model flow: download, install, sign in, import VS Code, then pick a model." />
+
+## What Is the Cursor Model Picker, and Why Does It Matter?
+
+The model picker is the dropdown in the chat and Composer panels where you choose which AI model answers your request, and it matters because the wrong choice for a task genuinely changes the quality and speed of what comes back.
+
+Cursor offers an Auto-select mode that tries to pick a suitable model based on your prompt, file type, and task complexity, alongside manually choosing a specific model yourself. For heavy reasoning work like refactoring a tangled function or debugging a subtle logic error, a stronger reasoning model tends to think it through more carefully. It's slower, but the depth pays off.
+
+For quick, mechanical edits like renaming a variable across a file, a faster model gets you there just as correctly. There's no reason to wait on a heavyweight model for that.
+
+I've had Auto-select quietly swap to a different model mid-session without me noticing, and only caught it because the response style changed tone halfway through a multi-file edit. Now I glance at the picker before starting anything that touches more than one file, just to know which model is actually doing the thinking.
+
+You can set your own default models for different actions in Cursor Settings, which is worth doing once you notice a pattern in what works for your kind of tasks.
+
+## What Are Cursor's Free-Tier Limits?
+
+Cursor's free tier gives you the full editor plus a limited number of AI requests each month, but the exact number is no longer something Cursor publishes as a fixed figure.
+
+In mid-2025, Cursor moved from a simple per-request quota to a credit-based pricing model, and its public pricing page doesn't list one hard number anymore. Older posts citing "2,000 completions and 50 slow premium requests" are describing a system that's since changed.
+
+The only reliable source for your actual limit and its reset date is your own account dashboard inside Cursor.
+
+If you outgrow the free tier, Cursor now offers six paid tiers running from Hobby at $10 a month up through Ultra at $200 a month, but there's no need to think about upgrading before you've even finished this lesson.
+
+---
+
+## Your Lab
+
+You've now installed the Cursor AI editor, toured it, and seen what does and doesn't survive an import. This lab proves it, on your machine, not just on paper.
+
+<Steps>
+  <Step number="1" title="Install Cursor">
+    Download Cursor from cursor.com for your OS, run the installer, and launch it. Sign in to unlock AI features.
+  </Step>
+  <Step number="2" title="Import your starter settings">
+    From the onboarding prompt, or manually via Cmd/Ctrl+Shift+J to General > Account, import your VS Code settings. If you don't have an existing VS Code setup, use the starter settings file provided with this lesson instead.
+  </Step>
+  <Step number="3" title="Switch the model twice">
+    Open the chat panel, open the model picker, and switch from Auto-select to a specific model. Then switch again to a different specific model. Notice any difference in response speed or depth between the two.
+  </Step>
+  <Step number="4" title="Prove it worked">
+    Take a screenshot of the model picker showing your second model choice, and save it into learning-log.md in your repo along with one sentence on which model you'd default to and why.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 14.02.
+</Note>
+
+<FAQ>
+  <FAQItem question="Is Cursor free to use?">Yes, Cursor has a free tier with the full editor and a limited number of AI requests. The exact quota isn't fixed anymore since Cursor moved to a credit-based system, so check your account dashboard under General for your current limit instead of trusting a number from an old blog post.</FAQItem>
+  <FAQItem question="Does Cursor import my VS Code extensions automatically?">Cursor offers to import your extensions, themes, keybindings, and settings the first time you launch it, and you can also trigger the import later from Settings. Most extensions transfer cleanly, but a handful of Microsoft-only ones won't, since Cursor pulls from the Open VSX registry instead of the Microsoft Marketplace.</FAQItem>
+  <FAQItem question="What is the Cursor model picker?">The model picker is the dropdown in Cursor's chat and Composer panels where you choose which AI model handles your request, including an Auto-select option that picks for you. It matters because different models trade off speed, cost, and reasoning depth, and the wrong pick for a task can mean a slower or shallower answer.</FAQItem>
+  <FAQItem question="Can I use Cursor and VS Code at the same time?">Yes, they run as completely separate applications and won't interfere with each other even on the same project folder. Many developers keep both installed during a transition period and gradually move projects over to Cursor.</FAQItem>
+</FAQ>
