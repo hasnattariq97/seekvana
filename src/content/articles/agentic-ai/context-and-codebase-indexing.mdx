@@ -75,7 +75,7 @@ Why this matters in practice: if your index is stale or your codebase is full of
 
 Codebase indexing is fast and genuinely useful, but it has three real limits worth knowing before you trust it blindly.
 
-**Sync lag** is the first. The index refreshes on a short interval, not the instant you hit save, so a file you changed ten seconds ago may briefly be invisible to a semantic search. If you just renamed a function and immediately ask `@Codebase` about it, you can get an answer built on the old name.
+**Sync lag** is the first. The index refreshes on a short interval, not the instant you hit save, so a file you changed ten seconds ago may briefly be invisible to a semantic search. If you just renamed a function and immediately ask `@Codebase` about it, you can get an answer built on the old name. This same discipline of curating exactly what the model sees carries straight into [Claude Code's agentic loop](/library/agentic-ai/claude-code-agentic-terminal), just with a `CLAUDE.md` file standing in for a deliberate @-mention.
 
 **No full-text matching** is the second. `@Codebase` searches by meaning, which is powerful for "find the thing that validates passwords" but genuinely bad for finding an exact string like a specific error message or a literal config key. A plain search would beat semantic search every time on that kind of lookup.
 

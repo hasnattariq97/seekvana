@@ -1,0 +1,153 @@
+---
+title: "How to Use Claude Code: Your First Autonomous Loop"
+description: "How to use Claude Code as an agentic terminal: watch a real autonomous loop, understand permission prompts, and write your first CLAUDE.md."
+pillar: "agentic-ai"
+slug: "claude-code-agentic-terminal"
+difficulty: "beginner"
+readTime: 8
+author: "Hasnat Tariq"
+authorSlug: "hasnat-tariq"
+publisher: "Seekvana"
+lastUpdated: "2026-07-26"
+publishedAt: "2026-07-26"
+tags: ["claude code", "agentic ai", "claude.md"]
+featured: false
+lessonModule: "14"
+lessonNumber: "14.06"
+faqs:
+  - q: "What does it mean for Claude Code to be an agentic terminal?"
+    a: "It means Claude Code doesn't just suggest a line of code, it runs a full loop: reading your files, planning a change, editing or running commands, and reporting what happened, pausing at permission prompts whenever an action is risky enough to need your approval."
+  - q: "Is it safe to let Claude Code run commands on its own?"
+    a: "It's safe as long as you keep permission prompts on, which is the default. The real risk cases involve skipping permissions entirely on a machine with production credentials, which is why this lesson explains what the prompts protect before you ever turn them off."
+  - q: "What is a CLAUDE.md file for?"
+    a: "CLAUDE.md is a plain markdown file in your project root that Claude Code reads at the start of every session, so it instantly knows your build/test commands, folder layout, and conventions instead of you re-explaining them each time."
+  - q: "Do I need to write a long CLAUDE.md file to get value from it?"
+    a: "No. A five-line file with your test command, your lint command, and one convention is enough to notice the difference, and you can always add more as a project grows."
+---
+
+{/* IMAGE PROMPT: Warm storybook gouache illustration; the cream-white robot watching a glowing terminal autonomously stack blocks into a small structure, a tiny open notebook labeled with a compass mark beside it, cozy, cream-to-clay palette. No text in image. | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+
+<ArticleImage
+  src="/images/articles/agentic-ai/claude-code-agentic-terminal/cover.webp"
+  alt="A cream-white robot watching a glowing terminal window autonomously stack blocks into a structure"
+  priority
+  isCover
+/>
+
+I gave Claude Code three jobs in a row: create a file, run the test suite, fix whatever broke, all from the same [terminal window](/paths/getting-started) I'd been using since Module 01. Twenty seconds in, a prompt appeared: `Run npm test? (y/n)`. I hadn't asked it to ask. It just knew that running a command was a bigger deal than reading one.
+
+That's the whole idea of an **agentic terminal**: instead of suggesting one line of code for you to accept, Claude Code reads your files, plans a multi-step change, runs commands, edits code, and reports back, pausing at a permission prompt whenever the next step is risky enough to need your go-ahead. Learning how to use Claude Code well starts with understanding that loop, not memorizing commands. Here's what the loop actually looks like, why the prompts exist, and how to give it a memory of your project with a file called `CLAUDE.md`.
+
+> **Key Takeaways**
+> - Claude Code runs a read → plan → act → report loop, not single-line autocomplete
+> - Permission prompts pause the loop before anything that edits files or runs a command, and you approve or deny each one
+> - The prompts exist because real incidents (a wiped production setup, a leaked token) happened when people skipped them entirely
+> - A `CLAUDE.md` file in your project root is read automatically every session, so you stop re-explaining the same context
+> - A five-line `CLAUDE.md` with your test command and one convention is enough to notice the difference
+
+## What Makes Claude Code "Agentic" Instead of Just Autocomplete?
+
+Claude Code is agentic because it decides its own next step across multiple actions, instead of stopping after one suggestion. A normal code-completion tool finishes the line you're typing. Claude Code reads your open task, works out a plan, and then keeps going: open a file, check what's there, write a change, run a command to verify it, look at the output, and decide whether that's actually done or whether it needs another pass.
+
+You already met this distinction in <a href="https://code.claude.com/docs/en/permission-modes" target="_blank" rel="noopener noreferrer">Anthropic's own permission modes documentation</a>, and it maps onto something you saw in [Cursor's modes](/library/agentic-ai/cursor-modes-and-inline-edits): Ask, Agent, and Plan modes are all about how much of that loop the tool is allowed to run before checking back with you. Claude Code runs the same loop from the terminal instead of an editor pane, which is why it can touch your whole project, not just the file you have open.
+
+## Watching the Loop: the Three-Step Chore
+
+Here's the chore from the opening, played back in full. I asked Claude Code to create a small config file, run the test suite, and fix whatever the tests flagged.
+
+```
+> Create a config.json with { "env": "dev" }, then run npm test and fix any failure.
+
+● Creating config.json...
+● Running npm test...
+  ✗ 1 test failed: expects config.env to be "development"
+● Editing config.json: "dev" → "development"
+● Running npm test again...
+  ✓ All tests passed
+```
+
+Two things happened that a single-line autocomplete tool can't do. First, it noticed the test's expectation didn't match what it had just written, without being told to check. Second, it re-ran the same command a second time to confirm the fix actually worked, rather than assuming it did. I've watched this exact self-correction happen on a real project more than once, and it's the moment a beginner usually stops thinking of it as "autocomplete with extra steps" and starts thinking of it as something closer to a very literal junior engineer.
+
+The permission prompt showed up right before each `npm test` run, because running a command is exactly the kind of step the loop pauses on.
+
+{/* IMAGE PROMPT: Warm storybook gouache infographic titled "The Claude Code Loop," five labeled steps (Read, Plan, Act, Report, Repeat) each with a terminal-style detail panel, plus a "Permission Prompts Keep You in Control" callout at the bottom, cream-to-clay palette. */}
+
+<ArticleImage
+  src="/images/articles/agentic-ai/claude-code-agentic-terminal/claude-code-loop.webp"
+  alt="Infographic showing Claude Code's five-step loop: read, plan, act, report, repeat, with a permission-prompt callout"
+  caption="The full loop: Claude Code reads, plans, acts, and reports, pausing at a permission prompt before each risky step."
+/>
+
+## What Permission Prompts Actually Protect
+
+A permission prompt is Claude Code asking you to confirm an action before it happens, and it exists because those specific actions, editing a file or running a command, are the ones that can go wrong in a way reading a file never can. Reading is always safe. Writing and executing aren't.
+
+Claude Code ships with a few permission levels, cycled with Shift+Tab in the terminal:
+
+- **Manual** (the default, called "Ask" in some surfaces): Claude Code reads freely, but stops to confirm before it edits a file or runs a command.
+- **Accept Edits**: file edits and safe filesystem operations auto-approve; anything riskier still pauses.
+- **Plan**: fully read-only. Claude Code writes up a plan of attack and touches nothing until you approve it.
+- **Auto**: prompts mostly go away, and a separate model reviews each action before it runs.
+- **Bypass** (`--dangerously-skip-permissions`): nothing pauses, ever.
+
+That last one is where the real stakes case comes from. A widely shared incident involved someone running Claude Code with permissions fully skipped on a machine that also held production credentials, and a misread instruction ended up wiping a real setup, per <a href="https://www.anthropic.com/engineering/claude-code-auto-mode" target="_blank" rel="noopener noreferrer">Anthropic's own account of why they built a safer auto mode</a>. That flag was designed for isolated environments like a CI container with no human watching and nothing valuable nearby, not your laptop with SSH keys sitting in it. The takeaway isn't "never trust the agent." It's: leave permission prompts on until you have a specific, isolated reason to turn them off.
+
+<Note>
+Starting on the default **Manual** mode for at least your first few weeks isn't caution for its own sake. It's how you learn which actions actually feel risky to approve, so switching to a faster mode later is a real decision, not a guess.
+</Note>
+
+## Writing Your First CLAUDE.md
+
+`CLAUDE.md` is a plain markdown file you put in your project's root folder, and Claude Code reads it automatically at the start of every session, so it already knows your commands and conventions before you type a single instruction. Without it, you end up re-explaining "run `npm test`, not `pytest`" every time you open a new session, which gets old fast once you're juggling more than one project.
+
+You don't need a long one to get value. Here's a genuinely useful five-line version:
+
+```markdown
+# my-project
+Commands: npm run dev (start), npm test (tests), npm run lint (lint)
+Structure: src/ is app code, tests/ is test files
+Style: use functional components, no class components
+Never: commit directly to main
+```
+
+{/* IMAGE PROMPT: Warm storybook gouache infographic titled "Your First CLAUDE.md," a five-item checklist (project description, commands, structure, style, never) beside a real five-line code example, cream-to-clay palette. */}
+
+<ArticleImage
+  src="/images/articles/agentic-ai/claude-code-agentic-terminal/first-claude-md.webp"
+  alt="Infographic showing the five parts of a first CLAUDE.md file next to a five-line code example"
+  caption="A five-line CLAUDE.md is enough for Claude Code to read your project's commands and conventions every session."
+/>
+
+That's a real project description, real commands, one structural note, one style rule, and one hard boundary. Claude Code reads this file the moment it starts in that folder, and you can prove it: ask it to state a fact that only exists in your `CLAUDE.md`, like "what's the lint command for this project?" If it answers correctly without you telling it, the file is doing its job. [@-context and codebase indexing](/library/agentic-ai/context-and-codebase-indexing) covers the deliberate, per-question version of feeding it context; `CLAUDE.md` is the standing version that's always there.
+
+<Note>
+Keep it short at first. A bloated `CLAUDE.md` with every rule you can think of is harder to maintain than it's worth this early, this file's job later in the path (Module 19) is a much deeper one, but right now, five honest lines beat fifty vague ones.
+</Note>
+
+## Your Lab
+
+<Steps>
+  <Step number={1} title="Run the three-step chore">
+    In a scratch project (or any repo you don't mind experimenting in), open Claude Code and give it: "Create a file called notes.txt with one line of text, then run any test command this project has, then fix any failure it finds." Let it run.
+  </Step>
+  <Step number={2} title="Annotate every permission prompt">
+    For each permission prompt Claude Code shows you during that chore, write one line in a new `learning-log.md`: what it asked to do, and why you approved it (or didn't).
+  </Step>
+  <Step number={3} title="Write a five-line CLAUDE.md">
+    In the same project's root folder, create `CLAUDE.md` with: a one-line project description, your real commands, your folder layout, one style rule, and one thing to never do, modeled on the example above.
+  </Step>
+  <Step number={4} title="Prove it's being read">
+    Start a fresh Claude Code session in that folder and ask it a question whose answer only exists in your `CLAUDE.md` (for example, your lint command). Paste its correct answer into `learning-log.md`.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 14.06.
+</Note>
+
+<FAQ>
+  <FAQItem question="What does it mean for Claude Code to be an agentic terminal?">It means Claude Code doesn't just suggest a line of code, it runs a full loop: reading your files, planning a change, editing or running commands, and reporting what happened, pausing at permission prompts whenever an action is risky enough to need your approval.</FAQItem>
+  <FAQItem question="Is it safe to let Claude Code run commands on its own?">It's safe as long as you keep permission prompts on, which is the default. The real risk cases involve skipping permissions entirely on a machine with production credentials, which is why this lesson explains what the prompts protect before you ever turn them off.</FAQItem>
+  <FAQItem question="What is a CLAUDE.md file for?">CLAUDE.md is a plain markdown file in your project root that Claude Code reads at the start of every session, so it instantly knows your build/test commands, folder layout, and conventions instead of you re-explaining them each time.</FAQItem>
+  <FAQItem question="Do I need to write a long CLAUDE.md file to get value from it?">No. A five-line file with your test command, your lint command, and one convention is enough to notice the difference, and you can always add more as a project grows.</FAQItem>
+</FAQ>
