@@ -18,6 +18,7 @@ import { Math, MathBlock } from './math'
 import { CodePlayground } from './code-playground'
 import { DownloadButton } from './download-button'
 import { FAQ, FAQItem } from './faq'
+import { SelfPlacementQuiz } from './self-placement-quiz'
 
 function slugify(text: string): string {
   return String(text)
@@ -163,5 +164,6 @@ export function getMDXComponents(): MDXComponents {
     DownloadButton,
     FAQ,
     FAQItem,
+    SelfPlacementQuiz,
   }
 }
