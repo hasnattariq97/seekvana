@@ -79,7 +79,7 @@ Codebase indexing is fast and genuinely useful, but it has three real limits wor
 
 **No full-text matching** is the second. `@Codebase` searches by meaning, which is powerful for "find the thing that validates passwords" but genuinely bad for finding an exact string like a specific error message or a literal config key. A plain search would beat semantic search every time on that kind of lookup.
 
-**A context window ceiling** is the third, and the one people forget most. Even a perfectly indexed, perfectly synced repo can't have its entire relevant history stuffed into one prompt. Retrieval picks the top handful of chunks it thinks matter, not the whole codebase, so an incomplete or misleading answer can still happen even when indexing worked exactly as designed.
+**A context window ceiling** is the third, and the one people forget most. Even a perfectly indexed, perfectly synced repo can't have its entire relevant history stuffed into one prompt. Retrieval picks the top handful of chunks it thinks matter, not the whole codebase, so an incomplete or misleading answer can still happen even when indexing worked exactly as designed. This is exactly why [agent memory grew into its own research field in 2026](/library/agentic-ai/what-changed-in-agentic-ai-2026): a bigger context window was never the real fix, better management of what gets remembered and forgotten was.
 
 None of these are bugs. They're the honest trade-offs of a system built for speed over exhaustiveness, and the practical response to all three is the same: when precision matters, don't rely on `@Codebase` alone, name the file or symbol yourself.
 
