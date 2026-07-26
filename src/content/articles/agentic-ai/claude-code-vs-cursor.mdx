@@ -52,7 +52,7 @@ Miss this distinction and you'll do the thing almost every beginner does: open C
 
 A terminal agent gives you no visual confirmation that it's working, that pause is normal, not a hang.
 
-In Cursor, an AI edit renders as a colored diff in a familiar editor pane, so "did it work" is answered visually, instantly. Claude Code answers the same question with text: a line telling you it read a file, a line telling you it's editing another, a final summary of what changed. There's no flash of color to reassure you, just output you have to actually read.
+In Cursor, an AI edit renders as a colored diff in a familiar editor pane, so "did it work" is answered visually, instantly. [Which Cursor mode produced that diff](/library/agentic-ai/cursor-modes-and-inline-edits) also decides how much you had to review before it landed, a question Claude Code answers differently, through the terminal log itself. Claude Code answers the same question with text: a line telling you it read a file, a line telling you it's editing another, a final summary of what changed. There's no flash of color to reassure you, just output you have to actually read.
 
 I remember the first time I asked Claude Code to summarize an unfamiliar repo, expecting a vague paragraph back. Instead it came back with a clean, file-by-file breakdown, correctly flagging which module handled auth and which one was dead code nobody had deleted, all from reading the project cold.
 
