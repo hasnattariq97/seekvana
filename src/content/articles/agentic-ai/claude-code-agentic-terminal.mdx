@@ -47,7 +47,7 @@ That's the whole idea of an **agentic terminal**: instead of suggesting one line
 
 ## What Makes Claude Code "Agentic" Instead of Just Autocomplete?
 
-Claude Code is agentic because it decides its own next step across multiple actions, instead of stopping after one suggestion. A normal code-completion tool finishes the line you're typing. Claude Code reads your open task, works out a plan, and then keeps going: open a file, check what's there, write a change, run a command to verify it, look at the output, and decide whether that's actually done or whether it needs another pass.
+Claude Code is agentic because it decides its own next step across multiple actions, instead of stopping after one suggestion. A normal code-completion tool finishes the line you're typing. Claude Code reads your open task, works out a plan, and then keeps going: open a file, check what's there, write a change, run a command to verify it, look at the output, and decide whether that's actually done or whether it needs another pass. That cycle has a name, and it's what separates an [agentic workflow](/library/agentic-ai/prompting-vs-agentic-workflows) from a single prompt.
 
 You already met this distinction in <a href="https://code.claude.com/docs/en/permission-modes" target="_blank" rel="noopener noreferrer">Anthropic's own permission modes documentation</a>, and it maps onto something you saw in [Cursor's modes](/library/agentic-ai/cursor-modes-and-inline-edits): Ask, Agent, and Plan modes are all about how much of that loop the tool is allowed to run before checking back with you. Claude Code runs the same loop from the terminal instead of an editor pane, which is why it can touch your whole project, not just the file you have open.
 
