@@ -89,7 +89,7 @@ Every import falls into one of three buckets, and the bucket tells you what brea
 
 **Standard library** comes with Python, no install needed. `import os` gives you operating system functions like file paths and environment variables. `import json` parses and generates JSON. These never need `pip install`, they're always available.
 
-**Third-party packages** are installed via pip. `import anthropic` needs `pip install anthropic` first. `from dotenv import load_dotenv` needs `pip install python-dotenv`. If you haven't installed it, the import fails with `ModuleNotFoundError`, that's your signal the [pip install](/library/building-with-ai/package-managers-explained) step was skipped.
+**Third-party packages** are installed via pip. `import anthropic` needs `pip install anthropic` first. `from dotenv import load_dotenv` needs `pip install python-dotenv`. If you haven't installed it, the import fails with `ModuleNotFoundError`, that's your signal the [pip install](/library/building-with-ai/package-managers-explained) step was skipped. The other cause of that same error is installing into the wrong environment, which is what [virtual environments](/library/building-with-ai/python-venv) exist to keep straight.
 
 **Local files** are your own code in the same project. `from utils import build_prompt` imports from a file you wrote called `utils.py`. No install needed, Python finds it because it's sitting in the same folder.
 

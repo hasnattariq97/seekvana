@@ -140,6 +140,8 @@ The choice comes down to two questions: what kind of model are you using, and ho
 
 <Note>
  Task complexity, not model size, is what actually determines whether CoT helps on a standard model. A short factual question gets no benefit from "let's think step by step," even on a large, capable model. There's no multi-step reasoning to surface in the first place.
+
+ When adding reasoning room still doesn't fix a weak output, the problem is somewhere else in the prompt, and [a repeatable way to debug it](/library/prompt-engineering/the-iteration-loop) beats guessing at rewrites.
 </Note>
 
 ---

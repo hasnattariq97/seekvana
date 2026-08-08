@@ -138,6 +138,8 @@ Schema enforcement is a huge reliability jump, not a guarantee against every fai
 
 I've shipped a pipeline that passed every test case in staging and then failed in production the first time a real user's message tripped a refusal, because none of the test inputs ever needed one. Structured outputs remove the shape-drift failure, not every failure. Testing edge cases, not just the happy path, is what separates a demo from something you can trust.
 
+The same schema discipline carries over when the input isn't text at all. Extracting fields from a scanned invoice or a screenshot works the same way once you know [how models actually read images and PDFs](/library/prompt-engineering/multimodal-prompting), and the failure modes there are worth knowing before you point a schema at one.
+
 ## Your Task
 
 <Steps>
