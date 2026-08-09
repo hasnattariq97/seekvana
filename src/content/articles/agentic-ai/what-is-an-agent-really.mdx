@@ -1,0 +1,144 @@
+---
+title: "What Is an AI Agent, Really? A Workflow-vs-Agent Test"
+description: "A workflow runs code you wrote in advance, an agent decides its next move after seeing a result. Here's Anthropic's exact test, applied to real examples."
+pillar: "agentic-ai"
+slug: "what-is-an-agent-really"
+difficulty: "beginner"
+readTime: 8
+author: "Hasnat Tariq"
+authorSlug: "hasnat-tariq"
+publisher: "Seekvana"
+reviewedBy: ""
+publishedAt: "2026-08-09"
+lastUpdated: "2026-08-09"
+tags: ["agents", "agentic-ai", "ai-fundamentals"]
+featured: false
+lessonModule: "15"
+lessonNumber: "15.03"
+faqs:
+  - q: "What makes an AI agent agentic?"
+    a: "A system is agentic when the model itself decides what to do next based on what it just observed, instead of following a sequence a developer wrote in advance. Anthropic's own definition: an agent is a system where the LLM dynamically directs its own process and tool use, keeping control over how the task gets done."
+  - q: "Is a chatbot an AI agent?"
+    a: "Not by default. A chatbot replies to what you type and stops, it doesn't plan multiple steps or decide when a task is finished. Some products marketed as chatbots have an agent running underneath them, but the chat window itself isn't what makes something agentic."
+  - q: "What is Anthropic's definition of an AI agent?"
+    a: "Anthropic defines a workflow as a system where LLMs and tools are orchestrated through predefined code paths, and an agent as a system where the LLM dynamically directs its own process and tool use. The test is who controls the sequence: your code, or the model."
+  - q: "Why does everything get called an AI agent right now?"
+    a: "Because 'agent' has become a marketing word almost as loose as 'AI' itself, applied to features that are really just a single LLM call or a fixed decision tree with a chat interface bolted on. Learning Anthropic's narrower test is how you see past the label to what a system is actually doing."
+---
+
+{/* IMAGE PROMPT: Warm storybook gouache illustration; two paths side by side, one a straight fixed rail with the robot riding a cart (workflow), one an open field where the robot chooses its own steps holding a compass (agent); cozy, cream-to-clay palette. No text in image. | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+
+<ArticleImage src="/images/articles/agentic-ai/what-is-an-agent-really/cover.webp" alt="A robot riding a fixed rail cart next to a robot choosing its own path across an open field with a compass" />
+
+A tool I tried last year advertised itself as an "AI agent for customer support." I opened its settings expecting something that reasoned about each ticket. It was a decision tree: if the message contains "refund," show template A, if it contains "shipping," show template B. Useful software. Not an agent by any real definition, whatever the landing page said.
+
+**A workflow is a system where a developer's code decides what happens next; an agent is a system where the model decides, after looking at what just happened.** That's Anthropic's own line, and it's narrower than how the word "agent" gets used everywhere else. Once you can apply that one test, you can classify almost any "smart" system you meet, including the ones with impressive marketing.
+
+> **Key Takeaways**
+> - Anthropic's exact test: workflows run through predefined code paths, agents dynamically direct their own process and tool use.
+> - The question that actually classifies a system is who controls the sequence, code written in advance, or the model deciding after it sees a result.
+> - Most products labeled "AI agent" are workflows with a chat interface, not agents by this test.
+> - A chatbot is not automatically an agent, and an agent doesn't need a chat window at all.
+> - Two of the classic examples (a thermostat, a "smart" research assistant) are genuinely contested, and defending your call on those is the actual skill this lesson builds.
+
+---
+
+## What Makes an AI Agent Agentic?
+
+An AI agent is agentic to the degree that the model, not the developer's code, controls what happens next. Anthropic's guide to building effective agents states it plainly: a workflow is "a system where LLMs and tools are orchestrated through predefined code paths," while an agent is "a system where LLMs dynamically direct their own processes and tool usage, maintaining control over how they accomplish tasks."
+
+<a href="https://www.anthropic.com/research/building-effective-agents" target="_blank" rel="noopener noreferrer">Anthropic's guide</a> also recommends starting with the simplest version that works, adding agency "only when it demonstrably improves outcomes." That's worth remembering before you reach for the word "agent" at all.
+
+Notice what that definition does *not* say. It doesn't say anything about how smart the model is, how many tools it has, or whether it has a nice chat interface. It says one thing: who's driving.
+
+That's a deliberately narrow bar, and getting it wrong has a real cost. Build a full agent loop for a task a fixed script could handle in one deterministic pass, and you've added latency, dollars, and new failure modes for nothing. Get it backward the other direction, and you'll ship a rigid workflow into a situation that actually needed a model watching the result and adjusting, then wonder why it keeps breaking on cases you didn't anticipate.
+
+## The One Question That Actually Classifies a System
+
+The question that classifies any system is this: after an action happens, who decides what happens next, code written in advance, or the model looking at the result and choosing? If the answer is "the code," you're looking at a workflow, however sophisticated the individual steps are. If the answer is "the model, based on what it just saw," you're looking at an agent.
+
+Skip this test and you'll misjudge real systems both ways. You might mistake a scripted support bot for something that adapts, or dismiss a genuine agent as "just automation" and second-guess every step it was actually capable of verifying on its own.
+
+You already felt half of this distinction in [the prompt-versus-loop lesson](/library/agentic-ai/prompting-vs-agentic-workflows): a one-shot prompt is a single round trip, an agentic workflow is a loop that acts, observes, and adjusts. This lesson sharpens that into a test you can run on any system, not just the ones you build yourself.
+
+And it plugs directly into the [augmented LLM primitive](/library/agentic-ai/the-augmented-llm): retrieval, tools, and memory are the parts an agent is made of, but having those parts doesn't make something an agent. What makes it an agent is who decides when and how to use them.
+
+**Table: Workflow vs. agent, side by side**
+
+| | Workflow | Agent |
+|---|---|---|
+| Who decides the next step | The developer, in advance | The model, after seeing the result |
+| Behavior on a new situation | Follows the path it was given, even if wrong | Adjusts based on what it observes |
+| Predictability | High, same input roughly means same path | Lower, and that's the trade you're accepting |
+| Example | A support bot's fixed decision tree | Claude Code reading a test failure and fixing it |
+
+<ArticleImage src="/images/articles/agentic-ai/what-is-an-agent-really/workflow-vs-agent-loop.webp" alt="Side-by-side diagram comparing a workflow's fixed step-by-step path against an agent's observe-think-act-check loop" caption="A workflow runs a fixed path start to finish; an agent loops through observe, think, act, and check until the goal is actually met." />
+
+## Are Chatbots Agents?
+
+A chatbot is not an agent by default. A chatbot replies to whatever you typed and then stops, it doesn't plan several steps ahead, call tools on its own initiative, or decide for itself when a task is actually finished. That's the entire loop: input in, one response out.
+
+The confusion is understandable, because plenty of products blur the line on purpose. Some "chatbots" have a real agent running behind the chat window, quietly calling tools and looping before it replies. And plenty of things people call "agents" are just a chatbot with better copywriting.
+
+The interface tells you nothing, only the test above does: does the model control the sequence, or does fixed code? [The Getting Started path's take on this](/library/agentic-ai/chatbot-vs-agent) covers the beginner version of this line if you want the simpler on-ramp; this lesson is the stricter, Anthropic-flavored version of the same question.
+
+## Classify These 8 Systems
+
+Here are eight real kinds of systems. Three are worked below so you can see the test applied; the other five, including two genuinely contested ones, are yours to classify in the lab.
+
+**Table: Three worked examples**
+
+| System | Verdict | Why |
+|---|---|---|
+| A customer-support bot with a fixed decision tree | Workflow | Every branch was written by a developer before the conversation started; the bot never decides anything new. |
+| Claude Code fixing a failing test | Agent | It reads the error, decides which file to open, makes an edit, reruns the test, and decides for itself when the failure is resolved, no developer wrote that exact sequence in advance. |
+| A cron job that runs a nightly backup script | Workflow | Time triggers it, a fixed script runs, nothing about the sequence changes based on what the script observes. |
+
+The five for your lab:
+1. A thermostat running a fixed heat and cool schedule
+2. A research assistant that decides what to search next based on what its last search turned up
+3. A spam filter that flags email using fixed rule thresholds
+4. An AI email triage tool that reads a message and decides which of several tools to call in response
+5. A recommendation feed that reorders posts using a fixed scoring formula
+
+Two of those five are the contested cases the lab asks you to defend. One looks like a textbook "agent" because it senses and acts, but has no model and no real decision after observing something new. The other looks agentic because it "decides," but the honest question is whether that's a real decision or just a retrieval loop repeating the same pattern.
+
+Anthropic's test doesn't hand you an easy answer on either. That's exactly why they're worth arguing about.
+
+## Why This Line Gets Blurry on Purpose
+
+Vendors have a financial incentive to call things agents. "Agent" sells better than "decision tree," and a landing page rarely says "if-statement" when "AI agent" tests better with buyers. I've opened the settings panel on more than one tool marketed this way and found a flowchart, not a model making a call.
+
+Getting this wrong in either direction costs you. Call a fixed workflow an agent, and you'll over-trust it in a situation its authors never anticipated, because you expect it to adapt when it can't. Call a real agent a workflow, and you'll under-trust it, double-checking every step a model was actually capable of verifying on its own, and burning time you didn't need to spend.
+
+The label on the box doesn't tell you which one you're holding. The test does.
+
+---
+
+## Your Lab
+
+<Steps>
+  <Step number={1} title="Open learning-log.md">
+    In your project (or scratch folder), open `learning-log.md` and add a heading for Lesson 15.03.
+  </Step>
+  <Step number={2} title="Classify the five systems">
+    For each of the five systems listed above (thermostat schedule, deciding-what-to-search-next research assistant, spam filter, email triage tool, scoring-formula recommendation feed), write one line: workflow or agent, plus a one-sentence justification using the test from this lesson, who controls what happens next.
+  </Step>
+  <Step number={3} title="Defend the two contested cases">
+    Identify which two of the five are genuinely arguable. Write two to three sentences on each, defending your call against the strongest version of the opposite answer. There's no single correct verdict here, the point is a reasoned application of the test.
+  </Step>
+  <Step number={4} title="Commit it">
+    Save `learning-log.md`. You now have a working reference for the workflow-vs-agent test you'll reuse constantly for the rest of this path.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 15.03.
+</Note>
+
+<FAQ>
+  <FAQItem question="What makes an AI agent agentic?">A system is agentic when the model itself decides what to do next based on what it just observed, instead of following a sequence a developer wrote in advance. Anthropic's own definition: an agent is a system where the LLM dynamically directs its own process and tool use, keeping control over how the task gets done.</FAQItem>
+  <FAQItem question="Is a chatbot an AI agent?">Not by default. A chatbot replies to what you type and stops, it doesn't plan multiple steps or decide when a task is finished. Some products marketed as chatbots have an agent running underneath them, but the chat window itself isn't what makes something agentic.</FAQItem>
+  <FAQItem question="What is Anthropic's definition of an AI agent?">Anthropic defines a workflow as a system where LLMs and tools are orchestrated through predefined code paths, and an agent as a system where the LLM dynamically directs its own process and tool use. The test is who controls the sequence: your code, or the model.</FAQItem>
+  <FAQItem question="Why does everything get called an AI agent right now?">Because "agent" has become a marketing word almost as loose as "AI" itself, applied to features that are really just a single LLM call or a fixed decision tree with a chat interface bolted on. Learning Anthropic's narrower test is how you see past the label to what a system is actually doing.</FAQItem>
+</FAQ>
