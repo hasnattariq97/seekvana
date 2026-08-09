@@ -1,0 +1,122 @@
+---
+title: "When Not to Use AI Agents (And What to Build Instead)"
+description: "When not to use AI agents comes down to one question: is there a real decision to make mid-task? Here's the full test, with five real scenarios."
+pillar: "agentic-ai"
+slug: "when-not-to-build-an-agent"
+difficulty: "beginner"
+readTime: 7
+author: "Hasnat Tariq"
+authorSlug: "hasnat-tariq"
+publisher: "Seekvana"
+reviewedBy: ""
+publishedAt: "2026-08-09"
+lastUpdated: "2026-08-09"
+tags: ["ai agents", "agentic ai", "agent overkill", "workflow automation"]
+featured: false
+lessonModule: "15"
+lessonNumber: "15.05"
+faqs:
+  - q: "When should I not use an AI agent?"
+    a: "Skip an agent when the task is a single step, when the correct output is fully predictable in advance, or when you can verify the answer at a glance. A one-shot prompt or a short script beats an agent on latency, cost, and reliability whenever there's no real decision for the model to make mid-task."
+  - q: "Do I need an AI agent for this task?"
+    a: "Ask whether step two depends on something you can only learn by seeing step one's real result. If yes, and the path can vary, you probably need an agent. If the steps are fixed and repeatable no matter what happens, you need a script, not an agent."
+  - q: "What is the difference between an AI agent and a simple script?"
+    a: "A script follows a sequence a developer wrote in advance and never changes it based on what it finds. An agent reads its own results mid-task and decides its next move, which is powerful but adds latency, token cost, and a new failure mode at every step it takes."
+  - q: "Why do AI agents cost more than a normal script or prompt?"
+    a: "Every autonomous step an agent takes is a separate model call, and each one adds latency, real dollars in tokens, and a chance for an earlier mistake to compound into the next step. A script runs once, deterministically, for a fraction of the cost, because there's no reasoning happening between the steps."
+---
+
+{/* IMAGE PROMPT: Warm storybook gouache illustration; the cream-white robot pausing thoughtfully at a fork, choosing a simple straight footpath over an elaborate winding machine-path, calm and wise, cream-to-clay palette. No text in image. | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+
+<ArticleImage src="/images/articles/agentic-ai/when-not-to-build-an-agent/cover.webp" alt="A robot pausing at a fork in the road, choosing a simple straight footpath over an elaborate winding machine path" />
+
+Most tasks you're excited to hand an agent don't need one. **An agent earns its cost only when a task genuinely requires judgment mid-way through: reading an uncertain result and choosing a different next step because of it.** If your task doesn't have that moment, a single prompt or a plain script will finish it faster, cheaper, and more reliably than any agent you could build.
+
+That's not a popular thing to say in a course about building agents. It's also the single most useful instinct you'll develop in this entire path.
+
+> **Key Takeaways**
+> - Anthropic's own guidance is to find the simplest solution and add agency only when it demonstrably improves outcomes, not by default.
+> - Every autonomous step an agent takes costs latency, real dollars, and a chance for an earlier mistake to compound into the next one.
+> - Reformatting a folder of files, answering a factual question, or renaming a variable are single-prompt or script jobs, not agent jobs.
+> - The three-way test: is there a real decision to make mid-task? If no, a prompt or script wins outright.
+
+---
+
+## What Anthropic Actually Means by "Start Simple"
+
+"Start simple" means finding the smallest working solution first and only adding an agent when a script or a single model call genuinely can't do the job. Anthropic's own engineering guide on building agents puts it directly: developers should <a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener noreferrer">"find the simplest solution possible, and only increasing complexity when needed."</a> That's not a hedge. It's the load-bearing recommendation of the whole guide, and most beginner content skips straight past it to the exciting part.
+
+The same guide draws the line you already learned in [what makes a system an agent, really](/library/agentic-ai/what-is-an-agent-really): a workflow runs through code a developer wrote in advance, an agent decides its own next move after seeing a result. Anthropic's guidance adds the part beginners usually miss: "for many applications, optimizing single LLM calls with retrieval and in-context examples is usually enough." Most tasks never need to cross into agent territory at all. They need a good prompt.
+
+Here's the part that doesn't make it into most explanations: "start simple" isn't a warning about your skill level, it's a warning about the shape of the task. A senior engineer building a genuinely agentic system will still start with a script for the 80% of the pipeline that's deterministic, and reach for an agent only for the 20% that actually requires judgment.
+
+## The Real Cost of Every Extra Autonomous Step
+
+Every autonomous step an agent takes adds latency, real dollars, and a chance for an earlier mistake to compound into the next one. Those are the three axes worth checking before you reach for an agent, because they're the exact ones Anthropic names when it warns that "agentic systems often trade latency and cost for better task performance, and you should consider when this tradeoff makes sense."
+
+**Latency.** A single prompt returns in one round trip. An agent that plans, acts, observes, and decides again, the loop from [the plan-act-observe cycle you already know](/library/agentic-ai/prompting-vs-agentic-workflows), might take five or ten of those round trips to finish one task. If a human is waiting on the other end, that difference is the gap between "instant" and "why is this still spinning."
+
+{/* IMAGE PROMPT: Warm storybook gouache illustration; a straight, calm footpath labeled by a single small deterministic marker on the left versus a branching, winding machine-path with several small gear-lights on the right, cozy editorial feel, cream-to-clay palette. No text in image. | FILENAME: script-vs-agent-cost.webp | DIMENSIONS: 1200x675 */}
+
+<ArticleImage src="/images/articles/agentic-ai/when-not-to-build-an-agent/script-vs-agent-cost.webp" alt="A straight deterministic footpath beside a branching machine path with several small lights" caption="A script follows one fixed path every time; an agent's branching path costs more in latency and tokens at every fork, so that flexibility should only be paid for when the task actually needs it." />
+
+**Cost.** Every one of those round trips is a separate model call, and separate model calls mean separate token bills. A task that would cost a fraction of a cent as one prompt can cost many times more as an agent looping through several tool calls, retries, and self-corrections. <a href="https://online.stevens.edu/blog/hidden-economics-ai-agents-token-costs-latency/" target="_blank" rel="noopener noreferrer">Stevens Institute's analysis of agentic cost patterns</a> notes that context grows with every turn of a multi-step loop, and that "unconstrained agents can incur several dollars in model costs for a single software-engineering task," a bill a single prompt never comes close to.
+
+**Error-compounding.** This is the one beginners underweight most. A script that's wrong is wrong the same way every time, which makes it easy to spot and fix. An agent that misreads its own tool result on step two carries that mistake into step three, then step four. By the time you notice, it's confidently built an entire wrong answer on top of one bad read.
+
+I've watched an agent burn several tool calls re-verifying a variable rename that a single `grep` and `sed` pass would have finished correctly in one shot. It wasn't that the agent was incapable. The task never had a decision in it worth delegating.
+
+None of this means agents are bad. It means every autonomous step is a cost you're choosing to pay, and you should only pay it when the task's flexibility is worth more than the latency, dollars, and compounding risk it costs you.
+
+## Steelmanning "Just Make It an Agent"
+
+The instinct to reach for an agent on everything is understandable, because agents genuinely do handle ambiguity that scripts can't. If a task's inputs vary wildly, if the right next step depends on something you can't know until you see an intermediate result, an agent's flexibility is exactly what a fixed script is missing. That's a real advantage, not hype.
+
+The impulse breaks down when it gets applied to tasks that never had that ambiguity to begin with. "Fancy if-else logic wrapped in good marketing" is how one frustrated practitioner described a lot of what gets sold as agentic, and the description lands because it's often accurate: plenty of "AI agents" are handling deterministic, single-path tasks that a plain script would run for a fraction of the cost. The tell isn't that agents are fake. It's that excitement about the technology gets pointed at tasks the technology was never needed for.
+
+There's a real question worth asking yourself here, and it's more honest than "could an agent do this": do you need an agent, or are you just excited about agents? Both feelings are normal this early in the path. Only one of them should decide your architecture.
+
+## When Not to Use AI Agents: The Three-Way Test
+
+Knowing when not to use AI agents comes down to one question: is there a real decision to make mid-task that depends on a result you can't predict in advance? If the answer is no, you don't need an agent, full stop. If the answer is yes, and the path genuinely varies based on what you find, that's when an agent's cost starts paying for itself.
+
+Walk it in order:
+
+- **Is it one step, with an answer you could verify at a glance?** Use a single prompt.
+- **Is it several steps, but the sequence and the correct output never change no matter what you find along the way?** Use a plain script or workflow.
+- **Does step two genuinely depend on a result you can't know until you see it, and could the right path actually branch?** Now an agent's flexibility is worth its latency, cost, and compounding risk.
+
+That's the whole test. Everything else, the frameworks, the orchestration layers, the multi-agent diagrams, is downstream of getting this one call right first.
+
+---
+
+## Your Lab
+
+<Steps>
+  <Step number="1" title="Scenario 1: Reformat 200 files the same way">
+    A repo has 200 markdown files that all need the same header style applied. Decide: single prompt, plain workflow/script, or agent? In `learning-log.md`, write one line justifying your call against latency, cost, and error-compounding. (This is a fixed transformation applied identically 200 times, the correct output for file one tells you the correct output for file 200, so a script wins on all three axes: no per-file latency from a model call, near-zero cost, and zero chance of the transformation drifting between files.)
+  </Step>
+  <Step number="2" title="Scenario 2: Answer one factual question">
+    A teammate asks you what year the Model Context Protocol was released. Decide: single prompt, plain workflow/script, or agent? Write your one-line justification. (One step, instantly verifiable, no branching, no tool result to react to: a single prompt, lowest latency and cost possible, nothing to compound.)
+  </Step>
+  <Step number="3" title="Scenario 3: Triage incoming support tickets that vary widely">
+    Tickets arrive in unpredictable shapes: refund requests, bug reports, angry one-liners, multi-part questions. Decide: single prompt, plain workflow/script, or agent? Write your one-line justification. (The right next action genuinely depends on reading each ticket's real content and deciding a path, that's the branching decision the three-way test looks for, so the flexibility of an agent is worth the extra latency and per-ticket cost here.)
+  </Step>
+  <Step number="4" title="Scenario 4: Rename a variable across a repo">
+    You need `userId` renamed to `accountId` everywhere it appears in a codebase. Decide: single prompt, plain workflow/script, or agent? Write your one-line justification. (Deterministic find-and-replace with a known, verifiable scope: a script (or a single tool call) handles this with zero ambiguity, and looping an agent through it multiple times only adds cost and a chance it mis-renames an unrelated match.)
+  </Step>
+  <Step number="5" title="Scenario 5: Plan and book a multi-step trip">
+    You need flights, a hotel, and ground transport booked around each other's availability and price, adjusting the plan as options come back. Decide: single prompt, plain workflow/script, or agent? Write your one-line justification. (Each booking result changes what's still worth booking next. That's a genuine mid-task decision an agent is built for, unlike scenarios 1, 2, and 4, so the latency and cost of looping is worth paying here.)
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 15.05.
+</Note>
+
+<FAQ>
+  <FAQItem question="When should I not use an AI agent?">Skip an agent when the task is a single step, when the correct output is fully predictable in advance, or when you can verify the answer at a glance. A one-shot prompt or a short script beats an agent on latency, cost, and reliability whenever there's no real decision for the model to make mid-task.</FAQItem>
+  <FAQItem question="Do I need an AI agent for this task?">Ask whether step two depends on something you can only learn by seeing step one's real result. If yes, and the path can vary, you probably need an agent. If the steps are fixed and repeatable no matter what happens, you need a script, not an agent.</FAQItem>
+  <FAQItem question="What is the difference between an AI agent and a simple script?">A script follows a sequence a developer wrote in advance and never changes it based on what it finds. An agent reads its own results mid-task and decides its next move, which is powerful but adds latency, token cost, and a new failure mode at every step it takes.</FAQItem>
+  <FAQItem question="Why do AI agents cost more than a normal script or prompt?">Every autonomous step an agent takes is a separate model call, and each one adds latency, real dollars in tokens, and a chance for an earlier mistake to compound into the next step. A script runs once, deterministically, for a fraction of the cost, because there's no reasoning happening between the steps.</FAQItem>
+</FAQ>
