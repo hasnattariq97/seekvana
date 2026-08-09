@@ -82,7 +82,7 @@ Tree of Thoughts has one structural limit: once a branch splits off, it stays se
 
 Picture the trip-planning problem again, but now split across two agents: one nails the flights, the other nails the hotel and car. In a tree, you'd have to pick one branch or the other. In a graph, you merge both partial solutions into a single itinerary that satisfies every constraint at once, instead of restarting from scratch or settling for whichever branch happened to score higher.
 
-**Graph of Thoughts is worth reaching for when a hard problem genuinely splits into sub-parts that get solved separately and then need to be combined**, document synthesis from multiple sources, code that needs pieces written independently and merged, or any task where the best answer is a combination of two partial ones, not a single winning branch. If your problem doesn't actually decompose that way, Graph of Thoughts adds complexity without adding value, and Tree of Thoughts is the simpler, cheaper choice.
+**Graph of Thoughts is worth reaching for when a problem genuinely splits into sub-parts that need to be combined.** Document synthesis from multiple sources, code that needs pieces written independently and merged, or any task where the best answer is a combination of two partial ones, not a single winning branch. If your problem doesn't actually decompose that way, Graph of Thoughts adds complexity without adding value, and Tree of Thoughts is the simpler, cheaper choice.
 
 ---
 
@@ -110,7 +110,7 @@ Where this differs from ordinary [prompt chaining](/library/prompt-engineering/d
 
 Take a billing question with three layered parts: what plan a customer is on, what their usage was that period, and what they owe after a mid-cycle upgrade. Solved all at once, a model can easily drop the upgrade proration. Solved least-to-most, the first pass just identifies the plan and dates, the second pass calculates usage against that plan, and the third pass applies the proration using both earlier answers. Each step is small enough to get right, and the model is never asked to jump straight to the hardest part cold.
 
-**Least-to-most prompting is worth using when a task cleanly decomposes into a strict sequence, where each step depends on the one before it.** It doesn't add much when the subtasks are actually independent of each other, that's a better fit for standard prompt chaining or just handling them in parallel.
+**Least-to-most prompting is worth using when a task decomposes into a strict sequence.** Each step depends on the one before it. It doesn't add much when the subtasks are actually independent of each other, that's a better fit for standard prompt chaining or just handling them in parallel.
 
 ---
 

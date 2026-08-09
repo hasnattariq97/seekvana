@@ -66,7 +66,7 @@ I write the handoff sentence before I write a single prompt, every time, because
 
 ## When to Chain Prompts vs. When to Just Ask Once
 
-**Chain when you need to inspect or control an intermediate step; ask once when a single prompt already gets you most of the way there.** That's the real test, and it's narrower than "use chaining for anything complex," which is the advice in most guides on this topic.
+**Chain when you need to inspect or control an intermediate step.** Ask once when a single prompt already gets you most of the way there. That's the real test, and it's narrower than "use chaining for anything complex," which is the advice in most guides on this topic.
 
 Modern models already do a lot of [multi-step reasoning](/library/prompt-engineering/giving-the-model-room-to-think) internally before they answer. <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/chain-prompts" target="_blank" rel="noopener noreferrer">Anthropic's prompt engineering documentation</a> puts it plainly: explicit chaining is still useful specifically when you need to inspect intermediate outputs or enforce a particular pipeline structure, not as a default for every hard task. If you don't need to see or check what happens in the middle, asking once and letting the model reason through it internally is often faster and just as reliable. Chaining a task that doesn't need it just adds steps.
 
