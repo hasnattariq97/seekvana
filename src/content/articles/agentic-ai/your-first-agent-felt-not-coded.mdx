@@ -1,0 +1,131 @@
+---
+title: "Your First AI Agent: A Real Delegated Task, Felt Not Coded"
+description: "Delegate a real multi-step task to Claude Code and learn to read what your first AI agent actually did, why it worked, and where it corrected itself."
+pillar: "agentic-ai"
+slug: "your-first-agent-felt-not-coded"
+difficulty: "beginner"
+readTime: 8
+author: "Hasnat Tariq"
+authorSlug: "hasnat-tariq"
+publisher: "Seekvana"
+lastUpdated: "2026-08-09"
+publishedAt: "2026-07-19"
+tags: ["agents", "claude-code", "inside-the-agent"]
+featured: false
+lessonModule: "15"
+lessonNumber: "15.07"
+faqs:
+  - q: "What does your first AI agent actually do differently from a chatbot?"
+    a: "A chatbot answers what you type and stops. Your first AI agent takes a goal, reads real files, decides its own next step, runs commands, checks the result, and keeps going until the task is actually done, no further prompting from you in between."
+  - q: "Do I need to write code to build my first AI agent?"
+    a: "No. Using Claude Code's built-in agent loop to complete a real task on a starter repo is genuinely building and running an agent, you're directing it and reading its output, not hand-typing the plumbing. The SDK and code-level construction come later, in Module 21."
+  - q: "How do I know if my agent's trajectory was actually good?"
+    a: "Check whether its plan matched the task, whether each tool call did what the plan said it would, and whether it caught its own mistakes by rereading real results instead of assuming success. A good trajectory shows at least one moment where it noticed something was wrong and adjusted, that's the signal, not a clean run with zero visible thinking."
+  - q: "What is an agent trajectory in plain English?"
+    a: "A trajectory is the full trace of what an agent did to finish a task, its plan, the tools it called, the actual results those calls returned, and any point it changed course. Reading one means following that chain in order and checking whether each step actually followed from the one before it."
+---
+
+{/* IMAGE PROMPT: Warm storybook gouache illustration; the cream-white robot proudly watching a small finished structure it just assembled on a workbench, a faint dotted trajectory line looping back through its steps, cozy and triumphant, cream-to-clay palette (#FAF8F3, #C9633F). No text in image. | FILENAME: cover.webp | DIMENSIONS: 1200×630 */}
+
+<ArticleImage src="/images/articles/agentic-ai/your-first-agent-felt-not-coded/cover.webp" alt="An illustrated robot proudly looking at a small structure it just finished assembling, with a dotted trajectory line looping back through its steps" />
+
+You tell Claude Code to add one small feature to a repo you barely know, hit enter, and watch the terminal start filling with actions you didn't type. Twenty seconds in, it opens a file you didn't mention. You have no idea if that's right.
+
+That uncertain half-second, watching it act without you steering each keystroke, is the actual moment this lesson is about. **Your first AI agent isn't something you code, it's something you delegate:** a real multi-step task, handed to Claude Code, that it plans, executes, and checks against reality on its own, while you learn to read exactly what it did and why. No SDK, no framework, nothing to build yet. You just watch it work, closely enough to trust it.
+
+If you're still fuzzy on [what actually makes something an agent](/library/agentic-ai/what-is-an-agent-really) or [the think-act-observe loop](/library/agentic-ai/anatomy-of-an-agent-and-the-loop), those two lessons cover the theory. This one is the felt version, on a real repo, in [the terminal you already opened](/library/agentic-ai/claude-code-agentic-terminal).
+
+> **Key Takeaways**
+> - Your first AI agent is a real delegated task, not a coding exercise, this lesson has no SDK and no framework.
+> - An agent's trajectory is the plan, the tool calls, the actual results, and any self-correction, in order.
+> - The single most useful early skill is reading that trajectory, not just admiring the finished output.
+> - A good trajectory usually shows at least one moment the agent caught its own mistake by checking a real result.
+> - This felt experience is deliberately built before Module 21's SDK work, so you learn to recognize good agent behavior before you ever construct it.
+
+---
+
+## What Does an AI Agent Actually Do, In Practice?
+
+In practice, an AI agent takes one goal you give it, breaks it into steps, and works through those steps itself, reading files, running commands, and checking outcomes, until the task is finished or it hits something it can't resolve alone.
+
+That's different from what most "build your first agent" guides show you. A lot of them are drag-and-drop workflow builders where you wire up triggers and actions by hand, that's automation, not an agent deciding its own next move.
+
+Others walk you through installing Claude Code and stop right after "now it figures out the steps," without ever showing you a real task or what the output actually looks like mid-run.
+
+Here, the task is real, the repo is real, and nothing about the delegation is simulated. You're not learning to build the mechanism yet, you're learning to recognize whether the mechanism is working.
+
+## The Starter Repo and the Task
+
+The task for this lesson is small and specific on purpose: add one missing input check to a small script, make it fail loudly instead of silently, and confirm the existing tests still pass.
+
+Open a small repo you already have from earlier in this path, or clone a fresh throwaway one. In Claude Code, give it a goal like this, in your own words:
+
+```
+This repo has a script that reads a config file and doesn't check
+whether a required field is missing before using it. Add a check
+that raises a clear error if the field is missing. Run the existing
+tests afterward and fix anything that breaks.
+```
+
+Notice what that goal does not include: no line numbers, no filename, no instructions for which test command to run. That's deliberate. A real delegated task describes the outcome, not the keystrokes, the agent's job is to figure out the rest by reading the repo.
+
+Let it run to completion. Don't interrupt it mid-task, the whole point of this lesson is watching a full trajectory, not a fragment of one.
+
+## Watching It Work
+
+Watching the agent work means following three things in order: what it says it's about to do, what it actually calls, and what comes back when it checks.
+
+On a run I did with almost this exact task, the agent opened the config-loading file first, read through it, and stated its plan out loud before touching anything: add a check right after the file loads, before any field gets used elsewhere. It made the edit.
+
+Then it searched the repo for the test file covering that script, ran the test suite, and got back a failure, not the one it expected. A different test, one it hadn't looked at, broke because it had assumed the missing-field error would be a specific exception type when the test expected a different one.
+
+<Note>
+Here's the self-correction, quoted close to how it actually read: "The test expects a `ValueError`, my check raised a generic `Exception`. Updating the check to match the existing error convention in this file." It then reread a neighboring function to confirm what convention the rest of the file already used, changed one line, reran the tests, and they passed.
+</Note>
+
+That's a real trajectory: a plan stated up front, a tool call that matched the plan, an observed result that didn't match expectations, and a correction based on rereading the actual codebase instead of guessing again blind.
+
+I've watched agents skip that last step entirely and rerun the exact same failing thing twice in a row, that's the failure mode you're learning to spot by watching a good run first.
+
+## Reading an Agent's Trajectory
+
+Reading a trajectory means checking four things in sequence: the stated plan, the tool calls it made, the results those calls actually returned, and whether any correction it made was based on a real result or just another guess.
+
+This is the skill that outlasts any specific tool. The plan tells you whether it understood the task. The tool calls tell you whether its actions matched that plan. The results tell you whether it's checking ground truth or hallucinating success.
+
+And a genuine correction, one that references what it just observed, not a vague "let me try something else", is the strongest signal the loop is actually working.
+
+{/* IMAGE PROMPT: Infographic, five-step horizontal flow titled "How Your First AI Agent Works", showing goal → plan → act → observe → correct with a worked config-check example under each step and a four-item "what to look for" checklist at the bottom, warm cream-and-clay palette, friendly robot mascot. | FILENAME: trajectory-self-correction.webp | DIMENSIONS: 1672×941 */}
+
+<ArticleImage src="/images/articles/agentic-ai/your-first-agent-felt-not-coded/trajectory-self-correction.webp" alt="Infographic showing the five-step flow of an AI agent: you give a goal, it plans, acts, observes, then corrects and repeats, with a four-point checklist for reading the trajectory" caption="The full loop, worked through the same config-check example, plus the four things worth checking in any trajectory." />
+
+Catching a bad plan early matters more than reviewing a finished diff. If the very first stated plan misunderstands the task, everything downstream is wasted motion, and you'll save real time by stopping the run there instead of waiting for a wrong answer to finish compiling.
+
+You'll use this exact reading skill again once the next module gets into the specific reasoning patterns behind what you just watched, so it's worth being genuinely comfortable with it now, not just able to follow along.
+
+---
+
+## Your Lab
+
+<Steps>
+  <Step number={1} title="Delegate the task">
+    In Claude Code, on a real repo, give it the goal from "The Starter Repo and the Task" above (or an equivalent small, real feature: add a check, fix a rough edge, make a failure visible instead of silent). Let it run to completion without interrupting it.
+  </Step>
+  <Step number={2} title="Write the trajectory analysis">
+    Open (or create) `learning-log.md`. Write roughly 300 words identifying: the plan it stated before acting, every distinct tool call it made, and at least one moment it corrected itself, quoting the actual transcript text for that correction.
+  </Step>
+  <Step number={3} title="Judge the trajectory, not just the output">
+    Add one final paragraph: did its plan match the task, did its tool calls match its plan, and did its correction (if any) come from a real observed result? If it never corrected anything, note whether that's because the task was simple or because it might have missed something.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 15.07.
+</Note>
+
+<FAQ>
+  <FAQItem question="What does your first AI agent actually do differently from a chatbot?">A chatbot answers what you type and stops. Your first AI agent takes a goal, reads real files, decides its own next step, runs commands, checks the result, and keeps going until the task is actually done, no further prompting from you in between.</FAQItem>
+  <FAQItem question="Do I need to write code to build my first AI agent?">No. Using Claude Code's built-in agent loop to complete a real task on a starter repo is genuinely building and running an agent, you're directing it and reading its output, not hand-typing the plumbing. The SDK and code-level construction come later, in Module 21.</FAQItem>
+  <FAQItem question="How do I know if my agent's trajectory was actually good?">Check whether its plan matched the task, whether each tool call did what the plan said it would, and whether it caught its own mistakes by rereading real results instead of assuming success. A good trajectory shows at least one moment where it noticed something was wrong and adjusted, that's the signal, not a clean run with zero visible thinking.</FAQItem>
+  <FAQItem question="What is an agent trajectory in plain English?">A trajectory is the full trace of what an agent did to finish a task, its plan, the tools it called, the actual results those calls returned, and any point it changed course. Reading one means following that chain in order and checking whether each step actually followed from the one before it.</FAQItem>
+</FAQ>
