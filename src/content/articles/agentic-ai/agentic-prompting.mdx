@@ -142,7 +142,7 @@ Each block is doing one job: identity ("research assistant"), a hard rule about 
 Most agent bugs aren't model failures, they're gaps in the agentic prompting itself. Here are the ones beginners hit most often, and the fix for each.
 
 - **Keeps calling the wrong tool.** Your tool descriptions overlap or are too vague. Fix: make each tool's description name a specific, non-overlapping use case.
-- **Loops forever.** No stopping condition exists in the prompt. Fix: state exactly what "done" looks like, and cap the maximum number of tool calls.
+- **Loops forever.** No stopping condition exists in the prompt. Fix: state exactly what "done" looks like, and cap the maximum number of tool calls. If this is already happening to you, [see the three specific loop failures and their fixes](/library/agentic-ai/why-your-ai-agent-wont-stop-looping).
 - **Hallucinates the arguments.** The tool's parameters aren't documented with an example. Fix: show one real example call in the prompt, not just a parameter list.
 - **Ignores half your instructions.** The system prompt is too long, or buries the important rule near the bottom. Fix: shorten it, and put the rule that matters most first.
 - **Doesn't know what to do when a tool fails.** No failure-handling instruction exists. Fix: add one explicit line, like rule 3 in the example above, that names the retry behavior.
