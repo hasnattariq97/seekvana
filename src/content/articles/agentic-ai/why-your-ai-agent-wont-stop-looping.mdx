@@ -3,25 +3,19 @@ title: "Why Your AI Agent Won't Stop Looping (and the Fix)"
 description: "Your AI agent won't stop looping because of one of three bugs: thrashing, no stop condition, or context bloat. Build, break, and fix a real loop here."
 pillar: "agentic-ai"
 slug: "why-your-ai-agent-wont-stop-looping"
-difficulty: "beginner"
+difficulty: "intermediate"
 readTime: 10
-author: "Hasnat Tariq"
-authorSlug: "hasnat-tariq"
-publisher: "Seekvana"
-reviewedBy: ""
+author: "Seekvana"
 publishedAt: "2026-08-10"
-lastUpdated: "2026-08-10"
 tags: ["agents", "agent-loops", "loop-engineering", "claude-code"]
 featured: false
-lessonModule: "15"
-lessonNumber: "15.08"
 faqs:
   - q: "Why does my AI agent keep looping?"
     a: "Almost always one of three things: it's retrying a failing tool call without adapting (thrashing), it has no clear stop condition (a runaway loop), or its context has grown so large the model loses track of what it already tried. Each has a different fix, which is why naming the failure matters more than re-prompting and hoping."
   - q: "What is loop engineering?"
     a: "Loop engineering is the practice of deliberately designing an agent's reason, act, observe cycle, its stop conditions, its state, and its cost, instead of writing one prompt and hoping the rest works itself out. The term is from June 2026; the mechanism it describes dates back to the 2022 ReAct pattern."
   - q: "How do I limit how many times an agent can call a tool?"
-    a: "In Claude Code, run with the --max-turns flag, for example claude -p --max-turns 3 'your task'. In your own code, track a turn counter and break the loop once it passes a fixed limit, the same pattern used in every scenario in this lesson."
+    a: "In Claude Code, run with the --max-turns flag, for example claude -p --max-turns 3 'your task'. In your own code, track a turn counter and break the loop once it passes a fixed limit, the same pattern used in every scenario in this guide."
   - q: "What's the difference between an agent loop and just prompting a chatbot?"
     a: "A single prompt gets one response back. An agent loop lets the model call tools, read the real result, and decide what to do next, repeating that cycle until the task is actually finished, not just until the model produces some text."
 ---
@@ -32,7 +26,7 @@ It's 2 a.m. and your Claude Code agent is still running. You gave it one instruc
 
 **An agent that won't stop is almost always doing one of three things: retrying a failing tool call without adapting, running with no clear stop condition, or dragging around so much accumulated context that it's lost track of what it already tried.** I built a real agent loop from scratch, broke it all three ways on purpose, and fixed each one. Here's the whole thing, plus the exact settings in Claude Code and Cursor that do the same job without the hand-rolling.
 
-If the last agent you ran was [your first real delegated task](/library/agentic-ai/your-first-agent-felt-not-coded), this is the lesson for the day it stops behaving.
+If you've ever [delegated a real multi-step task to an agent](/library/agentic-ai/your-first-agent-felt-not-coded), this is the guide for the day it stops behaving.
 
 > **Key Takeaways**
 > - An agent loop is just reason, then act, then observe, then repeat, with a check at the end of each cycle for whether to stop.
@@ -47,7 +41,7 @@ If the last agent you ran was [your first real delegated task](/library/agentic-
 
 An agent loop is the reason, act, observe cycle that lets an agent use tools repeatedly until a goal is met, instead of answering once and stopping, and it won't stop on its own unless something inside that cycle explicitly tells it to. Loop engineering, a term coined in June 2026, is the practice of designing that cycle on purpose. It means choosing the stop conditions up front. It means deciding what state carries between turns, and what that state costs, rather than writing one prompt and hoping the rest sorts itself out.
 
-The mechanism is older than the name by almost four years. In October 2022, researchers published ReAct, short for Reason plus Act. It describes agents that alternate between a thought, a tool call, and an observation of what came back, repeating until done. If you've already read [the think-act-observe loop](/library/agentic-ai/anatomy-of-an-agent-and-the-loop), that three-step cycle is exactly what's running under every scenario in this lesson. And if you've written [a system prompt for ReAct-style tool use](/library/agentic-ai/agentic-prompting) before, you've already built half of what's about to break.
+The mechanism is older than the name by almost four years. In October 2022, researchers published ReAct, short for Reason plus Act. It describes agents that alternate between a thought, a tool call, and an observation of what came back, repeating until done. If you've already read [the think-act-observe loop](/library/agentic-ai/anatomy-of-an-agent-and-the-loop), that three-step cycle is exactly what's running under every scenario in this guide. And if you've written [a system prompt for ReAct-style tool use](/library/agentic-ai/agentic-prompting) before, you've already built half of what's about to break.
 
 The next real milestone came in September 2025, when developer Simon Willison wrote about "designing agentic loops," the idea that an agent is just something that runs tools in a loop toward a goal, and that designing that loop well was becoming its own skill. The name itself arrived in June 2026, when several people building agents independently argued the same thing within about a day of each other: stop prompting agents, start designing the loops that prompt them.
 
@@ -117,7 +111,7 @@ I swapped the real model for a stand-in decider function so I could force specif
   [STOPPED] hit max_turns=5, forced exit, no natural completion
 ```
 
-That's the exact shape of the 2 a.m. scenario from the top of this lesson. The tool keeps returning an error, and the loop keeps sending the identical request, because nothing in the loop ever tells the model "this isn't working, try something else." Swap `read_config` for a scraping tool hitting a 403 and you get the same transcript with different names. A 403 means you're missing a header or you're rate-limited, and retrying the same request definitely won't fix either.
+That's the exact shape of the 2 a.m. scenario from the top of this guide. The tool keeps returning an error, and the loop keeps sending the identical request, because nothing in the loop ever tells the model "this isn't working, try something else." Swap `read_config` for a scraping tool hitting a 403 and you get the same transcript with different names. A 403 means you're missing a header or you're rate-limited, and retrying the same request definitely won't fix either.
 
 **Failure 2: the runaway loop.** Point the same harness at a decider with no goal check at all, it just keeps finding one more thing to look at:
 
@@ -149,7 +143,7 @@ The verifier is what actually catches wrong answers, not just long-running ones.
   [DONE] turn 2: Found it, debug mode is on in settings.yml, port 8080.
 ```
 
-This is the pattern worth remembering above every other one in this lesson: the agent that produces an answer should not be the only agent that grades it. A fresh check, even a simple one that confirms the answer mentions a specific fact it was supposed to find, catches mistakes that no amount of "please double-check your work" reliably catches, because the model doing the double-checking is the same model that made the mistake.
+This is the pattern worth remembering above every other one in this guide: the agent that produces an answer should not be the only agent that grades it. A fresh check, even a simple one that confirms the answer mentions a specific fact it was supposed to find, catches mistakes that no amount of "please double-check your work" reliably catches, because the model doing the double-checking is the same model that made the mistake.
 
 <ArticleImage src="/images/articles/agentic-ai/why-your-ai-agent-wont-stop-looping/turn-cap-verifier-compaction.webp" alt="Illustration of the same robot now protected by three fixes: a stop sign for the turn cap, a second small robot checking its work, and a shrinking stack of paper for compaction" caption="The three fixes that stop a loop from thrashing, running away, or bloating its context." />
 
@@ -167,7 +161,7 @@ None of these are new capabilities hiding in tools you already own. They're the 
 
 ## Debugging Playbook: Symptom → Cause → Fix
 
-Bookmark this table. It's the fast path back to this lesson the next time an agent misbehaves.
+Bookmark this table. It's the fast path back to this guide the next time an agent misbehaves.
 
 **Symptom, cause, and fix for the three loop failures**
 
@@ -186,7 +180,7 @@ So the honest, short answer to why your AI agent won't stop looping is one of th
 
 ---
 
-## Your Lab
+## Try It Yourself
 
 <Steps>
   <Step number={1} title="Set up a task that's easy to fail">
@@ -206,13 +200,9 @@ So the honest, short answer to why your AI agent won't stop looping is one of th
   </Step>
 </Steps>
 
-<Note>
-  Done? You've completed Lesson 15.08.
-</Note>
-
 <FAQ>
   <FAQItem question="Why does my AI agent keep looping?">Almost always one of three things: it's retrying a failing tool call without adapting (thrashing), it has no clear stop condition (a runaway loop), or its context has grown so large the model loses track of what it already tried. Each has a different fix, which is why naming the failure matters more than re-prompting and hoping.</FAQItem>
   <FAQItem question="What is loop engineering?">Loop engineering is the practice of deliberately designing an agent's reason, act, observe cycle, its stop conditions, its state, and its cost, instead of writing one prompt and hoping the rest works itself out. The term is from June 2026, the mechanism it describes dates back to the 2022 ReAct pattern.</FAQItem>
-  <FAQItem question="How do I limit how many times an agent can call a tool?">In Claude Code, run with the --max-turns flag, for example claude -p --max-turns 3 'your task'. In your own code, track a turn counter and break the loop once it passes a fixed limit, the same pattern used in every scenario in this lesson.</FAQItem>
+  <FAQItem question="How do I limit how many times an agent can call a tool?">In Claude Code, run with the --max-turns flag, for example claude -p --max-turns 3 'your task'. In your own code, track a turn counter and break the loop once it passes a fixed limit, the same pattern used in every scenario in this guide.</FAQItem>
   <FAQItem question="What's the difference between an agent loop and just prompting a chatbot?">A single prompt gets one response back. An agent loop lets the model call tools, read the real result, and decide what to do next, repeating that cycle until the task is actually finished, not just until the model produces some text.</FAQItem>
 </FAQ>
