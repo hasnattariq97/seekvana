@@ -1,0 +1,135 @@
+---
+title: "How AI Agents Work: The Think-Act-Observe Loop"
+description: "How do AI agents work? Four parts in a loop, environment, tools, a brain, and think-act-observe, dissected using the Claude Code you already run."
+pillar: "agentic-ai"
+slug: "anatomy-of-an-agent-and-the-loop"
+difficulty: "beginner"
+readTime: 9
+author: "Hasnat Tariq"
+authorSlug: "hasnat-tariq"
+publisher: "Seekvana"
+lastUpdated: "2026-08-09"
+publishedAt: "2026-07-19"
+tags: ["agents", "agent-architecture", "inside-the-agent"]
+featured: false
+lessonModule: "15"
+lessonNumber: "15.04"
+faqs:
+  - q: "How do AI agents actually work?"
+    a: "An AI agent works by looping through three steps: it thinks (decides what to do next), acts (calls a tool to do it), and observes (reads what actually happened), then repeats until the task is done. That loop, wrapped around a reasoning model with access to tools and a working environment, is the entire mechanism behind every AI agent you've used."
+  - q: "What are the main parts of an AI agent?"
+    a: "Every agent has four parts: an environment it operates in (like a codebase or a browser), tools and sensors it uses to act and perceive, a reasoning brain (the language model itself), and a loop that ties the other three together. Strip any one part away and what's left isn't an agent anymore, just a chatbot or a script."
+  - q: "Is the think-act-observe loop the same as ReAct?"
+    a: "Yes, in practice. Think-act-observe is the plain-language name for what researchers formalized as ReAct (Reason + Act), a technique from Princeton and Google Research that showed models solve tasks measurably better when they alternate between reasoning and acting instead of doing all their thinking up front."
+  - q: "Why does an agent's loop matter more than its model?"
+    a: "A smarter model with no loop is still just answering once and stopping, it can't check its own work or recover from a wrong guess. A weaker model wrapped in a good think-act-observe loop can catch its own mistakes mid-task, which is why the loop, not raw model quality alone, is usually what determines whether an agent finishes a real job correctly."
+---
+
+{/* IMAGE PROMPT: Warm storybook gouache illustration, cream-to-clay palette (#FAF8F3, #C9633F); a gentle cutaway of a cream-white robot showing a glowing three-light loop (think, act, observe) circling inside its chest, cozy and friendly, editorial. No text in image. | FILENAME: cover.webp | DIMENSIONS: 1200×630 */}
+
+<ArticleImage src="/images/articles/agentic-ai/anatomy-of-an-agent-and-the-loop/cover.webp" alt="A cutaway illustration of a robot with a glowing three-part loop inside its chest, representing the think-act-observe cycle" />
+
+You ask Claude Code to fix a failing test. It reads the error, edits a line, reruns the test, and the error hasn't moved an inch. Instead of guessing again, it opens the file the traceback actually points to, one it hadn't looked at yet, and the second edit works.
+
+That's not a smarter prompt. It's an agent doing what agents do: **an AI agent is four parts wired into a loop**, an environment it works in, tools and sensors it acts and perceives through, a reasoning brain, and the think → act → observe cycle that ties the other three together. Take any one of those parts away and you're left with a chatbot, not an agent.
+
+If you're still fuzzy on [what actually makes something an agent](/library/agentic-ai/what-is-an-agent-really), that lesson draws the line; this one dissects what's on the other side of it.
+
+You've already felt this loop, even if nobody pointed at it directly, in [the Claude Code session you first watched run](/library/agentic-ai/claude-code-agentic-terminal). This lesson names the parts and shows you exactly where each one lives inside that same tool.
+
+> **Key Takeaways**
+> - Every agent shares four parts: environment, tools/sensors, brain, and the loop connecting them.
+> - Claude Code's environment is your repo, its tools are read/edit/run, its brain is the model, and its loop is the same think-act-observe cycle every agent uses.
+> - The loop repeats: think (decide the next move) → act (call a tool) → observe (read the real result) → repeat until done.
+> - This plain-language loop has an academic name, ReAct, and measured research behind why it works better than reasoning all at once.
+> - Each phase of the loop is a distinct place things go wrong, which is exactly why evaluating agents is its own skill, not an afterthought.
+
+---
+
+## What Is an AI Agent Made Of?
+
+How AI agents work comes down to four parts: an environment, tools and sensors, a reasoning brain, and a loop connecting them. None of these is optional, and you can point at all four in Claude Code right now.
+
+Map them concretely: Claude Code's **environment** is your repository, the files, the terminal, the running test suite. Its **tools** are the read, edit, and run actions it's allowed to call. Its **brain** is the underlying model doing the reasoning. And its **loop** is the cycle that lets it check its own work instead of guessing once and stopping.
+
+A calculator app has tools (buttons) but no loop, no brain deciding what to press next, so it isn't an agent. A chatbot has a brain but usually no tools and no environment to act in, so it answers but never *does*. An agent is the version where all four exist at once, wired together.
+
+## The Environment: Where the Agent Actually Works
+
+The environment is the world an agent can actually observe and change, and for Claude Code that world is your codebase, not some abstract sandbox.
+
+Anthropic's own engineering guide on agent design describes this directly: it's crucial for agents to "gain 'ground truth' from the environment at each step (such as tool call results or code execution) to assess its progress." <a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener noreferrer">Anthropic's guide on building effective agents</a> treats this as non-negotiable, an agent that can't check ground truth is just narrating a plan, not executing one.
+
+Concretely: when Claude Code edits a file, the environment is what tells it whether that edit actually compiled or actually fixed the test. Without a real environment to check against, "I think this worked" and "this actually worked" would be indistinguishable, which is exactly the gap that separates confident-sounding output from a finished task.
+
+## Tools and Sensors: How It Acts and Perceives
+
+Tools and sensors are how an agent reaches out of pure language and into the world, acting on it and reading back what happened.
+
+You already have the vocabulary for this from [the augmented LLM](/library/agentic-ai/the-augmented-llm): tools were one of the three augmentations that turn a plain language model into something that can do more than talk. In Claude Code, those tools are concrete and countable: read a file, edit a file, run a command, search the repo. Each one is both an action (it changes or queries the world) and a sensor (it returns a result the model can read).
+
+That dual nature matters. A tool call that only acts, with no readable result coming back, would leave the agent blind after every move. A tool call that returns a clean, structured result is what makes the next step of the loop possible at all.
+
+## The Brain: What's Actually Reasoning
+
+The brain is the language model itself, the part actually deciding what to do next, and it's the one piece of this anatomy that doesn't live in your repo.
+
+There's no separate "agent module" bolted onto a plain model, the brain is the same kind of model you'd chat with directly, just given tools, an environment, and a loop to operate inside. What makes it act "agentic" isn't a different architecture, it's that its output on each turn gets read as a decision (which tool, what arguments) instead of just a reply to display.
+
+This is why a stronger model generally makes a better agent, but only up to a point, a brilliant brain still needs the other three parts to do anything beyond talk. Swap in a weaker model with no tools and no environment, and you don't get a worse agent, you get a chatbot that happens to know a lot: it can describe the fix perfectly and never touch the file that needs it.
+
+## The Think → Act → Observe Loop
+
+The loop is the cycle that turns those three ingredients into a working agent: think (decide the next action), act (call a tool), observe (read the real result), then repeat until the task is actually done.
+
+{/* IMAGE PROMPT: Warm storybook gouache illustration, same cream-white robot as the cover, closer cutaway view focused on the three-light loop mid-cycle, one light glowing brighter than the other two to suggest an active step, cream-to-clay palette (#FAF8F3, #C9633F), cozy and editorial. No text in image. | FILENAME: think-act-observe-loop.webp | DIMENSIONS: 1200×675 */}
+
+<ArticleImage src="/images/articles/agentic-ai/anatomy-of-an-agent-and-the-loop/think-act-observe-loop.webp" alt="Diagram of the think, act, observe loop with a worked example of Claude Code fixing a failing test" caption="The think → act → observe loop, worked through the same failing-test example, one phase at a time." />
+
+Here's what that looks like inside one real Claude Code run, fixing a failing test in `auth.py`:
+
+**Think:** the model reads the failing test output and reasons that the error is coming from a missing null check, not from the test itself.
+**Act:** it calls its edit tool, adding the null check at the line the traceback pointed to.
+**Observe:** it reruns the test suite and reads back that the same test still fails, with a different error now, one level deeper in the call stack.
+**Think:** it reasons that the first fix was correct but incomplete, and the real bug is one function up.
+**Act:** it edits the caller instead.
+**Observe:** the test suite comes back green.
+
+Two full loops, not one. I've watched this exact pattern more times than I can count, an agent's first fix is often technically correct and still insufficient, and the only reason it catches that is because the loop forces it to look at the real result instead of assuming the first edit landed.
+
+This isn't a Seekvana invention. Researchers at Princeton and Google Research formalized the same pattern as **ReAct** (Reason + Act) and showed models interleaving reasoning with action solved multi-step tasks measurably better than models that reasoned once and acted blind. The name is new; the instinct, checking your work before declaring it done, is not.
+
+## Why Every Phase Is a Place Things Go Wrong
+
+Every phase of the loop is also a distinct place an agent can fail, which is why debugging an agent means asking *which phase* broke, not just "why didn't this work."
+
+A **think** failure looks like a bad plan built on a correct observation, the agent reads the right error and still reasons its way to the wrong fix. An **act** failure looks like calling the right idea with the wrong arguments, editing the correct file at the wrong line. An **observe** failure is the sneakiest: the agent misreads a result, for example treating a warning as a pass, and confidently moves on to the next step already broken.
+
+Naming the phase matters because the fix is different for each one. A think failure needs a clearer prompt or more context. An act failure often needs a better tool description. An observe failure needs the tool's output format fixed so the model can't misread it. Once you can name which phase broke, you understand how AI agents work well enough to debug one, not just describe one, and that three-way split is exactly the mindset you'll need later when evaluating whether an agent is actually working.
+
+---
+
+## Your Lab
+
+<Steps>
+  <Step number={1} title="Run a small task with verbose output on">
+    In Claude Code, ask it to do something small and concrete in a repo you have open, for example: "Read the README and add one missing sentence explaining what this project does." Let it run to completion and keep the terminal output visible.
+  </Step>
+  <Step number={2} title="Label the four parts in learning-log.md">
+    Open (or create) `learning-log.md` in your project. Write four short lines labeling what you just watched: what was the environment, what tools did it use, what was the brain, and what triggered the loop to stop.
+  </Step>
+  <Step number={3} title="Annotate every Think → Act → Observe transition">
+    Scroll back through the same transcript. For each distinct step the agent took, write one line marking it as Think, Act, or Observe, in order. Most small tasks will show at least two full cycles, if yours shows only one, note that too, it's a real finding about how simple the task was.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 15.04.
+</Note>
+
+<FAQ>
+  <FAQItem question="How do AI agents actually work?">An AI agent works by looping through three steps: it thinks (decides what to do next), acts (calls a tool to do it), and observes (reads what actually happened), then repeats until the task is done. That loop, wrapped around a reasoning model with access to tools and a working environment, is the entire mechanism behind every AI agent you've used.</FAQItem>
+  <FAQItem question="What are the main parts of an AI agent?">Every agent has four parts: an environment it operates in (like a codebase or a browser), tools and sensors it uses to act and perceive, a reasoning brain (the language model itself), and a loop that ties the other three together. Strip any one part away and what's left isn't an agent anymore, just a chatbot or a script.</FAQItem>
+  <FAQItem question="Is the think-act-observe loop the same as ReAct?">Yes, in practice. Think-act-observe is the plain-language name for what researchers formalized as ReAct (Reason + Act), a technique from Princeton and Google Research that showed models solve tasks measurably better when they alternate between reasoning and acting instead of doing all their thinking up front.</FAQItem>
+  <FAQItem question="Why does an agent's loop matter more than its model?">A smarter model with no loop is still just answering once and stopping, it can't check its own work or recover from a wrong guess. A weaker model wrapped in a good think-act-observe loop can catch its own mistakes mid-task, which is why the loop, not raw model quality alone, is usually what determines whether an agent finishes a real job correctly.</FAQItem>
+</FAQ>
