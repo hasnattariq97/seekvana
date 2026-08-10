@@ -8,7 +8,7 @@ readTime: 9
 author: "Hasnat Tariq"
 authorSlug: "hasnat-tariq"
 publisher: "Seekvana"
-lastUpdated: "2026-08-09"
+lastUpdated: "2026-08-10"
 publishedAt: "2026-07-19"
 tags: ["agents", "agent-architecture", "inside-the-agent"]
 featured: false
@@ -81,6 +81,8 @@ This is why a stronger model generally makes a better agent, but only up to a po
 ## The Think → Act → Observe Loop
 
 The loop is the cycle that turns those three ingredients into a working agent: think (decide the next action), act (call a tool), observe (read the real result), then repeat until the task is actually done.
+
+That "think" step is doing real work: it's the moment the agent reasons about which tool to call next, and [how well it reasons there changes which tool gets picked](/library/agentic-ai/chain-of-thought-for-agents), not just how the final answer reads.
 
 {/* IMAGE PROMPT: Warm storybook gouache illustration, same cream-white robot as the cover, closer cutaway view focused on the three-light loop mid-cycle, one light glowing brighter than the other two to suggest an active step, cream-to-clay palette (#FAF8F3, #C9633F), cozy and editorial. No text in image. | FILENAME: think-act-observe-loop.webp | DIMENSIONS: 1200×675 */}
 

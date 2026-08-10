@@ -109,6 +109,8 @@ Then write your final answer inside <answer> tags.
 
 This structure earns its keep on multi-step or agentic tasks: several tool calls, a plan that might need revising mid-task, or a sequence of decisions that build on each other. Anthropic's own engineering team tested this directly, giving Claude a dedicated "think" step during a multi-step airline-booking task. Task completion rose from roughly 0.37 to 0.57 on an internal benchmark, according to <a href="https://www.anthropic.com/engineering/claude-think-tool" target="_blank" rel="noopener noreferrer">Anthropic's engineering blog</a>. That's a real, measured gain, but notice the setting: sequential decisions with real stakes for getting them wrong, not a one-shot factual question.
 
+That's also a different job than the one this technique does for a chatbot. In an agent, that same reasoning step happens before a tool call, so it's shaping which action gets taken, not just which sentence gets written. [The agentic version of this](/library/agentic-ai/chain-of-thought-for-agents) walks through exactly where that reasoning earns its tokens and where it doesn't.
+
 ## The Modern Twist: Chain of Thought Prompting Meets Reasoning Models
 
 Here's the part that trips up almost everyone who learned prompting before 2025: **reasoning models change the advice.**
