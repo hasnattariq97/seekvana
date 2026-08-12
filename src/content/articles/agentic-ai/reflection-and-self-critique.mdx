@@ -56,7 +56,7 @@ Two specific versions of this loop show up constantly in agent design. **Self-Re
 | Effect on reasoning accuracy (Huang et al., 2023) | Flat or worse | Reliable improvement |
 | Example prompt | "Does this look right?" | "Tests failed: assert median([1,3,2]) == 2, got 3. Fix it." |
 
-Both patterns assume the reasoning skills of chain-of-thought and the tool-calling of a [reasoning-before-acting loop](/library/agentic-ai/chain-of-thought-for-agents) are already in place; reflection is what happens after the agent has already acted and gotten a result back.
+Both patterns assume the [reasoning skills of chain-of-thought](/library/agentic-ai/chain-of-thought-for-agents) and the [reason-act loop from earlier lessons](/library/agentic-ai/react-reason-plus-act) are already in place; reflection is what happens after the agent has already acted and gotten a result back.
 
 ## The Nuance Almost No Course States: Grounded vs Intrinsic
 
@@ -109,7 +109,7 @@ If you're already running a [reasoning step before each tool call](/library/agen
 
 Reflection is not a free upgrade. Every extra critique-and-revise pass costs real tokens and real latency, and on a task the model already gets right on the first try, that cost buys nothing.
 
-Add a reflection step when two things are both true: the task is genuinely failure-prone (multi-step code, a flaky API call, a spec with edge cases), and you have a real signal to reflect on once it fails (a test suite, a schema validator, an execution trace).
+Add a reflection step when two things are both true: the task is genuinely failure-prone (multi-step code, a flaky API call, a spec with edge cases), and you have a real signal to reflect on once [a plan already executing](/library/agentic-ai/plan-and-execute) hits something that fails.
 
 Skip it, or keep it to a single pass, on simple lookups, obvious tool selections, or anything where a wrong first answer is cheap to just retry from scratch.
 
