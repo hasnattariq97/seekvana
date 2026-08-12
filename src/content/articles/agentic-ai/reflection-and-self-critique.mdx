@@ -1,0 +1,156 @@
+---
+title: "Agent Reflection Pattern: Why Grounded Beats Intrinsic"
+description: "Learn the agent reflection pattern (Self-Refine, Reflexion) and why grounded self-correction works while intrinsic self-checking often fails."
+pillar: "agentic-ai"
+slug: "reflection-and-self-critique"
+difficulty: "intermediate"
+readTime: 9
+author: "Hasnat Tariq"
+authorSlug: "hasnat-tariq"
+publisher: "Seekvana"
+reviewedBy: ""
+publishedAt: "2026-07-19"
+lastUpdated: "2026-07-19"
+tags: ["agents", "reflection", "self-correction"]
+featured: false
+lessonModule: "16"
+lessonNumber: "16.04"
+faqs:
+  - q: "What is the agent reflection pattern?"
+    a: "The agent reflection pattern is a loop where an agent produces an output, critiques that output against some signal, and revises it before finishing. Self-Refine and Reflexion are the two named versions of it: Self-Refine repeats the loop within one attempt, Reflexion carries the critique forward into the next attempt as memory."
+  - q: "Why does self-correction sometimes make an LLM's answer worse?"
+    a: "When a model checks its own work with no outside signal, it has nothing but its own judgment to grade its own guess. Research on intrinsic self-correction (Huang et al., 2023) found accuracy on reasoning tasks can drop after a self-check, because the model talks itself into changing a correct answer to an incorrect one."
+  - q: "What is the difference between grounded and intrinsic self-correction?"
+    a: "Intrinsic self-correction means the model reflects using only its own re-read of its own output, no outside signal. Grounded self-correction means the model reflects on a real, external result, a test failure, a stack trace, a linter warning, and revises based on that. Grounded correction reliably helps; intrinsic correction is unreliable and can hurt."
+  - q: "Do I need reflection in every agent I build?"
+    a: "No. Reflection costs tokens and latency for every extra pass, and on a task with an obvious first answer it adds nothing. Add a reflection step when the task is failure-prone and you have a real signal to reflect on, like tests, a schema check, or execution output, not as a default add-on to every agent."
+---
+
+<ArticleImage src="/images/articles/agentic-ai/reflection-and-self-critique/cover.webp" alt="Illustrated workflow of an agent thinking, researching, building, and reviewing its own results in a loop, watched over by a person checking a task list" />
+
+An agent writes a function, reads it back, and says "looks good to me." It's wrong twice: once about the code, once about its own judgment of the code. Ask that same agent to run the tests instead, read the actual failure, and try again, and the second attempt usually works.
+
+**The agent reflection pattern is a loop where an agent critiques its own output and tries again, but the pattern only reliably helps when the critique is grounded in a real external signal (test results, execution output, a linter) rather than the model simply re-reading its own guess.** Self-Refine and Reflexion are the two named versions of this loop. The distinction between grounded and intrinsic reflection is the one thing that decides whether the loop fixes bugs or just adds a slower, more confident wrong answer.
+
+> **Key Takeaways**
+> - Self-Refine loops critique-and-revise within a single attempt; Reflexion carries the critique forward as memory into the next attempt.
+> - Intrinsic self-correction, the model re-reading its own guess with no outside signal, can *decrease* accuracy on reasoning tasks (Huang et al., 2023).
+> - Grounded self-correction, reflecting on test output, execution traces, or a linter, is the version that actually works.
+> - The graded lab below builds a reflection loop that reads real pytest failures instead of a "does this look right?" pass.
+> - Reflection is not free. Add it where a task is failure-prone and a real signal exists, not as a default on every agent.
+
+## What Is the Agent Reflection Pattern?
+
+The agent reflection pattern is a loop where an agent generates an output, evaluates that output against some standard, and revises it, sometimes more than once, before returning a final answer. Get the mechanism wrong and you'll ship a reflection step that burns tokens on every run and doesn't catch a single real bug, that's the trap the rest of this lesson is about avoiding.
+
+Two specific versions of this loop show up constantly in agent design. **Self-Refine** has one model act as generator, critic, and reviser inside a single task: produce an answer, generate feedback on that same answer, refine it, and repeat until the feedback says stop. It needs no extra training and no separate model. The <a href="https://arxiv.org/abs/2303.17651" target="_blank" rel="noopener noreferrer">original Self-Refine paper</a> tested it across seven tasks. Outputs were preferred over one-shot generation roughly 20% more often.
+
+**Reflexion** extends the idea across attempts, not just within one. After a failed trial, the agent writes a short verbal reflection ("the tests failed because I mutated the input list instead of copying it") and stores that reflection in memory before trying again. The <a href="https://arxiv.org/abs/2303.11366" target="_blank" rel="noopener noreferrer">Reflexion paper</a> reported this lifted GPT-4's score on a coding benchmark from roughly 80% to 91% across repeated attempts. The gain came purely from language-based feedback, no weight updates involved.
+
+**Grounded vs. intrinsic reflection, at a glance**
+
+| | Intrinsic self-correction | Grounded self-correction |
+|---|---|---|
+| What it checks against | Its own re-read of its own answer | A real external signal: test output, stack trace, linter |
+| New information entering the loop | None | Yes, a concrete result the model didn't generate |
+| Effect on reasoning accuracy (Huang et al., 2023) | Flat or worse | Reliable improvement |
+| Example prompt | "Does this look right?" | "Tests failed: assert median([1,3,2]) == 2, got 3. Fix it." |
+
+Both patterns assume the reasoning skills of chain-of-thought and the tool-calling of a [reasoning-before-acting loop](/library/agentic-ai/chain-of-thought-for-agents) are already in place; reflection is what happens after the agent has already acted and gotten a result back.
+
+## The Nuance Almost No Course States: Grounded vs Intrinsic
+
+<ArticleImage src="/images/articles/agentic-ai/reflection-and-self-critique/agent-reflection-pattern-overview.webp" alt="Diagram contrasting intrinsic self-check, which has no outside feedback and can make correct answers worse, against grounded self-correction, which revises based on real test results" caption="Intrinsic self-checking has no outside signal to work from; grounded self-correction revises against a real result, like an actual failing test." />
+
+Every explainer on this topic will tell you an agent can "reflect on its own output." Almost none of them tell you that *how* it reflects is the whole game.
+
+**Intrinsic self-correction** means the model checks its own answer using nothing but another pass of its own judgment: same model, same knowledge, no new information entered the room. **Grounded self-correction** means the model checks its answer against something real and external to its own opinion: a test suite that actually ran, a stack trace, a linter output, a compiler error, a second tool's result.
+
+<Note>
+A 2023 study, "Large Language Models Cannot Self-Correct Reasoning Yet" (Huang et al.), tested intrinsic self-correction directly: ask a strong model to review and revise its own reasoning-task answers with no outside feedback. Accuracy did not improve. In several cases it got worse, because the model changed correct answers to incorrect ones more often than it fixed real errors. Read the paper at <a href="https://arxiv.org/abs/2310.01798" target="_blank" rel="noopener noreferrer">arxiv.org/abs/2310.01798</a>.
+</Note>
+
+That finding is the spine of this lesson: reflection is not automatically good. It's good when the thing being reflected on is real. A model re-reading its own guess has no new information, so "reflecting" on it is really just re-rolling the same judgment that produced the guess in the first place, dressed up as a check.
+
+## Why Intrinsic Reflection Can Make Things Worse
+
+Ask an agent "does this look right?" about code it just wrote, and it will almost always find *something* to say, because that's what the prompt asked for. The problem is it has no ground truth to measure against, only its own prior belief restated with more hedging.
+
+Here's the failure mode concretely. An agent writes a function to compute a running median. The logic has a subtle off-by-one: it picks the wrong middle index, so the median comes back one slot away from correct on most inputs.
+
+Ask it "does this look right?" and it typically answers yes, sometimes even praising its own use of `sorted()`. Nothing forced it to notice the wrong index, because nothing in that prompt gave it a value it hadn't already generated itself.
+
+I've watched this exact intrinsic pass "fix" a bug that didn't exist, rewriting a correctly-initialized variable name because the model decided, with no new evidence, that the original name "looked wrong." The function still failed the same three tests afterward, and now it also had an unrelated cosmetic change to review.
+
+Grounded reflection changes what the model is looking at, not just how carefully it looks. Feed that same function's actual pytest output into the next turn, three failing assertions naming the exact wrong values returned, and the model has something to reason against that isn't just its own prior text. It stops guessing about correctness and starts explaining a specific, real discrepancy. That's the entire mechanical difference between reflection that helps and reflection theater.
+
+## Building a Grounded Reflection Loop in Claude Code
+
+A grounded reflection loop has three moving parts, and you can build all three directly in Claude Code: a task, a real check, and a revise step that only fires off the real check's output.
+
+1. **Generate.** The agent writes a first attempt at the function, based on the spec you give it.
+2. **Check.** The agent runs the actual test command (`pytest -q` or equivalent) and captures the real stdout, pass/fail counts, and any assertion messages.
+3. **Reflect and revise.** The agent reads that real output, not its own memory of what it wrote, and revises specifically against what failed.
+
+```bash
+# in Claude Code's terminal, after it writes the first attempt:
+pytest test_running_median.py -q
+```
+
+The critical rule: the revise step's prompt should quote the actual failing assertion text, not a summary the model invents. "Tests failed: assert median([1,3,2]) == 2, got 3" is a grounded signal. "I think there might be an issue with sorting" is the model narrating its own suspicion, which is intrinsic reasoning wearing a grounded costume.
+
+This is the same three-part shape as Self-Refine's generate-feedback-refine loop, with one change that makes all the difference: the feedback step is a real command's real output, not the model's own second opinion.
+
+<Tip>
+If you're already running a [reasoning step before each tool call](/library/agentic-ai/chain-of-thought-for-agents), add one more instruction to it: "before revising, quote the exact failing line from the last tool output." That single line is usually enough to stop a reflection loop from drifting into vibes.
+</Tip>
+
+## When Reflection Is Worth the Tokens, and When It's Theater
+
+Reflection is not a free upgrade. Every extra critique-and-revise pass costs real tokens and real latency, and on a task the model already gets right on the first try, that cost buys nothing.
+
+Add a reflection step when two things are both true: the task is genuinely failure-prone (multi-step code, a flaky API call, a spec with edge cases), and you have a real signal to reflect on once it fails (a test suite, a schema validator, an execution trace).
+
+Skip it, or keep it to a single pass, on simple lookups, obvious tool selections, or anything where a wrong first answer is cheap to just retry from scratch.
+
+Watch for the "does this look right?" pattern creeping into agent prompts anywhere in your stack. It reads like diligence, and it's the exact shape Huang et al.'s research showed doesn't reliably help. If a reflection step can't point at something outside the model's own last message, it's decoration, not a correction mechanism.
+
+## Your Lab
+
+<Steps>
+  <Step number="1" title="Write the buggy function and the failing tests">
+    In Claude Code, create `running_median.py` with this starting function:
+
+    ```python
+    def running_median(values):
+        sorted_vals = sorted(values)
+        n = len(sorted_vals)
+        mid = n // 2
+        if n % 2 == 0:
+            return (sorted_vals[mid - 1] + sorted_vals[mid]) / 2
+        return sorted_vals[mid]
+    ```
+
+    Then create `test_running_median.py` with three tests: `running_median([5])` should return `5`, `running_median([1, 3, 2])` should return `2`, and `running_median([7, 1, 4, 4])` should return `4.0`. Run `pytest -q` and confirm all three pass, this is your clean baseline.
+  </Step>
+  <Step number="2" title="Do the intrinsic pass first, and write down what happens">
+    Ask Claude Code, "Does this function look correct? Check it over." without running the tests. Record its answer in `learning-log.md` under a heading called Intrinsic Pass. Note whether it found anything, and whether what it found (if anything) was the real problem.
+  </Step>
+  <Step number="3" title="Introduce the real bug and run the grounded loop">
+    Change `mid = n // 2` to `mid = n // 2 - 1` and save, this is the injected bug. Run `pytest -q` and capture the actual failing output. Paste that real output back to Claude Code and ask it to fix the function based specifically on the failing assertions shown, not from memory of the earlier conversation. Iterate: run the tests again after each fix attempt until all three pass.
+  </Step>
+  <Step number="4" title="Log the contrast">
+    In `learning-log.md`, under a heading called Grounded Pass, write which specific failing assertion led to the real fix, and how many iterations it took to reach green. Add one closing sentence contrasting the intrinsic pass from Step 2 with the grounded pass: which one actually found and fixed the injected bug, and what was different about the information each one had.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 16.04.
+</Note>
+
+<FAQ>
+  <FAQItem question="What is the agent reflection pattern?">The agent reflection pattern is a loop where an agent produces an output, critiques that output against some signal, and revises it before finishing. Self-Refine and Reflexion are the two named versions of it: Self-Refine repeats the loop within one attempt, Reflexion carries the critique forward into the next attempt as memory.</FAQItem>
+  <FAQItem question="Why does self-correction sometimes make an LLM's answer worse?">When a model checks its own work with no outside signal, it has nothing but its own judgment to grade its own guess. Research on intrinsic self-correction (Huang et al., 2023) found accuracy on reasoning tasks can drop after a self-check, because the model talks itself into changing a correct answer to an incorrect one.</FAQItem>
+  <FAQItem question="What is the difference between grounded and intrinsic self-correction?">Intrinsic self-correction means the model reflects using only its own re-read of its own output, no outside signal. Grounded self-correction means the model reflects on a real, external result, a test failure, a stack trace, a linter warning, and revises based on that. Grounded correction reliably helps; intrinsic correction is unreliable and can hurt.</FAQItem>
+  <FAQItem question="Do I need reflection in every agent I build?">No. Reflection costs tokens and latency for every extra pass, and on a task with an obvious first answer it adds nothing. Add a reflection step when the task is failure-prone and you have a real signal to reflect on, like tests, a schema check, or execution output, not as a default add-on to every agent.</FAQItem>
+</FAQ>
