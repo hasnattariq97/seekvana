@@ -1,0 +1,151 @@
+---
+title: "The Agent Self-Improvement Loop: Evaluate, Then Fix"
+description: "The agent self-improvement loop is plan, execute, evaluate against one number, then refine. Learn why skipping the metric turns improve into just change."
+pillar: "agentic-ai"
+slug: "the-evaluate-improve-loop"
+difficulty: "intermediate"
+readTime: 8
+author: "Hasnat Tariq"
+authorSlug: "hasnat-tariq"
+publisher: "Seekvana"
+reviewedBy: ""
+publishedAt: "2026-08-13"
+lastUpdated: "2026-08-13"
+tags: ["agents", "evaluation", "agent improvement"]
+featured: false
+lessonModule: "16"
+lessonNumber: "16.05"
+faqs:
+  - q: "What is the agent evaluate-improve loop?"
+    a: "The evaluate-improve loop is a repeatable four-step cycle for making an agent measurably better: plan a change, execute it, evaluate the result against one fixed number, then refine based on what the number showed. Without that fixed number, each pass just changes the agent instead of improving it."
+  - q: "How do I define a good success metric for an agent?"
+    a: "Pick one number a script or rubric can score the same way every time, like the percentage of a fixed task set solved correctly, or tokens spent per successful run. A good metric doesn't move just because you re-read the output and feel differently about it."
+  - q: "Why did my agent get worse after I 'improved' it?"
+    a: "Almost always because there was no fixed number tracking the actual goal, so a change that looked more polished on one example was never checked against the full task set. Track one metric across every pass and a regression shows up as a number going down, not a vague feeling."
+  - q: "How many improve cycles should I run before trusting a change?"
+    a: "Three is a reasonable minimum for a single agent task: enough to see whether a metric is trending in one direction or just bouncing around from run-to-run noise. A metric that improves once and drops the next pass is telling you something different than one that climbs three times in a row."
+---
+
+{/* IMAGE PROMPT: Warm storybook gouache illustration; the cream-white robot beside a small rising bar chart it's nudging upward each lap of a loop track; cozy, cream-to-clay palette. No text in image. | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+
+<ArticleImage src="/images/articles/agentic-ai/the-evaluate-improve-loop/cover.webp" alt="A cream-white robot nudging a small rising bar chart upward each lap around a loop track" isCover />
+
+An agent rewrites its own prompt, the output reads more confidently, uses better formatting, and the person reviewing it nods and moves on. Three passes later nobody can say whether the agent actually got better at the task or just got better at sounding like it did.
+
+**The agent self-improvement loop is plan, execute, evaluate against one fixed number, then refine, run as a repeating cycle instead of a one-off tweak.** The step that makes the whole thing work is defining that one number before the first pass starts. Skip it, and every "improvement" pass is really just a change you can't actually verify.
+
+> **Key Takeaways**
+> - The loop has four steps: plan a change, execute it, evaluate the result against one fixed metric, refine based on what the metric showed
+> - Without a metric defined before the first pass, "improve" and "change" become indistinguishable
+> - A good metric is something a script or fixed rubric can score the same way every time, not a feeling about how polished the output reads
+> - Three cycles is usually the minimum needed to tell a real trend from run-to-run noise
+> - This same discipline, evaluate before you trust a change, is the spine the whole course returns to later when it covers evals directly
+
+---
+
+## What Is the Evaluate-Improve Loop?
+
+The evaluate-improve loop is a four-step cycle for changing an agent on purpose: **plan** the change you're about to try, **execute** it, **evaluate** the result against a metric you fixed in advance, then **refine** based on what that number actually showed. Repeat the cycle, and each pass either moves the number or it doesn't.
+
+That's a small addition to patterns you've already built. You've already made an agent [reason before it acts](/library/agentic-ai/chain-of-thought-for-agents) instead of guessing at the first tool, planned before executing, and reflected on real signals like test output instead of your own guess. The evaluate-improve loop takes that same respect for real signals and points it at a question those earlier patterns don't answer: not "did this one attempt pass," but "across several attempts, is this agent actually trending better, or just different each time?"
+
+<ArticleImage src="/images/articles/agentic-ai/the-evaluate-improve-loop/evaluate-improve-loop-cycle.webp" alt="Diagram of the plan, execute, evaluate, refine cycle arranged as a loop with a single metric tracked at the center of each lap" caption="The same four-step cycle, repeated: a fixed metric at the center is what turns 'change' into 'improve.'" />
+
+## Why "Improve" Without a Metric Just Means "Change"
+
+Without a number fixed before you start, there's no way to tell an actual improvement apart from a difference that just feels better in the moment.
+
+This is a specific, common trap: you tweak a prompt, run the agent once, read the output, and it looks cleaner, better organized, more confident. It's tempting to call that an improvement and move on.
+
+But "looks better on one read" and "solves the task more reliably" are different claims, and only one of them is checkable.
+
+I've watched three consecutive prompt tweaks on a small research-summary agent each look like progress when read individually, formatting got tighter, the tone got more assured, and the actual task-success rate across a fixed set of ten test queries had dropped from 8/10 to 6/10 by the third tweak. Nobody would have caught that by reading outputs one at a time. The only reason it surfaced was that the success count was being logged after every pass.
+
+<Note>
+This is the exact trap current agent-evaluation practice keeps running into: teams run an optimization pass, the output changes, and only later do they realize nothing got measurably better, because the metric being tracked didn't match what they actually cared about, or because no metric was being tracked at all. Fix the metric before the first pass, not after the third one.
+</Note>
+
+The fix isn't complicated, it's just a step people skip because it feels like overhead before the "real work" of improving the agent. Define the number first. Everything else in this lesson is what to do with that number once you have it.
+
+## Defining One Measurable Success Criterion
+
+A good success criterion is a single number that a script or a fixed rubric can produce the same way on every run, not an impression you form from reading the output.
+
+The test is repeatability: if you handed the same output to two different reviewers, or ran the same scorer twice, would you get the same number back? "This response feels more thorough" fails that test. "7 of 10 fixed test queries returned the correct answer" passes it.
+
+**Good metric vs. bad metric**
+
+| | Good metric | Bad metric |
+|---|---|---|
+| Example | Percentage of a fixed 10-task set solved correctly | "The output reads more clearly now" |
+| Scored by | A script, a checker function, or a fixed rubric applied the same way every time | Whoever's reading it that day |
+| Stays fixed across passes | Yes, the same task set and same pass/fail rule every run | No, drifts with whatever example you happen to glance at |
+| Tells you refine or ship | Yes, a number moving up or down is unambiguous | No, "feels better" isn't a decision signal |
+
+Useful metrics for an agent task usually come from one of three places. **Task success rate** counts how many of a fixed set of test cases the agent actually completes correctly. **Cost per success** divides tokens or dollars spent by tasks actually solved, so a slower-but-more-reliable agent can beat a faster-but-sloppier one on this number. **Turns to completion** counts how many tool calls or reasoning steps it takes to finish a task it eventually gets right. Pick one that matches what you actually care about for this specific agent. Don't switch metrics mid-loop, that's the same trap as having no metric at all.
+
+## Running the Loop: Plan → Execute → Evaluate → Refine
+
+The loop runs in a fixed order every time: decide what change to try, make the change, score the result against your metric, then decide whether to keep going based on what the number said.
+
+Take a small example: an agent that answers questions from a product FAQ document, scored on a fixed set of 10 real user questions, metric is "number answered correctly out of 10."
+
+**Pass 1, Plan.** The current prompt just says "answer the question using the document." Plan: add an instruction to quote the exact sentence from the document that supports the answer, on the theory that forcing a citation will reduce made-up answers.
+
+**Pass 1, Execute.** Run the updated agent against all 10 fixed test questions.
+
+**Pass 1, Evaluate.** Score comes back 6/10, up from a baseline of 5/10 before this change. A real, if modest, gain.
+
+**Pass 1, Refine.** Keep the citation instruction. Plan the next change: two of the four remaining wrong answers were cases where the agent picked the wrong section of the document entirely, so the next pass targets retrieval, not phrasing.
+
+**Pass 2, Plan.** Add a step where the agent lists which section of the document it's about to use before answering, so a wrong section choice is visible in the transcript, not just in a wrong final answer.
+
+**Pass 2, Execute, Evaluate.** Run all 10 again. Score: 8/10. The section-naming step catches two of the previous misses.
+
+**Pass 2, Refine.** Two questions still fail, both about a pricing detail. Plan a targeted third pass instead of a broad one.
+
+**Pass 3, Plan, Execute, Evaluate.** Add a note pointing at the pricing section specifically. Score: 9/10. One question genuinely isn't answerable from the document at all, which the metric now reveals clearly instead of hiding it inside a vague "still not perfect" impression.
+
+Three passes, one number tracked the whole way: 5 → 6 → 8 → 9. That trend is the actual evidence of improvement. Nothing about reading any single one of those outputs in isolation would have told you that story as clearly as the chart of four numbers does.
+
+## What Breaks When You Skip the Metric
+
+Skip the metric and you can run five passes, feel like you've been iterating hard, and end up with an agent that's different, more verbose, more hedged, more "polished," without any evidence it does the job better.
+
+The concrete failure looks like this: someone changes a prompt, reads two example outputs, likes what they see, ships it. Weeks later a different set of real user questions starts failing in a way nobody predicted, because the change that looked good on the two examples someone happened to check was quietly worse on a category of question nobody tested. There was no fixed test set and no fixed number, so there was nothing to catch the regression before a real user hit it.
+
+<Tip>
+If you can't answer "compared to what baseline, and scored how" for a change you just made, you don't have an improvement yet, you have a change with an unverified guess attached. Fix that by writing the metric and the baseline number down before you touch the prompt, not after.
+</Tip>
+
+This is also the seed of a much bigger idea the course returns to directly later: treating evaluation as something you set up before you build, not something you bolt on afterward to check your work. It's a discipline that runs through the rest of the [agentic-ai library](/library/agentic-ai), not just this lesson. For now, the version of that discipline you need is small: one number, tracked across every pass, checked before you call anything an improvement.
+
+---
+
+## Your Lab
+
+<Steps>
+  <Step number="1" title="Pick a small agent task from an earlier lesson">
+    Choose something you already built, the ReAct loop from 16.02, the plan-and-execute task from 16.03, or the reflection loop from 16.04 all work. It needs a task you can run repeatedly with a clear right-or-wrong outcome.
+  </Step>
+  <Step number="2" title="Define one measurable success criterion">
+    Write down, in one sentence, the exact number you'll track, for example "number of 5 fixed test inputs the agent handles correctly" or "tokens spent per successful completion across 5 runs." Record this definition in `learning-log.md` before you change anything.
+  </Step>
+  <Step number="3" title="Run the baseline, then three improve cycles">
+    Score the agent's current behavior against your metric first, this is your baseline. Then, using Claude Code or Cursor, make one targeted change, run the same test set, and record the metric. Repeat for a second and third change, always scoring against the same fixed test set.
+  </Step>
+  <Step number="4" title="Chart the three values and write your verdict">
+    In `learning-log.md`, list the baseline plus all three pass scores in order. In one sentence, answer honestly: did the metric actually trend better across the three passes, or did it change without a clear improving direction?
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 16.05.
+</Note>
+
+<FAQ>
+  <FAQItem question="What is the agent evaluate-improve loop?">The evaluate-improve loop is a repeatable four-step cycle for making an agent measurably better: plan a change, execute it, evaluate the result against one fixed number, then refine based on what the number showed. Without that fixed number, each pass just changes the agent instead of improving it.</FAQItem>
+  <FAQItem question="How do I define a good success metric for an agent?">Pick one number a script or rubric can score the same way every time, like the percentage of a fixed task set solved correctly, or tokens spent per successful run. A good metric doesn't move just because you re-read the output and feel differently about it.</FAQItem>
+  <FAQItem question="Why did my agent get worse after I 'improved' it?">Almost always because there was no fixed number tracking the actual goal, so a change that looked more polished on one example was never checked against the full task set. Track one metric across every pass and a regression shows up as a number going down, not a vague feeling.</FAQItem>
+  <FAQItem question="How many improve cycles should I run before trusting a change?">Three is a reasonable minimum for a single agent task: enough to see whether a metric is trending in one direction or just bouncing around from run-to-run noise. A metric that improves once and drops the next pass is telling you something different than one that climbs three times in a row.</FAQItem>
+</FAQ>
