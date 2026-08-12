@@ -19,7 +19,7 @@ faqs:
   - q: "Are reflection and Reflexion the same thing?"
     a: "Not exactly. Casual 'reflection' usually means asking a model to glance back at its own answer once. Reflexion is a specific, named framework: an actor model attempts a task, a critique step scores what went wrong, and that critique gets carried forward as memory into the next attempt. Reflexion is reflection with structure and persistence."
   - q: "Do frontier reasoning models make these frameworks obsolete?"
-    a: "Partly. Models with built-in extended thinking already run something like an internal search before answering, so a hand-built Tree of Thoughts on top of one is often redundant. These frameworks still earn their cost when you need to see the reasoning, control the search yourself, or you're pairing a cheap model with an expensive judge."
+    a: "Partly. Models with built-in extended thinking already run something like an internal search before answering, so a hand-built Tree of Thoughts on top of one is often redundant. These frameworks still earn their cost when you need to see the reasoning, control the search yourself, or you're pairing a cheap model with an expensive judge, and the same quality-vs-cost tradeoff applies to setting the model's own thinking budget in the first place."
 ---
 
 <ArticleImage
@@ -160,6 +160,6 @@ If a native reasoning model is already available for the task, try that first, w
     Not exactly. Casual "reflection" usually means asking a model to glance back at its own answer once. Reflexion is a specific, named framework: an actor model attempts a task, a critique step scores what went wrong, and that critique gets carried forward as memory into the next attempt. Reflexion is reflection with structure and persistence.
   </FAQItem>
   <FAQItem question="Do frontier reasoning models make these frameworks obsolete?">
-    Partly. Models with built-in extended thinking already run something like an internal search before answering, so a hand-built Tree of Thoughts on top of one is often redundant. These frameworks still earn their cost when you need to see the reasoning, control the search yourself, or you're pairing a cheap model with an expensive judge.
+    Partly. Models with built-in extended thinking already run something like an internal search before answering, so a hand-built Tree of Thoughts on top of one is often redundant. These frameworks still earn their cost when you need to see the reasoning, control the search yourself, or you're pairing a cheap model with an expensive judge, and the same [quality-vs-cost tradeoff](/library/agentic-ai/reasoning-models-and-test-time-compute) applies to setting the model's own thinking budget in the first place.
   </FAQItem>
 </FAQ>
