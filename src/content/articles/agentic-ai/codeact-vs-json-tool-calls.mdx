@@ -1,0 +1,176 @@
+---
+title: "CodeAct vs Tool Calling: When Agents Should Write Code"
+description: "CodeAct lets agents write and run code instead of JSON tool calls, cutting round-trips but adding sandbox risk. Here's how to choose."
+pillar: "agentic-ai"
+slug: "codeact-vs-json-tool-calls"
+difficulty: "advanced"
+readTime: 10
+author: "Hasnat Tariq"
+authorSlug: "hasnat-tariq"
+publisher: "Seekvana"
+reviewedBy: ""
+publishedAt: "2026-08-13"
+lastUpdated: "2026-08-13"
+tags: ["ai-agents", "codeact", "tool-use", "agentic-ai"]
+featured: false
+lessonModule: "17"
+lessonNumber: "17.03"
+faqs:
+  - q: "Is CodeAct the same thing as function calling?"
+    a: "No. Function calling (the tool_use loop from Lesson 17.01) has the model emit one structured JSON request per operation and wait for a result before deciding the next step. CodeAct has the model write and run a short program that can call several tools, loop, and filter results in a single turn."
+  - q: "Does CodeAct replace JSON tool calls entirely?"
+    a: "Rarely in practice. Most production agents keep JSON tool calls for simple, single-step lookups and reach for code execution only when a task needs several chained operations. The two representations coexist in the same stack more often than one fully replaces the other."
+  - q: "Is running agent-generated code actually safe?"
+    a: "Only inside a sandbox with real limits: no unrestricted filesystem or network access, capped resource use, and monitoring on what ran. Code execution without that sandbox is not a minor risk, it's the difference between an agent that can misbehave in a box and one that can misbehave on your production system."
+  - q: "How do I know if my task even needs code execution?"
+    a: "Count the chained steps a single decision requires. If it's one tool, one answer, JSON tool calls are simpler and carry less operational risk. If the model would otherwise need three or more round trips to fetch, filter, and combine results before it can respond, code execution usually wins on turns and tokens."
+---
+
+{/* IMAGE PROMPT: Warm storybook gouache illustration; the cream-white robot at a fork choosing between handing over many small labeled cards (JSON calls) or one small running script-scroll (code action); cozy, cream-to-clay palette. No text in image. | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+
+<ArticleImage src="/images/articles/agentic-ai/codeact-vs-json-tool-calls/cover.webp" alt="A cream-white robot at a fork choosing between handing over many small labeled cards or one small running script" />
+
+I gave an agent a five-step task once: fetch five records, filter the ones matching a condition, summarize what's left. Wired as JSON tool calls, it took five separate round trips, one model turn per step, and by round trip four it had started re-reading a record it already had because the earlier result had scrolled out of its working context. Wired as one piece of code, the same task ran as a single turn: fetch, filter, summarize, done, no chance to lose the thread halfway through.
+
+**CodeAct is an agent design where the model writes and runs a short program to take its next action, instead of emitting one JSON `tool_use` block per operation.** The code can call several tools, loop, and filter results in one turn, which is why it often finishes multi-step tasks in fewer round trips than the JSON version, at the cost of needing a real sandbox to run in. Neither representation is strictly better. This lesson is a framework for choosing, not a verdict.
+
+> **Key Takeaways**
+> - JSON tool calls (Lesson 17.01) hand the model one discrete operation per turn; CodeAct hands it a program that can chain several operations in one turn
+> - The ICML 2024 CodeAct paper measured up to 20% higher task success rates across 17 LLMs, largely from composing operations instead of round-tripping them one at a time
+> - Anthropic's code-execution-with-MCP pattern cut one real workflow from 150,000 tokens to 2,000, a 98.7% reduction, by filtering results inside the sandbox before they reach the model
+> - Code execution's real cost is infrastructure: a secured, resource-limited sandbox with monitoring, which JSON tool calls never need
+> - The right choice depends on how chainable the task is and how much sandboxing risk you're set up to manage, not on which one is "better"
+
+---
+
+## What Is CodeAct? (Code-as-Action, Defined)
+
+CodeAct is the practice of giving an LLM agent executable code as its action space instead of a fixed menu of JSON tool calls, so a single action can be an entire short program rather than one discrete operation.
+
+The name comes from the paper that formalized it: <a href="https://arxiv.org/abs/2402.01030" target="_blank" rel="noopener noreferrer">"Executable Code Actions Elicit Better LLM Agents" (Wang et al., ICML 2024)</a>. The idea is simple once you strip the paper language off it: instead of asking the model to pick one item off a menu of predefined tools and wait for the result, you hand it a code interpreter and let it write whatever program solves the step, calling your tools as functions from inside that code. The model can loop, branch on a condition, and combine several tool outputs before it ever hands control back to you.
+
+This isn't a replacement mechanism bolted onto tool calling, it's a different action representation for the same underlying tools. The tools themselves, and [their descriptions](/library/agentic-ai/designing-good-tools), don't change. What changes is whether the model expresses "do this" as one JSON object or as a program. Mix the two up in your head and you'll misjudge every tradeoff in this lesson: reach for a sandbox on a task that never needed one, or keep paying round-trip costs on a task that would've collapsed into a single code block.
+
+## JSON Tool Calls vs Code Execution: What Actually Changes
+
+The mechanical difference is turn count: JSON tool calls cost one model turn per operation, code execution can fold several operations into a single turn.
+
+Walk through the same multi-tool task both ways and the contrast is concrete, not abstract.
+
+**JSON tool calls vs code execution, side by side**
+
+| | JSON tool calls | Code execution (CodeAct) |
+|---|---|---|
+| One operation per turn | Yes, exactly one `tool_use` block, then wait | No, a whole sequence can run before returning control |
+| Chaining 5 operations | 5 model turns, 5 round trips | Often 1 turn, 1 round trip |
+| Composing results (filter, loop, combine) | Not possible mid-call, must return to the model between each step | Native, it's just code |
+| Context load | Every intermediate result gets appended to the conversation | Intermediate results can be filtered in the sandbox before returning |
+| Execution environment needed | None beyond your existing tool-dispatch code | A sandboxed code interpreter with resource limits |
+| Debuggability | Each step is a discrete, inspectable JSON block | One program to read, but it can hide multi-step logic in a single turn |
+
+{/* IMAGE PROMPT: Warm storybook gouache infographic; left side "JSON Tool Calls" showing the four-step request/tool-responds/model-thinks/repeat loop with a "more turns, higher latency" tag, right side "CodeAct" showing write-and-run-code then return-result with a "fewer turns, lower latency" tag, a cream-white robot standing at the center fork; cozy, cream-to-clay palette. | FILENAME: json-tool-calls-vs-codeact-flow.webp | DIMENSIONS: 1536x1024 */}
+
+<ArticleImage src="/images/articles/agentic-ai/codeact-vs-json-tool-calls/json-tool-calls-vs-codeact-flow.webp" alt="Infographic contrasting the four-step JSON tool-calling loop against CodeAct's single write-and-run-code turn" caption="JSON tool calls repeat a four-step loop per operation; CodeAct folds the same operations into one write-and-run-code turn." />
+
+The mechanism from <a href="/library/agentic-ai/how-tool-calling-works">Lesson 17.01</a> doesn't disappear here, it's still exactly how a single tool gets invoked. What CodeAct changes is what surrounds that mechanism: instead of the model stopping after every `tool_use` block to wait for you, it writes the loop and the filtering logic itself, inside one program, and your tools become functions it calls from within that code. Pick the wrong row of this table for a real task and the cost shows up immediately: a chainable five-step job wired as five JSON round trips burns tokens and latency for no reason, while a single one-shot lookup wired through a code sandbox adds infrastructure risk that buys you nothing.
+
+## Why Code Execution Wins on Multi-Step Tasks
+
+Code execution wins on tasks that need several chained operations, because folding them into one program removes the round trips a JSON tool-call sequence would otherwise pay for at every step.
+
+The CodeAct paper's own numbers back this up directly: across 17 LLMs evaluated on the API-Bank benchmark and a custom multi-tool benchmark, code-as-action agents hit **up to 20% higher task success rates** than JSON- or text-based action formats, mainly because code lets the model compose multiple tool calls, revise an earlier step, and react to a new observation mid-program instead of being limited to one predefined operation per turn.
+
+Anthropic's <a href="https://www.anthropic.com/engineering/code-execution-with-mcp" target="_blank" rel="noopener noreferrer">"Code execution with MCP" writeup</a> makes the same case from a different angle: token cost. Their example workflow dropped from 150,000 tokens to 2,000, a **98.7% reduction**, because the code executing in the sandbox could load only the tool definitions it actually needed and filter a large intermediate result down to the handful of rows that mattered before that result ever touched the model's context. A JSON tool-call sequence can't do that filtering step; every intermediate result has to travel back through the model to get to the next call.
+
+Put plainly: the win shows up specifically when a task is chainable, filterable, or would otherwise cost multiple round trips. A single, one-shot lookup gets none of this benefit, because there's nothing to chain.
+
+## The Real Cost: Sandboxing and Security
+
+Code execution's cost is infrastructure, not compute: running model-generated code safely requires a sandboxed environment with resource limits and monitoring that a JSON tool-call setup never has to build.
+
+<Warning>
+  A JSON tool call can only ever invoke a function you wrote and approved ahead of time, its blast radius is whatever that function does. A code-execution action can, in principle, do anything code can do: read files it shouldn't, make network calls you didn't intend, or loop forever. Anthropic is explicit about this in their own writeup: running agent-generated code "requires a secure execution environment with appropriate sandboxing, resource limits, and monitoring," and that infrastructure is real operational overhead, not a checkbox.
+</Warning>
+
+This is the part most CodeAct explainers skip in favor of the performance numbers. A sandbox worth trusting needs, at minimum:
+
+- No unrestricted filesystem access
+- A capped, monitored network allowlist, if any network access is granted at all
+- A hard resource and time limit, so a runaway loop can't burn your compute budget
+- Logging on what actually executed, not just what the model intended
+
+None of that is optional once you're running real code, and none of it exists for a plain JSON tool-call dispatcher, which only ever runs functions you already wrote and reviewed.
+
+## The Decision Framework: Which One Fits Your Task
+
+Answer four questions about the specific task in front of you, not about your project as a whole, and you'll know which representation to reach for.
+
+<Steps>
+  <Step number={1} title="How many chained operations does one decision actually need?">
+    One tool, one answer? JSON tool calls are simpler and carry less risk, there's nothing to gain from a sandbox here. Three or more operations that depend on each other's output? That's where code execution starts winning on turns and tokens.
+  </Step>
+  <Step number={2} title="Does an intermediate result need filtering before the model sees it?">
+    If a tool can return a large result (a full table, a long document, a big API payload) and only a slice of it matters, code execution can filter that down inside the sandbox first. JSON tool calls always send the full result back to the model.
+  </Step>
+  <Step number={3} title="Do you already have, or can you build, a real sandbox?">
+    Be honest here. If the answer is "not yet," JSON tool calls are the right choice today, even for a chainable task, because an unsandboxed code-execution setup is a bigger risk than a few extra round trips.
+  </Step>
+  <Step number={4} title="Does the task's risk tolerance allow it?">
+    A read-only, low-stakes task (summarizing public data, formatting a report) tolerates code execution's larger blast radius fine inside a sandbox. A task touching sensitive systems deserves the narrower, more auditable JSON tool-call path even if it costs an extra turn or two.
+  </Step>
+</Steps>
+
+If your honest answers land on "one operation, no filtering need, no sandbox yet," you don't need CodeAct for this task, and that's a legitimate outcome of this framework, not a failure to use the fancier option. Most agents in production run both representations side by side: simple lookups as JSON tool calls, chainable data-heavy steps as code execution, chosen per task rather than picked once for the whole system. Both representations sit inside the same [agentic AI toolkit](/library/agentic-ai), not opposite ends of it.
+
+---
+
+## Your Lab
+
+You'll solve the exact task from this lesson's cold open both ways, then measure the difference yourself instead of taking the CodeAct paper's numbers on faith.
+
+<Steps>
+  <Step number={1} title="Set up the task data">
+    In a fresh Python file in Cursor or Claude Code, create five sample records and a tool to fetch them by ID:
+
+    ```python
+    RECORDS = {
+        1: {"name": "Aria Chen", "status": "active", "score": 82},
+        2: {"name": "Marcus Webb", "status": "inactive", "score": 41},
+        3: {"name": "Priya Nair", "status": "active", "score": 95},
+        4: {"name": "Dev Patel", "status": "active", "score": 58},
+        5: {"name": "Lena Ortiz", "status": "inactive", "score": 77},
+    }
+
+    def fetch_record(record_id: int) -> dict:
+        return RECORDS[record_id]
+    ```
+  </Step>
+  <Step number={2} title="Run it as JSON tool calls">
+    Declare `fetch_record` as a tool, then prompt the model: "Fetch records 1 through 5, keep only the ones with status active, and summarize their scores." Count every model turn it takes, including each `tool_use` round trip, until you get a final answer. Log the turn count and total tokens from the API response in `learning-log.md`.
+  </Step>
+  <Step number={3} title="Run it as one code-execution action">
+    Give the model a code interpreter tool instead (or simulate one: let it write a single Python script that calls `fetch_record` five times, filters, and computes the summary in one block, which you then execute yourself and feed back as the result). Count the turns this version takes and log the same numbers.
+  </Step>
+  <Step number={4} title="Compare and decide">
+    In `learning-log.md`, write down both turn counts and both token totals side by side, then state which representation you'd ship for this specific task and why, using the four questions from the decision framework above as your reasoning, not a gut call.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 17.03.
+</Note>
+
+<FAQ>
+  <FAQItem question="Is CodeAct the same thing as function calling?">
+    No. Function calling (the tool_use loop from Lesson 17.01) has the model emit one structured JSON request per operation and wait for a result before deciding the next step. CodeAct has the model write and run a short program that can call several tools, loop, and filter results in a single turn.
+  </FAQItem>
+  <FAQItem question="Does CodeAct replace JSON tool calls entirely?">
+    Rarely in practice. Most production agents keep JSON tool calls for simple, single-step lookups and reach for code execution only when a task needs several chained operations. The two representations coexist in the same stack more often than one fully replaces the other.
+  </FAQItem>
+  <FAQItem question="Is running agent-generated code actually safe?">
+    Only inside a sandbox with real limits: no unrestricted filesystem or network access, capped resource use, and monitoring on what ran. Code execution without that sandbox is not a minor risk, it's the difference between an agent that can misbehave in a box and one that can misbehave on your production system.
+  </FAQItem>
+  <FAQItem question="How do I know if my task even needs code execution?">
+    Count the chained steps a single decision requires. If it's one tool, one answer, JSON tool calls are simpler and carry less operational risk. If the model would otherwise need three or more round trips to fetch, filter, and combine results before it can respond, code execution usually wins on turns and tokens.
+  </FAQItem>
+</FAQ>
