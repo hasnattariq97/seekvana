@@ -83,6 +83,8 @@ Cursor's version works the same way through its Composer: the agent researches t
 
 I've had Claude Code's plan mode catch something a fully autonomous run would have quietly gotten wrong: it proposed editing a config file that looked like the obvious target, but reading the plan closely showed it had picked the wrong environment's copy. That's a five-second fix in a plan and a genuinely annoying rollback in a live diff.
 
+One limit worth naming: the plan lives inside this one session. Close the window and it's gone, with nothing left to review later or hand to a teammate. For anything you want to survive past the conversation that produced it, [a written spec that persists in the repo](/library/agentic-ai/spec-driven-development) is the durable version of the same instinct.
+
 ## The Real Skill: Editing the Plan Before Anything Runs
 
 Reading a generated plan and clicking approve isn't the skill that pays off. Editing it before you approve is.
