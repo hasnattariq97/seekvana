@@ -49,7 +49,7 @@ That word "contract" matters more than it sounds like it should. When you give a
 
 This is the piece most tutorials gloss over by jumping straight to a working code snippet. The snippet works, but it hides the actual handoff: the model **stops**. It doesn't keep generating text and quietly run a function in the background. It ends its turn early, with a specific signal saying "I need this before I can keep going," and waits.
 
-That printed-raw-response moment I mentioned earlier is worth being specific about: the framework I was using logged a single line, `[Tool: search_docs] called`, and nothing about *why*. Only the raw `tool_use` block showed the actual input the model had generated, and from there the fix (a clearer tool description) was obvious in under a minute. The abstraction that's supposed to save you time can also be exactly what hides the bug.
+That printed-raw-response moment I mentioned earlier is worth being specific about: the framework I was using logged a single line, `[Tool: search_docs] called`, and nothing about *why*. Only the raw `tool_use` block showed the actual input the model had generated, and from there the fix, a [clearer tool description](/library/agentic-ai/designing-good-tools), was obvious in under a minute. The abstraction that's supposed to save you time can also be exactly what hides the bug.
 
 <Note>
   If you've read this path's lesson on [the ReAct loop](/library/agentic-ai/react-reason-plus-act), this will feel familiar. ReAct describes how agents call tools at the reasoning level (think, act, observe); tool calling is the specific protocol-level mechanism that makes the "act" step possible.
@@ -137,6 +137,8 @@ What each value tells your code to do:
 <a href="https://platform.claude.com/docs/en/build-with-claude/handling-stop-reasons" target="_blank" rel="noopener noreferrer">Anthropic's full reference on stop reasons</a> covers a couple of rarer values too, but these five cover nearly every turn you'll actually see in a tool-calling loop.
 
 This is why "while `stop_reason == "tool_use"`" is such a clean way to describe the entire agentic loop in one line. Everything the agent does between the first request and the final answer is just that condition staying true. The moment it flips to anything else, the loop is done, whether that's a clean answer or something that needs handling, like a truncated response from `max_tokens`.
+
+One JSON `tool_use` block per turn is the mechanism, but it isn't the only way an agent can act: a model can also write and run code that chains several tool calls into a single turn, see [CodeAct vs JSON tool calls](/library/agentic-ai/codeact-vs-json-tool-calls) for when that trade is worth making.
 
 ---
 
