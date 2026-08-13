@@ -1,0 +1,145 @@
+---
+title: "Decision Journaling: Why Your Agent Needs a Decisions.md"
+description: "A decision log records what you chose, why, and what you rejected, so neither you nor your agent re-argues a settled call. Here's how to build one."
+pillar: "agentic-ai"
+slug: "decision-journaling"
+difficulty: "intermediate"
+readTime: 7
+author: "Hasnat Tariq"
+authorSlug: "hasnat-tariq"
+publisher: "Seekvana"
+reviewedBy: ""
+publishedAt: "2026-08-13"
+lastUpdated: "2026-08-13"
+tags: ["agent memory", "decision log", "adr", "agentic ai"]
+featured: false
+lessonModule: "16"
+lessonNumber: "16.09"
+faqs:
+  - q: "What is a decision log in software development?"
+    a: "A decision log is a plain-text record, usually a markdown file kept in the repository, that captures each significant choice made on a project: what you chose, why, and which alternatives you rejected and why. It exists so nobody, human or AI, has to re-derive or re-argue a settled decision later."
+  - q: "What's the difference between a decision log and an ADR?"
+    a: "They're the same idea under different names. Architecture Decision Records (ADRs) are the older, more formal version of this practice, usually one file per decision. A Decisions.md is a lighter, running version of the same log, often with entries for smaller day-to-day calls an ADR would feel too heavy for."
+  - q: "Where should Decisions.md live in a repo?"
+    a: "Keep it in source control, next to the code it documents, either at the project root or inside the specific feature directory it covers. Never put it in a wiki or a chat thread. If it isn't in the repo, an agent starting a fresh session in that repo will never see it."
+  - q: "Does a decision log replace CLAUDE.md or AGENTS.md?"
+    a: "No. CLAUDE.md and AGENTS.md are standing instruction files: rules the agent follows every session. A decision log is a dated history of specific choices already made. They work together, a CLAUDE.md can even tell the agent to read Decisions.md at the start of every session."
+---
+
+{/* IMAGE PROMPT: Warm storybook gouache illustration; the cream-white robot writing in a bound logbook on a lectern, past entries glowing faintly so a later robot can read them; cozy, cream-to-clay palette. No text in image. | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+
+<ArticleImage src="/images/articles/agentic-ai/decision-journaling/cover.webp" alt="A cream-white robot writing in a glowing logbook on a lectern" />
+
+I've had Claude Code re-propose an approach I'd already rejected two sessions earlier. It wasn't wrong to suggest it. It just had no way of knowing I'd tried it, watched it fail, and moved on. The fix took less time to write than the argument I had to re-make.
+
+A **decision log** is a plain-text file, kept in the repository, that records what you chose, why you chose it, and which alternatives you rejected and why. You write to it once, and every future session, human or [agent](/library/agentic-ai), reads from it instead of re-deriving the same answer from scratch.
+
+> **Key Takeaways**
+> - A decision log captures three things per entry: what you chose, why, and what you rejected
+> - It lives in the repo as a markdown file, never in a wiki or a chat thread
+> - Agents lose all working memory between sessions, which makes a decision log more valuable for them than it ever was for a human team
+> - It's the same practice as an Architecture Decision Record (ADR), just lighter and more frequent
+> - You'll retrofit one onto a real project in this lesson's lab, then prove a fresh agent session can use it
+
+---
+
+## What Is a Decision Log?
+
+A decision log is a dated, running record of the choices made on a project and the reasoning behind each one. Each entry names the decision, the reason it was made, and the alternatives that were considered and turned down.
+
+That last part is the piece most notes files skip. It's easy to write down what you did. It's the *rejected* column that stops someone from re-proposing an approach you already tried and abandoned. A decision log without rejected alternatives is just a changelog with extra steps.
+
+Entries are short. A typical one looks like this:
+
+**Chose:** cap the retry window at 24 hours.
+**Why:** longer windows kept the job queue backed up during a provider outage, delaying unrelated jobs.
+**Rejected:** a 7-day retry window. Tested it first, and it made the backup worse, not better.
+
+That's the whole format. No special tooling required, just a markdown file and the discipline to write three lines when a real decision gets made.
+
+{/* IMAGE PROMPT: Warm storybook gouache illustration; a close-up of an open logbook page with three handwritten labeled lines glowing softly (Chose, Why, Rejected), a small quill resting beside it; cozy, cream-to-clay palette. No text in image beyond the three labels implied by glow shapes. | FILENAME: decisions-md-format.webp | DIMENSIONS: 1200x675 */}
+
+<ArticleImage src="/images/articles/agentic-ai/decision-journaling/decisions-md-format.webp" alt="Close-up illustration of a logbook page with Chose, Why, and Rejected entries" caption="The three fields every decision log entry needs, skipping the rejected column is what turns a log back into a plain changelog." />
+
+## Why Agents "Forget" and Why That's Expensive
+
+Every new agent session starts with no memory of the sessions before it, which is exactly the statelessness problem this path covers in depth later (Module 19). Nothing you argued out with the agent last week carries forward unless it's written somewhere the agent will read again.
+
+That's expensive in a specific way: <a href="https://www.actual.ai/blog/agent-optimized-adrs" target="_blank" rel="noopener noreferrer">an agent cannot read your mind, and it will not reliably infer your architecture from the surrounding code</a>. It doesn't know the simpler version was already tried and rejected. So it "fixes" what looks like unnecessary complexity, and lands you right back in the bug you already solved.
+
+This is the same instinct that makes a [skill worth writing down explicitly](/library/agentic-ai/agent-skills-roles-capabilities) instead of trusting an agent to infer it fresh each time: anything that only lives in your head, or in last week's chat history, doesn't exist to a new session.
+
+A human teammate at least remembers the meeting where you argued about the retry window. A fresh agent session has no meeting to remember. That's not a flaw you can prompt your way around. It's a structural fact about how these sessions work, and it's why a decision log matters more for agent-assisted work than it ever did for an all-human team.
+
+<Tip>
+  The habit that pays off fastest: write the entry the moment you reject an alternative, not after you've moved three tasks further along. By the next day the "why" is already fuzzier than you think.
+</Tip>
+
+## Decisions.md vs Architecture Decision Records: Same Idea, Older Lineage
+
+An <a href="https://adr.github.io/" target="_blank" rel="noopener noreferrer">Architecture Decision Record (ADR)</a> is the formal ancestor of a decision log: one markdown file per significant decision, capturing the context, the choice, and its consequences. Teams have used ADRs for years to keep a paper trail on major architectural calls, long before agents were writing any of the code. <a href="https://aws.amazon.com/blogs/architecture/master-architecture-decision-records-adrs-best-practices-for-effective-decision-making/" target="_blank" rel="noopener noreferrer">Best practice keeps them stored centrally and updated as decisions evolve</a>, the same rule that makes a decision log useful at all.
+
+A `Decisions.md` is the same idea made lighter and more frequent. Instead of one file per big decision, it's a single running log with an entry for anything worth remembering, including smaller calls an ADR would feel too heavy for. Some teams call the agent-focused version of this an Agent Decision Record, but the format underneath hasn't really changed: what, why, what got turned down.
+
+One thing worth clearing up: a decision log is not the same file as your `CLAUDE.md` or `AGENTS.md`. Those are standing instructions the agent follows every session, things like coding conventions or which commands to run. A decision log is a dated history of specific choices already made. The two complement each other, and a good `CLAUDE.md` will even tell the agent to go read the decision log before starting work. Mix them up and you end up either bloating your instructions file with one-off history nobody needs every session, or burying a rule the agent should always follow inside a log entry it might never read twice.
+
+## Retrofitting Decisions.md Onto an Existing Project
+
+You don't need a clean slate to start one. Pick a real project you're already working on, even mid-build, and add the file today.
+
+Put `Decisions.md` at the project root if the log covers the whole project, or inside a feature directory if it's specific to that feature. Either way, it goes into source control alongside the code, so it shows up in the same clone every fresh session opens.
+
+Then work backward. You don't need to reconstruct every decision you've ever made, only the ones a future session, yours or the agent's, would otherwise re-argue. Three or four real entries are worth more than twenty vague ones written to look thorough.
+
+---
+
+## Your Lab
+
+<Steps>
+  <Step number={1} title="Create Decisions.md">
+    In an existing project (use one from an earlier lesson in this path, or any real project you're actively building), create a file named `Decisions.md` at the project root. Add a one-line header: `# Decisions Log`.
+  </Step>
+  <Step number={2} title="Log three real decisions">
+    Write three entries for real choices you've already made on this project. For each, use exactly this shape:
+
+    ```
+    ## [Short decision title]
+    **Chose:** [what you did]
+    **Why:** [the reason]
+    **Rejected:** [an alternative you considered, and why you didn't use it]
+    ```
+
+    If you genuinely can't recall a rejected alternative for one entry, that's a sign the decision was too small to log, swap it for one that had a real fork in the road.
+  </Step>
+  <Step number={3} title="Commit the file">
+    Commit `Decisions.md` to the repo. This step matters: an uncommitted file is a file the next session might not even see, depending on how it's checked out.
+  </Step>
+  <Step number={4} title="Start a fresh Claude Code session">
+    Close your current session entirely and open a brand-new one in the same project, with no prior chat history. Don't paste anything in manually yet.
+  </Step>
+  <Step number={5} title="Ask it to answer from the file alone">
+    In the new session, ask: "Why did we do [X]?", using one of the three decisions you logged. Point it at `Decisions.md` if it doesn't find the file on its own.
+  </Step>
+  <Step number={6} title="Record the proof">
+    Paste the full exchange, your question and the agent's answer, into `learning-log.md`. Add one sentence: did the answer match what you actually decided, using only the file and no memory of your original conversation?
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 16.09.
+</Note>
+
+<FAQ>
+  <FAQItem question="What is a decision log in software development?">
+    A decision log is a plain-text record, usually a markdown file kept in the repository, that captures each significant choice made on a project: what you chose, why, and which alternatives you rejected and why. It exists so nobody, human or AI, has to re-derive or re-argue a settled decision later.
+  </FAQItem>
+  <FAQItem question="What's the difference between a decision log and an ADR?">
+    They're the same idea under different names. Architecture Decision Records (ADRs) are the older, more formal version of this practice, usually one file per decision. A Decisions.md is a lighter, running version of the same log, often with entries for smaller day-to-day calls an ADR would feel too heavy for.
+  </FAQItem>
+  <FAQItem question="Where should Decisions.md live in a repo?">
+    Keep it in source control, next to the code it documents, either at the project root or inside the specific feature directory it covers. Never put it in a wiki or a chat thread. If it isn't in the repo, an agent starting a fresh session in that repo will never see it.
+  </FAQItem>
+  <FAQItem question="Does a decision log replace CLAUDE.md or AGENTS.md?">
+    No. CLAUDE.md and AGENTS.md are standing instruction files: rules the agent follows every session. A decision log is a dated history of specific choices already made. They work together, a CLAUDE.md can even tell the agent to read Decisions.md at the start of every session.
+  </FAQItem>
+</FAQ>
