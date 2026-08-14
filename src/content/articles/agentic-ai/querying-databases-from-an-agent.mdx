@@ -32,6 +32,8 @@ In July 2025, an AI coding agent deleted a real company's production database mi
 
 **The fix is a read-only database role**: a database user account, created specifically for your agent, that the database engine itself refuses to let write, update, or delete anything, no matter what SQL the agent generates or how the prompt is worded. It's what lets an agent query a database safely instead of just politely. You'll wire that role up, connect a real agent to a sample database, and then deliberately try to break it, so you have proof instead of a guess.
 
+If the last lesson had you handling an external API's rate limits and pagination, a database is the other major source of real data an agent reaches for, see <a href="/library/agentic-ai/calling-external-apis-from-an-agent" target="_self">calling external APIs from an agent</a> if you skipped it, the failure modes rhyme even though the fix here is different.
+
 > **Key Takeaways**
 > - The agent learns your database's tables and columns through schema introspection, a tool call, not magic, so you control exactly what it can see.
 > - A prompt telling the agent "don't write to the database" is a suggestion the model can be talked out of; a database role that lacks write privileges is enforced by the engine and can't be persuaded.

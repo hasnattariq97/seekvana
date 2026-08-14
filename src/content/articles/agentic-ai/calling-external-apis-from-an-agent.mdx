@@ -161,6 +161,8 @@ def repo_commit_summary(username, repo):
 
 Call 2 needs the exact repo name from call 1's response before it can run at all; that dependency is the whole point of "chained" calls, and it's also why a single tool-call error partway through a chain is worse for an agent than for a script you're watching. When I first ran this against a repo I didn't expect to be large, it took roughly 40 requests just to paginate through the commit history, which meant two-thirds of my hourly unauthenticated budget was gone before I'd even gotten to testing the rate-limit path on purpose.
 
+An external API is one source of real data for an agent; a SQL database is the other, and it comes with its own guardrail, see <a href="/library/agentic-ai/querying-databases-from-an-agent" target="_self">querying databases from an agent</a> for the read-only role that makes it safe.
+
 ---
 
 ## Your Lab
