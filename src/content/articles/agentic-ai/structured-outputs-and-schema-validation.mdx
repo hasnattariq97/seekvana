@@ -1,0 +1,149 @@
+---
+title: "Structured Outputs LLM: Pydantic, Zod & Validation"
+description: "Structured outputs force an LLM to emit a schema-validated object instead of free text, so malformed data fails loudly instead of breaking your pipeline."
+pillar: "agentic-ai"
+slug: "structured-outputs-and-schema-validation"
+difficulty: "intermediate"
+readTime: 9
+author: "Hasnat Tariq"
+authorSlug: "hasnat-tariq"
+publisher: "Seekvana"
+reviewedBy: ""
+publishedAt: "2026-08-14"
+lastUpdated: "2026-08-14"
+tags: ["structured outputs", "pydantic", "schema validation", "agent pipelines"]
+featured: false
+lessonModule: "17"
+lessonNumber: "17.06"
+faqs:
+  - q: "Is JSON mode the same thing as structured outputs?"
+    a: "No. JSON mode only guarantees the response parses as valid JSON, it says nothing about its shape. Structured outputs go further and guarantee the response matches a schema you define, so the right fields show up, with the right types, every time."
+  - q: "Do I need Pydantic or Zod to use structured outputs?"
+    a: "No, they're a convenience, not a requirement. You can hand-write raw JSON Schema and pass it straight to the API. Pydantic and Zod just let you define that schema as a class in Python or TypeScript, which most developers find faster to write and easier to keep in sync with their code."
+  - q: "Why would a model still return output that fails my schema?"
+    a: "A schema constrains shape, not truth. A model can return a perfectly valid object with a wrong or hallucinated value in a field, because nothing about JSON Schema checks whether a phone number is real or a date makes sense. That's why validation libraries like Pydantic let you add custom checks on top of the type contract."
+  - q: "Should I use Instructor, Outlines, or my provider's native structured output?"
+    a: "Start with your provider's native structured outputs if you're on one provider, since it constrains generation directly and needs no extra library. Reach for Instructor when you need the same Pydantic model to work across multiple providers or want automatic retries on validation failure. Reach for Outlines when you're running an open-source model yourself and need grammar-constrained decoding at the token level."
+---
+
+{/* IMAGE PROMPT: Warm storybook gouache illustration; the cream-white robot pushing shapes through a shaped sorting lid, only correctly-shaped pieces drop through, malformed ones bounce off; cozy, cream-to-clay palette. No text in image. | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+
+<ArticleImage
+  src="/images/articles/agentic-ai/structured-outputs-and-schema-validation/cover.webp"
+  alt="A robot sorting correctly shaped pieces through a lid while malformed ones bounce off"
+  priority
+  isCover
+/>
+
+A lead-extraction agent runs fine in testing: fifty calls, fifty clean records. Ship it, and by the following week it's dropping records at a rate of maybe one in seventy. Nothing crashes. No error gets logged. The agent just occasionally decides a phone number belongs in the notes field instead of the phone field, and the record slides past every downstream check because, technically, the JSON was still valid.
+
+**Structured outputs solve this by forcing a model to emit a typed, schema-validated object instead of free text, so a malformed or mis-shaped response fails loudly at the boundary instead of quietly corrupting whatever reads it next.** That's the whole idea: stop parsing hope out of prose, and start demanding a contract.
+
+> **Key Takeaways**
+> - JSON mode only guarantees valid syntax; structured outputs guarantee the response matches a specific schema, every time.
+> - There are two mechanically different ways to get there: constraining tokens *during* generation, or validating and retrying *after* generation.
+> - Claude's structured outputs are now natively supported through `output_config.format`, replacing the older workaround of forcing a fake tool call.
+> - A schema-valid object can still hold a wrong value; validation catches shape errors, not semantic ones, so libraries like Pydantic let you layer real checks on top.
+> - The right library depends on your setup: native support for a single provider, Instructor for multi-provider portability, Outlines for self-hosted models.
+
+## What Structured Outputs Actually Guarantee
+
+Structured outputs guarantee that a model's response conforms to a schema you define, field names, types, and required fields included, rather than merely being syntactically valid JSON. Those are two very different promises, and conflating them is where most pipelines get into trouble.
+
+"Respond in JSON" and "JSON mode" both check one box: is this text parseable? A model that returns `{"full_name": "Jordan Lee"}` when your code expects a `name` field passes that check and still breaks your webhook. Structured outputs add a second, stricter box: does this object actually match the shape my code is written against?
+
+{/* IMAGE PROMPT: Side-by-side infographic; left panel "JSON Mode (Syntax Only)" showing a robot holding mismatched puzzle pieces next to a JSON object with a wrong field name, labeled "Parses fine. Breaks your pipeline."; right panel "Structured Outputs (Schema-Validated)" showing a robot fitting pieces into a shape-sorter next to a correctly-fielded JSON object, labeled "Schema-validated. Safe to use."; a 4-step "How It Works" strip below (Define Schema, Constrain Generation, Validate & Return, Reliable Data); warm storybook gouache, cream-to-clay palette. | FILENAME: json-mode-vs-structured-outputs.webp | DIMENSIONS: 1600x900 */}
+
+<ArticleImage src="/images/articles/agentic-ai/structured-outputs-and-schema-validation/json-mode-vs-structured-outputs.webp" alt="Infographic contrasting JSON mode, which only guarantees valid syntax, against schema-validated structured outputs" caption="JSON mode only guarantees parseable syntax; structured outputs guarantee the shape underneath it, which is the gap that breaks pipelines silently." />
+
+The mechanism behind that second guarantee is constrained decoding: the API doesn't just ask the model nicely to follow a shape, it restricts which tokens the model is even allowed to produce at each step, so an invalid structure is never generated in the first place. That's the piece that makes this reliable enough to build a pipeline on, instead of a suggestion you hope the model follows.
+
+If you've already covered [schema-driven prompting](/library/prompt-engineering/structured-outputs-prompting) for a single response, this lesson is the next step up: making that same guarantee hold across an entire agent pipeline, not just one call.
+
+## Two Ways to Get There: Constrained Decoding vs. Validate-and-Retry
+
+There are two mechanically distinct approaches to enforcing a schema, and knowing which one you're using changes how you debug a failure.
+
+**Constrained decoding works during generation** by masking out any token that would violate the schema, so the model is physically unable to produce a malformed structure. XGrammar, the engine now used by default in vLLM, SGLang, and TensorRT-LLM as of early 2026, does this with under 40 microseconds of overhead per token, which is cheap enough that there's rarely a reason not to use it when it's available.
+
+**Validate-and-retry works after generation.** The model produces a response as usual, a library like Instructor validates it against your Pydantic model, and if validation fails, the error gets sent back to the model with instructions to try again. This is slower and less absolute than constrained decoding, since the model could in theory exhaust its retries, but it works across any provider and lets you layer in checks a grammar can't express, like "this end date must be after this start date."
+
+<Note>
+  A schema-valid response and a *correct* response aren't the same thing. Constrained decoding stops a model from emitting `{"age": "thirty"}` when your schema wants an integer. It does nothing to stop the model from emitting `{"age": 30}` for someone whose real age is 45. Shape and truth are different problems, and only the second one needs actual validation logic, not just a schema.
+</Note>
+
+## Defining the Contract: Pydantic, Zod, and Raw JSON Schema
+
+A JSON Schema is the underlying contract every one of these tools compiles down to, but you rarely write it by hand. Pydantic in Python and Zod in TypeScript let you define that same contract as a class or type, which is faster to write and stays in sync with the rest of your code.
+
+Here's the same contract that would extract a lead from a chat transcript, defined as a Pydantic model:
+
+```python
+from pydantic import BaseModel, EmailStr
+
+class Lead(BaseModel):
+    name: str
+    email: EmailStr
+    wants_demo: bool
+```
+
+That class is the same discipline covered in [designing good tools for an agent](/library/agentic-ai/designing-good-tools) applied to the other side of the conversation: instead of describing what the agent is allowed to send *in*, you're describing exactly what you'll accept *back*. A vague tool description gets the wrong tool called; a vague output contract gets a technically-valid object your code can't actually use.
+
+## Claude's Native Structured Outputs
+
+Claude now supports structured outputs natively through the `output_config.format` parameter, which constrains the model's final response to a JSON Schema you provide, instead of relying on the older trick of forcing a fake tool call just to get JSON-shaped output.
+
+The older method, still common in tutorials, defines a tool whose `input_schema` describes your desired shape and then sets `tool_choice` to force the model to call it, reading the structured data back out of the `tool_use` block. It works, but it repurposes a mechanism built for something else. Native structured outputs are more direct:
+
+```python
+response = client.messages.parse(
+    model="claude-sonnet-5",
+    max_tokens=1024,
+    messages=[{"role": "user", "content": "Extract the lead info from this message."}],
+    output_format=Lead,
+)
+```
+
+One real limitation worth knowing before you design a schema around it: Claude's structured outputs don't currently support numeric or string-length constraints like `minimum` or `maxLength` directly in the schema. The official <a href="https://platform.claude.com/docs/en/build-with-claude/structured-outputs" target="_blank" rel="noopener noreferrer">Claude structured outputs documentation</a> covers the full list of supported and unsupported JSON Schema keywords, and it's worth a read before you assume a constraint you wrote is actually being enforced at generation time rather than silently dropped.
+
+## Instructor and Outlines: Where Each One Fits
+
+Instructor and Outlines solve the same underlying problem from opposite ends, and picking between them comes down to whether you control the model.
+
+Instructor sits on top of whatever provider you're calling, wrapping the request-response cycle in a validate-and-retry loop: define a Pydantic model, pass it as `response_model`, and if the returned object fails validation, Instructor automatically sends the error back to the model and asks it to correct itself. The <a href="https://python.useinstructor.com/" target="_blank" rel="noopener noreferrer">Instructor documentation</a> lists support for over fifteen providers through one interface. That's the real reason to reach for it: the same Pydantic model works whether you're calling Claude, OpenAI, or a local Ollama model, without rewriting your extraction logic for each one.
+
+Outlines takes the constrained-decoding approach and makes it available for models you're running yourself. It builds a finite-state machine over the model's vocabulary so that, like Claude's native structured outputs, invalid tokens are masked out during generation rather than corrected afterward. That only works when you have direct access to the model's token-generation loop, which is why Outlines is the choice for self-hosted open-source models rather than for calls to a hosted API.
+
+Reach for the wrong one and you'll feel it fast: point Instructor at a self-hosted model with no native structured-output support and you're paying for retries on a model that was never going to get it right without token-level constraints in the first place. Point Outlines at a hosted API and there's no token loop to hook into at all.
+
+## Your Lab: Force a Validated Object, Then Break It On Purpose
+
+<Steps>
+  <Step number="1" title="Define the extraction schema">
+    In Cursor or Claude Code, create a `lead_schema.py` file with a Pydantic model for extracting a lead from messy chat text: `name` (string), `email` (string, must contain `@`), `budget` (integer, must be positive), and `wants_demo` (boolean). Add a custom validator on `email` that rejects anything without an `@` sign, since a bare type hint alone won't catch that.
+  </Step>
+  <Step number="2" title="Wire it to a real call">
+    Have your agent call Claude with `output_config.format` (or Instructor's `response_model`, if you're testing multi-provider portability) set to your schema. Run it once against a clean input: "Hi, I'm Jordan, jordan@example.com, budget's around 5000, yes I'd love a demo." Confirm you get back a validated `Lead` object, not a raw string.
+  </Step>
+  <Step number="3" title="Feed it five malformed inputs">
+    Run the same pipeline against these five inputs, each broken a different way: (1) no email address at all, (2) an email missing the `@`, (3) a budget written as the word "unclear" instead of a number, (4) a message with no `wants_demo` signal either way, (5) a budget given as `-500`. For each one, log whether the pipeline raised a validation error before the bad data reached anything downstream, or let it through.
+  </Step>
+  <Step number="4" title="Commit the results">
+    In `learning-log.md`, record all five outcomes. If any of the five silently passed, that's not a passing lab, it's a gap in your schema, fix the validator and re-run until all five are caught. Commit the schema file and the log together.
+  </Step>
+</Steps>
+
+I ran a version of this same test on an early extraction agent, and the one that got through wasn't the email or the budget. It was a `wants_demo` field the model just guessed as `true` when the transcript never said either way.
+
+The schema was satisfied. The data was invented. That's the exact failure a type check can't catch and a written-out validator can, which is the entire point of doing this by hand once instead of trusting the shape alone.
+
+<Note>
+  Done? You've completed Lesson 17.06.
+</Note>
+
+<FAQ>
+  <FAQItem question="Is JSON mode the same thing as structured outputs?">No. JSON mode only guarantees the response parses as valid JSON, it says nothing about its shape. Structured outputs go further and guarantee the response matches a schema you define, so the right fields show up, with the right types, every time.</FAQItem>
+  <FAQItem question="Do I need Pydantic or Zod to use structured outputs?">No, they're a convenience, not a requirement. You can hand-write raw JSON Schema and pass it straight to the API. Pydantic and Zod just let you define that schema as a class in Python or TypeScript, which most developers find faster to write and easier to keep in sync with their code.</FAQItem>
+  <FAQItem question="Why would a model still return output that fails my schema?">A schema constrains shape, not truth. A model can return a perfectly valid object with a wrong or hallucinated value in a field, because nothing about JSON Schema checks whether a phone number is real or a date makes sense. That's why validation libraries like Pydantic let you add custom checks on top of the type contract.</FAQItem>
+  <FAQItem question="Should I use Instructor, Outlines, or my provider's native structured output?">Start with your provider's native structured outputs if you're on one provider, since it constrains generation directly and needs no extra library. Reach for Instructor when you need the same Pydantic model to work across multiple providers or want automatic retries on validation failure. Reach for Outlines when you're running an open-source model yourself and need grammar-constrained decoding at the token level.</FAQItem>
+</FAQ>

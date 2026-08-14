@@ -97,7 +97,7 @@ def get_records(user_id: str, start_date: str, response_format: str):
     ...
 ```
 
-The second version isn't more code, it's the same function with names that carry their own documentation. Anthropic's writeup makes a related point about the *output* side of a schema too: return human-interpretable fields like `file_type` and `name` instead of raw identifiers like `uuid` or `mime_type` wherever you can, because the agent has to reason over whatever comes back, and cryptic values are just as costly to interpret as cryptic inputs.
+The second version isn't more code, it's the same function with names that carry their own documentation. Anthropic's writeup makes a related point about the *output* side of a schema too: return human-interpretable fields like `file_type` and `name` instead of raw identifiers like `uuid` or `mime_type` wherever you can, because the agent has to reason over whatever comes back, and cryptic values are just as costly to interpret as cryptic inputs. The same discipline, applied to an agent's *own* output instead of a tool's, is what [structured outputs and schema validation](/library/agentic-ai/structured-outputs-and-schema-validation) cover next.
 
 ## Before/After: One Rewrite, Measured
 
