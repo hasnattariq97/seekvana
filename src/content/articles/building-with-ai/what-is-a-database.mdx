@@ -78,7 +78,7 @@ Skip this structure and every later SQL lesson gets harder to follow, because SQ
 
 Here's the payoff for all of this: when people say an <a href="/library/agentic-ai">AI agent</a> has "memory," they don't mean anything mystical is happening inside the model. They mean the backend behind that agent is reading rows out of a database before calling the model, and writing new rows back in after.
 
-A chat app that "remembers" your last conversation is doing exactly what you just saw in the Table Editor: storing each message as a row, then pulling those rows back out the next time you show up. No database, no memory, no matter how capable the model itself is. See exactly [how AI agents use databases](/library/building-with-ai/database-tables-for-agents) for memory in the next lesson, including the specific table shape almost every agent project ends up using.
+A chat app that "remembers" your last conversation is doing exactly what you just saw in the Table Editor: storing each message as a row, then pulling those rows back out the next time you show up. No database, no memory, no matter how capable the model itself is. See exactly [how AI agents use databases](/library/building-with-ai/database-tables-for-agents) for memory in the next lesson, including the specific table shape almost every agent project ends up using. Later on, once an agent is reading real data instead of just its own memory, see [querying databases from an agent](/library/agentic-ai/querying-databases-from-an-agent) for the read-only guardrail every agent-database connection needs.
 
 <Steps>
   <Step number={1} title="Create your first Supabase project">
