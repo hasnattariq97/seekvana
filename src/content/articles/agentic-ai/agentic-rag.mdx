@@ -181,6 +181,8 @@ That's the entire case for agentic RAG in one example: the static pipeline isn't
   A sufficiency check judged by the same model that generated the answer will sometimes rubber-stamp its own incomplete work, especially on questions where "sounds complete" and "is complete" diverge. Watch your `learning-log.md` numbers from the lab below: if two-hop and one-hop give the same wrong answer on a question you know needs two facts, the sufficiency check is the first place to look, not the retrieval step.
 </Warning>
 
+One good compound question proves the upgrade works, but it doesn't tell you how often retrieval is quietly failing across everything else this pipeline handles. That's a measurement problem, not a one-question demo, and it's exactly what [evaluating retrieval](/library/agentic-ai/evaluating-retrieval) with a real eval set covers next.
+
 ## Your Lab
 
 <Steps>

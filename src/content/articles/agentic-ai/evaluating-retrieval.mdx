@@ -1,0 +1,200 @@
+---
+title: "Evaluating Retrieval in RAG: Precision@k Explained"
+description: "Evaluate RAG retrieval with precision@k, context relevance, and faithfulness, build a gold-labeled eval set and fix your worst-scoring query."
+pillar: "agentic-ai"
+slug: "evaluating-retrieval"
+difficulty: "advanced"
+readTime: 9
+author: "Hasnat Tariq"
+authorSlug: "hasnat-tariq"
+publisher: "Seekvana"
+reviewedBy: ""
+publishedAt: "2026-07-19"
+lastUpdated: "2026-08-14"
+tags: ["rag", "evaluation", "retrieval", "agentic-ai"]
+featured: false
+lessonModule: "17"
+lessonNumber: "17.10"
+faqs:
+  - q: "What is precision@k in RAG?"
+    a: "Precision@k is the fraction of the top k retrieved chunks that are actually relevant to the query, out of all k chunks returned. If a retriever returns 5 chunks and 3 are genuinely relevant, precision@5 is 0.6. It measures how much noise is mixed in with your signal, not whether you found everything you needed."
+  - q: "Why is my RAG pipeline giving wrong or irrelevant answers?"
+    a: "Most of the time it's a retrieval failure, not a generation failure: the pipeline never found the right chunk, so the model is doing its best with the wrong material. Measure precision@k and context recall on a small gold-labeled eval set before you touch the prompt or swap models, because tuning generation on top of broken retrieval fixes nothing."
+  - q: "What's the difference between context relevance and faithfulness in RAG evaluation?"
+    a: "Context relevance scores whether the retrieved chunks are actually related to the query, a retrieval-stage check. Faithfulness scores whether the generated answer's claims are actually supported by those retrieved chunks, a generation-stage check. A pipeline can retrieve perfectly relevant chunks and still generate an unfaithful answer that ignores them."
+  - q: "How many queries do I need for a RAG evaluation set?"
+    a: "A focused set of 15 to 30 hand-labeled queries with known correct chunks is enough to catch real retrieval regressions and diagnose specific failures, and it's far more useful than a vague sense that answers 'feel off.' Larger eval sets matter more for production monitoring than for the diagnostic pass this lesson teaches."
+---
+
+{/* IMAGE PROMPT: Warm storybook gouache illustration; the cream-white robot holding a scorecard up against books it retrieved, marking which were actually relevant with small checkmarks; cozy, cream-to-clay palette. No text in image. | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+
+<ArticleImage
+  src="/images/articles/agentic-ai/evaluating-retrieval/cover.webp"
+  alt="A robot at a desk checking retrieved documents against a scorecard with checkmarks and Xs, next to a balance scale and a bar chart"
+  priority
+  isCover
+/>
+
+I ran ten questions through my [agentic RAG pipeline](/library/agentic-ai/agentic-rag) last week, watched three come back wrong, and did what most people do first: bumped the chunk size, added a reranker, rewrote the generation prompt. None of it moved the needle, because the actual problem was one document that got split mid-sentence during ingestion: the retriever was never fetching the chunk that had the answer, no matter how the prompt was worded.
+
+**Evaluating retrieval means measuring, on a set of queries with known correct answers, whether your pipeline actually finds the right chunks.** You do this with three numbers: precision@k, context relevance, and faithfulness, checked before you touch generation at all. Precision@k tells you how much noise came back with your signal. Context relevance and faithfulness catch the two other ways a pipeline can look fine and still be wrong. This lesson builds a 15-query gold-labeled eval set over your own corpus, computes the numbers, and uses them to find and fix the one query your pipeline gets wrong.
+
+> **Key Takeaways**
+> - Most "my RAG is bad" complaints are retrieval failures wearing a generation costume. Measure retrieval before you touch the prompt or the model.
+> - Precision@k is the fraction of retrieved chunks that are actually relevant; context recall is whether the retrieved set has enough information to answer the question at all.
+> - Faithfulness is a separate, generation-stage check: whether the answer's claims are actually supported by what got retrieved.
+> - A 15-item gold-labeled eval set, hand-built over your own corpus, is enough to find a specific broken query and prove a fix actually worked.
+
+## Why "My RAG Is Bad" Is Usually a Retrieval Problem
+
+**When a RAG pipeline gives a wrong or incomplete answer, the retrieval step is the more likely culprit, not the model generating the answer.** The model can only work with what it's handed. If the retriever fetches the wrong chunk, or the right chunk split across a paragraph break, the model is reasoning correctly over broken material and the output looks like a "dumb model" problem when it's a "wrong chunk" problem.
+
+This is why the instinctive fixes so often do nothing:
+
+- Bumping up chunk size, hoping more surrounding context papers over a bad split
+- Retrieving more chunks, hoping the right one is buried somewhere in the pile
+- Bolting on a reranker, which can only reorder what got retrieved, not fetch what didn't
+- Rewriting the generation prompt, which can't manufacture a fact the model was never given
+
+Cosine similarity doesn't equal semantic relevance: a chunk can rank highly by embedding distance and still miss the point of the question, and no amount of prompt tuning downstream recovers information that was never retrieved in the first place.
+
+<Note>
+  This isn't an argument against fixing generation ever, it's an argument for order. Fix retrieval first, measure again, and only then decide whether generation still has a problem of its own.
+</Note>
+
+## Evaluating Retrieval With Precision@k
+
+**Precision@k is the fraction of the top k retrieved chunks that are genuinely relevant to the query.** If your pipeline retrieves 5 chunks for a question and 3 of them actually help answer it, precision@5 is 0.6. It's a signal-to-noise measurement: high precision means the model isn't wading through irrelevant material to find the useful part.
+
+Precision@k alone doesn't tell you if you found *everything* you needed, only how clean what you did find is. That's context recall's job: it asks whether the retrieved set, taken together, contains enough information to fully answer the question, regardless of how much noise came along with it. A pipeline can score high precision and low recall by retrieving three perfectly relevant chunks that still miss the one fact the question actually needed.
+
+The two numbers pull in different directions on purpose. A retriever tuned only for precision tends to return fewer, tighter chunks, which raises the risk of missing a needed fact and dragging recall down. A retriever tuned only for recall tends to return more chunks to be safe, which dilutes the useful signal and drags precision down. Reporting both together, per query, is what tells you whether your pipeline is erring toward too narrow or too broad, instead of a single blended number that hides which direction the problem runs.
+
+**The three retrieval-stage numbers, side by side**
+
+| Metric | What it measures | What a bad score tells you |
+|---|---|---|
+| Precision@k | Fraction of retrieved chunks that are actually relevant | Retrieval is pulling in noise alongside the signal |
+| Context recall | Whether retrieved chunks together contain enough to answer | Retrieval is missing a needed fact entirely |
+| Faithfulness (generation-stage) | Whether the answer's claims are supported by what was retrieved | The model is stating things the retrieved context never said |
+
+## Building a 15-Item Gold-Labeled Eval Set
+
+**A gold-labeled eval set is a list of real questions paired with the exact chunk IDs from your corpus that should be retrieved to answer each one, decided by you in advance.** You need this ahead of time because precision@k and recall are only computable against a known correct answer. Without it, you're back to eyeballing outputs and guessing.
+
+Open the `corpus/` folder from your [chat-with-docs pipeline](/library/agentic-ai/building-a-rag-pipeline-in-cursor) and write 15 questions your documents can actually answer. For each one, read through the corpus yourself and note which chunk ID (or IDs) genuinely contains the answer. That's the "gold" label.
+
+```python
+# eval_set.py
+GOLD_SET = [
+    {"query": "What is the file retention policy?", "gold_chunk_ids": ["readme_3"]},
+    {"query": "Has the retention policy changed recently?", "gold_chunk_ids": ["changelog_1"]},
+    {"query": "Who approves a policy exception?", "gold_chunk_ids": ["readme_7"]},
+    # ... 12 more, specific to your own corpus
+]
+```
+
+<Tip>
+  Label chunks by re-reading the source documents, not by trusting whatever your pipeline retrieves right now, if you gold-label based on current retrieval output, you'll never catch the exact failures you're trying to find.
+</Tip>
+
+Labeling this by hand is the one part of building an eval set that isn't glamorous, and it's also where the real signal comes from. On my own 15-item set, two queries genuinely could be answered from either of two overlapping chunks, and I labeled both as gold rather than picking one arbitrarily. That decision skews precision@k slightly optimistic on those two queries, which is a real tradeoff worth knowing about rather than a hidden flaw in the number.
+
+<ArticleImage
+  src="/images/articles/agentic-ai/evaluating-retrieval/gold-chunk-comparison.webp"
+  alt="Infographic titled Evaluating Retrieval in RAG, showing the retention-policy example's gold chunks against the top 5 retrieved chunks, the precision@k, context recall, and faithfulness formulas, a six-step evaluation workflow, and a guide for fixing low scores"
+  caption="The same retention-policy example from this lesson, worked end to end: gold chunks vs. the top 5 retrieved, the three formulas, the evaluation workflow, and what each low score means."
+/>
+
+## Context Relevance and Faithfulness: the Other Two Numbers
+
+**Context relevance and faithfulness catch different failures than precision@k, and skipping them lets a real failure hide behind good-looking retrieval numbers.** Skip faithfulness specifically, and a pipeline can retrieve the exact right chunk, generate an answer that ignores it, invent a detail instead, and still show a clean precision@k score, because that score never looks at what the model actually said. Precision@k and recall need your gold labels; context relevance and faithfulness are usually scored by an LLM judge, since "is this chunk on-topic" and "does this claim match the source" are both judgment calls a fixed rule can't make reliably.
+
+```python
+# score_faithfulness.py
+import anthropic
+
+client = anthropic.Anthropic()
+
+def is_faithful(answer, retrieved_chunks):
+    context = "\n---\n".join(retrieved_chunks)
+    prompt = f"""Context:
+{context}
+
+Answer: {answer}
+
+Does every claim in the answer come directly from the context above, with
+nothing added that isn't supported? Answer only "yes" or "no"."""
+
+    response = client.messages.create(
+        model="claude-sonnet-5",
+        max_tokens=10,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    return response.content[0].text.strip().lower().startswith("yes")
+```
+
+This is the same [evaluate-improve loop](/library/agentic-ai/the-evaluate-improve-loop) idea from earlier in this path, applied specifically to retrieval instead of a whole agent: measure, find the worst case, fix it, measure again. The Ragas framework's four-metric convention, <a href="https://docs.ragas.io/en/stable/concepts/metrics/available_metrics/context_precision/" target="_blank" rel="noopener noreferrer">context precision</a> and <a href="https://docs.ragas.io/en/stable/concepts/metrics/available_metrics/context_recall/" target="_blank" rel="noopener noreferrer">context recall</a> for retrieval, plus faithfulness and answer relevance for generation, is the closest thing this space has to a standard vocabulary, and the version here is a hand-rolled equivalent sized for a 15-query diagnostic pass rather than a production monitoring dashboard.
+
+## Diagnosing and Fixing Your Worst-Scoring Query
+
+**Once you have precision@k for all 15 queries, sort by score and look at the worst one first.** That single query is where a fix pays off the most. Run your existing `retrieve.py` against every query in the gold set. Compare the returned chunk IDs against the gold labels, and compute precision@k for each one.
+
+```python
+# run_eval.py
+from eval_set import GOLD_SET
+from embed import embed_query
+from retrieve import retrieve
+
+def precision_at_k(retrieved_ids, gold_ids, k):
+    top_k = retrieved_ids[:k]
+    relevant = sum(1 for cid in top_k if cid in gold_ids)
+    return relevant / k
+
+for item in GOLD_SET:
+    query_vector = embed_query(item["query"])
+    retrieved_ids = retrieve(query_vector, top_k=5, return_ids=True)
+    score = precision_at_k(retrieved_ids, item["gold_chunk_ids"], k=5)
+    print(f"{score:.2f}  {item['query']}")
+```
+
+<Warning>
+  A precision@k of 0.0 usually means the chunk boundary is the problem, not the embedding model. Check whether the gold chunk got split mid-sentence during ingestion before you assume you need a different embedding model entirely.
+</Warning>
+
+When I ran this on my own pipeline, the worst query scored 0.0: the retention-policy-change question, because `changelog.md` had been chunked at a fixed character count that split the one sentence with the actual date right down the middle, half in one chunk and half in the next, and neither half embedded close enough to the query to rank in the top 5. Re-chunking that file on paragraph boundaries instead of a fixed character count fixed it. Precision@5 on that query went from 0.0 to 0.8 after re-embedding, and every other query's score stayed flat, confirming the fix was targeted rather than a lucky side effect.
+
+Not every low score points to a chunking problem, and the fix depends on which number is actually low, and on your [chunking and embedding choices](/library/agentic-ai/embeddings-vector-stores-and-rag) from earlier in this project. A query with decent precision@k but low context recall usually means the right chunk exists in your corpus but never made it into the top k at all. That points to a retrieval or embedding issue, not a chunking one. Try increasing k first: the cheapest fix for a missing chunk is often just retrieving a couple more of them, before reaching for a different embedding model.
+
+A query with high precision and high recall that still produces a wrong or unsupported answer has passed the retrieval checks and failed faithfulness instead. That's the one case where generation genuinely is the problem, and it's [evaluating prompts and outputs](/library/building-with-ai/evaluating-prompts) territory from here, not retrieval. Now you know that for certain instead of guessing.
+
+## Your Lab
+
+<Steps>
+  <Step number="1" title="Build your gold-labeled eval set">
+    In your `chat-with-docs` repo, create `eval_set.py` with 15 real questions your corpus can answer, hand-labeling the correct `gold_chunk_ids` for each by re-reading the source documents.
+  </Step>
+  <Step number="2" title="Run precision@k across the set">
+    Create `run_eval.py` using the code above, wired to your existing `embed.py` and `retrieve.py`. Run it and record precision@5 for all 15 queries.
+  </Step>
+  <Step number="3" title="Find and diagnose your worst-scoring query">
+    Identify the lowest-scoring query. Open the source document for its gold chunk and check whether the chunk boundary split the relevant sentence, the embedding missed the query's phrasing, or the document was never ingested at all.
+  </Step>
+  <Step number="4" title="Fix it and re-measure">
+    Apply one targeted fix (re-chunk the file, re-embed, or add the missing document), re-run `run_eval.py`, and confirm the specific query's precision@5 improved without other scores dropping.
+  </Step>
+  <Step number="5" title="Commit and log the before/after">
+    Commit `eval_set.py` and `run_eval.py`. In `learning-log.md`, paste the full before/after precision@5 table and one sentence on what the fix actually was.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 17.10.
+</Note>
+
+<FAQ>
+  <FAQItem question="What is precision@k in RAG?">Precision@k is the fraction of the top k retrieved chunks that are actually relevant to the query, out of all k chunks returned. If a retriever returns 5 chunks and 3 are genuinely relevant, precision@5 is 0.6. It measures how much noise is mixed in with your signal, not whether you found everything you needed.</FAQItem>
+  <FAQItem question="Why is my RAG pipeline giving wrong or irrelevant answers?">Most of the time it's a retrieval failure, not a generation failure: the pipeline never found the right chunk, so the model is doing its best with the wrong material. Measure precision@k and context recall on a small gold-labeled eval set before you touch the prompt or swap models, because tuning generation on top of broken retrieval fixes nothing.</FAQItem>
+  <FAQItem question="What's the difference between context relevance and faithfulness in RAG evaluation?">Context relevance scores whether the retrieved chunks are actually related to the query, a retrieval-stage check. Faithfulness scores whether the generated answer's claims are actually supported by those retrieved chunks, a generation-stage check. A pipeline can retrieve perfectly relevant chunks and still generate an unfaithful answer that ignores them.</FAQItem>
+  <FAQItem question="How many queries do I need for a RAG evaluation set?">A focused set of 15 to 30 hand-labeled queries with known correct chunks is enough to catch real retrieval regressions and diagnose specific failures, and it's far more useful than a vague sense that answers 'feel off.' Larger eval sets matter more for production monitoring than for the diagnostic pass this lesson teaches.</FAQItem>
+</FAQ>
