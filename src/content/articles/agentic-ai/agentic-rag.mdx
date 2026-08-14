@@ -1,0 +1,213 @@
+---
+title: "Agentic RAG: Letting the Agent Decide When to Retrieve"
+description: "Upgrade a static RAG pipeline into agentic RAG: the agent decides when to retrieve, and a second hop fixes what one hop misses."
+pillar: "agentic-ai"
+slug: "agentic-rag"
+difficulty: "advanced"
+readTime: 10
+author: "Hasnat Tariq"
+authorSlug: "hasnat-tariq"
+publisher: "Seekvana"
+reviewedBy: ""
+publishedAt: "2026-07-19"
+lastUpdated: "2026-08-14"
+tags: ["rag", "agentic-ai", "retrieval", "cursor", "claude"]
+featured: false
+lessonModule: "17"
+lessonNumber: "17.09"
+faqs:
+  - q: "What is agentic RAG?"
+    a: "Agentic RAG is retrieval-augmented generation where the agent, not a fixed pipeline, decides whether to retrieve, what to retrieve, and how many times, instead of always running one retrieval pass and generating an answer from it. When the first pass comes back thin, the agent reformulates the query and retrieves again."
+  - q: "How is agentic RAG different from regular RAG?"
+    a: "Regular (static) RAG always retrieves exactly once per question, whether the model needed it or not, and has no way to recover if the retrieved chunks are incomplete. Agentic RAG treats retrieval as a decision inside the agent's loop: it can skip retrieval for a question the model already knows, or run a second, differently-worded query when the first pass doesn't fully answer the question."
+  - q: "Does agentic RAG always need multiple retrieval hops?"
+    a: "No. A well-built agentic RAG step often does zero or one hop, since most real questions are answered by a single well-targeted retrieval. The multi-hop capability only fires for compound questions that genuinely need facts from more than one place, and a working implementation includes a hop limit so it doesn't loop forever chasing a perfect answer."
+  - q: "How do I know if my RAG pipeline needs to be agentic?"
+    a: "If your evaluation queries are all single-fact lookups answerable from one chunk, static RAG is simpler, cheaper, and just as accurate, so there's no reason to add the complexity. Upgrade to agentic RAG once you see compound questions in your real usage, ones that need two or more facts pulled from different parts of the corpus, because a single fixed retrieval pass structurally can't answer those."
+---
+
+{/* IMAGE PROMPT: Warm storybook gouache illustration; the cream-white robot deciding at a shelf whether to grab a book at all, then going back for a second, better book after a first glance; cozy, cream-to-clay palette. No text in image. | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+
+<ArticleImage
+  src="/images/articles/agentic-ai/agentic-rag/cover.webp"
+  alt="A robot deciding at a shelf whether to grab a book, then going back for a second one after a first glance"
+  priority
+  isCover
+/>
+
+I asked the `chat-with-docs` agent from the last lesson a two-part question about its own corpus: what a policy said, and whether a later document had changed it. The pipeline retrieved once, answered the first half correctly, and quietly ignored the second, because the one chunk it fetched never mentioned the update. The answer sounded complete. It wasn't.
+
+**Agentic RAG is retrieval-augmented generation where the agent, not a fixed pipeline, decides whether to retrieve, what to retrieve, and how many times, instead of always running one retrieval pass and handing the result to the model.** When the first pass comes back thin, the agent reformulates the question and retrieves again. This lesson upgrades the [RAG pipeline you built](/library/agentic-ai/building-a-rag-pipeline-in-cursor) into exactly that, and shows one question where the second hop is the only reason the answer is right.
+
+> **Key Takeaways**
+> - Static RAG retrieves exactly once, every time, whether the question needs it or not. Agentic RAG makes retrieval a decision the agent revisits.
+> - The upgrade adds three things to your existing pipeline: a skip-check, a sufficiency-check, and a reformulated second query.
+> - A hop limit is not optional. Without one, a stubborn question can send the agent chasing a "better" retrieval indefinitely.
+> - The proof that this matters isn't theoretical: a real compound question over your own corpus will come back wrong on one hop and right on two.
+> - This is the same repo from the last lesson, upgraded in place. Nothing about the four original files gets rewritten, only extended.
+
+## What Makes Agentic RAG Different From Static RAG?
+
+**Agentic RAG replaces a fixed retrieval sequence with four decisions the agent makes per question: whether to retrieve at all, what query to send, how many times to retrieve, and when to stop.** Static RAG skips all four and always does the same four things: embed the question, retrieve the top three chunks, stuff them into a prompt, generate. That's fine for a question fully answered by one chunk, and breaks silently for anything else, because the pipeline has no way to notice it came back short.
+
+Concretely, the agentic version inserts a check before retrieval (does the model already know this?), a check after retrieval (did this actually answer the question, or only part of it?), and an iterative-retrieval loop that can run the retrieval step again with a reformulated query if the check fails, up to a fixed limit. This is the same decision-and-loop shape you already saw in [plan-and-execute](/library/agentic-ai/plan-and-execute), applied specifically to retrieval instead of general tool use.
+
+**Static RAG vs. agentic RAG, the same four stages**
+
+| Decision | Static RAG (17.08) | Agentic RAG (this lesson) |
+|---|---|---|
+| Whether to retrieve | Always | Only if the model can't already answer confidently |
+| What to retrieve | The original question, verbatim | The original question, or a reformulated follow-up if the first pass was incomplete |
+| How many times | Exactly once | One to N, until the sufficiency check passes or the hop limit is hit |
+| When to stop | After one pass, regardless of quality | When the answer is judged sufficient, or the hop limit is reached |
+
+Nothing about `embed_query`, `retrieve`, or `generate_answer` from the last lesson changes. What's new is a decision layer wrapped around them.
+
+## Teaching the Agent to Skip Retrieval When It Already Knows
+
+Not every question your agent gets asked needs your corpus. "What's 12 times 4?" doesn't, and running a retrieval pass anyway costs an embedding call and adds latency for no benefit. Agentic RAG's first decision is whether to retrieve at all, and skipping it correctly is a real cost win, not just a nicety.
+
+The check is a small model call before anything else runs: ask Claude whether it can answer the question directly, using only what it already knows, with no access to the corpus. If yes, skip retrieval entirely and answer straight from the model.
+
+```python
+# decide.py
+import anthropic
+
+client = anthropic.Anthropic()
+
+def needs_retrieval(question):
+    prompt = f"""Can you answer this question fully and confidently from your own
+knowledge, with no access to any external documents? Answer only "yes" or "no".
+
+Question: {question}"""
+
+    response = client.messages.create(
+        model="claude-sonnet-5",
+        max_tokens=10,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    return response.content[0].text.strip().lower().startswith("no")
+```
+
+This costs one small, fast call, but it's cheaper than the embedding call and retrieval pass it might skip, and it stops the pipeline from dragging in irrelevant chunks for questions your corpus was never meant to answer. The first time I wired this in, the agent kept saying "no, I need retrieval" for questions that were clearly general knowledge, until I tightened the prompt to explicitly ask for full confidence rather than "any relevant" knowledge. A vague skip-check is worse than no skip-check, because it retrieves anyway and just adds a wasted call on top.
+
+<Note>
+  This lesson's decisions run as separate small model calls for clarity. In a production agent you'd fold `needs_retrieval` and the sufficiency check from the next section into the same tool-calling loop from [how tool calling actually works](/library/agentic-ai/how-tool-calling-works), where retrieval is one tool among several the agent can choose to call.
+</Note>
+
+## Building the Second Hop
+
+The real upgrade is what happens after a retrieval pass that doesn't fully answer the question. Static RAG has no concept of "didn't fully answer", it generates from whatever came back and stops. Agentic RAG adds a sufficiency check, and if it fails, reformulates the question and retrieves again.
+
+```python
+# agentic_retrieve.py
+from embed import embed_query
+from retrieve import retrieve
+from generate import generate_answer
+from decide import needs_retrieval
+import anthropic
+
+client = anthropic.Anthropic()
+MAX_HOPS = 2
+
+def is_sufficient(question, answer):
+    prompt = f"""Question: {question}
+Answer: {answer}
+
+Does this answer fully address every part of the question, with no missing piece?
+Answer only "yes" or "no"."""
+
+    response = client.messages.create(
+        model="claude-sonnet-5",
+        max_tokens=10,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    return response.content[0].text.strip().lower().startswith("yes")
+
+def reformulate(question, prior_answer):
+    prompt = f"""This question wasn't fully answered by the first search:
+"{question}"
+
+The partial answer so far: "{prior_answer}"
+
+Write one focused follow-up search query that would find the missing piece."""
+
+    response = client.messages.create(
+        model="claude-sonnet-5",
+        max_tokens=60,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    return response.content[0].text.strip()
+
+def agentic_answer(question, chunks, vectors):
+    if not needs_retrieval(question):
+        return generate_answer(question, [])
+
+    query = question
+    answer = None
+    for hop in range(MAX_HOPS):
+        query_vector = embed_query(query)
+        top_chunks = retrieve(query_vector, vectors, chunks)
+        answer = generate_answer(query, top_chunks)
+
+        if is_sufficient(question, answer):
+            break
+        query = reformulate(question, answer)
+
+    return answer
+```
+
+`MAX_HOPS = 2` is the hop limit, and it's not optional. Without one, a question the corpus genuinely can't answer sends the agent reformulating and retrieving forever, since `is_sufficient` will keep failing no matter how many times it searches. Two hops is enough for a compound two-fact question, which is what most multi-hop retrieval in practice actually needs; raise the limit only if your real queries need more, and always keep a ceiling.
+
+<ArticleImage src="/images/articles/agentic-ai/agentic-rag/second-hop-decision.webp" alt="Infographic titled Agentic RAG: Let the Agent Decide, showing the five-step loop of deciding whether to retrieve, retrieving, generating, checking if the answer is sufficient, and reformulating to retrieve again, compared side by side against static RAG's single-hop path" caption="The full agentic RAG loop next to static RAG's one-hop path: decide, retrieve, generate, check sufficiency, and reformulate for another hop only when the first pass falls short." />
+
+## The Query Where the Second Hop Is Decisive
+
+Here's the question that broke the static pipeline at the top of this lesson, tested against both versions on the same corpus (a project's `README.md` plus a `changelog.md` documenting a later update to that same policy):
+
+**Question:** "What's our current file retention policy, and has it changed recently?"
+
+**Single-hop answer (17.08's static pipeline):** retrieves the top chunk from `README.md`, which states the original policy: "Files are retained for 30 days." It never sees `changelog.md`, because nothing in the question's embedding pulled that chunk into the top 3. The pipeline answers only the first half and states it as if it were the whole answer, wrong by omission.
+
+**Two-hop answer (this lesson's pipeline):** hop one retrieves the same `README.md` chunk and generates the same partial answer. `is_sufficient` correctly flags it as incomplete, since the question explicitly asked about a recent change and the answer says nothing about one. `reformulate` produces a follow-up query like "recent changes to file retention policy," which retrieves the `changelog.md` chunk on hop two: "As of last month, retention was extended to 90 days for compliance." The final answer now states both the original policy and the update, correct.
+
+That's the entire case for agentic RAG in one example: the static pipeline isn't broken, it's just structurally blind to any question that needs a second, differently-worded search. No amount of better prompting fixes that at generation time, because the missing chunk was never retrieved in the first place.
+
+## Where This Can Go Wrong
+
+**Latency and cost stack up fast.** Every hop adds an embedding call, a retrieval pass, and a generation call. The skip-check and sufficiency-check each add their own small call on top. A two-hop answer here costs roughly triple a single static retrieval. That's the right trade for a compound question and a waste for a simple one, which is exactly why the skip-check and hop limit exist rather than always running the full loop.
+
+<Warning>
+  A sufficiency check judged by the same model that generated the answer will sometimes rubber-stamp its own incomplete work, especially on questions where "sounds complete" and "is complete" diverge. Watch your `learning-log.md` numbers from the lab below: if two-hop and one-hop give the same wrong answer on a question you know needs two facts, the sufficiency check is the first place to look, not the retrieval step.
+</Warning>
+
+## Your Lab
+
+<Steps>
+  <Step number="1" title="Add the decision layer">
+    In your `chat-with-docs` repo from the last lesson, create `decide.py` with `needs_retrieval` using the code above. Test it on one question your corpus can't answer (general knowledge) and one it can, and confirm the skip-check gets each one right.
+  </Step>
+  <Step number="2" title="Build the sufficiency check and reformulation">
+    Create `agentic_retrieve.py` with `is_sufficient`, `reformulate`, and `agentic_answer`, wired to your existing `embed.py`, `retrieve.py`, and `generate.py`. Set `MAX_HOPS = 2`.
+  </Step>
+  <Step number="3" title="Write a decisive two-part document pair">
+    Add two short files to your `corpus/`: one stating a policy or fact, and a second stating a change to it, worded differently enough that a single embedding search for the combined question won't retrieve both.
+  </Step>
+  <Step number="4" title="Run the same question through both pipelines">
+    Run your compound question ("what's X, and has it changed?") through `chat.py` (single-hop, from 17.08) and through `agentic_answer` (two-hop). Confirm the single-hop answer misses the change and the two-hop answer catches it.
+  </Step>
+  <Step number="5" title="Commit and log the diff">
+    Commit `decide.py` and `agentic_retrieve.py`. In `learning-log.md`, paste both answers side by side and write one sentence on why the second hop was the one that mattered.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 17.09.
+</Note>
+
+<FAQ>
+  <FAQItem question="What is agentic RAG?">Agentic RAG is retrieval-augmented generation where the agent, not a fixed pipeline, decides whether to retrieve, what to retrieve, and how many times, instead of always running one retrieval pass and generating an answer from it. When the first pass comes back thin, the agent reformulates the query and retrieves again.</FAQItem>
+  <FAQItem question="How is agentic RAG different from regular RAG?">Regular (static) RAG always retrieves exactly once per question, whether the model needed it or not, and has no way to recover if the retrieved chunks are incomplete. Agentic RAG treats retrieval as a decision inside the agent's loop: it can skip retrieval for a question the model already knows, or run a second, differently-worded query when the first pass doesn't fully answer the question.</FAQItem>
+  <FAQItem question="Does agentic RAG always need multiple retrieval hops?">No. A well-built agentic RAG step often does zero or one hop, since most real questions are answered by a single well-targeted retrieval. The multi-hop capability only fires for compound questions that genuinely need facts from more than one place, and a working implementation includes a hop limit so it doesn't loop forever chasing a perfect answer.</FAQItem>
+  <FAQItem question="How do I know if my RAG pipeline needs to be agentic?">If your evaluation queries are all single-fact lookups answerable from one chunk, static RAG is simpler, cheaper, and just as accurate, so there's no reason to add the complexity. Upgrade to agentic RAG once you see compound questions in your real usage, ones that need two or more facts pulled from different parts of the corpus, because a single fixed retrieval pass structurally can't answer those.</FAQItem>
+</FAQ>
