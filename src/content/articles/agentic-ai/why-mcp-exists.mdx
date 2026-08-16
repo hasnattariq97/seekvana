@@ -1,0 +1,139 @@
+---
+title: "Why MCP Exists: Solving AI's N×M Integration Problem"
+description: "MCP solves AI's N×M integration problem: one protocol instead of a custom connector per tool per model. Here's why every major lab adopted it."
+pillar: "agentic-ai"
+slug: "why-mcp-exists"
+difficulty: "intermediate"
+readTime: 9
+author: "Hasnat Tariq"
+authorSlug: "hasnat-tariq"
+publisher: "Seekvana"
+reviewedBy: ""
+publishedAt: "2026-07-19"
+lastUpdated: "2026-08-16"
+tags: ["mcp", "agentic-ai", "ai-standards"]
+featured: false
+lessonModule: "18"
+lessonNumber: "18.01"
+faqs:
+  - q: "What problem does MCP solve?"
+    a: "MCP solves the N×M integration problem: without it, every AI application needs a custom-built connector for every tool or data source it wants to use, so the number of integrations multiplies with every new app and every new model. MCP replaces all of those one-off connectors with a single protocol, so any MCP-speaking client can use any MCP-speaking server without custom code."
+  - q: "Why does MCP exist?"
+    a: "MCP exists because before it, connecting an AI model to a database, an API, or a file system meant writing custom glue code for that specific model and that specific tool, and repeating the work for every other model you wanted to support. Anthropic built MCP in 2024 to make that connection a one-time, reusable standard instead of a permanent maintenance burden."
+  - q: "Who created the Model Context Protocol?"
+    a: "Anthropic created MCP and open-sourced it in November 2024. Engineers David Soria Parra and Justin Spahr-Summers built the original protocol, and Anthropic released the first Python and TypeScript SDKs alongside the spec."
+  - q: "Is MCP only for Claude?"
+    a: "No. MCP started at Anthropic, but OpenAI adopted it across ChatGPT in March 2025, Google DeepMind added support for Gemini in April 2025, and in December 2025 Anthropic donated the protocol to the Linux Foundation's new Agentic AI Foundation, making it a vendor-neutral industry standard governed outside any single company."
+---
+
+{/* IMAGE PROMPT: Warm storybook gouache illustration; on the left a tangled web of many cables between little app-huts and model-orbs, on the right one tidy central hub connecting them all; the cream-white robot looking relieved; cozy, cream-to-clay palette. No text in image. | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+
+<ArticleImage src="/images/articles/agentic-ai/why-mcp-exists/cover.webp" alt="A tangled web of integration cables on one side and a single tidy hub on the other, with a relieved robot" />
+
+You just spent an afternoon wiring one tool call by hand: a schema, an execute function, a result you append back into the conversation. It worked. Then you thought about doing that same wiring for a second tool. And a third. And then for the next model you want to support, because none of that code carries over.
+
+**MCP, the Model Context Protocol, solves exactly that problem: it replaces the custom, one-off connector you'd otherwise write for every tool-and-model pairing with a single standard that any MCP-speaking app can use to talk to any MCP-speaking server.** Instead of writing N×M integrations, you write N+M. It's the connective layer that lets an [AI agent](/library/agentic-ai) reach any tool without a bespoke integration, and it's not just an Anthropic thing anymore.
+
+> **Key Takeaways**
+> - Without a shared protocol, connecting M AI apps to N tools requires N×M custom integrations, and that number explodes as either side grows
+> - MCP turns N×M into N+M: each tool builds one MCP server, each app builds one MCP client, and every combination works automatically
+> - Anthropic open-sourced MCP in November 2024; OpenAI adopted it in March 2025 and Google DeepMind in April 2025
+> - In December 2025, Anthropic donated MCP to the Linux Foundation's new Agentic AI Foundation, making it vendor-neutral, not a Claude feature
+> - You already touched the exact pain MCP fixes back in [Lesson 17.01](/library/agentic-ai/how-tool-calling-works), when you wired one tool call by hand
+
+---
+
+## What Problem Does MCP Solve?
+
+MCP solves the N×M integration problem: the number of custom connectors you need grows with every app times every tool, instead of staying flat as either side scales.
+
+Picture three AI apps your team might use: a coding assistant, a chat client, and an internal support agent. Now picture three things those apps need to reach: a Postgres database, a Slack workspace, and a GitHub repo. Before MCP, wiring all three apps to all three tools means nine separate integrations. Each one needs its own auth model, its own schema, its own retry logic.
+
+Add a fourth app and you're not adding one integration, you're adding three, one for each existing tool.
+
+One developer building a Slack integration for a coding assistant might spend a full week getting the auth flow and schema right. Rebuild that same integration for a different chat client, with a different SDK and a different tool-calling format, and it's another week. The underlying capability, "post a message to Slack," hasn't changed at all.
+
+Multiply that by every tool an organization actually uses and the math turns brutal fast. Real estimates for enterprises running five AI systems against twenty tools put the integration cost at $50,000 to build and $15,000 a year to maintain, per tool, per app.
+
+## How MCP Turns N×M Into N+M
+
+MCP fixes the multiplication by making each side implement the protocol exactly once instead of once per pairing.
+
+A tool builder (say, the team maintaining a Postgres connector) writes one MCP server that exposes what that database can do, following the shared spec. An app builder (say, the team building a coding assistant) writes one MCP client that knows how to talk to any MCP server.
+
+Now that Postgres server works with every MCP-speaking app, and that coding assistant can reach every MCP-speaking tool, with zero additional integration work on either side. Three apps and three tools drop from nine connectors to six things built once, and the gap only widens as you add more of either.
+
+<Tip>
+An integration that used to take eight weeks and roughly $80,000 in engineering time can become available immediately once both sides already speak MCP. That's not a marginal efficiency gain, it's the difference between a capability shipping this quarter or getting cut from the roadmap.
+</Tip>
+
+**Before/after MCP: connecting 3 apps to 3 tools**
+
+| Approach | Integrations needed | What each one requires |
+|---|---|---|
+| Custom, pre-MCP | 9 (3 apps × 3 tools) | Its own auth, schema, and error handling, rebuilt per pairing |
+| MCP | 6 (3 clients + 3 servers) | Built once per side, reused automatically across every pairing |
+
+{/* IMAGE PROMPT: Warm storybook gouache illustration; a small side-by-side diagram panel — left panel shows nine tangled threads connecting three app-huts to three model-orbs, right panel shows the same six shapes each with one clean thread running into a single central hub; cream-to-clay palette, no text in image. | FILENAME: n-times-m-integration-diagram.webp | DIMENSIONS: 1200x675 */}
+
+<ArticleImage src="/images/articles/agentic-ai/why-mcp-exists/n-times-m-integration-diagram.webp" alt="Side-by-side diagram comparing nine tangled pre-MCP integrations to six clean MCP connections through a central hub" caption="Nine custom connectors before MCP shrink to six things built once — a client per app, a server per tool." />
+
+You've probably heard MCP called "USB-C for AI," and now you can see why the analogy actually holds instead of just sounding catchy: USB-C didn't make any single device better, it made every device pluggable into every port without a custom cable for each combination. MCP does the same thing for the connection between a model and the tools it needs.
+
+## MCP's Origin: Anthropic, November 2024
+
+MCP started as an internal Anthropic project to solve its own version of this problem, and the company <a href="https://www.anthropic.com/news/model-context-protocol" target="_blank" rel="noopener noreferrer">open-sourced it in November 2024</a>.
+
+Anthropic released the spec (version 2024-11-05) along with the first Python and TypeScript SDKs, built by engineers David Soria Parra and Justin Spahr-Summers. The pitch was direct: instead of every lab building and maintaining bespoke connectors to every database, API, and internal tool, define one protocol and let the ecosystem build servers against it once.
+
+Within a few months, over a thousand community-built MCP servers already existed, covering everything from filesystems to project-management tools.
+
+## Why Every Major Lab Adopted It in 2025
+
+Every major AI lab adopted MCP within months of launch because the N×M math doesn't care which model you're using. OpenAI and Google faced the exact same integration multiplication Anthropic did, and a shared protocol was cheaper for all three than three incompatible ones.
+
+OpenAI added MCP support across ChatGPT Desktop and its API in March 2025. Google DeepMind confirmed MCP support for Gemini the following month. Microsoft, AWS, Cloudflare, and Bloomberg joined as backers over the course of 2025, and by year's end the ecosystem had grown to more than 16,000 MCP servers.
+
+I've watched my own MCP configuration go from "one server I added by hand for one project" to a set of servers I now reuse across nearly every repo I touch, without writing a single line of new integration code for any of them. That's the protocol doing exactly what it was built to do.
+
+## MCP Is Now Vendor-Neutral: The Linux Foundation Move
+
+MCP is no longer an Anthropic-owned standard. In December 2025, Anthropic donated it to the newly formed Agentic AI Foundation (AAIF), a directed fund under the Linux Foundation.
+
+The <a href="https://www.linuxfoundation.org/press/linux-foundation-announces-the-formation-of-the-agentic-ai-foundation" target="_blank" rel="noopener noreferrer">AAIF launched on December 9, 2025</a>, co-founded by Anthropic, Block, and OpenAI, with Google, Microsoft, AWS, Cloudflare, and Bloomberg named as supporters. MCP became a founding project alongside Block's `goose` agent framework and OpenAI's `AGENTS.md` convention. That's a meaningful governance shift: a protocol now sits under a vendor-neutral foundation, co-steered by companies that compete directly with each other everywhere else, because none of them wanted to bet their tool ecosystem on a rival's roadmap.
+
+<Note>
+This is exactly why "which lab built it" stopped mattering for MCP. A protocol governed by a foundation with competing companies at the table is far harder for any single vendor to quietly change in their own favor than one owned outright by its inventor.
+</Note>
+
+For you as a builder, this means the servers and clients you build in the next several lessons aren't tied to Anthropic's roadmap alone; they follow a spec that OpenAI, Google, and the rest of the industry are also committed to maintaining. That's the whole point of a standard, and it's why the next eleven lessons in this module are worth the depth they go into.
+
+---
+
+## Your Lab
+
+<Steps>
+  <Step number={1} title="Diagram the before state">
+    In a new markdown file in Cursor, sketch a 3-app × 3-model integration matrix: list three AI apps (pick any real ones, or use "coding assistant," "chat client," "support agent") down one side and three models or tools across the top. Draw a line for every custom connector the pre-MCP world would require. Count them.
+  </Step>
+  <Step number={2} title="Diagram the after state">
+    Below it, sketch the same 3×3 grid as it looks with MCP: each app builds one client, each tool builds one server, and every pairing connects through the shared protocol. Count the total pieces built (clients + servers, not connections).
+  </Step>
+  <Step number={3} title="Quantify the reduction at scale">
+    Write out the formula for N apps and M tools both ways: N×M for the custom-integration world, N+M for the MCP world. Calculate both at N=10, M=10, and again at N=50, M=50. Write one sentence on how fast the gap widens.
+  </Step>
+  <Step number={4} title="Commit it">
+    Save the file as `learning-log.md` in a fresh repo (or append to an existing one if you already started one in Module 17) and commit it with a message like "18.01: N×M vs N+M diagram."
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 18.01.
+</Note>
+
+<FAQ>
+  <FAQItem question="What problem does MCP solve?">MCP solves the N×M integration problem: without it, every AI application needs a custom-built connector for every tool or data source it wants to use, so the number of integrations multiplies with every new app and every new model. MCP replaces all of those one-off connectors with a single protocol, so any MCP-speaking client can use any MCP-speaking server without custom code.</FAQItem>
+  <FAQItem question="Why does MCP exist?">MCP exists because before it, connecting an AI model to a database, an API, or a file system meant writing custom glue code for that specific model and that specific tool, and repeating the work for every other model you wanted to support. Anthropic built MCP in 2024 to make that connection a one-time, reusable standard instead of a permanent maintenance burden.</FAQItem>
+  <FAQItem question="Who created the Model Context Protocol?">Anthropic created MCP and open-sourced it in November 2024. Engineers David Soria Parra and Justin Spahr-Summers built the original protocol, and Anthropic released the first Python and TypeScript SDKs alongside the spec.</FAQItem>
+  <FAQItem question="Is MCP only for Claude?">No. MCP started at Anthropic, but OpenAI adopted it across ChatGPT in March 2025, Google DeepMind added support for Gemini in April 2025, and in December 2025 Anthropic donated the protocol to the Linux Foundation's new Agentic AI Foundation, making it a vendor-neutral industry standard governed outside any single company.</FAQItem>
+</FAQ>
