@@ -59,7 +59,7 @@ Multiply that by every tool an organization actually uses and the math turns bru
 
 MCP fixes the multiplication by making each side implement the protocol exactly once instead of once per pairing.
 
-A tool builder (say, the team maintaining a Postgres connector) writes one MCP server that exposes what that database can do, following the shared spec. An app builder (say, the team building a coding assistant) writes one MCP client that knows how to talk to any MCP server.
+A tool builder (say, the team maintaining a Postgres connector) writes one MCP server that exposes [what that database can do](/library/agentic-ai/mcp-three-primitives), following the shared spec. An app builder (say, the team building a coding assistant) writes one MCP client that knows how to talk to any MCP server.
 
 Now that Postgres server works with every MCP-speaking app, and that coding assistant can reach every MCP-speaking tool, with zero additional integration work on either side. Three apps and three tools drop from nine connectors to six things built once, and the gap only widens as you add more of either.
 
