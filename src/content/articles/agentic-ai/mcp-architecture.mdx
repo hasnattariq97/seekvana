@@ -108,6 +108,8 @@ Streamable HTTP turns the server into a real network service, reachable at a URL
 
 **The decision in one line:** start with stdio while you're prototyping alone, move to Streamable HTTP the moment a second person, a second machine, or an auth requirement shows up.
 
+Registering either transport with a host is a one-line command in Claude Code; see [adding MCP servers to Claude Code](/library/agentic-ai/adding-mcp-servers-to-claude-code) for the exact syntax and how project scope shares that config with a team.
+
 ## A Request's Full Lifecycle, Traced
 
 Theory is easy to nod along to and hard to debug against. Here's what an actual tool call looks like as it crosses the host → client → server boundary and comes back.
