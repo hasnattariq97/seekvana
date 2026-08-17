@@ -150,7 +150,7 @@ Inside a session, `/mcp` shows the same status list plus the option to re-authen
 
 <Steps>
   <Step number={1} title="Register the same server at project scope">
-    Take the MCP server you added to Cursor in 18.04 (a Postgres or filesystem server) and register it in Claude Code with `--scope project`, using an environment variable for any credential instead of a literal value.
+    Take the MCP server you added to Cursor in [18.04](/library/agentic-ai/adding-mcp-servers-to-cursor) (a Postgres or filesystem server) and register it in Claude Code with `--scope project`, using an environment variable for any credential instead of a literal value.
   </Step>
   <Step number={2} title="Commit .mcp.json">
     Commit the resulting `.mcp.json` to your repo. Confirm the file itself contains no raw secret, only the `${VAR}` reference in its place.
