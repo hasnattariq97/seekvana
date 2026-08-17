@@ -151,6 +151,8 @@ It calls `run_query` with a `SELECT`, gets rows back, and answers normally. Then
 
 The agent will generate an `INSERT` statement and call `run_query` with it, same as any other tool call, and the database will refuse it. That rejection, not the agent's compliance, is the thing you're actually testing.
 
+Keep this sample database around. Later in the path, when you [register an MCP server for it in Cursor](/library/agentic-ai/adding-mcp-servers-to-cursor), you'll reuse this exact schema and role instead of building a new one from scratch.
+
 <ArticleImage src="/images/articles/agentic-ai/querying-databases-from-an-agent/agent-database-flow.webp" alt="Diagram of an AI agent discovering a schema, querying data, and having a write blocked by a read-only database role" caption="The whole flow in one picture: discover the schema, query safely, and watch a write get rejected by the role itself, not the prompt." />
 
 ## Your Lab
