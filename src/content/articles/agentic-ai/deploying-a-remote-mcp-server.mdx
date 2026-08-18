@@ -1,0 +1,140 @@
+---
+title: "Deploy a Remote MCP Server: stdio to Streamable HTTP"
+description: "Deploy your MCP server remotely over Streamable HTTP, host it somewhere always-on, and validate every tool with the MCP Inspector before trusting it."
+pillar: "agentic-ai"
+slug: "deploying-a-remote-mcp-server"
+difficulty: "advanced"
+readTime: 10
+author: "Hasnat Tariq"
+authorSlug: "hasnat-tariq"
+publisher: "Seekvana"
+reviewedBy: ""
+publishedAt: "2026-07-19"
+lastUpdated: "2026-08-18"
+tags: ["mcp", "fastmcp", "agentic-ai", "deployment"]
+featured: false
+lessonModule: "18"
+lessonNumber: "18.09"
+faqs:
+  - q: "What's the difference between stdio and Streamable HTTP for MCP?"
+    a: "Stdio means your host starts the server as a local subprocess and talks to it over stdin/stdout, so only that one machine can ever reach it. Streamable HTTP means the server runs as its own independent process behind a single network endpoint, so any client with the URL can connect, whether that's your laptop, a teammate's, or a deployed agent."
+  - q: "Do I need to rewrite my tools to deploy an MCP server remotely?"
+    a: "No. MCP's transport is separate from your tool logic, so add_note, search_notes, and the rest of your FastMCP decorators don't change at all. The only edit is how the server starts: swap mcp.run() for mcp.run(transport=\"http\", host=\"0.0.0.0\", port=...) or serve mcp.http_app() behind an ASGI server."
+  - q: "Why did my MCP Inspector connection time out right after I deployed?"
+    a: "Free-tier hosts commonly spin down an idle server and take several seconds to wake it back up on the next request, a cold start. If your first Inspector call after deploying times out but a second attempt a few seconds later succeeds, that's almost always a cold start, not a broken deployment."
+  - q: "Is the MCP Inspector required, or can I just trust that deployment worked?"
+    a: "Treat it as required. A server can start successfully, respond to a health check, and still have a tool that's silently broken over the network transport in a way it wasn't over stdio. The Inspector lets you call tools/list and then invoke each tool, resource, and prompt by hand, so you confirm the deployed server actually works before an agent depends on it."
+---
+
+<ArticleImage src="/images/articles/agentic-ai/deploying-a-remote-mcp-server/cover.webp" alt="A robot lifting its server hut onto a hill with an antenna, checking each tool through an inspector lens" />
+
+I deployed `notes_server.py` to a free-tier host, pointed the MCP Inspector at the live URL, and hit Connect. Ten seconds passed, then Inspector reported the server unreachable, while the host's own deploy log insisted everything had started fine.
+
+**To deploy a remote MCP server, you switch its transport from stdio, a local subprocess only your machine can start, to Streamable HTTP, a single network endpoint any client can reach, host that endpoint somewhere always-on, and then confirm every tool, resource, and prompt still works by calling them through the MCP Inspector before you trust the deployment.** The [server you built in the last lesson](/library/agentic-ai/building-an-mcp-server-with-fastmcp) already does everything it needs to; the only thing missing is a way for anyone besides you to reach it.
+
+> **Key Takeaways**
+> - Streamable HTTP replaces the old HTTP+SSE transport, deprecated in the 2025-03-26 MCP spec, and is now the standard way to reach an MCP server over a network
+> - Switching transports is a one-line change to how the server starts, not a rewrite of any tool, resource, or prompt
+> - A server that starts and passes a health check can still fail silently on individual tool calls, which is why Inspector validation is a separate, required step
+> - Free-tier hosts commonly sleep an idle server, so the first request after deploying can look like a broken deployment when it's actually a cold start
+> - The reader's own 18.07 server, `notes_server.py`, is what gets deployed here, not a new example
+
+---
+
+## Why stdio Stops Working the Moment You Need to Share Your Server
+
+Stdio ties your server's entire lifecycle to one process on one machine, which is exactly why `claude mcp add notes-server -- python notes_server.py` worked so cleanly in the last lesson. Claude Code started `notes_server.py` as a child process, wrote to its stdin, and read its stdout, all on your laptop.
+
+That's also stdio's ceiling. The moment you want to call your server from a different machine, hand it to a teammate, or let a deployed agent reach it, there's no process for anything else to start, because the process only exists on your computer while your session is open. [MCP's architecture lesson](/library/agentic-ai/mcp-architecture) covered stdio and Streamable HTTP as the protocol's two transports; this is the lesson where that distinction stops being theoretical.
+
+<ArticleImage src="/images/articles/agentic-ai/deploying-a-remote-mcp-server/stdio-vs-streamable-http-deployment.webp" alt="Diagram comparing stdio, a single local process reachable only from one laptop, against Streamable HTTP, one hosted server reachable from multiple devices over a shared URL" caption="Stdio ties your server to one process on one machine; Streamable HTTP puts it behind one URL any client can reach." />
+
+## Switching notes_server.py from stdio to Streamable HTTP
+
+Streamable HTTP serves your server behind one URL that any client can reach, and the switch touches exactly one line: how the server starts, not what it does.
+
+```python
+# Before — stdio, local only
+if __name__ == "__main__":
+    mcp.run()
+```
+
+```python
+# After — Streamable HTTP, reachable from anywhere
+if __name__ == "__main__":
+    mcp.run(transport="http", host="0.0.0.0", port=8000)
+```
+
+`host="0.0.0.0"` binds the server to every network interface on the machine it runs on, instead of only `localhost`, and `port=8000` is just the port that URL listens on. By default the server answers at `http://<your-host>:8000/mcp`. Everything decorated with `@mcp.tool`, `@mcp.resource`, or `@mcp.prompt` in `notes_server.py`, meaning `add_note`, `search_notes`, `notes://all`, and `summarize_notes`, keeps working exactly as written, because FastMCP separates the transport from the capability. You're not touching a single function signature.
+
+For a production deployment, serve the ASGI app directly instead of calling `mcp.run()` yourself:
+
+```python
+app = mcp.http_app()
+# run with: uvicorn notes_server:app --host 0.0.0.0 --port 8000
+```
+
+If you expect more than one instance of your server running behind a load balancer, add `stateless_http=True` to the `FastMCP` constructor. Without it, a client's session can get pinned to one instance's memory, and a request routed to a different instance won't find it.
+
+The same goes for the [client you wrote in the last lesson](/library/agentic-ai/building-an-mcp-client): swap its stdio connection parameters for the deployed URL, and every line of `list_tools`/`call_tool` code keeps working unchanged, because MCP's transport is decoupled from both sides of the connection, not just the server.
+
+## Deploying It Somewhere Reachable
+
+Deploying means running that same `notes_server.py`, now on Streamable HTTP, on a host that stays up when your laptop doesn't, and that's true whether you pick a free-tier platform built for small Python apps or a full cloud VM. Pick whichever free-tier host your <a href="https://gofastmcp.com/deployment/http" target="_blank" rel="noopener noreferrer">FastMCP-supported deployment target</a> already documents, push the repo you committed in the last lesson, and set the start command to your `uvicorn` line.
+
+<Warning>
+  The first request after a deploy on a free-tier host can time out even when nothing is broken. Most free tiers spin an idle server down after a few minutes of no traffic and take several seconds to wake it back up on the next request, a cold start. If your very first Inspector connection attempt fails but a second attempt thirty seconds later succeeds, that's the cold start, not a bad deployment, and it's worth checking before you start debugging code that already works.
+</Warning>
+
+That's precisely what happened to me the first time: the deploy log said the process was healthy, but the platform had already put it to sleep by the time I opened Inspector, and my first connection attempt hit that gap. A second attempt, moments later, connected instantly, and every tool responded normally after that. If you're on a host with a configurable idle timeout, raising it removes the surprise entirely; if you're not, just expect the first call after any quiet stretch to be slower than the rest and don't mistake that for a broken deploy. Note the live URL your host gives you; you'll need it for the Inspector and for the reader who's about to connect from a fresh machine in your lab.
+
+For deployment fundamentals like environment variables, build commands, and what "always-on" actually costs on a free tier, [Getting Started's deployment section](/paths/getting-started) covers that ground; this lesson only covers what's MCP-specific on top of it.
+
+## Validating Every Tool with the MCP Inspector
+
+The MCP Inspector is the standard tool for calling a server's tools, resources, and prompts by hand, without an agent in the loop, and it's how you confirm a deployment actually works rather than just started. Run it from your terminal:
+
+```bash
+npx @modelcontextprotocol/inspector
+```
+
+In the Inspector UI, choose the `streamable-http` transport from the dropdown, paste your deployed server's `/mcp` URL, and connect. Once connected, call `tools/list` first to confirm `add_note` and `search_notes` both appear with their full schemas intact, then invoke each one directly: add a note, then search for it, and confirm the returned data matches what you'd expect. Check the resource too, `notes://all` should return every note you've added so far, and try the `summarize_notes` prompt to confirm it still returns its templated request text over the network.
+
+A server can pass a basic health check and still have a tool that's quietly broken only over the network transport, in a way it never was locally over stdio, which is exactly why this step isn't optional. If the <a href="https://github.com/modelcontextprotocol/inspector" target="_blank" rel="noopener noreferrer">Inspector</a> connects but the transport drops immediately after, that's almost always a bug in how the server's HTTP app is wired, not a client-side misconfiguration, so check your `mcp.run()` or `http_app()` call before you touch anything on the Inspector side.
+
+**Stdio vs Remote MCP: what actually changes**
+
+| Dimension | Stdio | Streamable HTTP (remote) |
+|---|---|---|
+| Who starts the process | The host, as a local subprocess | The server runs independently, always-on |
+| Reachable from | Only the machine running the host | Any client with the URL |
+| Typical latency | Roughly 1ms, no network hop | Normal network latency to the host |
+| Auth and audit | None built into the transport | Can sit behind auth, logging, a load balancer |
+
+## Your Lab
+
+<Steps>
+  <Step number={1} title="Switch the transport">
+    In `notes_server.py`, change the run block to `mcp.run(transport="http", host="0.0.0.0", port=8000)`, or expose `app = mcp.http_app()` and run it with `uvicorn notes_server:app --host 0.0.0.0 --port 8000`. Confirm it starts locally and answers at `http://localhost:8000/mcp`.
+  </Step>
+  <Step number={2} title="Deploy it">
+    Push your repo to the free-tier host named in this lesson's deployment section, set the start command to your `uvicorn` line, and deploy. Note the live URL the host gives you.
+  </Step>
+  <Step number={3} title="Validate every tool in the Inspector">
+    Run `npx @modelcontextprotocol/inspector`, connect over `streamable-http` to your live URL, call `tools/list`, then invoke `add_note`, `search_notes`, `notes://all`, and `summarize_notes` one at a time and confirm each returns correct data.
+  </Step>
+  <Step number={4} title="Connect from a fresh machine">
+    From a different machine, a clean environment, or a fresh Claude Code session with no local server registered, connect to the live URL and confirm the same four capabilities are reachable. Commit the live URL and the Inspector results to `learning-log.md`.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 18.09.
+</Note>
+
+<FAQ>
+  <FAQItem question="What's the difference between stdio and Streamable HTTP for MCP?">Stdio means your host starts the server as a local subprocess and talks to it over stdin/stdout, so only that one machine can ever reach it. Streamable HTTP means the server runs as its own independent process behind a single network endpoint, so any client with the URL can connect, whether that's your laptop, a teammate's, or a deployed agent.</FAQItem>
+  <FAQItem question="Do I need to rewrite my tools to deploy an MCP server remotely?">No. MCP's transport is separate from your tool logic, so add_note, search_notes, and the rest of your FastMCP decorators don't change at all. The only edit is how the server starts: swap mcp.run() for mcp.run(transport="http", host="0.0.0.0", port=...) or serve mcp.http_app() behind an ASGI server.</FAQItem>
+  <FAQItem question="Why did my MCP Inspector connection time out right after I deployed?">Free-tier hosts commonly spin down an idle server and take several seconds to wake it back up on the next request, a cold start. If your first Inspector call after deploying times out but a second attempt a few seconds later succeeds, that's almost always a cold start, not a broken deployment.</FAQItem>
+  <FAQItem question="Is the MCP Inspector required, or can I just trust that deployment worked?">Treat it as required. A server can start successfully, respond to a health check, and still have a tool that's silently broken over the network transport in a way it wasn't over stdio. The Inspector lets you call tools/list and then invoke each tool, resource, and prompt by hand, so you confirm the deployed server actually works before an agent depends on it.</FAQItem>
+</FAQ>
