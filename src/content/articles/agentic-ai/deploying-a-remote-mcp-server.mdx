@@ -109,7 +109,7 @@ A server can pass a basic health check and still have a tool that's quietly brok
 | Who starts the process | The host, as a local subprocess | The server runs independently, always-on |
 | Reachable from | Only the machine running the host | Any client with the URL |
 | Typical latency | Roughly 1ms, no network hop | Normal network latency to the host |
-| Auth and audit | None built into the transport | Can sit behind auth, logging, a load balancer |
+| Auth and audit | None built into the transport | Can sit behind [auth](/library/agentic-ai/mcp-authorization-oauth-pkce), logging, a load balancer |
 
 ## Your Lab
 
