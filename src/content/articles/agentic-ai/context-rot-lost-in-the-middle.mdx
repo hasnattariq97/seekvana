@@ -1,0 +1,105 @@
+---
+title: "Context Rot: Why More Context Can Mean Worse Answers"
+description: "Context rot is the research-backed drop in LLM accuracy as input grows, even when nothing relevant is missing. Here's the data, and why it happens."
+pillar: "agentic-ai"
+slug: "context-rot-lost-in-the-middle"
+difficulty: "intermediate"
+readTime: 10
+author: "Hasnat Tariq"
+authorSlug: "hasnat-tariq"
+publisher: "Seekvana"
+reviewedBy: ""
+publishedAt: "2026-08-19"
+lastUpdated: "2026-08-19"
+tags: ["context rot", "ai agent memory", "claude code", "long context"]
+featured: false
+lessonModule: "19"
+lessonNumber: "19.02"
+faqs:
+  - q: "What is context rot in AI?"
+    a: "Context rot is the measured drop in an LLM's accuracy as the amount of input text grows, even when every fact the model needs is still present in the context window. It isn't the model running out of room; it's the model getting less reliable at using the room it has."
+  - q: "Why do LLMs forget things in the middle of long text?"
+    a: "Research on attention patterns shows models weight the start and end of an input more heavily than the middle, a pattern named 'lost in the middle' by researchers at Stanford and Samaya AI in 2023. A fact placed mid-document gets less attention than the same fact placed first or last, regardless of how important it is."
+  - q: "Does a bigger context window fix context rot?"
+    a: "No. A bigger window delays when you notice the problem, it doesn't remove it. Chroma's 2025 study found accuracy degrading well before models hit their stated context limits, across all 18 models it tested, so the fix is curating what you feed the model, not just expanding how much it can technically hold."
+  - q: "How much does context rot actually hurt accuracy?"
+    a: "It depends on the model and task, but the effect is large enough to matter in practice: the original lost-in-the-middle research found accuracy could fall by roughly 15 to 20 percentage points purely from moving the answer to the middle of the input, and Chroma's 2025 report measured degradation of 30 to 50 percent relative to short-context performance on some tasks, well before the advertised context limit."
+---
+
+<ArticleImage src="/images/articles/agentic-ai/context-rot-lost-in-the-middle/cover.webp" alt="Cream-white robots along a winding path of notes and papers, one reading calmly, one confused in the middle where a key note glows, and one overwhelmed by scattered pages further along" />
+
+Thirty minutes into a Claude Code session, you tell it: use `snake_case` for every new function, not `camelCase` like the rest of this legacy file. It agrees, follows the rule for the next ten minutes, and then, an hour later, writes a brand-new function in `camelCase` again. The instruction is still sitting right there in the transcript, nothing got deleted. The agent just stopped weighting it the way it did when you first said it.
+
+**Context rot is the documented drop in an LLM's accuracy as the amount of text in its context window grows, even when the exact fact it needs is still present and hasn't gone anywhere.** It's not a bug where information disappears; it's a measured pattern where a model gets steadily less reliable at using everything in front of it, and facts buried in the middle of a long input fare worst of all. That's a different failure than the one from the last lesson: [statelessness](/library/agentic-ai/the-statelessness-problem) is about a session having no memory at all once it ends. Context rot happens *inside* a single, still-active session, while the memory is technically still there.
+
+## What Is Context Rot?
+
+Context rot is what happens when a model's accuracy declines as its input gets longer, independent of whether the relevant information was removed. You'll sometimes see the same phrase used for a completely different problem: a `CLAUDE.md` or `AGENTS.md` file that's gone stale as a codebase evolves. That's a real issue, but it's a documentation problem, not this one. What this lesson covers is a property of how the model itself processes a long input, one that shows up whether your files are current or not.
+
+The confusion is worth naming upfront, because it changes what you'd even try to fix. A stale rules file gets fixed by editing the file. Context rot gets fixed by managing what you put in the window in the first place, which is why it sets up the next several lessons in this module.
+
+## The Research: "Lost in the Middle"
+
+A model uses information near the start and end of its input far more reliably than information buried in the middle, and that gap holds even for models explicitly built to handle long inputs. In 2023, researchers Nelson Liu, Kevin Lin, and colleagues at Stanford and Samaya AI ran a deceptively simple test: give a model a question, along with a document containing the answer buried among distractor documents, and move the answer's position around. Same information, same total input length, only the position changed.
+
+The result is now called <a href="https://arxiv.org/abs/2307.03172" target="_blank" rel="noopener noreferrer">"lost in the middle"</a>, and it produces a U-shaped accuracy curve. Performance is highest when the answer sits at the very start or very end of the input, and drops noticeably, roughly 15 to 20 percentage points in some of their tests, when the same answer sits in the middle. No model the researchers tested was immune.
+
+The finding mattered because it broke a common assumption: that a model treats every token in its context window with roughly equal attention. It doesn't. Position matters as much as presence.
+
+## The 2025 Confirmation: Chroma's 18-Model Report
+
+Two years after the original finding, newer models still show the same degradation, and it starts earlier and runs deeper than most people assume. In July 2025, the retrieval company Chroma published a technical report testing 18 frontier models, including Claude, GPT-4.1, Gemini 2.5, and Qwen3, across tasks designed to isolate exactly this effect.
+
+The <a href="https://www.trychroma.com/research/context-rot" target="_blank" rel="noopener noreferrer">Chroma report</a> found accuracy degrading non-uniformly as input length grew, in some tasks by 30 to 50 percent relative to short-context performance, well before any model reached its advertised context limit. Adding even a single distractor document alongside the real answer measurably hurt retrieval, and stacking four distractors compounded the loss further. That part tracks with the 2023 findings.
+
+The genuinely surprising part didn't: when researchers shuffled the surrounding text so it lost its logical flow, retrieval accuracy *improved*. Coherent, well-organized writing degraded the model's attention more than scrambled nonsense did, suggesting the model spends some of its attention tracking the narrative itself, competing with the retrieval task instead of only supporting it.
+
+<Note>
+This shuffled-text result is the one detail worth sitting with. It means "make your context cleaner and better organized" isn't automatically the fix people assume it is. Removing irrelevant tokens still helps. Reformatting the tokens you keep to read more naturally doesn't necessarily.
+</Note>
+
+## Why This Happens
+
+Context rot traces back to how a transformer's attention mechanism spreads its focus across every token in the input, and that focus isn't distributed evenly by default. Modern models are trained with patterns and positional encodings that make the start and end of a sequence easier to attend to strongly, a side effect of how next-token prediction gets trained on typical text, where the beginning sets up what matters and the end resolves it. The middle of a long document often just holds supporting detail in ordinary writing, so the model has less training signal telling it to weight the middle heavily.
+
+None of this requires you to understand transformer internals to act on it, and this lesson isn't the place to go deeper into the math (if you want the [context window fundamentals](/library/prompt-engineering/context-engineering-part-1) this builds on, that's covered there). The practical upshot is the one that matters: the model isn't broken, it's behaving exactly as its architecture and training predict, which means the fix has to happen in how you manage its input, not by hoping a future model version quietly solves it.
+
+## What This Means for Claude Code and Cursor
+
+If a fact or instruction matters, its position in your context is a lever you control, and re-stating it near the end of a long session is often cheaper than debugging why the agent "forgot" it. I've watched a naming convention I stated clearly at the start of a Claude Code session get contradicted an hour later, not because the model lost the instruction, but because ten thousand tokens of file reads and tool output had since buried it in exactly the middle-of-context spot the research predicts.
+
+<Tip>
+When a long session needs a rule to hold for its entire duration, don't just state it once at the start. Restate it right before the step where it matters most, or keep it in a file the agent re-reads rather than trusting it to stay weighted from turn one.
+</Tip>
+
+This is also why "just paste more context in," the workaround the last lesson flagged as expensive, is worse than expensive. It's actively counterproductive past a certain point, because more tokens means more middle for your important facts to get lost in. The next lesson in this module picks up exactly here: it gives you a concrete threshold, roughly 70% of the context window, for when to compact a session before this degradation sets in, plus the real commands (Cursor's `/summarize`, Claude Code's `/compact`) to do it.
+
+<ArticleImage src="/images/articles/agentic-ai/context-rot-lost-in-the-middle/short-vs-long-context.webp" alt="Side-by-side comparison of a robot retrieving a deploy password easily from a short context versus struggling to find the same password buried among distractors in a long context, with a 30 to 50 percent accuracy drop called out" caption="The exact test your lab reproduces: the same fact, found instantly in a short context but buried and missed in a long one, in line with the 30-50% accuracy drop Chroma measured." />
+
+## Your Lab
+
+<Steps>
+  <Step number="1" title="Set up the short-context test">
+    Open a fresh Claude Code or Cursor session. Give the model a single, specific, made-up fact it couldn't already know: "The project's deploy password is `falcon-triage-9`." Immediately ask it to repeat the deploy password back to you. Confirm it gets this right (it should, every time, in a short context) and note the result in a new `learning-log.md` file.
+  </Step>
+  <Step number="2" title="Bury the same fact in a long context">
+    Start a new, separate session. State the same fact early on. Then feed the model a long stretch of unrelated content, at least 3,000-4,000 tokens' worth: paste in a large log file, a long README, or ask it to read several unrelated files in a real repo. Make sure the deploy-password sentence ends up somewhere in the middle of the resulting conversation, not at the very end.
+  </Step>
+  <Step number="3" title="Test retrieval and record the drop">
+    Ask the model to repeat the deploy password back to you. Run this same short-context vs. long-context test five times each (varying the unrelated filler slightly each run), and count how often it answers correctly in each condition.
+  </Step>
+  <Step number="4" title="Commit your numbers">
+    In `learning-log.md`, record both accuracy rates as a fraction (e.g. "5/5 correct in short context, 2/5 correct in long context") and write two sentences on what you observed. This is your own reproduction of the accuracy drop this lesson describes, with a real number behind it.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 19.02.
+</Note>
+
+<FAQ>
+  <FAQItem question="What is context rot in AI?">Context rot is the measured drop in an LLM's accuracy as the amount of input text grows, even when every fact the model needs is still present in the context window. It isn't the model running out of room; it's the model getting less reliable at using the room it has.</FAQItem>
+  <FAQItem question="Why do LLMs forget things in the middle of long text?">Research on attention patterns shows models weight the start and end of an input more heavily than the middle, a pattern named "lost in the middle" by researchers at Stanford and Samaya AI in 2023. A fact placed mid-document gets less attention than the same fact placed first or last, regardless of how important it is.</FAQItem>
+  <FAQItem question="Does a bigger context window fix context rot?">No. A bigger window delays when you notice the problem, it doesn't remove it. Chroma's 2025 study found accuracy degrading well before models hit their stated context limits, across all 18 models it tested, so the fix is curating what you feed the model, not just expanding how much it can technically hold.</FAQItem>
+  <FAQItem question="How much does context rot actually hurt accuracy?">It depends on the model and task, but the effect is large enough to matter in practice: the original lost-in-the-middle research found accuracy could fall by roughly 15 to 20 percentage points purely from moving the answer to the middle of the input, and Chroma's 2025 report measured degradation of 30 to 50 percent relative to short-context performance on some tasks, well before the advertised context limit.</FAQItem>
+</FAQ>
