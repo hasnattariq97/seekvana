@@ -1,0 +1,34 @@
+---
+term: "MCP (Model Context Protocol)"
+slug: "mcp"
+shortDef: "An open standard that lets AI models connect to tools, data sources, and apps through one shared protocol instead of a custom integration for every model-tool pairing."
+tags: ["mcp", "model context protocol", "tool use", "agentic ai"]
+relatedTerms: ["tool-use", "agent", "rag"]
+publishedAt: "2026-08-19"
+---
+
+## What MCP Is
+
+MCP (Model Context Protocol) is an open standard, created by Anthropic and open-sourced in November 2024, that defines a common way for AI applications to connect to external tools, databases, and data sources. Instead of writing custom glue code for every tool-and-model pairing, a tool builder writes one MCP server and an app builder writes one MCP client — and the two can talk to each other automatically.
+
+## The Problem It Solves
+
+Before MCP, connecting M AI apps to N tools meant N×M custom integrations: each one with its own auth flow, its own schema, its own retry logic. Add one more app or one more tool and the integration count grows by every existing item on the other side.
+
+MCP turns that N×M into N+M. Each side builds its integration once, against the shared spec, and every combination works without extra glue code.
+
+## How It Works
+
+MCP defines three core primitives a server can expose:
+
+- **Tools** — functions the model can call, like querying a database or posting to Slack
+- **Resources** — data the model can read, like a file or a document
+- **Prompts** — reusable prompt templates the server provides to the client
+
+A client (the AI app) connects to any number of MCP servers, and the model can then use whatever tools, resources, and prompts those servers expose — no bespoke integration required.
+
+## Why It Matters
+
+MCP is often called "USB-C for AI": it doesn't make any single model or tool better on its own, but it makes every tool pluggable into every app without a custom cable per combination. OpenAI adopted it in March 2025, Google DeepMind in April 2025, and in December 2025 Anthropic donated the protocol to the Linux Foundation's Agentic AI Foundation, making it a vendor-neutral industry standard rather than an Anthropic-only feature.
+
+If you're building an [AI agent](/glossary/agent) that needs to reach real tools and data, MCP is the connective layer that gets it there without reinventing an integration for every new capability.

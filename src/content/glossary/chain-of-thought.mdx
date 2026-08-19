@@ -1,0 +1,26 @@
+---
+term: "Chain of Thought"
+slug: "chain-of-thought"
+shortDef: "A prompting technique where a model reasons step by step before giving its final answer or next action, instead of jumping straight to a conclusion."
+tags: ["chain of thought", "reasoning", "prompting", "agentic ai"]
+relatedTerms: ["prompt-engineering", "agent", "tool-use"]
+publishedAt: "2026-08-19"
+---
+
+## What Chain of Thought Is
+
+Chain of thought (CoT) is a prompting technique that gets a model to reason through a problem step by step before producing its final output, rather than answering directly. For math, logic, or multi-step questions, walking through the reasoning first measurably improves accuracy over jumping straight to an answer.
+
+## Chatbot vs. Agent: What the Reasoning Is For
+
+In a chatbot, chain of thought makes the final written answer better — the model thinks, then tells you something.
+
+Inside an [AI agent](/glossary/agent), that same reasoning step is aimed at a different target: it happens before a tool call, deciding which action gets taken next rather than which sentence gets written. Agentic chain of thought is judged by whether it leads to the right action, not by whether it reads well.
+
+## When It Helps, and When It Doesn't
+
+Chain of thought earns its tokens when the right next step is genuinely ambiguous, or when a wrong first move compounds across several steps. It wastes tokens on a single obvious call, and can even hurt: a model can reason its way to the correct choice, then keep reasoning and talk itself into a worse one. Reasoning models that already deliberate internally often don't need an explicit "think step by step" instruction bolted on top.
+
+## Related to, Not the Same as, ReAct
+
+Chain of thought is the reasoning itself. [ReAct](/glossary/react-agent-pattern) is the loop that interleaves that reasoning with actual tool calls and their results, one step at a time — chain of thought is the "think" half of ReAct's think-act-observe cycle.

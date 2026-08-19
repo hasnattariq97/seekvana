@@ -1,0 +1,24 @@
+---
+term: "Orchestration (Multi-Agent Orchestration)"
+slug: "orchestration"
+shortDef: "Coordinating two or more AI agents, each with a distinct role and prompt, so they complete together a task one agent would handle worse alone."
+tags: ["orchestration", "multi agent systems", "supervisor worker pattern", "agentic ai"]
+relatedTerms: ["multi-agent", "agent", "tool-use"]
+publishedAt: "2026-08-19"
+---
+
+## What Orchestration Means
+
+Multi-agent orchestration is the practice of coordinating two or more AI agents, each with a distinct role, prompt, or tool set, so they complete a task together that a single agent would handle worse or not at all. The coordination is the point — running the same prompt on several models isn't orchestration, it's just redundancy.
+
+Think of it like a newsroom instead of one overworked freelancer: a researcher gathers facts, a writer drafts, an editor checks the draft. Each [agent](/glossary/agent) is good at one job, not all of them at once.
+
+## The Supervisor/Worker Pattern
+
+The most common structure is supervisor/worker: one agent breaks the overall task into pieces and assigns them to worker agents, then reviews what comes back — retrying a step, reassigning it, or sending a worker back with more specific instructions.
+
+Worker prompts are narrow and specific ("You are a research agent, return five verified facts"). Supervisor prompts are broader and evaluative ("Review the research agent's output for gaps before passing it on").
+
+## When It's Worth It
+
+A single, well-prompted agent still matches multi-agent systems on the majority of tasks, and every hand-off between agents adds a chance for context to get lost. Orchestration earns its added cost only when the roles are genuinely distinct — most production setups stay small, usually 2 to 4 agents, since coordination overhead grows faster than the benefit past that.

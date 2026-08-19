@@ -29,7 +29,7 @@ faqs:
 
 My first hand-built agent loop hung for eleven seconds on the second turn. I'd written the code assuming that once the model decided to call a tool, the model would somehow just... call it. It doesn't. The model names the tool and stops talking. Your code is the one that has to notice, run it, and hand the result back. Until you write that part, the loop just sits there.
 
-**ReAct (Reason + Act) is an agent pattern where the model alternates between an explicit reasoning step and a tool call, reading back the result before deciding what to do next.** Mechanically, each tool call is the model pausing generation with a `tool_use` stop reason: it names a tool and its arguments, your code executes it, and you send the result back as a `tool_result` so the loop can continue. This is the mechanism that LangChain's `create_react_agent` and Claude Code's own loop are both built on top of.
+**[ReAct](/glossary/react-agent-pattern) (Reason + Act) is an agent pattern where the model alternates between an explicit reasoning step and a tool call, reading back the result before deciding what to do next.** Mechanically, each tool call is the model pausing generation with a `tool_use` stop reason: it names a tool and its arguments, your code executes it, and you send the result back as a `tool_result` so the loop can continue. This is the mechanism that LangChain's `create_react_agent` and Claude Code's own loop are both built on top of.
 
 > **Key Takeaways**
 > - ReAct interleaves a Thought (reasoning), an Action (tool call), and an Observation (tool result) in a repeating loop until the model has enough to answer.

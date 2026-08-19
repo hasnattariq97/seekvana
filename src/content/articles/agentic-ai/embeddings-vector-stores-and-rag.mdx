@@ -35,7 +35,7 @@ faqs:
 
 An agent gets asked a question its documents clearly answer, and it comes back with nothing. Or worse, it comes back confident and wrong, having pulled a chunk that's topically close but actually irrelevant. Nobody touched the model. Nobody touched the prompt. The retrieval step just quietly handed the model the wrong material to work with.
 
-**RAG (retrieval-augmented generation) is the practice of pulling relevant documents into a model's context at query time, using embeddings, numeric vectors that capture meaning, stored in a vector database and matched by similarity search.** It grounds an agent in real, current documents instead of only whatever it memorized during training. Here's the mechanism underneath that sentence, and why most "the model is bad at this" complaints are actually chunking problems.
+**RAG (retrieval-augmented generation) is the practice of pulling relevant documents into a model's context at query time, using embeddings, numeric vectors that capture meaning, stored in a [vector database](/glossary/vector-store) and matched by similarity search.** It grounds an agent in real, current documents instead of only whatever it memorized during training. Here's the mechanism underneath that sentence, and why most "the model is bad at this" complaints are actually chunking problems.
 
 > **Key Takeaways**
 > - RAG retrieves documents at query time instead of baking knowledge into the model's weights, which makes updates as cheap as re-indexing a file.

@@ -30,7 +30,7 @@ faqs:
 
 Ask Claude Code to fix a bug report that just says "the export button doesn't work," and it's staring at three plausible first moves: grep the codebase for "export," open the file the error log actually points to, or run the test suite and see what fails. Guess wrong, and the next several tool calls get spent digging out of a hole the first guess dug.
 
-**Chain of thought prompting for agents works differently than it does for a chatbot. In a chatbot, it makes the final answer better; in an [agent](/library/agentic-ai), that same reasoning step happens before a tool call, so it decides which action gets taken next, not just which sentence gets written.** Reasoning well means picking the right tool, not just writing a more convincing paragraph.
+**[Chain of thought](/glossary/chain-of-thought) prompting for agents works differently than it does for a chatbot. In a chatbot, it makes the final answer better; in an [agent](/library/agentic-ai), that same reasoning step happens before a tool call, so it decides which action gets taken next, not just which sentence gets written.** Reasoning well means picking the right tool, not just writing a more convincing paragraph.
 
 > **Key Takeaways**
 > - Chain of thought inside an agent is a decision step before a tool call, not just a way to write a better final answer
