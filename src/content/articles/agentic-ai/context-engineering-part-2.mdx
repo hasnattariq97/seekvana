@@ -73,6 +73,8 @@ What survives a compaction pass and what doesn't tends to follow a pattern:
 If your agent needs to preserve something very specific (an exact number, an exact file path), don't rely on compaction to carry it forward. Write it somewhere durable instead, which is exactly what the memory section below covers.
 </Tip>
 
+For the hands-on workflow, exactly when to trigger a compaction pass yourself and how to verify it kept what mattered, see the [walkthrough on triggering compaction in Claude Code and Cursor](/library/agentic-ai/compaction-and-summarization).
+
 ## Clearing Tool Output Before It Piles Up
 
 Not every token in a long agent session is a decision or a piece of reasoning. Often, the majority of it is tool output: the full contents of a file the agent read, an API response, a search result. Once the agent has used that information, most of it doesn't need to sit in context anymore. It can be fetched again if it's ever needed.
