@@ -67,6 +67,8 @@ Nothing about `embed_query`, `retrieve`, or `generate_answer` from the last less
 
 Not every question your agent gets asked needs your corpus. "What's 12 times 4?" doesn't, and running a retrieval pass anyway costs an embedding call and adds latency for no benefit. Agentic RAG's first decision is whether to retrieve at all, and skipping it correctly is a real cost win, not just a nicety.
 
+That "retrieve only when needed" instinct is a specific case of a broader choice: whether an agent pre-loads context up front or fetches it [just-in-time](/library/agentic-ai/just-in-time-vs-preloaded-context), and the same latency-cost-relevance tradeoff applies whether the thing being fetched is a document chunk or a tool schema.
+
 The check is a small model call before anything else runs: ask Claude whether it can answer the question directly, using only what it already knows, with no access to the corpus. If yes, skip retrieval entirely and answer straight from the model.
 
 ```python

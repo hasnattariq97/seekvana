@@ -74,6 +74,8 @@ When a long session needs a rule to hold for its entire duration, don't just sta
 
 This is also why "just paste more context in," the workaround the last lesson flagged as expensive, is worse than expensive. It's actively counterproductive past a certain point, because more tokens means more middle for your important facts to get lost in. The next lesson in this module picks up exactly here: it gives you a concrete threshold, roughly 70% of the context window, for when to compact a session before this degradation sets in, plus the real commands (Cursor's `/summarize`, Claude Code's `/compact`) to do it.
 
+Compaction fixes context rot after it's already accumulated. A [just-in-time context strategy](/library/agentic-ai/just-in-time-vs-preloaded-context) prevents most of it from accumulating in the first place, by never pre-loading the data that would have rotted in the middle.
+
 <ArticleImage src="/images/articles/agentic-ai/context-rot-lost-in-the-middle/short-vs-long-context.webp" alt="Side-by-side comparison of a robot retrieving a deploy password easily from a short context versus struggling to find the same password buried among distractors in a long context, with a 30 to 50 percent accuracy drop called out" caption="The exact test your lab reproduces: the same fact, found instantly in a short context but buried and missed in a long one, in line with the 30-50% accuracy drop Chroma measured." />
 
 ## Your Lab
