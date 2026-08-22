@@ -1,0 +1,138 @@
+---
+title: "Claude Progress File: The Shift Log That Resumes Sessions"
+description: "A claude progress file is a done/in-progress/next/blockers log an agent updates, so a fresh session resumes cleanly instead of re-deriving state."
+pillar: "agentic-ai"
+slug: "progress-files-and-shift-logs"
+difficulty: "intermediate"
+readTime: 8
+author: "Hasnat Tariq"
+authorSlug: "hasnat-tariq"
+publisher: "Seekvana"
+reviewedBy: ""
+publishedAt: "2026-08-23"
+lastUpdated: "2026-08-23"
+tags: ["agentic-ai", "context-engineering", "claude-code", "agent-memory"]
+featured: false
+lessonModule: "19"
+lessonNumber: "19.09"
+faqs:
+  - q: "What is a claude progress file?"
+    a: "A claude progress file, usually named claude-progress.txt, is a short status log an agent writes and updates as it works: what's done, what's in progress, what's next, and what's blocked. A new session reads it before doing anything else, so it resumes from the real state of the work instead of guessing."
+  - q: "What's the difference between a progress file and session resume?"
+    a: "Session resume (--continue or --resume) replays the raw conversation transcript from where you left off, in the same session lineage. A progress file is a deliberate, compact substitute that works even when you start a session with zero history, which is exactly what happens after a compaction, a crash, or a plain new session."
+  - q: "What should a shift log actually contain?"
+    a: "Four short sections: what's done, what's currently in progress, what to do next, and any blockers. Keep each one to a few lines of plain language, not a full transcript. The goal is a 30-second read that tells a fresh session exactly where to pick up."
+  - q: "Is a progress file the same as a decision log or a notes file?"
+    a: "No. A notes file holds working facts inside a single task's lifetime, and a decision log is a permanent, append-only history of what you chose and rejected. A progress file is a current-state snapshot: it gets overwritten each shift, and its only job is telling the next session where to start."
+---
+
+{/* IMAGE PROMPT: Warm storybook gouache illustration; the cream-white robot leaving a clear handoff note on a clipboard for the next shift, a second robot picking it up and continuing seamlessly; cozy, cream-to-clay palette. No text in image. | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+
+<ArticleImage src="/images/articles/agentic-ai/progress-files-and-shift-logs/cover.webp" alt="A cream-white robot leaving a handoff note on a clipboard for a second robot to continue the shift" />
+
+Nine o'clock the next morning, I opened a brand-new Claude Code session on a build I'd stopped mid-feature the night before. No `--resume`, no chat history, nothing pasted in.
+
+The first thing the agent did was read one file. The first thing it said back was exactly what I'd have told a human teammate walking in cold: here's what's done, here's what I'm about to do next, here's the one thing blocking it.
+
+**A claude progress file, usually saved as `claude-progress.txt`, is a short status log an agent writes and updates as it works, recording what's done, what's in progress, what's next, and what's blocked.** A fresh session reads that file before touching anything else, so it resumes from the actual state of the work instead of re-deriving it from scratch or, worse, quietly redoing something already finished. Think of it as a shift log: the note one worker leaves for whoever clocks in next.
+
+> **Key Takeaways**
+> - A claude progress file is a short, current-state log covering done / in-progress / next / blockers, overwritten each shift, not a full history.
+> - It solves a specific failure: a session that ends mid-task leaves the next one guessing, even when the conversation was compacted along the way.
+> - It's not the same tool as `--resume`, a notes file, or a decision log, each of those answers a different question about a project's memory.
+> - The proof isn't a diagram. It's starting a genuinely fresh session and watching it resume correctly from the file alone.
+
+## What Goes Into a Shift Log
+
+A shift log is four short sections, each a few lines, never a transcript. The whole point is a 30-second read that tells the next session exactly where to start.
+
+```
+// claude-progress.txt
+
+DONE:
+- Auth middleware wired up and passing its test suite
+- Rate limiter added to /api/upload, tested against a 429 case
+
+IN PROGRESS:
+- Migrating the upload handler to stream large files instead of buffering
+  (buffering approach works, but stalls above ~200MB)
+
+NEXT:
+- Finish the streaming migration
+- Add a progress callback so the frontend can show upload percentage
+
+BLOCKERS:
+- Need to confirm whether the CDN in front of /api/upload supports
+  chunked transfer encoding, or the streaming approach won't help
+```
+
+Notice what's absent. No code, no error messages pasted in full, no play-by-play of every tool call. Those already live in the git log and the conversation history, and pasting them into the progress file just recreates the bloat this whole module has spent eight lessons teaching you to avoid. The file's job is narrower and more valuable: state, not history.
+
+The blockers field earns its place more than any other line. Skip it, and a fresh session will cheerfully re-attempt the exact thing that stalled the last one, burning a full round of tool calls to rediscover a wall you already found.
+
+{/* IMAGE PROMPT: Warm storybook gouache illustration; a close-up of a clipboard shift-log card with four glowing labeled sections (Done, In Progress, Next, Blockers), a small robot hand pinning it up for the next shift; cozy, cream-to-clay palette. No text in image beyond the four labels implied by glow shapes. | FILENAME: shift-log-fields.webp | DIMENSIONS: 1200x675 */}
+
+<ArticleImage src="/images/articles/agentic-ai/progress-files-and-shift-logs/shift-log-fields.webp" alt="Close-up illustration of a shift-log clipboard with four glowing sections labeled Done, In Progress, Next, and Blockers" caption="The four fields a shift log needs, current state only, never a full transcript." />
+
+## Why `--resume` Alone Isn't the Same Thing
+
+Claude Code's `--continue` and `--resume` flags pick up an existing session and replay its conversation history, the SDK writes that history to disk automatically as you work. A progress file solves a different problem: what happens when there is no session to resume, on purpose or otherwise.
+
+That gap shows up more often than it should. A session gets compacted partway through, and even with a summary in place, the fine-grained "what exactly was I about to do" detail can thin out. A terminal closes, a machine restarts, or you deliberately want a clean context window because the last one was cluttered. In every one of those cases, `--resume` either doesn't apply or hands you back less than you need. Anthropic's own engineering writeup on long-running agents names the failure mode directly: without an external record, a session that ran out of context mid-implementation leaves the next one to "guess what happened" and burn real time recovering.
+
+<Tip>
+Use `--resume` and a progress file together, not as alternatives. Resume gets you back the conversational texture when the session lineage is intact. The progress file is your fallback, and your record of intent, for every case where it isn't.
+</Tip>
+
+A progress file is deliberately smaller than a transcript because that's the feature, not a limitation. A transcript replays everything that happened. A shift log tells a stranger, or a version of the agent with zero memory of any of it, exactly what to do next. That's what makes a project's state genuinely resumable across a multi-session agent build: not the length of what got written down, but whether a fresh reader could act on it correctly. A resumable agent session, in this sense, isn't a technical mode you switch on, it's a property the progress file earns by being specific about multi-session agent state instead of vague about it.
+
+**Table: How a claude progress file compares to two adjacent memory practices**
+
+| Artifact | What it captures | Written | Read |
+|---|---|---|---|
+| Progress file (this lesson) | Current state only: done / in-progress / next / blockers | Continuously, overwritten each shift | At the start of every new session, before any work begins |
+| Notes file ([19.04](/library/agentic-ai/note-taking-and-tool-result-pruning)) | Working facts inside one task's lifetime, extracted from tool output | As facts are learned, mid-task | Whenever a fact needs recalling later in the same task |
+| Decision log ([16.09](/library/agentic-ai/decision-journaling)) | Permanent history: what was chosen, why, and what was rejected | Once per real decision, append-only, never overwritten | Whenever a past decision might get re-argued |
+
+The three aren't competing tools, they answer different questions. A notes file is scratch memory for a task still running. A decision log is a project's permanent paper trail. A progress file is neither, it's a snapshot of exactly where things stand right now, replaced the moment that changes.
+
+## The Pattern Anthropic Actually Uses
+
+Anthropic's own engineering team documents this exact pattern in a <a href="https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents" target="_blank" rel="noopener noreferrer">writeup on effective harnesses for long-running agents</a>, and the name `claude-progress.txt` comes directly from it. Their setup splits the work across two roles: an **initializer agent** that sets up the project on the very first run (repo structure, a feature list, and the progress file itself), and a **coding agent** that does the actual work, session after session.
+
+Every new coding-agent session follows the same onboarding step before writing a line of code: read the git log and the progress file to understand what was recently worked on. Every session ends the same way too, a commit paired with a progress update, so the two artifacts move together instead of drifting apart.
+
+That pairing matters. Git tells you what changed. The progress file tells you why it's not finished yet and what's next, which a commit message alone rarely does well.
+
+This lesson gives you the file and the discipline of updating it by hand, on a single agent, across sessions you start yourself. Wiring an initializer agent to set this up automatically, on a fully autonomous harness that runs for many sessions without you in the loop, is its own topic, coming later in this module. What you're building here is the exact artifact that pattern depends on. Get the habit right at this scale, and scaling it up later is a wiring problem, not a new concept.
+
+## Your Lab
+
+<Steps>
+  <Step number={1} title="Start the first session and pick a real, multi-step task">
+    Choose something with at least three distinct pieces of work, for example, "add input validation to a form, write a test for it, and update the README." In your project root, create `claude-progress.txt` with the four-section format from this lesson (DONE / IN PROGRESS / NEXT / BLOCKERS), starting empty or with just a one-line goal.
+  </Step>
+  <Step number={2} title="Do part of the task, then update the file yourself">
+    Work through only part of the task in this first session, deliberately stop partway, ideally mid-step rather than at a clean boundary. Before ending the session, update `claude-progress.txt` by hand: move what's finished into DONE, describe exactly what's half-done under IN PROGRESS, name the very next action under NEXT, and log any real blocker you hit. Commit the file along with whatever code exists so far.
+  </Step>
+  <Step number={3} title="Close everything and start a genuinely fresh session">
+    Close the terminal or start a brand-new Claude Code session with no `--resume` and no `--continue`, in the same project directory. Don't paste anything in or summarize what happened yourself. Ask only: "Check claude-progress.txt and tell me where we left off, then continue."
+  </Step>
+  <Step number={4} title="Confirm it resumed from the file alone">
+    Read what the fresh session reports back. It should describe your actual DONE/IN PROGRESS/NEXT state accurately, without you correcting it. If it gets something wrong or vague, that's a sign your update in Step 2 wasn't specific enough, tighten the file and try the fresh-session test again.
+  </Step>
+  <Step number={5} title="Commit the proof to learning-log.md">
+    In `learning-log.md`, paste the exchange from Step 3 (your one-line prompt and the agent's response), plus the version of `claude-progress.txt` you handed it. Add one sentence: did the fresh session pick up exactly where you left off, using the file alone, with nothing re-explained?
+  </Step>
+</Steps>
+
+<Note>
+Done? You've completed Lesson 19.09.
+</Note>
+
+<FAQ>
+  <FAQItem question="What is a claude progress file?">A claude progress file, usually named claude-progress.txt, is a short status log an agent writes and updates as it works: what's done, what's in progress, what's next, and what's blocked. A new session reads it before doing anything else, so it resumes from the real state of the work instead of guessing.</FAQItem>
+  <FAQItem question="What's the difference between a progress file and session resume?">Session resume (--continue or --resume) replays the raw conversation transcript from where you left off, in the same session lineage. A progress file is a deliberate, compact substitute that works even when you start a session with zero history, which is exactly what happens after a compaction, a crash, or a plain new session.</FAQItem>
+  <FAQItem question="What should a shift log actually contain?">Four short sections: what's done, what's currently in progress, what to do next, and any blockers. Keep each one to a few lines of plain language, not a full transcript. The goal is a 30-second read that tells a fresh session exactly where to pick up.</FAQItem>
+  <FAQItem question="Is a progress file the same as a decision log or a notes file?">No. A notes file holds working facts inside a single task's lifetime, and a decision log is a permanent, append-only history of what you chose and rejected. A progress file is a current-state snapshot: it gets overwritten each shift, and its only job is telling the next session where to start.</FAQItem>
+</FAQ>
