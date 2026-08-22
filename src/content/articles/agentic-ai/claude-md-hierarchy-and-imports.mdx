@@ -1,0 +1,151 @@
+---
+title: "The CLAUDE.md Hierarchy: Scopes, @import, and Rules"
+description: "The CLAUDE.md hierarchy loads files by scope: managed policy, user, project, local, all concatenated, and @import shares one standards file across scopes."
+pillar: "agentic-ai"
+slug: "claude-md-hierarchy-and-imports"
+difficulty: "intermediate"
+readTime: 9
+author: "Hasnat Tariq"
+authorSlug: "hasnat-tariq"
+publisher: "Seekvana"
+reviewedBy: ""
+publishedAt: "2026-07-19"
+lastUpdated: "2026-08-22"
+tags: ["claude code", "claude.md", "agent memory", "context engineering"]
+featured: false
+lessonModule: "19"
+lessonNumber: "19.07"
+faqs:
+  - q: "What is the CLAUDE.md hierarchy?"
+    a: "It's the set of scopes Claude Code loads CLAUDE.md files from, in order from broadest to most specific: managed policy, then user, then project, then local. Files above your working directory load at launch and get concatenated into context, while files in subdirectories load only when Claude actually reads a file inside that folder."
+  - q: "How does @import work in a CLAUDE.md file?"
+    a: "You write @path/to/file on its own line, and Claude Code pulls that file's content into context at launch. There's no special import keyword: it's just a path prefixed with @. Relative paths resolve relative to the file containing the import, not your working directory, and imports can chain up to four hops deep."
+  - q: "What's the difference between @import and path-scoped rules?"
+    a: "@import pulls another file's full content into whatever CLAUDE.md references it, and that content loads every session regardless of what you're working on. Path-scoped rules, set up in .claude/rules/ with a paths: frontmatter field, only load when Claude opens a file matching that glob pattern. That makes them the tool for instructions that shouldn't be in context all the time."
+  - q: "Why doesn't my subfolder's CLAUDE.md seem to be working?"
+    a: "It probably is working, it just hasn't loaded yet. Claude Code only reads a subdirectory's CLAUDE.md on demand, the first time it opens a file inside that folder in the current session. Run /context to see exactly which memory files have loaded so far, and don't assume a rule is broken just because it hasn't shown up yet."
+---
+
+{/* IMAGE PROMPT: Warm storybook gouache illustration; the cream-white robot standing before a small building where each floor has its own house-rules plaque, all wired to one shared rulebook in the lobby; cozy, cream-to-clay palette. No text in image. | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+
+<ArticleImage src="/images/articles/agentic-ai/claude-md-hierarchy-and-imports/cover.webp" alt="A robot standing before a small building where each floor has its own house-rules plaque, all wired to one shared rulebook in the lobby" />
+
+Your repo has a `backend/` folder and a `frontend/` folder, and exactly one of them should never touch raw SQL without going through the query builder. Right now that rule lives in [the single CLAUDE.md file you started with](/library/agentic-ai/claude-code-agentic-terminal), sitting next to a dozen frontend-only conventions the backend agent has no use for.
+
+**The CLAUDE.md hierarchy is the order Claude Code loads CLAUDE.md files in, from broadest to most specific: managed policy, then user, then project, then any folder Claude actually opens a file in.** On top of that, `@path/to/file` lets one CLAUDE.md pull in another file's content, so a shared standards file can feed multiple folders without being copy-pasted into each one.
+
+> **Key Takeaways**
+> - The CLAUDE.md hierarchy runs from managed policy to user to project, then subdirectories opened on demand.
+> - Files above your working directory load at launch; files in subfolders load only once Claude reads something inside that folder.
+> - `@path/to/file` is the whole import syntax: no special keyword, just a path with an `@` in front of it.
+> - Imports can chain up to four hops deep, and an import outside your working directory triggers a one-time approval dialog.
+> - `@import` and `.claude/rules/` path-scoping solve different problems and aren't interchangeable.
+
+## What Is the CLAUDE.md Hierarchy?
+
+The CLAUDE.md hierarchy is the fixed order Claude Code checks for memory files, running from settings that apply to everyone on a machine down to a single project folder. It exists because [every session starts with a blank slate](/library/agentic-ai/the-statelessness-problem), and a single memory file is the simplest fix, until a project outgrows one file's worth of rules. Here's every scope, in load order:
+
+**The CLAUDE.md hierarchy, broadest to most specific**
+
+| Scope | Typical location | Applies to |
+|---|---|---|
+| Managed policy | `/etc/claude-code/CLAUDE.md` (Linux/WSL) or the platform equivalent | Every user on the machine, every repo |
+| User | `~/.claude/CLAUDE.md` | Just you, across all your projects |
+| Project | `./CLAUDE.md` or `./.claude/CLAUDE.md` | Everyone on the team, via version control |
+| Local | `./CLAUDE.local.md` | Just you, this one project (gitignore it) |
+
+None of these override each other. Claude Code concatenates every file it finds into one context block, ordered from broadest scope to most specific, so a project-level instruction is read *after* your personal user-level one, not instead of it. Anthropic's own documentation on this is direct: <a href="https://code.claude.com/docs/en/memory" target="_blank" rel="noopener noreferrer">the full resolution order runs from managed policy down through local, all appended together</a>.
+
+You already met a single flat CLAUDE.md, the project-scope one, in [the previous lesson on CLAUDE.md as a maintained artifact](/library/agentic-ai/memory-via-files-claude-md). This lesson is about what happens once one file per project stops being enough.
+
+## Root, User, and Path-Scoped Memory: Who Sees What
+
+The mechanic behind "different rules for different folders" is simpler than it sounds. Files above your working directory load immediately when Claude Code starts. Files inside subdirectories load only when Claude reads a file there.
+
+Run Claude Code from your repo root and it loads the root `CLAUDE.md` on launch. If you never touch anything inside `backend/`, `backend/CLAUDE.md` never enters context at all, not because it's broken, but because nothing has asked for it yet. The moment Claude opens a file inside `backend/`, that folder's CLAUDE.md loads alongside it, and from then on it's part of the session.
+
+I've had a subfolder CLAUDE.md sit there for a week doing nothing useful. It wasn't a bug. I just hadn't asked Claude to touch a single file in that folder during that stretch of sessions, so the rule never got the chance to load. The instruction was correct the whole time. It just hadn't loaded yet.
+
+This is the exact distinction to hold onto:
+
+- **Loads at launch:** the working directory's CLAUDE.md, plus every CLAUDE.md and CLAUDE.local.md in the directories above it.
+- **Loads on demand:** any CLAUDE.md sitting inside a subdirectory, the first time Claude reads a file in that subtree.
+
+This is the same [pre-loaded versus just-in-time context tradeoff](/library/agentic-ai/just-in-time-vs-preloaded-context) that shows up everywhere else in context engineering, here it's applied to memory files instead of retrieved documents.
+
+<Note>
+  Run `/context` in a session to see exactly which memory files have actually loaded so far. If a subfolder rule isn't showing up there, it's not that it failed, it's that Claude hasn't opened anything in that folder yet this session.
+</Note>
+
+In short, the backend folder and the frontend folder can have different standing rules with no special configuration and no per-folder setting to flip. Put the SQL rule in `backend/CLAUDE.md`, the component-naming rule in `frontend/CLAUDE.md`, and let the directory Claude is actually working in decide which one applies.
+
+## Pulling in Shared Standards with @import
+
+Some instructions genuinely belong in more than one folder: a security policy, a commit-message format, a shared lint config. Copy the same paragraph into three CLAUDE.md files, and those three copies will quietly drift apart into stale, contradicting rules, a maintenance problem, distinct from [the context rot problem](/library/agentic-ai/context-rot-lost-in-the-middle) that degrades a single long-running session instead. `@import` exists for the drift problem: it lets one CLAUDE.md reference another file's content instead of duplicating it.
+
+The syntax is deliberately unremarkable. There's no `import` keyword, no special block, just a path with an `@` in front of it, written on its own line:
+
+```text
+@docs/shared-standards.md
+```
+
+A few facts worth being precise about, because most explanations of this gloss over them:
+
+- **Relative paths resolve relative to the file doing the importing**, not to your current working directory. An `@../shared/standards.md` inside `backend/CLAUDE.md` resolves from `backend/`, not from repo root.
+- **Imports can chain, up to four hops deep.** A file you import can itself import another file, and that one can import another, but the chain stops at four.
+- **Import parsing skips code blocks and inline code spans.** Writing `` `@README` `` in backticks just mentions the path as text; `@README` outside backticks actually imports it.
+- **An import that resolves outside your working directory is treated as external.** The first time Claude Code sees one in a project, it shows a one-time approval dialog listing exactly which files it wants to load.
+- **Imported content still loads in full at launch.** Splitting a CLAUDE.md into imports helps organization, not token count. Three imported files are three files' worth of tokens, same as if you'd pasted them in directly.
+
+{/* IMAGE PROMPT: Infographic-style illustration showing the CLAUDE.md hierarchy as four stacked labeled bars (Managed Policy, User, Project, Local) from broadest to most specific, a cream-white robot at a laptop beside it, and a companion @import panel showing one standards.md file feeding into a frontend/ and a backend/ folder; warm cream-to-clay palette. | FILENAME: hierarchy-and-import-overview.webp | DIMENSIONS: 1680x945 */}
+
+<ArticleImage src="/images/articles/agentic-ai/claude-md-hierarchy-and-imports/hierarchy-and-import-overview.webp" alt="Infographic showing the CLAUDE.md hierarchy from managed policy down to local, alongside an @import panel feeding one standards file into a frontend and a backend folder" caption="The full picture: the four-scope load order on the left, and one shared standards file reaching two different folders via @import on the right." />
+
+## @import vs. Path-Scoped Rules: Two Different Jobs
+
+It's easy to blur `@import` together with `.claude/rules/`, since both involve "extra files that affect what Claude knows," but they solve two different problems and get confused constantly in explainer content.
+
+`@import` pulls a file's entire content into context, every session, unconditionally, the moment the CLAUDE.md that references it loads. It's the tool for "this content belongs in multiple places and shouldn't drift."
+
+Path-scoped rules, set up as markdown files inside `.claude/rules/` with a `paths:` field in their YAML frontmatter, only enter context when Claude opens a file matching that glob pattern. A rule scoped to `paths: ["backend/**/*.py"]` stays out of context entirely until Claude touches a Python file under `backend/`. Path-scoped rules exist for the opposite case: content that's only relevant sometimes, and shouldn't compete for attention the rest of the time.
+
+<Note>
+  Use `@import` when the content genuinely applies everywhere and you just don't want to duplicate it. Use a path-scoped rule when the content should only load for a specific kind of file. Confusing the two is exactly how teams end up with rules that either load constantly for no reason, or never load when they'd actually help.
+</Note>
+
+## Building It on a Real Repo
+
+A two-folder repo with a shared standards file, imported from both sides, is the smallest setup that exercises every piece of this. The hierarchy decides when each folder's file loads. `@import` keeps the shared parts in one place instead of three.
+
+## Your Lab
+
+Takes about 10 minutes across two short sessions.
+
+<Steps>
+  <Step number={1} title="Set up the tiered files">
+    In a repo with at least two distinct folders (for example `backend/` and `frontend/`), create a root `CLAUDE.md`, a `backend/CLAUDE.md`, and a `frontend/CLAUDE.md`. If you already have a root CLAUDE.md from the previous lesson, add to it rather than replacing it. Give each folder one rule that's specific to it, and nothing else.
+  </Step>
+  <Step number={2} title="Create and import a shared standards file">
+    Write a `shared-standards.md` with one or two rules that should apply everywhere, for example a commit-message format. Add `@shared-standards.md` (adjust the relative path per folder) to the root, `backend/`, and `frontend/` CLAUDE.md files.
+  </Step>
+  <Step number={3} title="Test the backend folder">
+    Start a fresh session at repo root. Open a file inside `backend/`, then ask: "which rule applies to you right now that's specific to this folder?" Run `/context` to confirm which memory files loaded.
+  </Step>
+  <Step number={4} title="Test the frontend folder and compare">
+    In a new session, repeat the same test inside `frontend/`: open a file there, ask the same question, and run `/context` again. Compare the two answers, they should name different folder-specific rules.
+  </Step>
+  <Step number={5} title="Commit the proof">
+    Save all four files (root, backend, frontend, shared-standards) plus the two answers you got to `learning-log.md`.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 19.07.
+</Note>
+
+<FAQ>
+  <FAQItem question="What is the CLAUDE.md hierarchy?">It's the set of scopes Claude Code loads CLAUDE.md files from, in order from broadest to most specific: managed policy, then user, then project, then local. Files above your working directory load at launch and get concatenated into context, while files in subdirectories load only when Claude actually reads a file inside that folder.</FAQItem>
+  <FAQItem question="How does @import work in a CLAUDE.md file?">You write @path/to/file on its own line, and Claude Code pulls that file's content into context at launch. There's no special import keyword: it's just a path prefixed with @. Relative paths resolve relative to the file containing the import, not your working directory, and imports can chain up to four hops deep.</FAQItem>
+  <FAQItem question="What's the difference between @import and path-scoped rules?">@import pulls another file's full content into whatever CLAUDE.md references it, and that content loads every session regardless of what you're working on. Path-scoped rules, set up in .claude/rules/ with a paths: frontmatter field, only load when Claude opens a file matching that glob pattern. That makes them the tool for instructions that shouldn't be in context all the time.</FAQItem>
+  <FAQItem question="Why doesn't my subfolder's CLAUDE.md seem to be working?">It probably is working, it just hasn't loaded yet. Claude Code only reads a subdirectory's CLAUDE.md on demand, the first time it opens a file inside that folder in the current session. Run /context to see exactly which memory files have loaded so far, and don't assume a rule is broken just because it hasn't shown up yet.</FAQItem>
+</FAQ>
