@@ -1,0 +1,131 @@
+---
+title: "What Is a Large Language Model? A Clear, No-Math Explainer"
+description: "A large language model (LLM) is an AI trained on huge amounts of text to predict language, one token at a time. Here's what that means, in plain English."
+pillar: "large-language-models"
+slug: "what-is-a-large-language-model"
+difficulty: "beginner"
+readTime: 9
+author: "Hasnat Tariq"
+publishedAt: "2026-08-23"
+tags: ["what is a large language model", "what is an llm", "llm definition", "large language model explained"]
+featured: false
+faqs:
+  - q: "Why are they called 'large' language models?"
+    a: "'Large' refers to two things at once: the size of the model (billions, sometimes trillions, of internal parameters) and the size of the training data (a large fraction of the public internet, plus books, code, and articles). A small language model does the same basic job with far fewer parameters and a narrower training set, trading some capability for speed and lower cost."
+  - q: "Is ChatGPT a large language model?"
+    a: "ChatGPT is a product built on top of a large language model (OpenAI's GPT family). The distinction matters: the LLM is the underlying prediction engine, and ChatGPT is the chat interface, memory layer, and safety rules wrapped around it. Claude and Gemini follow the same pattern: a model underneath, a product on top."
+  - q: "Does a large language model actually understand what I'm saying?"
+    a: "Not the way a person does. It has learned statistical patterns in language so well that its responses are usually coherent and often useful, but there's no comprehension happening the way there is in a human mind. That distinction matters for knowing when to double-check its answers."
+  - q: "Can I run a large language model without an internet connection?"
+    a: "Yes, for some models. Open-weight models like Llama or Mistral can run entirely on a personal computer using tools like Ollama, with no internet needed after the initial download. ChatGPT, Claude, and Gemini are cloud-only: the model runs on the company's servers, not your device."
+---
+
+<ArticleImage
+  src="/images/articles/large-language-models/what-is-a-large-language-model/cover.webp"
+  alt="Editorial illustration of text and code streaming into a glowing neural network brain, branching out into everyday tasks like writing, translation, and legal review"
+  dimensions="1200x630"
+  priority
+  isCover
+/>
+
+Ask ChatGPT to write a haiku about your dog, and it will. Ask it to explain a legal contract, and it will attempt that too. Neither task was programmed in ahead of time. A **large language model (LLM)** is the AI system underneath both answers: software trained on enormous amounts of text whose one job is predicting what word comes next, over and over, until a full response takes shape. That single trick, done at massive scale, is what's powering the AI tools you already use.
+
+If you haven't placed LLMs in the bigger AI picture yet, the [AI family tree](/library/ai-foundations/ai-family-tree) lesson is a good five-minute detour before this one.
+
+> **Key Takeaways**
+> - An LLM predicts the next token (a word fragment) based on patterns learned from massive amounts of text, it does not "look up" answers
+> - "Large" refers to both the model's size (billions of parameters) and the size of its training data
+> - LLMs are the engine inside ChatGPT, Claude, and Gemini, not the products themselves
+> - They're impressively fluent and routinely wrong with total confidence, both traits come from the same prediction mechanism
+> - Today's leading LLMs include Claude, GPT, Gemini, and open-weight models like Llama
+
+---
+
+## What Is a Large Language Model?
+
+A **large language model** is a type of AI trained on huge quantities of text: books, articles, websites, and code. It has one narrow job. Given the text so far, predict the most likely next chunk of it. Do that billions of times across billions of examples, and something bigger emerges. The model ends up with a working knowledge of language, facts, and reasoning patterns.
+
+The "large" part isn't marketing. It describes two real numbers: the model's **parameters** (the internal values it adjusts during training, often in the hundreds of billions) and the size of the training data, <a href="https://aws.amazon.com/what-is/large-language-model/" target="_blank" rel="noopener noreferrer">a meaningful slice of the internet, plus curated books and code</a>. More parameters and more data generally mean the model captures more subtle patterns, though not without limits or tradeoffs.
+
+For the short version of this definition, see the [LLM glossary entry](/glossary/llm). Everything after this section is the fuller walkthrough.
+
+## How Do LLMs Learn?
+
+Training an LLM means showing it text and asking it to guess what comes next, then correcting it slightly every time it's wrong. Repeat that across a training set the size of a large chunk of the written internet, and the model's internal parameters gradually shift toward better and better guesses.
+
+Here's the part people find counterintuitive: nobody hand-writes rules for grammar, facts, or logic into the model. It's all learned indirectly, as a side effect of getting really, really good at "what word probably comes next." A model that's seen millions of working code samples ends up able to write working code. A model that's seen millions of explanations of a concept ends up able to explain it.
+
+The mechanism, prediction, explains a lot about what the model is good and bad at. The [full walkthrough of how LLMs work](/library/large-language-models/how-llms-work) covers this in more depth.
+
+<Note>
+This is why a fresh conversation with an LLM starts with no memory of you. The model isn't recalling past chats, it's reading whatever text is in front of it right now. Apps like ChatGPT and Claude.ai simulate memory by feeding your past messages back in as part of that text.
+</Note>
+
+<ArticleImage
+  src="/images/articles/large-language-models/what-is-a-large-language-model/training-explained.webp"
+  alt="Five-step diagram showing how a large language model predicts the next token one step at a time, from prompt to complete response"
+  dimensions="1200x675"
+  caption="Each step is the same trick: look at the text so far, predict the next token, repeat until the response is complete."
+/>
+
+## Tokens, Not Words
+
+LLMs don't process whole words. They break text into **tokens**, chunks that are often smaller than a word. "Unbelievable" might come apart into three separate tokens. This matters in practice because a model's limits, and its pricing, are measured in tokens, not words or sentences.
+
+You don't need to memorize the mechanics of tokenization to use an LLM well. Just know that when a chatbot says a document is "too long," it means too many tokens, not too many words. See the [token glossary entry](/glossary/token) if you want the quick technical definition.
+
+## What Can an LLM Actually Do?
+
+In practice, a large language model can draft an email, summarize a 40-page report into six bullet points, translate a paragraph into Spanish, explain a Python error message, or hold a multi-turn conversation that stays coherent. All of that comes from one underlying skill: predicting plausible, useful continuations of text.
+
+There are things it can't do reliably, too. It doesn't know anything that happened after its training data was collected, unless a tool or web search is connected. It can't guarantee a fact is correct just because it sounds confident. And it won't "remember" you between separate sessions without help from the app layer. Those limits come from the exact same mechanism that makes it useful. Worth sitting with that for a second.
+
+## Is an LLM the Same as Generative AI?
+
+Close, but not identical. **Generative AI** is the broader category: any AI that creates new content, images, video, audio, or text. A large language model is the specific kind of generative AI that specializes in text and language.
+
+Every LLM is a generative AI. Not every generative AI is an LLM, an image generator like a diffusion model is generative AI but isn't a language model at all. If you're mapping out how these terms relate, the [AI family tree](/library/ai-foundations/ai-family-tree) lesson lays out the full hierarchy.
+
+## Where LLMs Fall Short
+
+This is the part a lot of overview pages rush past, and it deserves real space. LLMs can produce **hallucinations**, <a href="https://www.ibm.com/think/topics/ai-hallucinations" target="_blank" rel="noopener noreferrer">confident, fluent, completely false statements</a>. This isn't a bug that will necessarily disappear with the next version. It's a direct consequence of a system built to produce plausible text, not verified truth.
+
+There's also a real cost story here that's easy to forget while typing into a free chat box: training a frontier-scale LLM requires massive computing infrastructure, and every response you get back consumes real compute and energy behind the scenes. That's part of why models come in different sizes: a smaller model that answers a simple question doesn't need the same firepower as one solving a hard math proof.
+
+I've caught models confidently inventing a citation, a function name, or a statistic that simply doesn't exist, and the tone never wavers between the true parts and the made-up ones. That's the tell: fluency is not a reliability signal here.
+
+<Note>
+A good habit: treat an LLM's confident tone as no evidence of accuracy. For anything that matters, especially numbers, dates, citations, or legal and medical claims, verify against a real source before you act on it.
+</Note>
+
+If you want the deeper picture on why retrieval helps with this specific problem, [how embeddings and vector stores make RAG work](/library/agentic-ai/embeddings-vector-stores-and-rag) explains one common fix: giving the model real documents to reference instead of relying purely on what it memorized during training.
+
+## Well-Known LLMs Today
+
+**Major large language models in active use**
+
+| Model family | Maker | Notable for |
+|---|---|---|
+| Claude | Anthropic | Long context, careful reasoning, coding |
+| GPT | OpenAI | General-purpose chat and reasoning, wide plugin ecosystem |
+| Gemini | Google | Deep integration with Google's own products and search |
+| Llama | Meta | Open-weight, runs locally, free to self-host |
+
+Model names and versions change fast enough that specific numbers go stale within months, which is exactly why this table lists families instead of version numbers you'd have to double-check next year.
+
+---
+
+<FAQ>
+  <FAQItem question="Why are they called 'large' language models?">
+    "Large" refers to two things at once: the size of the model (billions, sometimes trillions, of internal parameters) and the size of the training data (a large fraction of the public internet, plus books, code, and articles). A small language model does the same basic job with far fewer parameters and a narrower training set, trading some capability for speed and lower cost.
+  </FAQItem>
+  <FAQItem question="Is ChatGPT a large language model?">
+    ChatGPT is a product built on top of a large language model (OpenAI's GPT family). The distinction matters: the LLM is the underlying prediction engine, and ChatGPT is the chat interface, memory layer, and safety rules wrapped around it. Claude and Gemini follow the same pattern: a model underneath, a product on top.
+  </FAQItem>
+  <FAQItem question="Does a large language model actually understand what I'm saying?">
+    Not the way a person does. It has learned statistical patterns in language so well that its responses are usually coherent and often useful, but there's no comprehension happening the way there is in a human mind. That distinction matters for knowing when to double-check its answers.
+  </FAQItem>
+  <FAQItem question="Can I run a large language model without an internet connection?">
+    Yes, for some models. Open-weight models like Llama or Mistral can run entirely on a personal computer using tools like Ollama, with no internet needed after the initial download. ChatGPT, Claude, and Gemini are cloud-only: the model runs on the company's servers, not your device.
+  </FAQItem>
+</FAQ>
