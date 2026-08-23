@@ -1,0 +1,174 @@
+---
+title: "MemGPT & Letta: Self-Editing Memory and Sleep-Time Compute"
+description: "MemGPT (now Letta) gives agents self-editing, tiered memory, and sleep-time compute lets them reorganize it while idle. Build a minimal version."
+pillar: "agentic-ai"
+slug: "memory-research-memgpt-letta-sleep-time"
+difficulty: "advanced"
+readTime: 11
+author: "Hasnat Tariq"
+authorSlug: "hasnat-tariq"
+publisher: "Seekvana"
+reviewedBy: ""
+publishedAt: "2026-07-19"
+lastUpdated: "2026-08-23"
+tags: ["agentic-ai", "context-engineering", "agent-memory", "letta"]
+featured: false
+lessonModule: "19"
+lessonNumber: "19.11"
+faqs:
+  - q: "Is MemGPT the same thing as Letta?"
+    a: "Yes, functionally. MemGPT was the 2023 research paper and design pattern; Letta is the company and open-source framework that grew out of it, renamed in 2024 to separate the agent-memory pattern from the production runtime. If you see MemGPT referenced today, it means the tiered self-editing memory architecture, which now ships as Letta."
+  - q: "What is sleep-time compute in AI agents?"
+    a: "Sleep-time compute is running a second agent in the background, during idle time between user turns, to reorganize and consolidate memory before it's needed. Instead of doing that work live and adding latency to a response, the agent effectively pre-thinks, so the next real turn starts from cleaner, denser context."
+  - q: "How does an agent edit its own memory?"
+    a: "It calls specific functions the same way it calls any other tool, things like core_memory_replace to update a fact or archival_memory_insert to file something away for later. The model decides when a memory operation is worth making, then executes it as a normal tool call inside its own reasoning loop."
+  - q: "Do I need a vector database to use self-editing memory?"
+    a: "No. Core memory is just a few editable text blocks kept in every prompt, no database required. A vector store only becomes useful for the archival tier, once you have more facts than fit in a prompt and need semantic search to find the right one later."
+---
+
+{/* IMAGE PROMPT: Warm storybook gouache illustration; the cream-white robot asleep while a small helper tidies and re-shelves its memory-orbs overnight, so it wakes to an organized vault; cozy, cream-to-clay palette. No text in image. | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+
+<ArticleImage src="/images/articles/agentic-ai/memory-research-memgpt-letta-sleep-time/cover.webp" alt="A cream-white robot asleep while a small helper tidies and reorganizes its memory overnight" />
+
+Somewhere around message forty, an agent I was running hit its context limit mid-task. It didn't crash. It just quietly stopped remembering a decision from ten minutes earlier, because that message had already scrolled out of the window, and nothing had rescued it before it was gone.
+
+**MemGPT, the research pattern now shipped as the Letta framework, solves exactly this by letting the agent manage its own memory: it gets a small set of editable memory blocks it can rewrite mid-conversation, plus a larger external store it searches on demand, and it decides for itself what's worth keeping.** On the <a href="https://www.emergentmind.com/topics/memgpt-style-memory-management" target="_blank" rel="noopener noreferrer">original Deep Memory Retrieval evaluation</a>, this lifted GPT-4's long-conversation fact recall from 32.1% accuracy with a plain fixed context to 92.5% with the tiered, self-editing version. That's not a marginal tweak. It's the difference between an agent that forgets and one that curates.
+
+## What Is MemGPT (Now Letta)?
+
+MemGPT is the name of the 2023 UC Berkeley research paper and the memory-management pattern it introduced; Letta is the company and open-source framework the same researchers built to ship it as production infrastructure.
+
+The rename happened in 2024, mostly to separate two things that had gotten tangled: the *design pattern* (self-editing, OS-inspired agent memory) from the *runtime* (a server, SDKs, and deployment tooling you actually install). If you're reading a 2026 blog post about "Letta," it's talking about the same underlying idea MemGPT described. If you're reading the original paper, you're reading the theory Letta productized. There's no competing successor here, just one idea that outgrew its academic name.
+
+The core claim, stripped of branding, is this: instead of a human deciding what an agent remembers, give the agent the tools to decide for itself, and give it somewhere to put what it decides matters.
+
+## The Three Memory Tiers: Core, Recall, Archival
+
+**MemGPT's architecture borrows directly from how an operating system manages RAM and disk, splitting an agent's memory into three tiers with different size, speed, and visibility trade-offs.**
+
+Core memory lives in every single prompt, a handful of small, always-visible blocks (a "Human" block with facts about you, a "Persona" block with the agent's own behavioral notes). Recall memory is the full conversation history, sitting outside the prompt but retrievable by exact search. Archival memory is a long-term, semantically searchable store for anything too big or too old to keep around otherwise.
+
+Skip the tiering and stuff everything into core memory instead, and you've built the exact self-inflicted context rot this module opened with, an always-loaded block that keeps growing until it crowds out the room the model needs to actually reason.
+
+**How MemGPT's three memory tiers compare**
+
+| Tier | What it holds | Where it lives | How it's accessed |
+|---|---|---|---|
+| Core | A few pinned facts and behavioral notes | Inside every prompt, always | Always visible, edited directly |
+| Recall | The complete conversation history | Outside the prompt | Exact keyword or ID search |
+| Archival | Long-term facts, documents, past sessions | External store (often vector-backed) | Semantic search, pulled in on demand |
+
+{/* IMAGE PROMPT: Warm storybook gouache illustration; a small cream-white robot standing before three labeled shelves, a near one within arm's reach (core), a middle drawer it slides open (recall), and a deep archive room glowing softly in the back (archival); cozy, cream-to-clay palette. No text in image. | FILENAME: memory-tiers.webp | DIMENSIONS: 1200x675 */}
+
+<ArticleImage src="/images/articles/agentic-ai/memory-research-memgpt-letta-sleep-time/memory-tiers.webp" alt="Infographic showing MemGPT's core, recall, and archival memory tiers, the self-editing memory functions, and sleep-time compute" caption="Core memory stays pinned in every prompt; recall and archival sit outside it, retrieved only when the agent asks." />
+
+That mirrors the [just-in-time context](/library/agentic-ai/just-in-time-vs-preloaded-context) strategy from earlier in this module almost exactly: keep the smallest useful slice loaded by default, and fetch the rest only when something actually needs it.
+
+## How the Agent Edits Its Own Memory
+
+**The agent edits its own core memory by calling ordinary tool functions, the same mechanism it uses to call any other tool, just aimed at its own prompt instead of an external API.**
+
+The functions are specific and small. `core_memory_append` adds a new fact to a block without erasing what's there. `core_memory_replace` overwrites something that's now wrong or outdated. `archival_memory_insert` files something away for the long term, and `archival_memory_search` plus `conversation_search` pull things back out when they're needed.
+
+None of this is magic. It's a handful of named functions the model chooses to invoke, exactly like it would choose to call a weather API.
+
+The first time I watched a Letta-style agent do this live, it deleted an old fact from its own core memory mid-conversation to make room for a corrected one, without being told to. It didn't feel like logging. It felt like the agent making an actual judgment call about what still mattered and what didn't, the same call a human keeping a running notes doc makes constantly without thinking about it.
+
+<Tip>
+Design core memory blocks the way you'd design any other tool schema: a short, named field with a clear purpose beats one giant free-text scratchpad. A "Human" block and a "Persona" block, each with an obvious job, is easier for the model to edit correctly than one undifferentiated wall of notes.
+</Tip>
+
+This is also the honest limit of the approach: the agent has to *decide* something is worth saving before it saves it. If it doesn't, that fact is gone the moment it scrolls out of context, the same failure this whole module opened with in the [statelessness problem](/library/agentic-ai/the-statelessness-problem). Self-editing memory doesn't eliminate that risk, it just moves the judgment call from a human forgetting to configure something, to a model that can also just get it wrong.
+
+## What Is Sleep-Time Compute?
+
+**Sleep-time compute is running a second, background agent during idle time between turns to reorganize memory before it's needed, so the live agent starts its next turn from cleaner context instead of raw, unprocessed history.**
+
+Letta's <a href="https://docs.letta.com/guides/agents/architectures/sleeptime/" target="_blank" rel="noopener noreferrer">sleep-time agent documentation</a> calls the everyday version of this "dreaming": a background subagent reviews recent conversations, consolidates whatever lessons are worth keeping, and updates a shared memory store, triggered either after a set number of steps or during a context-window compaction. The primary agent never waits on any of this. It just benefits from memory that's a little more organized every time it comes back.
+
+Without it, every one of those consolidation decisions has to happen live, on the user's clock, which is exactly the compute you're paying full latency for on every single turn instead of once in the background.
+
+## The Sleep-Time Numbers
+
+<a href="https://arxiv.org/abs/2504.13171" target="_blank" rel="noopener noreferrer">Letta's sleep-time compute paper</a> reports roughly a 5x reduction in test-time compute needed for equivalent accuracy on math-reasoning benchmarks (Stateful GSM-Symbolic and Stateful AIME), or, at a fixed compute budget, accuracy gains up to 13% on GSM-Symbolic and up to 18% on AIME.
+
+Worth saying plainly: those numbers come from Letta's own published research on their own benchmarks, not an independent third-party replication I've run or verified myself. Treat the direction as credible, given the underlying idea (idle time is otherwise wasted compute) is sound, but treat the exact percentages as a vendor's reported result rather than a settled, community-verified figure.
+
+<Note>
+Two honest trade-offs worth stating up front. First, every memory operation, self-editing or sleep-time, costs real inference tokens, the agent has to reason about what to store and how before it stores it. Second, sleep-time compute helps most when future questions are somewhat predictable from what already happened, an agent dreaming about a conversation that's about to pivot in a totally new direction gets less benefit from it.
+</Note>
+
+## Building a Minimal Self-Editing Memory Block
+
+You don't need Letta's full framework to feel how this works. Here's a minimal core-memory block spec you can implement directly with the Claude Agent SDK or a raw tool-calling loop.
+
+```python
+# core_memory.py
+core_memory = {
+    "human": "",   # facts about the user, edited via replace/append
+    "persona": "You are a careful, concise coding assistant.",
+}
+
+def core_memory_append(block: str, text: str) -> str:
+    core_memory[block] = (core_memory[block] + "\n" + text).strip()
+    return f"Appended to {block}."
+
+def core_memory_replace(block: str, old: str, new: str) -> str:
+    core_memory[block] = core_memory[block].replace(old, new)
+    return f"Replaced in {block}."
+```
+
+Register `core_memory_append` and `core_memory_replace` as tools the agent can call, and inject the current `core_memory` dict into the system prompt on every turn. That's the entire mechanism: two functions, one always-visible dict, and a model that decides when to use them. Everything Letta adds on top, the archival vector search, the multi-agent sleep-time layer, is scaling this same idea, not replacing it.
+
+## Adding an Offline Reorganization Pass
+
+The self-editing block above only reacts to what happens live. A sleep-time pass adds a second, separate call, made between sessions rather than during one, that looks at everything the live agent wrote and tightens it up.
+
+```python
+# sleep_time_pass.py
+def reorganize_memory(core_memory: dict, recent_transcript: str) -> dict:
+    prompt = f"""Review this transcript and the agent's current core memory.
+Consolidate redundant facts, remove anything stale, and keep each block
+under 200 words.
+
+Current memory: {core_memory}
+Recent transcript: {recent_transcript}
+
+Return the updated memory blocks."""
+    # Send `prompt` to a model call and parse the returned blocks back
+    # into core_memory before the next session starts.
+    ...
+```
+
+Run this once at the end of a session, before the next one starts, and you have a working, minimal version of the same idea Letta ships as a background subagent: memory that gets a little cleaner every time it's touched, without costing the live agent any latency to do it.
+
+## Where This Fits in Your Memory Stack
+
+Self-editing memory and sleep-time compute sit at the far end of the [files → database → vector store spectrum](/library/agentic-ai/database-and-vector-store-memory) this module builds toward, not a replacement for the earlier steps. A `CLAUDE.md` file is still the right tool for static project rules. A progress file is still the right tool for resuming a paused build. Self-editing core memory earns its cost when the facts worth remembering change *during* a session and nobody's available to update a file by hand.
+
+That's also the honest caveat to close on: this is genuinely the research frontier, not a settled best practice every production agent needs today. Reach for it when an agent's memory needs are dynamic enough that a static file can't keep up, not because it's the newest name in the space.
+
+## Your Lab
+
+<Steps>
+  <Step number={1} title="Build the memory block and prove it self-edits">
+    In a fresh Python file, implement the `core_memory` dict and the `core_memory_append` / `core_memory_replace` functions from this lesson, and register them as tools with the Claude Agent SDK. Give the agent a short conversation where it learns two facts about you, then confirm, by printing `core_memory` afterward, that it actually called the functions rather than just replying with the facts in text.
+  </Step>
+  <Step number={2} title="Add the offline reorganization pass and show a before/after">
+    Implement `reorganize_memory` from this lesson. Feed it a transcript where you deliberately give the agent one fact, then correct it later in the same session, so core memory ends up with both the old and new version. Run the reorganization pass and confirm the stale fact is gone and only the correct one remains.
+  </Step>
+  <Step number={3} title="Commit the before/after to learning-log.md">
+    In `learning-log.md`, paste the `core_memory` dict before the reorganization pass and after it, side by side, plus one sentence on what the pass actually fixed.
+  </Step>
+</Steps>
+
+<Note>
+Done? You've completed Lesson 19.11.
+</Note>
+
+<FAQ>
+  <FAQItem question="Is MemGPT the same thing as Letta?">Yes, functionally. MemGPT was the 2023 research paper and design pattern; Letta is the company and open-source framework that grew out of it, renamed in 2024 to separate the agent-memory pattern from the production runtime. If you see MemGPT referenced today, it means the tiered self-editing memory architecture, which now ships as Letta.</FAQItem>
+  <FAQItem question="What is sleep-time compute in AI agents?">Sleep-time compute is running a second agent in the background, during idle time between user turns, to reorganize and consolidate memory before it's needed. Instead of doing that work live and adding latency to a response, the agent effectively pre-thinks, so the next real turn starts from cleaner, denser context.</FAQItem>
+  <FAQItem question="How does an agent edit its own memory?">It calls specific functions the same way it calls any other tool, things like core_memory_replace to update a fact or archival_memory_insert to file something away for later. The model decides when a memory operation is worth making, then executes it as a normal tool call inside its own reasoning loop.</FAQItem>
+  <FAQItem question="Do I need a vector database to use self-editing memory?">No. Core memory is just a few editable text blocks kept in every prompt, no database required. A vector store only becomes useful for the archival tier, once you have more facts than fit in a prompt and need semantic search to find the right one later.</FAQItem>
+</FAQ>
