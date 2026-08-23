@@ -85,7 +85,7 @@ So re-pasting everything is neither cheap nor safe at scale. It's a stopgap, not
 
 ## Memory Is an Engineering Trade-off, Not a Toggle
 
-Giving an agent real memory means deliberately choosing what to persist, where to store it, and when to load it back in, not flipping a "remember things" switch that doesn't exist. Every option carries a cost. A plain text file is cheap and simple but only scales so far. A database can hold much more but adds infrastructure you have to run and maintain. A vector store enables searching by meaning rather than exact wording, at the price of more moving parts and more places things can go wrong.
+Giving an agent real memory means deliberately choosing what to persist, where to store it, and when to load it back in, not flipping a "remember things" switch that doesn't exist. Every option carries a cost. A plain text file is cheap and simple but only scales so far. A database can hold much more but adds infrastructure you have to run and maintain. A vector store enables searching by meaning rather than exact wording, at the price of more moving parts and more places things can go wrong, the trade-offs covered in [database and vector-store memory](/library/agentic-ai/database-and-vector-store-memory).
 
 None of that is a downside of AI agents specifically. It's the same trade-off every stateless system has always faced: speed and simplicity now, or durability and cost later. Once you understand why AI agents forget in the first place, the rest of this module walks through the real tools for making that trade-off deliberately, files, structured notes, databases, vector memory, instead of by accident.
 
