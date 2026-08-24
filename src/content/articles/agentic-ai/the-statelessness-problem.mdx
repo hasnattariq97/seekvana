@@ -30,7 +30,7 @@ faqs:
 
 You spend forty minutes with Claude Code chasing a bug, and around minute thirty it finally clicks: the failing test wasn't a logic error at all, it was a stale cache key. You fix it together, [agent](/library/agentic-ai) and all, and it feels like a real breakthrough. You close the terminal. Tomorrow, you open a fresh session and ask a follow-up question about the same bug. The agent has no idea what you're talking about.
 
-**AI agents forget between sessions because the underlying model is stateless: every request it processes is handled independently, with nothing carried over from the last one.** The context window you're typing into isn't a memory, it's temporary working space for the current conversation only, and when that conversation ends, everything in it disappears unless something outside the model explicitly saved it first.
+**AI agents forget between sessions because the underlying model is stateless: every request it processes is handled independently, with nothing carried over from the last one.** The [context window](/library/large-language-models/what-is-a-context-window) you're typing into isn't a memory, it's temporary working space for the current conversation only, and when that conversation ends, everything in it disappears unless something outside the model explicitly saved it first.
 
 > **Key Takeaways**
 > - Large language models are stateless by design: each call in, response out, then the model discards everything it just computed.
