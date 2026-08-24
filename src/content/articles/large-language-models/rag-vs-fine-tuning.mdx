@@ -45,7 +45,7 @@ If you're not sure what a large language model is doing under the hood before th
 
 Here's the framing that actually matters, stripped of the feature tables: **RAG handles knowledge that changes. Fine-tuning handles behavior that shouldn't.**
 
-RAG doesn't touch the model at all. It retrieves real documents, the [quick RAG definition](/glossary/rag) covers the mechanics, and hands them to the model as context right before it answers. Fine-tuning does the opposite: it adjusts the model's actual parameters through additional training, covered in the [fine-tuning glossary entry](/glossary/fine-tuning), so its behavior shifts permanently.
+RAG doesn't touch the model at all. It retrieves real documents, the [quick RAG definition](/glossary/rag) covers the mechanics, and hands them to the model as context right before it answers. Fine-tuning does the opposite: it adjusts the model's actual parameters through additional training, [covered in full here](/library/large-language-models/llm-fine-tuning-explained), so its behavior shifts permanently.
 
 That single distinction, knowledge versus behavior, resolves most "which one do I need" questions faster than any comparison chart.
 

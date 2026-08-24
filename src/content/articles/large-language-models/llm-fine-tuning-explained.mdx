@@ -1,0 +1,121 @@
+---
+title: "LLM Fine-Tuning Explained: What It Actually Changes"
+description: "Fine-tuning retrains a model on your own examples to change its behavior permanently. Here's what that means and when you actually need it."
+pillar: "large-language-models"
+slug: "llm-fine-tuning-explained"
+difficulty: "intermediate"
+readTime: 8
+author: "Hasnat Tariq"
+publishedAt: "2026-08-24"
+tags: ["llm fine tuning explained", "what is fine tuning ai", "when to fine tune a model", "fine tuning vs prompting"]
+featured: false
+faqs:
+  - q: "Is fine-tuning the same as prompting?"
+    a: "No. Prompting shapes a single response by changing what you ask, the model itself never changes. Fine-tuning retrains the model's actual parameters on a set of examples, so the change carries forward into every future response, not just the current one."
+  - q: "Do I need to fine-tune a model to get consistent output?"
+    a: "Not always, and it's worth trying the cheaper option first. A well-written prompt with clear instructions and a few examples can get you surprisingly consistent output. Fine-tuning is worth the cost once prompting alone keeps falling short at real volume, not before you've genuinely tried it."
+  - q: "Can fine-tuning teach a model facts it didn't already know?"
+    a: "It can, but unreliably. Fine-tuning is much better at teaching consistent style, tone, or format than at reliably memorizing new facts. If the goal is fresh or specific knowledge, retrieval, not fine-tuning, is almost always the better tool for that job."
+  - q: "What's the difference between fine-tuning and RLHF?"
+    a: "Fine-tuning is the broad category: additional training on top of a base model. RLHF (reinforcement learning from human feedback) is one specific fine-tuning technique, used to steer a model toward responses humans actually prefer, rather than just responses that match a fixed example dataset."
+---
+
+<ArticleImage
+  src="/images/articles/large-language-models/llm-fine-tuning-explained/cover.webp"
+  alt="A general robot reading a wide range of books on the left, connected through a glowing neural network to a specialized robot in a graduation cap writing confidently on the right"
+  dimensions="1200x630"
+  priority
+  isCover
+/>
+
+A model answers a customer support question with the technically correct information, delivered in a tone that reads like a legal disclaimer. The facts are fine. The voice is wrong, every single time, no matter how the prompt is worded. That's the kind of problem **fine-tuning** exists to fix: additional training that changes how a model behaves, not just what you ask it in a single message.
+
+If you haven't covered what a large language model actually is yet, [start there first](/library/large-language-models/what-is-a-large-language-model).
+
+> **Key Takeaways**
+> - Fine-tuning retrains a model's actual parameters on your examples, so the change persists across every future response
+> - It's much better at teaching consistent tone, style, and format than at reliably teaching new facts
+> - Prompting is cheaper and faster to try first, fine-tuning earns its cost once prompting alone keeps falling short at real volume
+> - It doesn't erase the model's general knowledge, it steers behavior on top of what the model already knows
+> - Terms like SFT, LoRA, and RLHF all describe specific fine-tuning techniques, not separate concepts
+
+---
+
+## What Is Fine-Tuning?
+
+Think of a pretrained large language model as someone who finished a broad general education: they know a little about almost everything. **Fine-tuning** is like sending that person to a focused graduate program in one specific area. They come out sharper and more consistent in that one domain, without losing the general knowledge they already had.
+
+Technically, <a href="https://www.ibm.com/think/topics/rag-vs-fine-tuning-vs-prompt-engineering" target="_blank" rel="noopener noreferrer">fine-tuning means taking a model that's already trained and training it further on a smaller, specific dataset</a>. That extra training adjusts its internal parameters. Its behavior shifts toward whatever the dataset demonstrates. It doesn't start over. It builds on everything the base model already learned.
+
+For the short version of this definition, see the [fine-tuning glossary entry](/glossary/fine-tuning).
+
+## How Fine-Tuning Actually Works
+
+The process starts with a dataset of examples, typically input-output pairs that demonstrate exactly the behavior you want. A support team might collect hundreds of real questions paired with well-written, on-brand answers. A coding tool might use thousands of examples of a specific bug pattern paired with the correct fix.
+
+The model then trains on those examples the same basic way [it learned in the first place](/library/large-language-models/how-llms-work): predict, compare against the example, adjust the internal parameters slightly, repeat. After enough passes through the dataset, the model's outputs start to consistently look more like your examples, in tone, structure, and content, without you having to specify all of that in every single prompt.
+
+<Note>
+Fine-tuning adjusts the model's behavior. It doesn't wipe out what it already knows. A model fine-tuned to write in a specific customer-service tone can still reason, still write code, still do everything else it could do before, it's just been nudged toward your specific style on top of all that.
+</Note>
+
+<ArticleImage
+  src="/images/articles/large-language-models/llm-fine-tuning-explained/fine-tuning-process.webp"
+  alt="Five-step diagram titled How Fine-Tuning Works: prepare data, train the model, patterns are learned, new input arrives, consistent output every time"
+  dimensions="1200x675"
+  caption="Each example nudges the model's internal parameters a little closer to the behavior the dataset demonstrates."
+/>
+
+## What Fine-Tuning Is Good At (and Bad At)
+
+Fine-tuning excels at consistency. A specific tone that should never drift. A rigid output format a prompt keeps failing to enforce. A narrow task run at high enough volume that a smaller, specialized model actually saves money over a large general-purpose one.
+
+It's much weaker at teaching a model new facts reliably. You can technically expose a model to new information during fine-tuning. But it absorbs style and format far more reliably than it memorizes specific facts. If your actual problem is [hallucination](/library/large-language-models/what-is-hallucination-in-ai) from missing or outdated knowledge, fine-tuning is usually the wrong tool. Retrieval is the better fix for that specific failure.
+
+**Fine-tuning vs prompting, at a glance**
+
+| | Prompting | Fine-tuning |
+|---|---|---|
+| Setup cost | Minutes | Hours to days |
+| Best for | Quick iteration, flexible tasks | Locked-in tone, format, or narrow high-volume tasks |
+| Teaches new facts reliably | No | Not reliably either, use RAG instead |
+| Where to start | Here, first | Only once prompting genuinely falls short |
+
+## Fine-Tuning vs Prompting: Start Here First
+
+Most guides bury this, but it's the most practically useful thing to know: try prompting before you reach for fine-tuning. A well-written prompt with clear instructions and a couple of good examples solves more consistency problems than people expect, at a fraction of the cost and none of the training overhead.
+
+Fine-tuning earns its cost once prompting genuinely keeps falling short, usually at real production volume, where the savings from a smaller, purpose-trained model, or the cost of inconsistent output at scale, outweighs the upfront investment. I've seen teams jump straight to fine-tuning on a problem a better-written prompt would have solved in an afternoon. Fine-tuning is a real tool, not a first resort.
+
+If you're weighing fine-tuning against retrieval instead of prompting, [the full RAG vs fine-tuning decision framework](/library/large-language-models/rag-vs-fine-tuning) covers that comparison directly.
+
+## The Terms You'll See Next
+
+Once you start reading about fine-tuning, a handful of specific technique names show up constantly. You don't need to master them to understand fine-tuning conceptually, but recognizing them saves confusion later.
+
+**Fine-tuning techniques you'll run into**
+
+| Term | What it is |
+|---|---|
+| SFT (Supervised Fine-Tuning) | The basic form: training on labeled input-output example pairs |
+| LoRA / QLoRA | Efficient fine-tuning methods that update far fewer parameters, cutting cost and hardware needs |
+| RLHF | Reinforcement learning from human feedback, steering a model toward responses people actually prefer |
+
+Each one is a specific technique for doing fine-tuning, not a separate concept from it. They solve the same core problem, changing model behavior through additional training, with different tradeoffs in cost, speed, and control.
+
+---
+
+<FAQ>
+  <FAQItem question="Is fine-tuning the same as prompting?">
+    No. Prompting shapes a single response by changing what you ask, the model itself never changes. Fine-tuning retrains the model's actual parameters on a set of examples, so the change carries forward into every future response, not just the current one.
+  </FAQItem>
+  <FAQItem question="Do I need to fine-tune a model to get consistent output?">
+    Not always, and it's worth trying the cheaper option first. A well-written prompt with clear instructions and a few examples can get you surprisingly consistent output. Fine-tuning is worth the cost once prompting alone keeps falling short at real volume, not before you've genuinely tried it.
+  </FAQItem>
+  <FAQItem question="Can fine-tuning teach a model facts it didn't already know?">
+    It can, but unreliably. Fine-tuning is much better at teaching consistent style, tone, or format than at reliably memorizing new facts. If the goal is fresh or specific knowledge, retrieval, not fine-tuning, is almost always the better tool for that job.
+  </FAQItem>
+  <FAQItem question="What's the difference between fine-tuning and RLHF?">
+    Fine-tuning is the broad category: additional training on top of a base model. RLHF (reinforcement learning from human feedback) is one specific fine-tuning technique, used to steer a model toward responses humans actually prefer, rather than just responses that match a fixed example dataset.
+  </FAQItem>
+</FAQ>
