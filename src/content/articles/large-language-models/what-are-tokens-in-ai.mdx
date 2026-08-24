@@ -1,0 +1,123 @@
+---
+title: "What Are Tokens in AI? The Unit Behind Every AI Answer"
+description: "Tokens are the chunks of text an AI model actually reads and bills you for, not words. Here's what that means for your prompts and your bill."
+pillar: "large-language-models"
+slug: "what-are-tokens-in-ai"
+difficulty: "beginner"
+readTime: 8
+author: "Hasnat Tariq"
+publishedAt: "2026-08-24"
+tags: ["what are tokens in ai", "how does tokenization work", "token pricing", "how many tokens is a word"]
+featured: false
+faqs:
+  - q: "Is a token the same as a word?"
+    a: "No, and that difference matters more than it sounds. A short common word is often one token. A longer or less common word can split into two or three. As a rough rule of thumb, one token is about three-quarters of a word in English, but the exact count depends on the specific word and the tokenizer."
+  - q: "Why does my AI bill change even when my prompts are a similar length?"
+    a: "Because token count, not word count or character count, is what actually gets billed. A prompt full of common short words can tokenize into fewer tokens than a shorter prompt full of unusual words or a different language, even if the word count looks similar."
+  - q: "Do all AI models split text into tokens the same way?"
+    a: "No. Each model uses its own tokenizer, trained on its own data, so the same sentence can split into a different number of tokens depending on which model reads it. There's no universal token, only a model-specific one."
+  - q: "Why do other languages cost more to use with AI?"
+    a: "Because most tokenizers were built primarily from English text, so English words tend to match existing token patterns efficiently. A language with different scripts or word structures often needs more tokens to represent the same sentence, which means higher cost and a smaller effective context window for the same amount of meaning."
+---
+
+<ArticleImage
+  src="/images/articles/large-language-models/what-are-tokens-in-ai/cover.webp"
+  alt="A robot reading a book while a document breaks apart into floating punctuation and text fragments flowing toward its glowing brain"
+  dimensions="1200x630"
+  priority
+  isCover
+/>
+
+Two prompts, roughly the same length. One costs noticeably more to run than the other. The difference isn't word count, it's **tokens**: the actual chunks of text an AI model reads, generates, and gets billed for. A model never sees "unbelievable" as one word. It sees three separate pieces, and every one of them counts.
+
+If you haven't covered what a large language model actually is yet, [start there first](/library/large-language-models/what-is-a-large-language-model).
+
+> **Key Takeaways**
+> - Tokens, not words, are what an AI model actually reads, generates, and gets billed for
+> - One token is roughly three-quarters of a word in English, but the exact split depends on the specific word and the model's tokenizer
+> - A short prompt full of unusual words can use more tokens, and cost more, than a longer prompt full of common ones
+> - Every model has its own tokenizer, so the same sentence can split differently depending on which model reads it
+> - Non-English languages often need more tokens for the same meaning, which raises both cost and effective context usage
+
+---
+
+## What Are Tokens?
+
+A **token** is the basic unit of text a language model actually processes, a chunk that's often smaller than a full word. It can be a whole common word, part of a longer word, a single punctuation mark, or even just a space. The model never reads raw sentences the way you do. Everything is converted into tokens first.
+
+For the short version of this definition, see the [token glossary entry](/glossary/token).
+
+## How Tokenization Actually Splits Text
+
+A process called tokenization breaks text into tokens before the model ever sees it. Common, short words often become a single token. Longer or less common words get split into pieces.
+
+Take "unbelievable." A typical tokenizer might split it into three tokens: `un`, `believ`, and `able`. Compare that to "hello," which stays as one token because it's common enough to have its own dedicated slot in the tokenizer's vocabulary. <a href="https://www.analyticsvidhya.com/blog/2020/05/what-is-tokenization-nlp/" target="_blank" rel="noopener noreferrer">This same pattern shows up across common subword tokenization methods</a>: frequent words stay whole, rarer or longer ones get carved into meaningful pieces. Same idea, wildly different token cost, purely because of how common each word is.
+
+This connects directly to [how LLMs learn to predict text](/library/large-language-models/how-llms-work) in the first place: the model was trained to predict the next token, not the next word, so tokens are the actual unit its entire prediction mechanism operates on.
+
+**A few examples of how text actually splits into tokens**
+
+| Text | Typical token split | Token count |
+|---|---|---|
+| "hello" | `hello` | 1 |
+| "unbelievable" | `un` + `believ` + `able` | 3 |
+| "GPT-4" | `G` + `PT` + `-4` | 3 |
+| "the cat sat" | `the` + `cat` + `sat` | 3 |
+
+Exact splits vary by model and tokenizer version, but the pattern holds everywhere: common short words stay whole, unusual or compound ones get carved up.
+
+<ArticleImage
+  src="/images/articles/large-language-models/what-are-tokens-in-ai/tokenization-example.webp"
+  alt="Infographic titled How Tokenization Splits Text, showing hello staying as one token while unbelievable, GPT-4, and the cat sat each split into three"
+  dimensions="1200x675"
+  caption="Same rule every time: common short words stay whole, longer or less common ones get carved into pieces."
+/>
+
+## Why Tokens Aren't the Same as Words
+
+As a rough rule of thumb, one token is about three-quarters of a word in English. So 100 words works out to roughly 133 tokens. But that's an average, not a guarantee, and it's easy to get burned by treating it as exact.
+
+A prompt built from short, common words can come in well under that estimate. A prompt with technical jargon, unusual names, or a lot of punctuation can run well over it. The word count you see in a text editor and the token count the model actually bills you for can diverge more than people expect.
+
+<Note>
+If you need an exact count rather than an estimate, most providers publish a tokenizer tool that shows the real token breakdown for a specific piece of text before you send it. Estimating by eye gets you close; the tool gets you exact.
+</Note>
+
+## Why This Matters: Context Limits and Cost
+
+Tokens aren't just a technical curiosity, they're the currency that two very practical limits are measured in.
+
+Every model has a maximum [context window](/library/large-language-models/what-is-a-context-window), and that limit is counted in tokens, not words or messages. A conversation, a pasted document, and the model's own response all draw from the same token budget.
+
+Cost works the same way. API providers typically charge per token, split between what you send and what the model generates back, and output tokens usually cost more per token than input ones. A prompt that looks short in your editor can still tokenize into more billable units than you'd guess, especially if it's dense with uncommon words.
+
+I've seen a single prompt's cost jump noticeably after swapping a handful of plain-English terms for domain jargon, same rough word count, meaningfully more tokens. The words looked interchangeable. The tokenizer didn't see them that way at all.
+
+## Not Every Language Tokenizes the Same Way
+
+Most tokenizers were built primarily from English text, so common English words tend to map efficiently to single tokens. Other languages don't get the same treatment by default.
+
+A sentence in a language with a different script or word structure, say a language written without spaces between words, or one with heavy use of compound characters, can require noticeably more tokens to represent the same meaning than the English equivalent. That's not a minor detail: it means the same idea can cost more to process, and it eats into the effective context window faster, purely because of which language it's written in.
+
+## A Quick Gut-Check for Estimating Tokens
+
+You don't need to run every prompt through a tokenizer tool to have a reasonable sense of your token usage. A workable gut-check: count your words, then add roughly 30 percent as a buffer. That gets you in the right neighborhood for plain English text.
+
+Push that estimate up further if your text is full of technical terms, unusual names, code, or a non-English language, all of which tend to tokenize less efficiently than common English prose. When the estimate actually matters, like right before hitting a hard context limit, switch to a real tokenizer tool instead of trusting the gut-check.
+
+---
+
+<FAQ>
+  <FAQItem question="Is a token the same as a word?">
+    No, and that difference matters more than it sounds. A short common word is often one token. A longer or less common word can split into two or three. As a rough rule of thumb, one token is about three-quarters of a word in English, but the exact count depends on the specific word and the tokenizer.
+  </FAQItem>
+  <FAQItem question="Why does my AI bill change even when my prompts are a similar length?">
+    Because token count, not word count or character count, is what actually gets billed. A prompt full of common short words can tokenize into fewer tokens than a shorter prompt full of unusual words or a different language, even if the word count looks similar.
+  </FAQItem>
+  <FAQItem question="Do all AI models split text into tokens the same way?">
+    No. Each model uses its own tokenizer, trained on its own data, so the same sentence can split into a different number of tokens depending on which model reads it. There's no universal token, only a model-specific one.
+  </FAQItem>
+  <FAQItem question="Why do other languages cost more to use with AI?">
+    Because most tokenizers were built primarily from English text, so English words tend to match existing token patterns efficiently. A language with different scripts or word structures often needs more tokens to represent the same sentence, which means higher cost and a smaller effective context window for the same amount of meaning.
+  </FAQItem>
+</FAQ>

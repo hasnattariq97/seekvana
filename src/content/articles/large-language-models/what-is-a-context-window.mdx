@@ -45,7 +45,7 @@ If you haven't yet covered what an LLM actually is, [start there first](/library
 
 A **context window** is <a href="https://nebius.com/blog/posts/context-window-in-ai" target="_blank" rel="noopener noreferrer">the model's working memory for the current exchange</a>. It's not storage, and it's not the same as remembering you between sessions, it's the specific set of text the model can actually see and reason over right now. Anything outside it doesn't exist for the model. It can't reference it, summarize it, or be influenced by it.
 
-Context windows are measured in **tokens**, chunks of text usually smaller than a whole word. That measurement matters because [the way LLMs learn](/library/large-language-models/how-llms-work) to process text happens one token at a time, and the window is a hard limit on how many of those tokens fit into a single pass.
+Context windows are measured in [tokens](/library/large-language-models/what-are-tokens-in-ai), chunks of text usually smaller than a whole word. That measurement matters because [the way LLMs learn](/library/large-language-models/how-llms-work) to process text happens one token at a time, and the window is a hard limit on how many of those tokens fit into a single pass.
 
 For the short version of this definition, see the [context window glossary entry](/glossary/context-window).
 
