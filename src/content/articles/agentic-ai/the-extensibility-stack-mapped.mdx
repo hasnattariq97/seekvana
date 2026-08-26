@@ -64,7 +64,7 @@ Each primitive answers a specific scope question: is this always on, on-demand, 
 
 **Rules**, stored in `.claude/rules/`, are scoped memory. They load every session too, but can be restricted to specific file paths, so a rule about your test conventions only loads when Claude is actually working in the test directory. Rules exist to keep CLAUDE.md from growing into a wall of text that applies to files it has nothing to do with.
 
-**Skills** are triggerable behavior. A skill is a markdown file Claude loads on demand, either because you typed its name or because your task matched its description. Skills cost almost nothing until they fire, which makes them the natural home for reusable workflows and reference material you don't need loaded all the time.
+**Skills** are triggerable behavior. A skill is a markdown file Claude loads on demand, either because you typed its name or because your task matched its description. Skills cost almost nothing until they fire, which makes them the natural home for reusable workflows and reference material you don't need loaded all the time. The simplest version of this idea is a [slash command](/library/agentic-ai/slash-commands): a saved prompt you trigger by typing `/name` instead of retyping it every session.
 
 **Subagents** are isolated context. A subagent is a separate worker with its own context window that reads files, runs searches, or does research, then hands back only a condensed summary. The value isn't delegation for its own sake, it's keeping a noisy side-task from filling up your main conversation with details you'll never need again.
 
