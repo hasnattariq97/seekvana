@@ -1,0 +1,100 @@
+---
+title: "What Is RLHF? How AI Models Get Trained to Be Helpful"
+description: "RLHF is how a raw AI model gets shaped into a helpful assistant. Here's what changes, in plain English, no PPO math required."
+pillar: "large-language-models"
+slug: "what-is-rlhf"
+difficulty: "intermediate"
+readTime: 7
+author: "Hasnat Tariq"
+publishedAt: "2026-08-26"
+tags: ["reinforcement learning from human feedback", "what is rlhf", "how does rlhf work", "rlhf vs fine tuning"]
+featured: false
+faqs:
+  - q: "Does RLHF make a model more accurate?"
+    a: "Not directly. RLHF shapes tone, helpfulness, and format, steering the model toward responses people prefer, not toward verified facts. A model can be extremely well-aligned by RLHF standards and still hallucinate, those are two separate problems with two separate fixes."
+  - q: "Is RLHF the same as fine-tuning?"
+    a: "RLHF is one specific type of fine-tuning, not a separate category. Fine-tuning is the broad idea of additional training on top of a base model. RLHF is a particular technique within that: training a reward model on human preferences, then using it to steer the base model's behavior."
+  - q: "What is DPO, and is it different from RLHF?"
+    a: "DPO (Direct Preference Optimization) is a newer alternative that achieves a similar goal, steering a model toward preferred responses, without needing to train and maintain a separate reward model. It's simpler to implement and has become popular for exactly that reason, but the underlying goal, aligning a model with human preferences, is the same as RLHF's."
+  - q: "Why does RLHF sometimes make a model refuse reasonable requests?"
+    a: "Because the human feedback used to train it wasn't perfectly consistent or wasn't specific enough, so the model can overgeneralize a preference for caution into refusing things that were actually fine. This is a known limitation, not a sign the model is broken, and it's one reason models get iteratively retrained on updated feedback over time."
+---
+
+<ArticleImage
+  src="/images/articles/large-language-models/what-is-rlhf/cover.webp"
+  alt="A raw, expressionless robot on the left transforming through a human ranking preferred responses into a warm, smiling, safety-shielded robot on the right"
+  dimensions="1200x630"
+  priority
+  isCover
+/>
+
+A raw, freshly trained language model isn't the polite, helpful assistant you're used to talking to. Left alone, it just predicts plausible next text, sometimes useful, sometimes rambling, sometimes genuinely unhelpful or off-putting. **RLHF (reinforcement learning from human feedback)** is the training step that turns that raw prediction engine into something that actually behaves like a helpful assistant.
+
+If you haven't covered what a large language model actually is yet, [start there first](/library/large-language-models/what-is-a-large-language-model).
+
+> **Key Takeaways**
+> - RLHF trains a model using human preferences, not just examples, to shape tone, helpfulness, and format
+> - It's the reason a raw base model and the polished assistant you actually use feel so different
+> - RLHF shapes how a model behaves, it doesn't make it more factually accurate, those are separate problems
+> - RLHF is one specific fine-tuning technique, not a separate category from fine-tuning itself
+> - DPO is a newer, simpler alternative that aims at the same goal without a separate reward model
+
+---
+
+## What Is RLHF?
+
+**Reinforcement learning from human feedback (RLHF)** is a training technique that uses human preferences, not just labeled examples, to steer a model's behavior. Rather than showing the model a fixed set of correct answers, RLHF shows it multiple possible responses and lets human raters indicate which ones they prefer. <a href="https://www.assemblyai.com/blog/how-rlhf-preference-model-tuning-works-and-how-things-may-go-wrong" target="_blank" rel="noopener noreferrer">The model then gets refined to prioritize the responses humans favored</a>, shifting its behavior toward what people actually chose.
+
+Pretraining teaches a model what's statistically probable in language. RLHF teaches it something different: what's actually helpful, appropriate, and preferred, which pretraining alone never captures.
+
+## How It Actually Works
+
+The process starts with a base model that already works. It's been [trained on massive amounts of text](/library/large-language-models/how-llms-work) to predict plausible language. From there, RLHF adds a layer on top, in three rough stages.
+
+**How RLHF trains a model, in three stages**
+
+| Stage | What happens |
+|---|---|
+| 1. Generate | The model produces several different responses to the same prompt |
+| 2. Rank | Human raters review those responses and rank them by preference |
+| 3. Retrain | That ranking data shifts the model toward the kind of responses people consistently preferred |
+
+<ArticleImage
+  src="/images/articles/large-language-models/what-is-rlhf/rlhf-process.webp"
+  alt="Three-step diagram titled How RLHF Works: generate multiple responses, rank them by human preference, retrain the model to prefer better responses"
+  dimensions="1200x675"
+  caption="Generate multiple responses, rank them by human preference, then retrain the model to favor what people actually preferred."
+/>
+
+<Note>
+You don't need to understand the underlying optimization algorithm to grasp what RLHF does. The practical version is: humans said "this response is better than that one," repeatedly, at scale, and the model absorbed that pattern.
+</Note>
+
+## What RLHF Changes (and What It Doesn't)
+
+RLHF is why a raw model and a polished assistant behave so differently. It's a big part of why a model refuses harmful requests, follows multistep instructions more reliably, and defaults to a tone that reads as considerate rather than blunt or robotic.
+
+What it doesn't do is make the model more factually accurate. RLHF optimizes for what humans rated as a good response. That's about tone, helpfulness, and appropriateness, not verified truth. A model can be extremely well-shaped by RLHF and still confidently produce [hallucinations](/library/large-language-models/what-is-hallucination-in-ai). Those are two separate properties. Two separate mechanisms fix them. Conflating them is a common mistake.
+
+## RLHF vs Fine-Tuning: How They Relate
+
+RLHF isn't a separate category from fine-tuning, it's a specific technique within it. [Fine-tuning](/library/large-language-models/llm-fine-tuning-explained) broadly means additional training on top of a base model to change its behavior. RLHF is one particular way of doing that: instead of training directly on fixed example pairs, it trains on human preference rankings between multiple candidate responses.
+
+A newer approach called **DPO (Direct Preference Optimization)** aims at the same goal, aligning a model with human preferences, using a simpler process that skips training a separate reward model. It's worth recognizing the term if you keep reading in this space, even though the practical difference doesn't change what you need to know as a user of these models.
+
+---
+
+<FAQ>
+  <FAQItem question="Does RLHF make a model more accurate?">
+    Not directly. RLHF shapes tone, helpfulness, and format, steering the model toward responses people prefer, not toward verified facts. A model can be extremely well-aligned by RLHF standards and still hallucinate, those are two separate problems with two separate fixes.
+  </FAQItem>
+  <FAQItem question="Is RLHF the same as fine-tuning?">
+    RLHF is one specific type of fine-tuning, not a separate category. Fine-tuning is the broad idea of additional training on top of a base model. RLHF is a particular technique within that: training a reward model on human preferences, then using it to steer the base model's behavior.
+  </FAQItem>
+  <FAQItem question="What is DPO, and is it different from RLHF?">
+    DPO (Direct Preference Optimization) is a newer alternative that achieves a similar goal, steering a model toward preferred responses, without needing to train and maintain a separate reward model. It's simpler to implement and has become popular for exactly that reason, but the underlying goal, aligning a model with human preferences, is the same as RLHF's.
+  </FAQItem>
+  <FAQItem question="Why does RLHF sometimes make a model refuse reasonable requests?">
+    Because the human feedback used to train it wasn't perfectly consistent or wasn't specific enough, so the model can overgeneralize a preference for caution into refusing things that were actually fine. This is a known limitation, not a sign the model is broken, and it's one reason models get iteratively retrained on updated feedback over time.
+  </FAQItem>
+</FAQ>
