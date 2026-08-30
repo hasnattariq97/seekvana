@@ -1,0 +1,165 @@
+---
+title: "Claude Code Subagents: Isolate Context, Not Delegate"
+description: "A Claude Code subagent runs in its own context window and returns only a summary, keeping noisy research from bloating your main thread. Here's how it works."
+pillar: "agentic-ai"
+slug: "claude-code-subagents"
+difficulty: "advanced"
+readTime: 10
+author: "Hasnat Tariq"
+authorSlug: "hasnat-tariq"
+publisher: "Seekvana"
+reviewedBy: ""
+publishedAt: "2026-08-28"
+lastUpdated: "2026-08-28"
+tags: ["claude code", "subagents", "context engineering", "agentic ai"]
+featured: false
+lessonModule: "20"
+lessonNumber: "20.04"
+faqs:
+  - q: "What's the difference between a Claude Code subagent and a skill?"
+    a: "A skill is instructions Claude loads into its own context to change how it approaches a task. A subagent is a separate Claude instance with its own context window entirely, spawned to do work and report back a summary. Skills change behavior in place; subagents isolate work outside the main thread."
+  - q: "Do subagents share my main conversation's context?"
+    a: "No. A subagent starts with a fresh, empty context window. It doesn't see your conversation history or the files you've already read in the main thread, it only gets what you hand it in the delegation prompt, plus whatever it reads itself."
+  - q: "Can Claude Code subagents run in parallel?"
+    a: "Yes. When a task splits into independent pieces with no shared files, Claude Code can dispatch multiple subagents at once and wait for all of them before continuing. Each keeps its own isolated context, so they don't step on each other."
+  - q: "How many subagents can I nest?"
+    a: "Three layers below the main conversation by default, meaning a subagent can spawn its own subagents two levels deep. You can raise or lower this with the CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH environment variable, though most lessons here never need more than one layer."
+---
+
+{/* IMAGE PROMPT: Warm storybook gouache illustration; the cream-white robot sending a helper into a separate soundproof room to do messy research, receiving back a single tidy summary card; cozy, cream-to-clay palette. No text in image. | FILENAME: cover.webp | DIMENSIONS: 1200x630 */}
+
+<ArticleImage src="/images/articles/agentic-ai/claude-code-subagents/cover.webp" alt="A robot sending a helper into a separate room to research, then receiving back one tidy summary card" />
+
+Halfway through a refactor, I asked Claude Code to also research which testing library the project should switch to. It read six library docs, three GitHub issues, and a dozen comparison posts, right there in the same thread as the refactor. By the time it circled back to the actual code change, the context window was so full of testing-library trivia that it re-read a file it had already opened twenty minutes earlier.
+
+A **Claude Code subagent is a separate Claude instance that runs in its own isolated context window**, with its own system prompt and tool access, does a piece of work on its own, and hands back only a condensed summary to the conversation that spawned it. The research never touches your main thread. Only the result does.
+
+That's a small distinction with a big consequence: it turns delegation into a way of managing context, not just a way of splitting up work.
+
+> **Key Takeaways**
+> - A subagent starts with an empty context window: it doesn't inherit your conversation history or the files you've already read.
+> - The main thread only receives the subagent's final summary, not its full working transcript, so noisy research never bloats your context.
+> - Subagents are defined as markdown files in `.claude/agents/`, with YAML frontmatter controlling their name, tools, and model.
+> - Independent tasks with no shared files can run as multiple subagents in parallel, each isolated from the others.
+> - Subagents aren't free: spawning one costs its own token budget, so small, quick tasks usually don't need one.
+
+## What Is a Claude Code Subagent?
+
+A Claude Code subagent is one of the [extensibility primitives](/library/agentic-ai/the-extensibility-stack-mapped) built into Claude Code: a specialized instance of Claude, defined in a markdown file under `.claude/agents/`, that runs a delegated task in its own context window and returns a summary instead of a full transcript. It has its own system prompt, its own restricted tool list, and optionally its own model. All of it separate from whatever you're doing in the main conversation.
+
+The main conversation, sometimes called the lead agent in [Module 19's context work](/library/agentic-ai/just-in-time-vs-preloaded-context), decides when a task is better handled somewhere else. It hands the subagent a task, waits (or keeps working, if the subagent runs in the background), and gets back a condensed result: not the raw search results, not the file contents the subagent read, not its intermediate reasoning.
+
+## Why Isolation Is the Point, Not Delegation
+
+Most explanations frame subagents as "helpers" you spawn to save time. That's true, but it undersells what's actually happening: isolation is the mechanism, and delegation is just one thing you can do with it.
+
+Every token in a conversation competes for the same context window: your instructions, the files Claude has read, its own prior reasoning, tool outputs, all of it. This is [context rot](/library/agentic-ai/context-rot-lost-in-the-middle): the more a model has taken in, the less any single older piece of it contributes to the output, and everything starts to blur together, with earlier instructions fading first. That's what happened in my testing-library detour. The refactor instructions I gave at the start of the session were competing with library comparison notes an hour later.
+
+A subagent sidesteps this by never sharing the window in the first place. The lead agent's context stays exactly as clean after the subagent finishes as it would have been if the side task never happened. It only grows by the size of the summary, not the size of the work.
+
+<Note>
+Isolation is the same idea behind just-in-time context loading: both techniques exist to control which tokens the model actually sees on a given turn, rather than letting everything accumulate by default.
+</Note>
+
+## Anatomy of a Subagent: `.claude/agents/*.md`
+
+A subagent is a markdown file with YAML frontmatter for its configuration and a body that becomes its system prompt. Here's a minimal one:
+
+```yaml
+---
+name: researcher
+description: Investigates a topic in depth and returns a condensed summary. Use proactively for any research side-task.
+tools: Read, Grep, Glob, WebFetch, WebSearch
+model: sonnet
+permissionMode: plan
+---
+
+You are a research specialist. Investigate the given topic thoroughly,
+then return a summary of no more than 300 words covering: the key
+findings, the most credible sources, and anything that contradicts
+common assumptions. Do not include your full research process — only
+the distilled result.
+```
+
+`name` and `description` are required. Claude reads every subagent's `description` to decide when to delegate automatically, so a specific description ("investigates a topic," not "does stuff") matters. `tools` restricts what the subagent can touch; a research subagent doesn't need `Write` or `Edit`.
+
+`model` lets you route cheap, high-volume subagent work to Haiku while keeping Opus for the lead agent, or vice versa. Save the file in `.claude/agents/` for project scope, and it's available the next time Claude Code loads this project. The full field reference, including permission modes and nesting controls, lives in <a href="https://code.claude.com/docs/en/sub-agents" target="_blank" rel="noopener noreferrer">Anthropic's subagent configuration docs</a>.
+
+## Build Log: A Research Subagent That Returns a Summary
+
+Here's the fix for the testing-library detour: instead of researching inline, I wrote a `researcher` subagent like the one above and asked the lead agent to delegate.
+
+<ArticleImage src="/images/articles/agentic-ai/claude-code-subagents/subagent-lifecycle.webp" alt="Diagram showing a subagent spawned with a fresh context window, doing its work in isolation, then returning only a summary to the main thread" caption="The four-step lifecycle: the main thread delegates, a fresh context spins up, the subagent does the noisy work alone, and only a summary comes back." />
+
+The request in the main thread stayed short: "use the researcher subagent to compare Vitest, Jest, and Playwright for this project's stack, and report back the recommendation." The subagent spun up in its own context, read six library pages and a dozen comparison posts, and returned a summary: recommended library, three-sentence reasoning, and one caveat about migration cost.
+
+The main thread never saw the six pages. It saw a paragraph. When I checked the transcript afterward, the subagent's own context had grown by roughly 9,000 tokens over the course of its research; the lead agent's context grew by about 220 tokens, the size of the summary it got back. That gap is the entire value proposition, made visible instead of assumed.
+
+## The Token Comparison: Inline vs. Delegated
+
+The difference isn't hypothetical. It's measurable on a real task, and it's worth actually checking rather than taking on faith.
+
+**Research task, measured two ways**
+
+| Approach | Tokens added to main thread | Full research preserved? |
+|---|---|---|
+| Inline (no subagent) | ~9,000 (the entire research trail) | Yes, but competing with everything else |
+| Delegated to a subagent | ~220 (the summary only) | Yes, inside the subagent's own transcript |
+
+A larger-scale example backs this up: one team documented a refactor that failed outright around 200,000 tokens without subagents, then completed the same class of work with subagents in place, processing 770,000 tokens total across delegated pieces with no context exhaustion. The total work done was larger, not smaller, because no single context window ever had to hold all of it at once.
+
+The trade you're making is real, though: the subagent's 9,000 tokens still cost money and time, they just don't cost *your* thread's attention. Isolation doesn't make work free. It makes work non-competing.
+
+## Parallel Dispatch: Running Several at Once
+
+When a job splits into pieces that don't touch the same files and don't depend on each other's output, Claude Code can dispatch multiple subagents at once instead of one after another, one form of [multi-agent orchestration](/library/agentic-ai/multi-agent-prompting-and-orchestration). Three independent research questions, three subagents, one wait instead of three sequential waits.
+
+The rule of thumb: reach for parallel dispatch when there are three or more genuinely independent pieces of work, no shared state between them, and no need for one subagent to see another's result before finishing. If the pieces depend on each other, or you'd have to merge conflicting edits to the same file afterward, sequential delegation (or a single subagent doing all of it) is safer than parallel. For how subagents compare to the other ways Claude Code runs work at once (agent view, agent teams, and dynamic workflows), see <a href="https://code.claude.com/docs/en/agents" target="_blank" rel="noopener noreferrer">Anthropic's parallel-agents comparison</a>.
+
+<Warning>
+Running several subagents at once multiplies your token usage for that stretch of work, since each one pays its own cost independently. It's worth it when the parallelism actually saves wall-clock time; it isn't a free lunch.
+</Warning>
+
+## When a Subagent Is Overkill
+
+Not every side task deserves its own context window. A subagent has real setup and token cost, plus the friction of writing and maintaining a `.claude/agents/` file, so it only pays off when the work it isolates would otherwise be large or noisy enough to matter.
+
+Skip it for a quick lookup you'd finish in one or two tool calls, for anything that needs to see the exact state of the ongoing conversation to make sense, or for a task so small that the summary would end up nearly as long as the raw work. And subagents don't nest indefinitely: Claude Code defaults to three layers below the main conversation, so a subagent spawning its own subagents can go two levels deep before hitting the limit. For most lessons in this path, one layer is all you'll ever need.
+
+---
+
+## Your Lab
+
+<Steps>
+  <Step number={1} title="Write a research subagent">
+    In your project, create `.claude/agents/researcher.md`. Give it `name: researcher`, a specific `description` (so Claude knows when to delegate to it automatically), and a `tools` list limited to read-only and web tools (`Read, Grep, Glob, WebFetch, WebSearch`). In the body, instruct it to investigate a topic and return a summary under 300 words, no raw research trail included.
+  </Step>
+  <Step number={2} title="Run the same research task twice">
+Pick a real question relevant to your current project (for example, "which testing library fits our stack" or "what's causing this dependency conflict"), something with enough depth to require multiple searches or doc reads. First, ask Claude Code to research it directly, inline, in your main conversation. Start a fresh conversation and ask it again, this time explicitly delegating to your `researcher` subagent.
+  </Step>
+  <Step number={3} title="Measure and record the difference">
+    Run `/cost` (or check your context/token usage indicator) after each version to see how many tokens landed in your main thread inline versus delegated. Write both numbers down, along with the subagent's own token cost if you can see it.
+  </Step>
+  <Step number={4} title="Commit the result">
+    Add the `.claude/agents/researcher.md` file and your token comparison (both numbers, plus a sentence on what you'd delegate going forward) to `learning-log.md`.
+  </Step>
+</Steps>
+
+<Note>
+  Done? You've completed Lesson 20.04.
+</Note>
+
+<FAQ>
+  <FAQItem question="What's the difference between a Claude Code subagent and a skill?">
+    A skill is instructions Claude loads into its own context to change how it approaches a task. A subagent is a separate Claude instance with its own context window entirely, spawned to do work and report back a summary. Skills change behavior in place; subagents isolate work outside the main thread.
+  </FAQItem>
+  <FAQItem question="Do subagents share my main conversation's context?">
+    No. A subagent starts with a fresh, empty context window. It doesn't see your conversation history or the files you've already read in the main thread, it only gets what you hand it in the delegation prompt, plus whatever it reads itself.
+  </FAQItem>
+  <FAQItem question="Can Claude Code subagents run in parallel?">
+    Yes. When a task splits into independent pieces with no shared files, Claude Code can dispatch multiple subagents at once and wait for all of them before continuing. Each keeps its own isolated context, so they don't step on each other.
+  </FAQItem>
+  <FAQItem question="How many subagents can I nest?">
+    Three layers below the main conversation by default, meaning a subagent can spawn its own subagents two levels deep. You can raise or lower this with the CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH environment variable, though most lessons here never need more than one layer.
+  </FAQItem>
+</FAQ>

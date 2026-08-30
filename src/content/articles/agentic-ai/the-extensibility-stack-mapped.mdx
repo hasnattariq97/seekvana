@@ -66,7 +66,7 @@ Each primitive answers a specific scope question: is this always on, on-demand, 
 
 **Skills** are triggerable behavior. A skill is a markdown file Claude loads on demand, either because you typed its name or because your task matched its description. Skills cost almost nothing until they fire, which makes them the natural home for reusable workflows and reference material you don't need loaded all the time. The simplest version of this idea is a [slash command](/library/agentic-ai/slash-commands): a saved prompt you trigger by typing `/name` instead of retyping it every session.
 
-**Subagents** are isolated context. A subagent is a separate worker with its own context window that reads files, runs searches, or does research, then hands back only a condensed summary. The value isn't delegation for its own sake, it's keeping a noisy side-task from filling up your main conversation with details you'll never need again.
+**Subagents** are isolated context. A [subagent](/library/agentic-ai/claude-code-subagents) is a separate worker with its own context window that reads files, runs searches, or does research, then hands back only a condensed summary. The value isn't delegation for its own sake, it's keeping a noisy side-task from filling up your main conversation with details you'll never need again.
 
 **Hooks** are deterministic control. A hook is a script, HTTP request, or tool call that Claude Code runs automatically at a specific lifecycle event, like right before a file edit or right after a tool runs. Hooks execute outside the model entirely, cost zero tokens by default, and cannot be talked out of firing.
 
