@@ -1,0 +1,97 @@
+---
+title: "Why Does AI Give a Different Answer Every Time You Ask?"
+description: "Ask an AI the same question twice and get two different answers. Here's why, temperature, sampling, and a surprising fact about 'zero.'"
+pillar: "large-language-models"
+slug: "why-does-ai-give-different-answers"
+difficulty: "beginner"
+readTime: 7
+author: "Hasnat Tariq"
+publishedAt: "2026-08-28"
+tags: ["why does ai give different answers", "what is temperature in ai", "is ai deterministic", "chatgpt different answers same question"]
+featured: false
+faqs:
+  - q: "What is temperature in AI, in simple terms?"
+    a: "Temperature is a setting that controls how much randomness a model allows when picking its next word. Low temperature sticks close to the single most likely word every time. Higher temperature lets it occasionally pick a less likely, more varied option instead."
+  - q: "If I set temperature to zero, will I always get the exact same answer?"
+    a: "Usually very close, but not guaranteed. At temperature zero the model always tries to pick the single most likely word, but tiny computational differences from how the math gets processed on real hardware can still occasionally produce small variations, even with randomness turned all the way down."
+  - q: "Is it bad that AI gives different answers to the same question?"
+    a: "Not inherently. For creative or open-ended tasks, that variation is often exactly what you want. For tasks where you need the exact same output every time, it's worth knowing that even a low temperature setting doesn't provide a hard guarantee, and building in verification for anything that really matters."
+  - q: "Does the AI remember what it told me before and change its answer on purpose?"
+    a: "No. Each response is generated independently based on the current input, not by comparing against or reacting to what it said in a previous conversation. If two different sessions give different answers, that's sampling variation, not a deliberate change of position."
+---
+
+<ArticleImage
+  src="/images/articles/large-language-models/why-does-ai-give-different-answers/cover.webp"
+  alt="A robot asking a question that flows into a glowing brain in a box, branching out into four different answer bubbles each next to a different creative icon"
+  dimensions="1200x630"
+  priority
+  isCover
+/>
+
+Ask an AI model the exact same question twice, in two separate chats, and you can get two genuinely different answers. Same words, same model, different result. That's not a glitch. It's a deliberate design choice called **sampling**, controlled mainly by a setting called **temperature**, and understanding it explains a lot about how these tools actually behave.
+
+If you haven't covered what a large language model actually is yet, [start there first](/library/large-language-models/what-is-a-large-language-model).
+
+> **Key Takeaways**
+> - AI models don't always pick the single most likely next word, they sample from a range of likely options, controlled by a setting called temperature
+> - Higher temperature means more variety and creativity, lower temperature means more consistent, predictable output
+> - Temperature isn't the only source of variation, conversation history, saved memory, and even server-level computation quirks all play a role
+> - Even temperature set to zero isn't a perfect guarantee of identical output every time
+> - This variability is a deliberate tradeoff, not a bug, and it's worth building around rather than fighting
+
+---
+
+## What Controls the Variation: Temperature
+
+When a model generates a response, it's [predicting the next token](/library/large-language-models/how-llms-work) based on probabilities, not looking up a single fixed answer. **Temperature** controls how strictly the model sticks to the single most probable next token versus how often it's willing to pick something a little less likely.
+
+At low temperature, the model almost always picks the top choice. That produces consistent, predictable output. At higher temperature, it occasionally picks a less probable option. That produces more varied, sometimes more creative, phrasing and structure.
+
+**How temperature changes the output**
+
+| Temperature | Behavior | Best for |
+|---|---|---|
+| Low (near 0) | Sticks to the most likely word almost every time | Consistent, predictable output |
+| Medium | Mixes in some less-likely words | Balanced, natural-sounding writing |
+| High | Frequently picks less-likely words | Creative brainstorming, varied phrasing |
+
+Same question, same model, different setting, noticeably different feel to the answer.
+
+## It's Not Just Temperature
+
+Temperature explains a lot, but it's not the whole story. Conversation history changes what the model is actually responding to. A slightly different earlier exchange in one session versus another can shift the answer, even with identical final questions.
+
+Saved memory or custom instructions add another layer. An app that remembers your preferences across sessions can quietly change what "the same question" actually means to the model. And at the infrastructure level, the exact server and computation path handling your specific request can introduce tiny differences that ripple into the output.
+
+<Note>
+None of these factors mean the model is being inconsistent on purpose. It's responding to slightly different actual inputs, or working through slightly different computation, even when the words you typed look identical on your screen.
+</Note>
+
+## The Surprising Part: Even "Zero" Isn't Perfectly Deterministic
+
+Here's the part that surprises people who assume turning temperature all the way down guarantees identical output every time: it doesn't, not perfectly. Research running the same prompt a thousand times at temperature zero, the setting meant to eliminate randomness entirely, still produced dozens of different responses.
+
+The cause isn't the temperature setting failing. <a href="https://mikulskibartosz.name/why-temperature-0-isnt-deterministic" target="_blank" rel="noopener noreferrer">Temperature zero only makes the token-selection step itself deterministic</a>, it doesn't control everything else happening underneath. Requests get batched alongside other users' requests, and routed across different hardware behind the scenes, and both of those factors can shift the math just enough to occasionally tip a near-tied probability toward a different token. It's a hardware-and-infrastructure quirk, not a broken setting.
+
+## Is This a Bug?
+
+No. For a huge range of tasks, some variation is exactly what you want. A creative writing assistant that gave the identical response every single time would feel stale fast. Brainstorming, drafting, casual conversation, all benefit from a bit of natural variety.
+
+The tradeoff only becomes a real problem when you need identical output every time, for automated testing, reproducible research, or a pipeline where consistency matters more than creativity. In those cases, low temperature helps a lot, but [self-consistency and verification techniques](/library/prompt-engineering/self-consistency-and-verification) exist precisely because low temperature alone isn't a hard guarantee. Build in a check for anything where the exact wording genuinely matters, rather than assuming any single temperature setting will fully lock it down.
+
+---
+
+<FAQ>
+  <FAQItem question="What is temperature in AI, in simple terms?">
+    Temperature is a setting that controls how much randomness a model allows when picking its next word. Low temperature sticks close to the single most likely word every time. Higher temperature lets it occasionally pick a less likely, more varied option instead.
+  </FAQItem>
+  <FAQItem question="If I set temperature to zero, will I always get the exact same answer?">
+    Usually very close, but not guaranteed. At temperature zero the model always tries to pick the single most likely word, but tiny computational differences from how the math gets processed on real hardware can still occasionally produce small variations, even with randomness turned all the way down.
+  </FAQItem>
+  <FAQItem question="Is it bad that AI gives different answers to the same question?">
+    Not inherently. For creative or open-ended tasks, that variation is often exactly what you want. For tasks where you need the exact same output every time, it's worth knowing that even a low temperature setting doesn't provide a hard guarantee, and building in verification for anything that really matters.
+  </FAQItem>
+  <FAQItem question="Does the AI remember what it told me before and change its answer on purpose?">
+    No. Each response is generated independently based on the current input, not by comparing against or reacting to what it said in a previous conversation. If two different sessions give different answers, that's sampling variation, not a deliberate change of position.
+  </FAQItem>
+</FAQ>
