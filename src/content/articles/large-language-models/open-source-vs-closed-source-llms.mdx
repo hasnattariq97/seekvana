@@ -1,0 +1,104 @@
+---
+title: "Open-Source vs Closed-Source LLMs: What's the Difference?"
+description: "Some AI models you download and run yourself, others you only access through an API. Here's what that actually changes for you."
+pillar: "large-language-models"
+slug: "open-source-vs-closed-source-llms"
+difficulty: "intermediate"
+readTime: 8
+author: "Hasnat Tariq"
+publishedAt: "2026-08-28"
+tags: ["open source vs closed source llm", "what is an open weight model", "llama vs gpt vs claude", "can i run an ai model locally"]
+featured: false
+faqs:
+  - q: "Is open-source AI free?"
+    a: "Often, yes, in the sense that you can download and run the model without a subscription. But running it still costs something: your own computer's processing power, or a server you pay for if you host it elsewhere. Free to use isn't the same as free to run."
+  - q: "Are open-weight models as good as ChatGPT or Claude?"
+    a: "For many everyday tasks, they're genuinely close, and the gap keeps narrowing. For the most demanding tasks, the best closed models still tend to lead. Whether that gap matters depends entirely on what you're actually using the model for."
+  - q: "Can I run an open-weight model without an internet connection?"
+    a: "Yes, once you've downloaded it. Tools like Ollama or LM Studio let you run models like Llama or Mistral entirely on your own computer, with no internet needed after the initial download. Closed models like ChatGPT or Claude require an internet connection every time, since the model runs on the company's servers, not yours."
+  - q: "Why would a company choose a closed model over a free open one?"
+    a: "Ease and capability. A closed model is ready to use immediately through an API, with no setup, no hardware to manage, and often stronger performance on the hardest tasks. For many teams, that convenience is worth paying for, even when a free alternative technically exists."
+---
+
+<ArticleImage
+  src="/images/articles/large-language-models/open-source-vs-closed-source-llms/cover.webp"
+  alt="A robot standing between two glowing paths, one leading to a laptop and private local server with a privacy shield, the other leading to a cloud connected to remote data center racks"
+  dimensions="1200x630"
+  priority
+  isCover
+/>
+
+Download Llama onto your own laptop and run it completely offline, no company sees a single word you type. Or open ChatGPT and send your message to OpenAI's servers, where the actual model lives. Same basic technology, two very different relationships between you and the AI. That's the real difference between **open-source** and **closed-source** large language models.
+
+If you haven't covered what a large language model actually is yet, [start there first](/library/large-language-models/what-is-a-large-language-model).
+
+> **Key Takeaways**
+> - Open-source (open-weight) models can be downloaded and run on your own hardware, closed models only run on the provider's servers
+> - Running an open model yourself means your data never has to leave your device
+> - Closed models are typically easier to use and often lead on the hardest tasks, open models lead on control, privacy, and cost at real scale
+> - "Free" and "open" aren't the same thing, running a model still costs computing power somewhere
+> - Most people don't need to choose one exclusively, many projects use both for different purposes
+
+---
+
+## What Open-Source and Closed-Source Actually Mean Here
+
+A **closed-source** model, like GPT, Claude, or Gemini, only runs on the provider's own servers. You send a request through an app or API, and the response comes back, but the model's internal parameters (its "weights") are never available to you directly.
+
+An **open-source** model, more precisely called **open-weight**, publishes those internal parameters for anyone to download. <a href="https://flaviocopes.com/open-weight-models/" target="_blank" rel="noopener noreferrer">Once you have the weights, you can run the model yourself, on your own hardware, with no request ever traveling back to the original company's servers</a>.
+
+<Note>
+"Open-source" in AI usually means the weights are public, not that every detail of the training data or training process is. Full transparency varies model to model, worth checking if that distinction matters for your use case.
+</Note>
+
+## What You Gain With an Open-Weight Model
+
+Running a model yourself means your data never has to leave your device. For anything sensitive, personal documents, internal company information, that's a meaningful difference from sending the same text to an external API every time.
+
+It also means no vendor lock-in. If a closed provider changes pricing, deprecates a model, or shifts policy, you're stuck adapting. An open-weight model you've downloaded keeps working exactly as it did, on your terms, indefinitely. And at high enough usage volume, running your own model can end up considerably cheaper than paying per request through an API, though the upfront setup takes real effort.
+
+Open-weight models are also what you [fine-tune](/library/large-language-models/llm-fine-tuning-explained) most often in practice, since you need direct access to a model's weights to retrain them on your own data.
+
+## What You Gain With a Closed Model
+
+Closed models trade control for convenience. There's no download, no hardware to manage, no setup beyond an API key. You get access to some of the most capable models available, often the ones leading on the hardest reasoning and coding tasks, the moment they're released.
+
+For most everyday use, this convenience is the entire point. You're not trying to own the infrastructure, you just want a good answer, fast, without becoming responsible for running a model yourself.
+
+## A Practical Way to Decide
+
+**Which one fits your situation?**
+
+| Your situation | Reach for |
+|---|---|
+| Handling sensitive or private data | Open-weight, run it locally |
+| Want the strongest performance with zero setup | Closed model via API |
+| Running the same task at very high volume | Open-weight, self-hosted |
+| Just want to try AI without any technical setup | Closed model via a consumer app |
+| Need to fine-tune on your own data | Open-weight |
+
+<ArticleImage
+  src="/images/articles/large-language-models/open-source-vs-closed-source-llms/open-weight-local.webp"
+  alt="Side-by-side comparison: open-weight run-it-yourself with privacy, full control, and cost-effective at scale, versus closed model use-via-API with best performance, zero setup, and always up to date"
+  dimensions="1200x675"
+  caption="Open-weight trades setup effort for privacy, control, and cost at scale; a closed model trades control for zero setup and top performance on demand."
+/>
+
+Most real projects don't pick one exclusively. It's common to prototype with a closed model for speed, then move a specific high-volume or privacy-sensitive piece over to an open-weight model once the project's actual needs are clear.
+
+---
+
+<FAQ>
+  <FAQItem question="Is open-source AI free?">
+    Often, yes, in the sense that you can download and run the model without a subscription. But running it still costs something: your own computer's processing power, or a server you pay for if you host it elsewhere. Free to use isn't the same as free to run.
+  </FAQItem>
+  <FAQItem question="Are open-weight models as good as ChatGPT or Claude?">
+    For many everyday tasks, they're genuinely close, and the gap keeps narrowing. For the most demanding tasks, the best closed models still tend to lead. Whether that gap matters depends entirely on what you're actually using the model for.
+  </FAQItem>
+  <FAQItem question="Can I run an open-weight model without an internet connection?">
+    Yes, once you've downloaded it. Tools like Ollama or LM Studio let you run models like Llama or Mistral entirely on your own computer, with no internet needed after the initial download. Closed models like ChatGPT or Claude require an internet connection every time, since the model runs on the company's servers, not yours.
+  </FAQItem>
+  <FAQItem question="Why would a company choose a closed model over a free open one?">
+    Ease and capability. A closed model is ready to use immediately through an API, with no setup, no hardware to manage, and often stronger performance on the hardest tasks. For many teams, that convenience is worth paying for, even when a free alternative technically exists.
+  </FAQItem>
+</FAQ>
