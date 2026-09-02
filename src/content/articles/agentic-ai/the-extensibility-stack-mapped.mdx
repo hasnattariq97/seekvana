@@ -68,7 +68,7 @@ Each primitive answers a specific scope question: is this always on, on-demand, 
 
 **Subagents** are isolated context. A [subagent](/library/agentic-ai/claude-code-subagents) is a separate worker with its own context window that reads files, runs searches, or does research, then hands back only a condensed summary. The value isn't delegation for its own sake, it's keeping a noisy side-task from filling up your main conversation with details you'll never need again.
 
-**Hooks** are deterministic control. A hook is a script, HTTP request, or tool call that Claude Code runs automatically at a specific lifecycle event, like right before a file edit or right after a tool runs. Hooks execute outside the model entirely, cost zero tokens by default, and cannot be talked out of firing.
+**Hooks** are deterministic control. A hook is a script, HTTP request, or tool call that Claude Code runs automatically at a specific lifecycle event, like right before a file edit or right after a tool runs. Hooks execute outside the model entirely, cost zero tokens by default, and cannot be talked out of firing (see [hooks and deterministic control](/library/agentic-ai/hooks-deterministic-control) for a full build).
 
 **MCP**, the Model Context Protocol, connects Claude to systems it otherwise has no way to reach: your database, a Slack workspace, a browser. It's the primitive for external connections, not internal behavior.
 
