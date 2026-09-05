@@ -23,7 +23,7 @@ export function ModuleList({ modules, totalTopics, readSet = [], curriculumHint,
       ) : (
         <p className="text-[13px] text-secondary mb-6 leading-relaxed">
           <strong className="text-primary font-semibold">Every topic takes under 5 minutes.</strong>{' '}
-          Each ends with a hands-on task you can complete right now — no setup required to begin Module 00.
+          Each ends with a hands-on task you can complete right now, no setup required to begin Module 00.
         </p>
       )}
       <div className="border border-border rounded-2xl overflow-hidden bg-surface">

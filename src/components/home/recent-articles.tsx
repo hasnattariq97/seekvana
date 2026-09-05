@@ -31,7 +31,7 @@ function ArticleGrid({ articles }: { articles: ArticleMeta[] }) {
   if (articles.length === 0) {
     return (
       <p className="text-secondary text-sm py-12 text-center">
-        No articles yet in this category — check back soon.
+        No articles yet in this category. Check back soon.
       </p>
     );
   }
@@ -102,7 +102,7 @@ export function RecentArticles({ articles }: RecentArticlesProps) {
           Fresh from the library
         </h2>
         <p className="font-inter text-sm text-secondary mt-1 mb-6">
-          Recent articles across AI topics — updated regularly.
+          Recent articles across AI topics, updated regularly.
         </p>
 
         <Tabs defaultValue="All">

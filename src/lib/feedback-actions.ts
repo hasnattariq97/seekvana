@@ -58,7 +58,7 @@ export async function submitFeedback(
   resend.emails.send({
     from: 'Seekvana <noreply@seekvana.com>',
     to: 'hasnattariq97@gmail.com',
-    subject: `[Seekvana Feedback] ${input.type} — ${message.slice(0, 60)}${message.length > 60 ? '…' : ''}`,
+    subject: `[Seekvana Feedback] ${input.type}: ${message.slice(0, 60)}${message.length > 60 ? '...' : ''}`,
     text: [
       `Type:    ${input.type}`,
       `Message: ${message}`,

@@ -33,7 +33,7 @@ export function PostArticleNewsletter() {
         </h3>
 
         <p className="text-sm text-secondary leading-relaxed mb-6 max-w-sm">
-          New articles, tool picks, and practical guides — plus a free cheatsheet when you sign up.
+          New articles, tool picks, and practical guides, plus a free cheatsheet when you sign up.
         </p>
 
         <NewsletterForm source="post-article" onSuccess={setSubscribed} />

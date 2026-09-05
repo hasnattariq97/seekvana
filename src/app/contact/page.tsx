@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Contact',
-  description: 'Get in touch with the Seekvana team — for corrections, suggestions, partnerships, or general enquiries.',
+  description: 'Get in touch with the Seekvana team for corrections, suggestions, partnerships, or general enquiries.',
 }
 
 export default function ContactPage() {
@@ -25,7 +25,7 @@ export default function ContactPage() {
       <h1 className="font-fraunces text-4xl text-primary mb-3">Get in touch</h1>
       <p className="text-secondary leading-relaxed mb-10">
         We read every message. Whether you&apos;ve spotted an error, have a question about the content,
-        or want to work together — reach out and we&apos;ll get back to you.
+        or want to work together, reach out and we&apos;ll get back to you.
       </p>
 
       {/* Primary contact */}
@@ -56,7 +56,7 @@ export default function ContactPage() {
               <span className="mt-0.5 w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0 mt-2" />
               <div>
                 <span className="text-sm font-medium text-primary">{label}</span>
-                <span className="text-sm text-secondary"> — {desc}</span>
+                <span className="text-sm text-secondary">: {desc}</span>
               </div>
             </li>
           ))}
@@ -73,7 +73,7 @@ export default function ContactPage() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Twitter / X — @seekvana
+            Twitter / X: @seekvana
           </a>
         </div>
       </div>

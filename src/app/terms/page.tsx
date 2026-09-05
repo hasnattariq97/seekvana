@@ -63,8 +63,8 @@ export default function TermsPage() {
         <section>
           <h2 className="font-fraunces text-xl text-primary mb-3">3. Intellectual Property</h2>
           <p className="text-secondary leading-relaxed">
-            All content on Seekvana — including articles, guides, diagrams, code examples, and design
-            elements — is owned by or licensed to Seekvana and is protected by copyright law. You may
+            All content on Seekvana, including articles, guides, diagrams, code examples, and design
+            elements, is owned by or licensed to Seekvana and is protected by copyright law. You may
             share links to our content freely. Brief quotations for commentary, review, or educational
             purposes are permitted with clear attribution and a link back to the original page. Any
             other reproduction or distribution requires prior written permission.

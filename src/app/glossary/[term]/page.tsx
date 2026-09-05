@@ -21,13 +21,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!result) return {}
   const { frontmatter } = result
   return {
-    title: { absolute: `${frontmatter.term} — AI Glossary` },
+    title: { absolute: `${frontmatter.term} - AI Glossary` },
     description: frontmatter.shortDef,
     alternates: {
       canonical: `https://seekvana.com/glossary/${term}`,
     },
     openGraph: {
-      title: `${frontmatter.term} — AI Glossary`,
+      title: `${frontmatter.term} - AI Glossary`,
       description: frontmatter.shortDef,
     },
   }

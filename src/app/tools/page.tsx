@@ -24,7 +24,7 @@ export default function ToolsPage() {
       </nav>
       <h1 className="font-fraunces text-4xl text-primary mb-4">AI Tools</h1>
       <p className="text-lg text-secondary max-w-2xl mb-12">
-        Honest reviews and comparisons of AI tools, models, and platforms — so you can choose what actually fits your needs.
+        Honest reviews and comparisons of AI tools, models, and platforms, so you can choose what actually fits your needs.
       </p>
       <div className="bg-surface border border-border rounded-xl p-10 text-center max-w-lg mx-auto">
         <p className="font-fraunces text-xl text-primary mb-2">Coming soon</p>

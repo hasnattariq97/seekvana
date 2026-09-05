@@ -7,11 +7,11 @@ import { getAllArticles } from '@/lib/mdx'
 
 export const metadata: Metadata = {
   title: 'Library',
-  description: 'Every AI topic in one place — from foundations to agentic systems. Browse all 9 content pillars.',
+  description: 'Every AI topic in one place: from foundations to agentic systems. Browse all 9 content pillars.',
   alternates: { canonical: 'https://seekvana.com/library' },
   openGraph: {
-    title: 'Library — Seekvana',
-    description: 'Every AI topic in one place — from foundations to agentic systems.',
+    title: 'Library - Seekvana',
+    description: 'Every AI topic in one place: from foundations to agentic systems.',
     url: 'https://seekvana.com/library',
   },
 }
@@ -46,7 +46,7 @@ export default function LibraryPage() {
           The Library
         </h1>
         <p className="text-[14px] text-secondary leading-relaxed max-w-lg mb-3">
-          Every AI topic — clearly explained. Browse by subject area or search for what you need.
+          Every AI topic, clearly explained. Browse by subject area or search for what you need.
         </p>
         <div className="flex items-center gap-2">
           <span className="inline-flex items-center gap-[5px] px-[11px] py-[4px] bg-surface-subtle border border-border rounded-full text-[12px] text-secondary font-medium">

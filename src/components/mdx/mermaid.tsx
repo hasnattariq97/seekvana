@@ -76,7 +76,7 @@ export function Mermaid({ chart }: MermaidProps) {
         .catch(() => {
           if (active)
             setSvg(
-              '<p style="color:var(--color-accent);font-size:14px;padding:8px">Diagram error — check Mermaid syntax</p>'
+              '<p style="color:var(--color-accent);font-size:14px;padding:8px">Diagram error: check Mermaid syntax</p>'
             )
         })
     })

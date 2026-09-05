@@ -47,7 +47,7 @@ function FooterNewsletter() {
     <p className="text-sm text-secondary">You&apos;re already subscribed. See you Tuesday!</p>
   );
   if (state === "success") return (
-    <p className="text-sm text-accent font-medium">You&apos;re in — see you Tuesday! 🎉</p>
+    <p className="text-sm text-accent font-medium">You&apos;re in, see you Tuesday! 🎉</p>
   );
   if (state === "duplicate") return (
     <p className="text-sm text-secondary">You&apos;re already subscribed. See you Tuesday!</p>

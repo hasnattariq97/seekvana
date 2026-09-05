@@ -23,7 +23,7 @@ export function NewsletterSection() {
             </h2>
 
             <p className="text-sm text-secondary leading-relaxed max-w-sm">
-              New articles, tool picks, and practical guides every Tuesday — written for humans, not hype merchants.
+              New articles, tool picks, and practical guides every Tuesday, written for humans, not hype merchants.
             </p>
 
             <ul className="flex flex-col sm:flex-row gap-3 text-sm text-secondary">

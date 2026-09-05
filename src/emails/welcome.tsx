@@ -24,7 +24,7 @@ export function WelcomeEmail({
   return (
     <Html>
       <Head />
-      <Preview>You&apos;re in — your free AI cheatsheet is ready</Preview>
+      <Preview>You&apos;re in, your free AI cheatsheet is ready</Preview>
       <Body style={{ backgroundColor: '#FAF8F3', fontFamily: 'Georgia, serif', margin: 0, padding: 0 }}>
         <Container style={{ maxWidth: '560px', margin: '40px auto', padding: '0 20px' }}>
           {/* Header */}
@@ -43,7 +43,7 @@ export function WelcomeEmail({
               You&apos;re in! 🎉
             </Heading>
             <Text style={{ fontSize: '16px', color: '#6F6B62', lineHeight: '1.7', margin: '0 0 24px' }}>
-              Welcome to Seekvana — your weekly guide to AI, clearly explained.
+              Welcome to Seekvana, your weekly guide to AI, clearly explained.
               Every Tuesday you&apos;ll get new articles, AI tool picks, and practical guides.
             </Text>
 

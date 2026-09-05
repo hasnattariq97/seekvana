@@ -70,7 +70,7 @@ export function FooterFeedback() {
       >
         <span className="flex items-center gap-2 text-primary font-medium group-hover:text-accent transition-colors">
           <MessageSquare className="h-4 w-4 text-accent" aria-hidden="true" />
-          Help us improve — share your feedback
+          Help us improve: share your feedback
         </span>
         <ChevronDown
           className="h-4 w-4 text-secondary transition-transform duration-200 group-hover:text-accent"

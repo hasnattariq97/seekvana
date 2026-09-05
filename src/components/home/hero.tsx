@@ -95,7 +95,7 @@ export function Hero() {
 
           {/* Description */}
           <p className="mt-6 max-w-md text-lg leading-relaxed text-secondary">
-            From your first prompt to production-grade agents — clearly written, well-sourced guides for beginners and builders alike.
+            From your first prompt to production-grade agents: clearly written, well-sourced guides for beginners and builders alike.
           </p>
 
           {/* Search bar */}

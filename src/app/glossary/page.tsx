@@ -5,7 +5,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'AI Glossary',
-  description: 'Clear definitions of AI terms — from LLMs to agents, embeddings to fine-tuning.',
+  description: 'Clear definitions of AI terms: from LLMs to agents, embeddings to fine-tuning.',
   alternates: { canonical: 'https://seekvana.com/glossary' },
 }
 
@@ -31,7 +31,7 @@ export default async function GlossaryPage() {
       <div>
         <h1 className="font-fraunces text-4xl text-primary">AI Glossary</h1>
         <p className="text-lg text-secondary mt-2 max-w-2xl">
-          Clear definitions of essential AI terms — updated as the field evolves.
+          Clear definitions of essential AI terms, updated as the field evolves.
         </p>
         <span className="bg-accent-soft text-accent text-sm rounded-full px-3 py-1 mt-4 inline-block">
           {terms.length} terms

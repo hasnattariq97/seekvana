@@ -36,23 +36,23 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://seekvana.com"),
   title: {
-    default: "Seekvana — Learn AI, clearly",
-    template: "%s — Seekvana",
+    default: "Seekvana - Learn AI, clearly",
+    template: "%s - Seekvana",
   },
   description:
-    "Learn Agentic AI and all things AI — clear, well-sourced articles for everyone from beginners to advanced builders.",
+    "Learn Agentic AI and all things AI: clear, well-sourced articles for everyone from beginners to advanced builders.",
   openGraph: {
     type: "website",
     siteName: "Seekvana",
-    title: "Seekvana — Learn AI, clearly",
+    title: "Seekvana - Learn AI, clearly",
     description:
-      "Learn Agentic AI and all things AI — clear, well-sourced articles for everyone from beginners to advanced builders.",
+      "Learn Agentic AI and all things AI: clear, well-sourced articles for everyone from beginners to advanced builders.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Seekvana — Learn AI, clearly",
+    title: "Seekvana - Learn AI, clearly",
     description:
-      "Learn Agentic AI and all things AI — clear, well-sourced articles for everyone from beginners to advanced builders.",
+      "Learn Agentic AI and all things AI: clear, well-sourced articles for everyone from beginners to advanced builders.",
   },
 };
 
@@ -90,7 +90,7 @@ export default function RootLayout({
                 url: "https://seekvana.com",
                 logo: "https://seekvana.com/icon-512.png",
                 description:
-                  "Learn Agentic AI and all things AI — clear, well-sourced articles for everyone from beginners to advanced builders.",
+                  "Learn Agentic AI and all things AI: clear, well-sourced articles for everyone from beginners to advanced builders.",
               },
               {
                 "@context": "https://schema.org",

@@ -8,7 +8,7 @@ export const PILLARS: PillarMeta[] = [
   {
     slug: 'agentic-ai',
     name: 'Agentic AI',
-    description: 'Agents, tool use, memory, planning, and multi-agent systems — the flagship pillar.',
+    description: 'Agents, tool use, memory, planning, and multi-agent systems: the flagship pillar.',
   },
   {
     slug: 'ai-foundations',
@@ -33,7 +33,7 @@ export const PILLARS: PillarMeta[] = [
   {
     slug: 'ai-in-practice',
     name: 'AI in Practice',
-    description: 'Real workflows for writing, research, coding, and automation — no deep technical knowledge required.',
+    description: 'Real workflows for writing, research, coding, and automation, no deep technical knowledge required.',
   },
   {
     slug: 'prompt-engineering',

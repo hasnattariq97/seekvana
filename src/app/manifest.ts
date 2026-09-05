@@ -2,10 +2,10 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Seekvana — Learn AI, clearly",
+    name: "Seekvana - Learn AI, clearly",
     short_name: "Seekvana",
     description:
-      "Learn Agentic AI and all things AI — clear, well-sourced articles for everyone.",
+      "Learn Agentic AI and all things AI: clear, well-sourced articles for everyone.",
     start_url: "/",
     display: "standalone",
     background_color: "#FAF8F3",

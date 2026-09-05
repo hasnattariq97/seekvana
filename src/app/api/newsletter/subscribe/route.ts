@@ -41,7 +41,7 @@ export async function POST(request: Request) {
       await resend.emails.send({
         from: process.env.EMAIL_FROM ?? 'Seekvana <onboarding@resend.dev>',
         to: email.toLowerCase().trim(),
-        subject: "You're in — here's your free AI cheatsheet 🎉",
+        subject: "You're in, here's your free AI cheatsheet 🎉",
         react: createElement(WelcomeEmail, { unsubscribeUrl }),
       })
     } catch {

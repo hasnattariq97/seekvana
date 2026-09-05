@@ -10,7 +10,7 @@ import { FaqSection } from "@/components/faq/faq-section";
 const HOMEPAGE_FAQS = [
   {
     q: "Is Seekvana free?",
-    a: "Yes — every article and learning path on Seekvana is completely free. No paywalls, no trials, no credit card.",
+    a: "Yes. Every article and learning path on Seekvana is completely free. No paywalls, no trials, no credit card.",
   },
   {
     q: "Do I need coding experience?",
@@ -18,7 +18,7 @@ const HOMEPAGE_FAQS = [
   },
   {
     q: "Who is Seekvana for?",
-    a: "Everyone — complete beginners with no technical background, students and career-switchers, and developers who want to go deeper on AI and agents.",
+    a: "Everyone: complete beginners with no technical background, students and career-switchers, and developers who want to go deeper on AI and agents.",
   },
   {
     q: "Do I need an account?",
@@ -26,7 +26,7 @@ const HOMEPAGE_FAQS = [
   },
   {
     q: "How is Seekvana different from an online course?",
-    a: "It's self-paced, searchable, and free. Read a single article when you land from a search, or follow a full structured path from start to finish — your choice.",
+    a: "It's self-paced, searchable, and free. Read a single article when you land from a search, or follow a full structured path from start to finish, your choice.",
   },
 ];
 export const metadata: Metadata = {

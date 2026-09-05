@@ -32,7 +32,7 @@ export function SlideEmbed({ src, title, caption }: SlideEmbedProps) {
           >
             <Presentation className="w-10 h-10" />
             <span className="text-sm font-medium">Load slide deck</span>
-            <span className="text-xs">Hosted on SlideShare — click to load (sets third-party cookies)</span>
+            <span className="text-xs">Hosted on SlideShare, click to load (sets third-party cookies)</span>
           </button>
         )}
       </div>

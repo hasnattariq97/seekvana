@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: meta.description,
     alternates: { canonical: `https://seekvana.com/library/${pillar}` },
     openGraph: {
-      title: `${meta.name} — Seekvana`,
+      title: `${meta.name} - Seekvana`,
       description: meta.description,
       url: `https://seekvana.com/library/${pillar}`,
     },
@@ -77,7 +77,7 @@ export default async function PillarPage({ params }: PageProps) {
 
       {/* Article grid */}
       {articles.length === 0 ? (
-        <p className="text-secondary text-center py-16">No articles yet — check back soon.</p>
+        <p className="text-secondary text-center py-16">No articles yet. Check back soon.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {articles.map(({ frontmatter, slug }) => (

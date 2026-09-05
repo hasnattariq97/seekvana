@@ -38,7 +38,7 @@ const QUESTIONS: Question[] = [
     prompt: 'Git and GitHub, to you, are:',
     options: [
       'Unfamiliar',
-      "Somewhat familiar — you've cloned a repo or made a commit before",
+      "Somewhat familiar, you've cloned a repo or made a commit before",
       'A normal part of how you already work',
     ],
   },
@@ -239,7 +239,7 @@ export function SelfPlacementQuiz() {
       {allAnswered && tier && (
         <div role="status" className="mt-6 p-5 rounded-lg bg-accent-soft">
           <p className="font-fraunces text-lg text-accent-deep mb-1">
-            Score: {score}/22 — {tier.label}
+            Score: {score}/22: {tier.label}
           </p>
           <p className="text-sm text-primary">{tier.advice}</p>
         </div>

@@ -64,7 +64,7 @@ export function Quiz({ question, options = [], correct, explanation }: QuizProps
               : 'bg-accent-soft text-primary'
           }`}
         >
-          <strong>{selected === parsedCorrect ? 'Correct! ' : 'Not quite — '}</strong>
+          <strong>{selected === parsedCorrect ? 'Correct! ' : 'Not quite: '}</strong>
           {explanation}
         </div>
       )}

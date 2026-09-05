@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const path = getPathBySlug(slug)
   if (!path) return {}
   return {
-    title: { absolute: `${path.title} — Seekvana` },
+    title: { absolute: `${path.title} - Seekvana` },
     description: path.description,
   }
 }

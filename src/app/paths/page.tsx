@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: 'Structured learning journeys from AI beginner to advanced builder. Pick a path and start today.',
   alternates: { canonical: 'https://seekvana.com/paths' },
   openGraph: {
-    title: 'Learning Paths — Seekvana',
+    title: 'Learning Paths - Seekvana',
     description: 'Structured learning journeys from AI beginner to advanced builder.',
     url: 'https://seekvana.com/paths',
   },
@@ -44,7 +44,7 @@ export default function PathsPage() {
       </header>
 
       {paths.length === 0 ? (
-        <p className="text-secondary text-center py-16">No paths available yet — check back soon.</p>
+        <p className="text-secondary text-center py-16">No paths available yet. Check back soon.</p>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {paths.map((path) => (

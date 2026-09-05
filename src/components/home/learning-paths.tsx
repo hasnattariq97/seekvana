@@ -39,7 +39,7 @@ const PATHS: PathCard[] = [
     title: "Getting Started",
     description: "From zero to live AI app. No experience needed.",
     imageSrc: "/images/paths/getting-started/cover.png",
-    imageAlt: "Getting Started learning path — a robot's journey through 10 AI modules",
+    imageAlt: "Getting Started learning path, a robot's journey through 10 AI modules",
     moduleGridCols: "grid-cols-5",
     topicCount: 101,
     modules: [
@@ -63,7 +63,7 @@ const PATHS: PathCard[] = [
     title: "Beyond the Prompt",
     description: "From first prompt to production-grade prompt system.",
     imageSrc: "/images/paths/beyond-the-prompt/cover.png",
-    imageAlt: "Beyond the Prompt learning path — a robot's journey from a raw prompt to a shipped production system",
+    imageAlt: "Beyond the Prompt learning path, a robot's journey from a raw prompt to a shipped production system",
     moduleGridCols: "grid-cols-3",
     topicCount: 31,
     modules: [
@@ -78,9 +78,9 @@ const PATHS: PathCard[] = [
     badgeLabel: "Flagship · Free",
     badgeColorClass: "border-accent/30 bg-accent-soft text-accent",
     title: "Inside the Agent",
-    description: "From your first tool call to autonomous agents — built where the pros build.",
+    description: "From your first tool call to autonomous agents, built where the pros build.",
     imageSrc: "/images/paths/inside-the-agent/cover.png",
-    imageAlt: "Inside the Agent learning path — building real autonomous AI agents inside Cursor and Claude Code",
+    imageAlt: "Inside the Agent learning path, building real autonomous AI agents inside Cursor and Claude Code",
     moduleGridCols: "grid-cols-5",
     topicCount: 120,
     modules: [
@@ -111,7 +111,7 @@ export function LearningPaths() {
           <div>
             <h2 className="font-fraunces text-3xl text-primary">Learning paths</h2>
             <p className="text-sm text-secondary mt-1.5">
-              Structured paths through AI — pick your level.
+              Structured paths through AI. Pick your level.
             </p>
           </div>
           <Link href="/paths" className="text-sm text-accent font-medium hover:text-accent-deep transition-colors shrink-0 mb-1">

@@ -30,7 +30,7 @@ export default function PrivacyPage() {
         <section>
           <p className="text-secondary leading-relaxed">
             Seekvana (&ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;) operates{' '}
-            <strong>seekvana.com</strong> — a free AI learning website. This Privacy Policy explains
+            <strong>seekvana.com</strong>, a free AI learning website. This Privacy Policy explains
             what information we collect, how we use it, and your rights regarding that information.
             By using Seekvana, you agree to this policy.
           </p>
@@ -119,10 +119,10 @@ export default function PrivacyPage() {
           <div className="space-y-3 text-secondary leading-relaxed">
             <p>We do not sell your personal information. We share data only with the following third-party service providers necessary to operate the site:</p>
             <ul className="list-disc list-outside ml-5 space-y-2">
-              <li><strong className="text-primary">Google LLC</strong> — Analytics (GA4) and advertising (AdSense). <a href="https://policies.google.com/privacy" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a></li>
-              <li><strong className="text-primary">Vercel Inc.</strong> — Website hosting and infrastructure. <a href="https://vercel.com/legal/privacy-policy" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">Vercel Privacy Policy</a></li>
-              <li><strong className="text-primary">Supabase Inc.</strong> — Newsletter subscription storage. <a href="https://supabase.com/privacy" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">Supabase Privacy Policy</a></li>
-              <li><strong className="text-primary">Resend Inc.</strong> — Email delivery for newsletters. <a href="https://resend.com/legal/privacy-policy" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">Resend Privacy Policy</a></li>
+              <li><strong className="text-primary">Google LLC</strong>: Analytics (GA4) and advertising (AdSense). <a href="https://policies.google.com/privacy" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">Google Privacy Policy</a></li>
+              <li><strong className="text-primary">Vercel Inc.</strong>: Website hosting and infrastructure. <a href="https://vercel.com/legal/privacy-policy" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">Vercel Privacy Policy</a></li>
+              <li><strong className="text-primary">Supabase Inc.</strong>: Newsletter subscription storage. <a href="https://supabase.com/privacy" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">Supabase Privacy Policy</a></li>
+              <li><strong className="text-primary">Resend Inc.</strong>: Email delivery for newsletters. <a href="https://resend.com/legal/privacy-policy" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">Resend Privacy Policy</a></li>
             </ul>
           </div>
         </section>
@@ -150,12 +150,12 @@ export default function PrivacyPage() {
           <div className="space-y-3 text-secondary leading-relaxed">
             <p>If you are located in the European Economic Area, United Kingdom, or another jurisdiction with applicable data protection laws, you have the following rights:</p>
             <ul className="list-disc list-outside ml-5 space-y-2">
-              <li><strong className="text-primary">Access</strong> — request a copy of the personal data we hold about you</li>
-              <li><strong className="text-primary">Rectification</strong> — request correction of inaccurate data</li>
-              <li><strong className="text-primary">Erasure</strong> — request deletion of your personal data</li>
-              <li><strong className="text-primary">Portability</strong> — receive your data in a structured, machine-readable format</li>
-              <li><strong className="text-primary">Objection</strong> — object to processing based on legitimate interests</li>
-              <li><strong className="text-primary">Withdraw consent</strong> — unsubscribe from the newsletter at any time</li>
+              <li><strong className="text-primary">Access</strong>: request a copy of the personal data we hold about you</li>
+              <li><strong className="text-primary">Rectification</strong>: request correction of inaccurate data</li>
+              <li><strong className="text-primary">Erasure</strong>: request deletion of your personal data</li>
+              <li><strong className="text-primary">Portability</strong>: receive your data in a structured, machine-readable format</li>
+              <li><strong className="text-primary">Objection</strong>: object to processing based on legitimate interests</li>
+              <li><strong className="text-primary">Withdraw consent</strong>: unsubscribe from the newsletter at any time</li>
             </ul>
             <p>To exercise any of these rights, contact us at the address in Section 10.</p>
           </div>

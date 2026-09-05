@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'About',
-  description: 'Seekvana is a free AI learning platform built by a non-technical founder who went from zero to automating his workday with AI agents — and wants to help everyone do the same.',
+  description: 'Seekvana is a free AI learning platform built by a non-technical founder who went from zero to automating his workday with AI agents, and wants to help everyone do the same.',
 }
 
 export default function AboutPage() {
@@ -118,11 +118,11 @@ export default function AboutPage() {
           <div className="space-y-4 text-secondary leading-relaxed">
             <p>Every article on Seekvana is written to a single standard:</p>
             <ul className="list-disc list-outside ml-5 space-y-2">
-              <li>Plain language first — no jargon without explanation</li>
+              <li>Plain language first: no jargon without explanation</li>
               <li>Real-world examples over abstract theory</li>
-              <li>Accurate and up to date — the AI field moves fast and we move with it</li>
+              <li>Accurate and up to date: the AI field moves fast and we move with it</li>
               <li>Honest about what we don&apos;t know</li>
-              <li>No filler — every sentence earns its place</li>
+              <li>No filler: every sentence earns its place</li>
             </ul>
             <p>
               If you spot an error or something outdated,{' '}

@@ -42,7 +42,7 @@ export default function CookiePolicyPage() {
           <h2 className="font-fraunces text-xl text-primary mb-3">1. What Cookies Are</h2>
           <p className="text-secondary leading-relaxed">
             Cookies are small text files a website stores on your device. They let a site remember
-            things between page loads and visits — like keeping you signed in, or measuring which
+            things between page loads and visits, like keeping you signed in, or measuring which
             pages are popular. Some cookies are set by us; others are set by third parties such as
             Google when their scripts run on our pages. We also use similar technologies, like web
             beacons and local storage, which this policy treats the same as cookies.
@@ -55,18 +55,18 @@ export default function CookiePolicyPage() {
             <p>We group cookies into three categories:</p>
             <ul className="list-disc list-outside ml-5 space-y-2">
               <li>
-                <strong className="text-primary">Necessary</strong> — required for the site to work
+                <strong className="text-primary">Necessary</strong>: required for the site to work
                 (keeping you signed in, remembering your cookie choice). These are always on and
                 are not subject to consent, because the site cannot function without them.
               </li>
               <li>
-                <strong className="text-primary">Analytics</strong> — help us understand how visitors
-                use Seekvana so we can improve it (via Google Analytics 4). You can opt out at any time —
+                <strong className="text-primary">Analytics</strong>: help us understand how visitors
+                use Seekvana so we can improve it (via Google Analytics 4). You can opt out at any time,
                 see Section 3.
               </li>
               <li>
-                <strong className="text-primary">Advertising</strong> — used to show personalized ads
-                via Google AdSense. You can opt out at any time — see Section 3.
+                <strong className="text-primary">Advertising</strong>: used to show personalized ads
+                via Google AdSense. You can opt out at any time, see Section 3.
               </li>
             </ul>
           </div>
@@ -80,18 +80,18 @@ export default function CookiePolicyPage() {
             </p>
             <ul className="list-disc list-outside ml-5 space-y-2">
               <li>
-                <strong className="text-primary">Browser settings</strong> — every major browser lets you
+                <strong className="text-primary">Browser settings</strong>: every major browser lets you
                 block or delete cookies, either entirely or per site. Blocking Necessary cookies may break
                 parts of the site, such as staying signed in.
               </li>
               <li>
-                <strong className="text-primary">Personalized advertising</strong> — opt out via{' '}
+                <strong className="text-primary">Personalized advertising</strong>: opt out via{' '}
                 <a href="https://www.google.com/settings/ads" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">Google Ads Settings</a>,{' '}
                 <a href="https://youradchoices.com" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">youradchoices.com</a>, or{' '}
                 <a href="https://www.youronlinechoices.eu" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">youronlinechoices.eu</a>.
               </li>
               <li>
-                <strong className="text-primary">Analytics</strong> — opt out of Google Analytics with the{' '}
+                <strong className="text-primary">Analytics</strong>: opt out of Google Analytics with the{' '}
                 <a href="https://tools.google.com/dlpage/gaoptout" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">Google Analytics Opt-out Browser Add-on</a>.
               </li>
             </ul>
@@ -124,25 +124,25 @@ export default function CookiePolicyPage() {
                 <tr>
                   <td className="border border-border px-3 py-2 font-mono text-xs">_ga, _ga_*</td>
                   <td className="border border-border px-3 py-2">Analytics</td>
-                  <td className="border border-border px-3 py-2">Google Analytics — distinguishes visitors and sessions.</td>
+                  <td className="border border-border px-3 py-2">Google Analytics: distinguishes visitors and sessions.</td>
                   <td className="border border-border px-3 py-2">2 years</td>
                 </tr>
                 <tr>
                   <td className="border border-border px-3 py-2 font-mono text-xs">_gid</td>
                   <td className="border border-border px-3 py-2">Analytics</td>
-                  <td className="border border-border px-3 py-2">Google Analytics — distinguishes visitors.</td>
+                  <td className="border border-border px-3 py-2">Google Analytics: distinguishes visitors.</td>
                   <td className="border border-border px-3 py-2">24 hours</td>
                 </tr>
                 <tr>
                   <td className="border border-border px-3 py-2 font-mono text-xs">__gads, __gpi</td>
                   <td className="border border-border px-3 py-2">Advertising</td>
-                  <td className="border border-border px-3 py-2">Google AdSense — ad serving, frequency capping, and measurement.</td>
+                  <td className="border border-border px-3 py-2">Google AdSense: ad serving, frequency capping, and measurement.</td>
                   <td className="border border-border px-3 py-2">Up to 13 months</td>
                 </tr>
                 <tr>
                   <td className="border border-border px-3 py-2 font-mono text-xs">_gcl_au</td>
                   <td className="border border-border px-3 py-2">Advertising</td>
-                  <td className="border border-border px-3 py-2">Google — measures ad conversions.</td>
+                  <td className="border border-border px-3 py-2">Google: measures ad conversions.</td>
                   <td className="border border-border px-3 py-2">3 months</td>
                 </tr>
               </tbody>
@@ -159,7 +159,7 @@ export default function CookiePolicyPage() {
             </p>
             <ul className="list-disc list-outside ml-5 space-y-2">
               <li>
-                <strong className="text-primary">Google LLC</strong> — Analytics (GA4) and advertising
+                <strong className="text-primary">Google LLC</strong>: Analytics (GA4) and advertising
                 (AdSense).{' '}
                 <a href="https://policies.google.com/technologies/cookies" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">How Google uses cookies</a>
               </li>

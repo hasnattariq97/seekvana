@@ -18,7 +18,7 @@ async function buildLlmsTxt(): Promise<string> {
   lines.push('# Seekvana')
   lines.push('')
   lines.push(
-    '> Free AI learning site teaching Agentic AI and all things AI — clear, well-sourced guides for everyone from complete beginners to advanced builders.',
+    '> Free AI learning site teaching Agentic AI and all things AI: clear, well-sourced guides for everyone from complete beginners to advanced builders.',
   )
   lines.push('')
   lines.push(

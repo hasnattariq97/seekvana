@@ -197,7 +197,7 @@ function DuplicateCard() {
         You&apos;re already on<br />the <span style={{ fontStyle: 'italic', fontWeight: 300, color: '#C9633F' }}>list!</span>
       </div>
       <p style={{ fontSize: 13, color: '#6B6560', lineHeight: 1.65, marginBottom: 16, position: 'relative', zIndex: 1 }}>
-        Good taste. Next issue drops <strong style={{ color: '#1A1714' }}>this Tuesday</strong> — check your inbox.
+        Good taste. Next issue drops <strong style={{ color: '#1A1714' }}>this Tuesday</strong>, check your inbox.
       </p>
 
       <ExpectStrip label="Every Tuesday you'll get" items={expectItems.slice(0, 2)} />
