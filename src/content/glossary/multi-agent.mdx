@@ -11,7 +11,7 @@ publishedAt: "2026-01-15"
 
 A single AI agent works well for tasks that fit within a manageable conversation. But some goals are too large, too complex, or require too many specialized skills to hand off to one agent.
 
-Imagine asking an agent to "research AI developments from the past month, summarize the top 10 stories, write a newsletter draft, and suggest a distribution strategy." That's four different types of work — research, synthesis, writing, and marketing — that might all benefit from separate handling.
+Imagine asking an agent to "research AI developments from the past month, summarize the top 10 stories, write a newsletter draft, and suggest a distribution strategy." That's four different types of work: research, synthesis, writing, and marketing, that might all benefit from separate handling.
 
 Multi-agent systems solve this by breaking work across specialized agents that collaborate.
 
@@ -19,10 +19,10 @@ Multi-agent systems solve this by breaking work across specialized agents that c
 
 Most multi-agent systems use a hub-and-spoke design:
 
-- **Orchestrator** — a coordinating agent that receives the overall goal, breaks it into subtasks, and delegates to worker agents
-- **Worker agents** — specialized agents that do one thing well: search the web, write code, summarize documents, call an API
+- **Orchestrator**: a coordinating agent that receives the overall goal, breaks it into subtasks, and delegates to worker agents
+- **Worker agents**: specialized agents that do one thing well: search the web, write code, summarize documents, call an API
 
-The orchestrator collects the workers' outputs and synthesizes them into a final result. It may loop — asking a worker to revise based on another worker's feedback.
+The orchestrator collects the workers' outputs and synthesizes them into a final result. It may loop: asking a worker to revise based on another worker's feedback.
 
 ## A Concrete Example
 
@@ -35,6 +35,6 @@ A research multi-agent system might have:
 
 ## Tradeoffs
 
-Multi-agent systems are more powerful for complex tasks but also more expensive (more LLM calls), slower, and harder to debug. Coordination introduces points of failure — an orchestrator can misinterpret a worker's output or send incomplete context. Start with a single agent and move to multi-agent only when you've hit a real ceiling.
+Multi-agent systems are more powerful for complex tasks but also more expensive (more LLM calls), slower, and harder to debug. Coordination introduces points of failure: an orchestrator can misinterpret a worker's output or send incomplete context. Start with a single agent and move to multi-agent only when you've hit a real ceiling.
 
 For the full walkthrough on supervisor/worker prompting, hand-offs, and debate patterns, see [multi-agent prompting and orchestration](/library/agentic-ai/multi-agent-prompting-and-orchestration).

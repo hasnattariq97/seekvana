@@ -11,19 +11,19 @@ publishedAt: "2026-08-19"
 
 ReAct (Reason + Act) is an agent pattern where a model interleaves an explicit reasoning step with a tool call, then reads the result before deciding what to do next. The name comes from the 2023 paper <a href="https://react-lm.github.io/" target="_blank" rel="noopener noreferrer">"ReAct: Synergizing Reasoning and Acting in Language Models"</a>, from researchers at Princeton and Google Research.
 
-Not to be confused with React, the JavaScript UI library — same name, unrelated concept.
+Not to be confused with React, the JavaScript UI library, same name, unrelated concept.
 
 ## The Loop
 
 ReAct repeats three parts as many times as needed:
 
-- **Thought** — the model reasons about the current state and what it needs to do next
-- **Action** — the model calls a tool to gather information or take a step
-- **Observation** — the result of that tool call gets added to what the model can see
+- **Thought**: the model reasons about the current state and what it needs to do next
+- **Action**: the model calls a tool to gather information or take a step
+- **Observation**: the result of that tool call gets added to what the model can see
 
 ## How It Works Mechanically
 
-Each tool call is the model pausing generation with a `tool_use` stop reason: it names a tool and its arguments, the calling code executes it, and the result is sent back as a `tool_result` so the loop can continue. The model never runs a tool itself — it requests, your system executes.
+Each tool call is the model pausing generation with a `tool_use` stop reason: it names a tool and its arguments, the calling code executes it, and the result is sent back as a `tool_result` so the loop can continue. The model never runs a tool itself: it requests, your system executes.
 
 ## Why It Matters
 

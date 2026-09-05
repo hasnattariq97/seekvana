@@ -9,15 +9,15 @@ publishedAt: "2026-08-19"
 
 ## Autonomy Is a Spectrum, Not a Switch
 
-Agent autonomy is the range of control an [AI agent](/glossary/agent) holds over its own next action — running from fully scripted (a developer decided every step in advance) to fully autonomous (the agent decides what to do and when it's done, with no per-step check). It's a continuous line, not a fixed set of tiers with hard walls between them.
+Agent autonomy is the range of control an [AI agent](/glossary/agent) holds over its own next action: running from fully scripted (a developer decided every step in advance) to fully autonomous (the agent decides what to do and when it's done, with no per-step check). It's a continuous line, not a fixed set of tiers with hard walls between them.
 
 ## Five Points Worth Naming
 
-- **Scripted automation** — zero freedom; a fixed code path runs the same way every time
-- **Suggest-only** — the agent proposes, a human decides; nothing changes until it's accepted
-- **Approve-each-step** — the agent plans, but stops before every action for a yes or no
-- **Approve-checkpoints** — the agent runs a batch of steps on its own, pausing at review points instead of every action
-- **Fully autonomous** — the agent acts, observes, and decides its next move without stopping, reporting back once done or stuck
+- **Scripted automation**: zero freedom; a fixed code path runs the same way every time
+- **Suggest-only**: the agent proposes, a human decides; nothing changes until it's accepted
+- **Approve-each-step**: the agent plans, but stops before every action for a yes or no
+- **Approve-checkpoints**: the agent runs a batch of steps on its own, pausing at review points instead of every action
+- **Fully autonomous**: the agent acts, observes, and decides its next move without stopping, reporting back once done or stuck
 
 Cursor's Read-only, Ask, Plan, and Agent modes, and Claude Code's Manual, Accept Edits, Plan, Auto, and Bypass permission tiers are real, working instances of this same dial.
 
@@ -25,4 +25,4 @@ Cursor's Read-only, Ask, Plan, and Agent modes, and Claude Code's Manual, Accept
 
 No point on the dial is inherently better. The right level depends on the stakes of the task: how bad it would be if the agent got it wrong, how easy that mistake is to undo, and how certain you already are about the right outcome. High-stakes, hard-to-reverse, uncertain tasks need tighter approval; low-stakes, reversible, well-understood ones can run with more freedom.
 
-Autonomy can also be granted by accident, not just on purpose — a misread setting or a bug can silently widen an agent's permissions beyond what a user believes they've approved.
+Autonomy can also be granted by accident, not just on purpose: a misread setting or a bug can silently widen an agent's permissions beyond what a user believes they've approved.

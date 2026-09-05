@@ -9,7 +9,7 @@ publishedAt: "2026-08-19"
 
 ## What MCP Is
 
-MCP (Model Context Protocol) is an open standard, created by Anthropic and open-sourced in November 2024, that defines a common way for AI applications to connect to external tools, databases, and data sources. Instead of writing custom glue code for every tool-and-model pairing, a tool builder writes one MCP server and an app builder writes one MCP client — and the two can talk to each other automatically.
+MCP (Model Context Protocol) is an open standard, created by Anthropic and open-sourced in November 2024, that defines a common way for AI applications to connect to external tools, databases, and data sources. Instead of writing custom glue code for every tool-and-model pairing, a tool builder writes one MCP server and an app builder writes one MCP client, and the two can talk to each other automatically.
 
 ## The Problem It Solves
 
@@ -21,11 +21,11 @@ MCP turns that N×M into N+M. Each side builds its integration once, against the
 
 MCP defines three core primitives a server can expose:
 
-- **Tools** — functions the model can call, like querying a database or posting to Slack
-- **Resources** — data the model can read, like a file or a document
-- **Prompts** — reusable prompt templates the server provides to the client
+- **Tools**: functions the model can call, like querying a database or posting to Slack
+- **Resources**: data the model can read, like a file or a document
+- **Prompts**: reusable prompt templates the server provides to the client
 
-A client (the AI app) connects to any number of MCP servers, and the model can then use whatever tools, resources, and prompts those servers expose — no bespoke integration required.
+A client (the AI app) connects to any number of MCP servers, and the model can then use whatever tools, resources, and prompts those servers expose. No bespoke integration required.
 
 ## Why It Matters
 

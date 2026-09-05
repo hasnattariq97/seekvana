@@ -9,13 +9,13 @@ publishedAt: "2026-08-19"
 
 ## What a Vector Store Does
 
-A vector store (also called a vector database) stores [embeddings](/glossary/embedding) — numeric vectors that capture meaning — and answers one question fast: given a query vector, which stored vectors are closest to it?
+A vector store (also called a vector database) stores [embeddings](/glossary/embedding), numeric vectors that capture meaning, and answers one question fast: given a query vector, which stored vectors are closest to it?
 
 That "closest" search is similarity search. It's the retrieval half of [RAG](/glossary/rag): a query gets embedded, the vector store finds the nearest document chunks, and those chunks get handed to the model as context.
 
 ## Why Not Just a Regular Database?
 
-A regular database is built to find exact matches or filtered rows fast. A vector store is built to find approximate nearest neighbors across millions of high-dimensional vectors fast — a fundamentally different search problem that regular indexes don't solve well at scale.
+A regular database is built to find exact matches or filtered rows fast. A vector store is built to find approximate nearest neighbors across millions of high-dimensional vectors fast, a fundamentally different search problem that regular indexes don't solve well at scale.
 
 For a small, static set of documents, a regular database with a vector extension (like pgvector on Postgres) is often enough. Dedicated vector databases (Pinecone, Qdrant, Weaviate) earn their keep once you need fast similarity search over millions of vectors, often combined with metadata filtering.
 

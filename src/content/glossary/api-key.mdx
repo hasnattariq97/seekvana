@@ -9,13 +9,13 @@ publishedAt: "2026-01-15"
 
 ## What an API Key Is
 
-When your code calls an AI service — like sending a message to Claude or GPT-4 — the provider needs to know who is making the request. API keys are how they do that. An API key is a long, randomly generated string (something like `sk-ant-api03-...`) that uniquely identifies your account.
+When your code calls an AI service, like sending a message to Claude or GPT-4, the provider needs to know who is making the request. API keys are how they do that. An API key is a long, randomly generated string (something like `sk-ant-api03-...`) that uniquely identifies your account.
 
 Every time your code makes a request, it sends this key along. The provider checks it, confirms it belongs to a valid account, and bills the usage to that account.
 
 ## Why It Must Stay Secret
 
-Your API key is tied directly to your billing account. If someone else gets hold of it, they can make requests that you pay for — and with AI APIs, costs can rack up quickly. This is called **key theft**, and it's a real and common problem.
+Your API key is tied directly to your billing account. If someone else gets hold of it, they can make requests that you pay for, and with AI APIs, costs can rack up quickly. This is called **key theft**, and it's a real and common problem.
 
 The most common mistake beginners make is putting an API key directly in code and then pushing that code to a public GitHub repository. Automated bots scan GitHub for exposed keys and exploit them within minutes.
 

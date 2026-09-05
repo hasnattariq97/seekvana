@@ -1,7 +1,7 @@
 ---
 term: "Environment Variable"
 slug: "environment-variable"
-shortDef: "A named value stored outside your code — like an API key or database URL — that your program reads at runtime."
+shortDef: "A named value stored outside your code, like an API key or database URL, that your program reads at runtime."
 tags: ["environment variables", "dotenv", "api keys", "developer setup"]
 relatedTerms: ["api-key", "path-variable"]
 publishedAt: "2026-01-15"
@@ -11,7 +11,7 @@ publishedAt: "2026-01-15"
 
 An environment variable is a key-value pair that lives outside your code but can be read by your program when it runs. Instead of writing your database password directly into your code, you store it as an environment variable and your code reads it from there.
 
-The name comes from the "environment" your program runs in — the context provided by the operating system before your code even starts.
+The name comes from the "environment" your program runs in: the context provided by the operating system before your code even starts.
 
 ## The .env File
 
@@ -44,4 +44,4 @@ Many projects use a library like `dotenv` to automatically load the `.env` file 
 
 ## The Golden Rule
 
-Secrets in code get leaked. Secrets in environment variables stay safe — as long as you never commit the `.env` file. This single habit prevents the majority of security incidents beginners encounter.
+Secrets in code get leaked. Secrets in environment variables stay safe, as long as you never commit the `.env` file. This single habit prevents the majority of security incidents beginners encounter.

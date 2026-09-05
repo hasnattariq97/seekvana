@@ -17,9 +17,9 @@ RAG (Retrieval-Augmented Generation) fixes both problems without retraining the 
 
 The process has three steps:
 
-1. **Retrieve** — When a question arrives, a search system finds the most relevant documents or passages from an external knowledge base (a database, a PDF library, a website).
-2. **Augment** — Those retrieved passages are inserted into the model's context window alongside the original question.
-3. **Generate** — The LLM answers using both its trained knowledge and the freshly retrieved context.
+1. **Retrieve**: When a question arrives, a search system finds the most relevant documents or passages from an external knowledge base (a database, a PDF library, a website).
+2. **Augment**: Those retrieved passages are inserted into the model's context window alongside the original question.
+3. **Generate**: The LLM answers using both its trained knowledge and the freshly retrieved context.
 
 Think of it like an open-book exam. The model is still doing the reasoning; RAG just hands it the right pages to reference.
 
@@ -31,6 +31,6 @@ Without RAG, the LLM guesses. With RAG, it retrieves your actual policy document
 
 ## Why RAG Beats Fine-tuning for Knowledge Updates
 
-Fine-tuning bakes knowledge into the model permanently — expensive and slow to update. RAG keeps knowledge in a separate store you can update any time, instantly. For frequently changing information, RAG is almost always the right choice.
+Fine-tuning bakes knowledge into the model permanently: expensive and slow to update. RAG keeps knowledge in a separate store you can update any time, instantly. For frequently changing information, RAG is almost always the right choice.
 
 For the full decision framework, including when fine-tuning wins instead and when to use both together, see [RAG vs fine-tuning](/library/large-language-models/rag-vs-fine-tuning).

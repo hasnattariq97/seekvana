@@ -9,9 +9,9 @@ publishedAt: "2026-01-15"
 
 ## The Short-Term Memory Analogy
 
-An LLM's context window is like working memory for a person — it is the information the model can actively hold and reason over right now. Anything outside the window simply does not exist to the model. It cannot reference it, summarize it, or be influenced by it.
+An LLM's context window is like working memory for a person: it is the information the model can actively hold and reason over right now. Anything outside the window simply does not exist to the model. It cannot reference it, summarize it, or be influenced by it.
 
-Context windows are measured in tokens. A 128k-token window can hold roughly 100,000 words — about the length of a novel. That sounds large, but long documents, codebases, and extended conversations can fill it quickly.
+Context windows are measured in tokens. A 128k-token window can hold roughly 100,000 words, about the length of a novel. That sounds large, but long documents, codebases, and extended conversations can fill it quickly.
 
 ## What Goes Into the Context Window
 
@@ -27,12 +27,12 @@ All of it competes for the same finite space.
 
 ## What Happens When You Exceed the Limit
 
-Different systems handle this differently. Some truncate older messages (the model "forgets" early conversation). Some throw an error. Some summarize earlier content. In all cases, exceeding the context window means information is lost — and the model may give inconsistent or confused answers as a result.
+Different systems handle this differently. Some truncate older messages (the model "forgets" early conversation). Some throw an error. Some summarize earlier content. In all cases, exceeding the context window means information is lost, and the model may give inconsistent or confused answers as a result.
 
 ## How RAG Helps
 
 Rather than dumping an entire document library into the context window, RAG retrieves only the most relevant passages. This lets you work with knowledge bases far larger than any context window by being selective about what actually needs to be in context for each query.
 
-Context window sizes have grown dramatically in recent years and will continue to grow — but efficient use of context remains a core skill for anyone building with AI.
+Context window sizes have grown dramatically in recent years and will continue to grow, but efficient use of context remains a core skill for anyone building with AI.
 
 For the full walkthrough, including what happens when you hit the limit and why bigger isn't always better, see [what is a context window](/library/large-language-models/what-is-a-context-window).
