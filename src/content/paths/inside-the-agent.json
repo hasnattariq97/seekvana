@@ -2,19 +2,19 @@
   "slug": "inside-the-agent",
   "title": "Inside the Agent",
   "subtitle": "from first tool call to autonomous agent",
-  "description": "120 hands-on articles across 13 modules — build real AI agents inside Cursor and Claude Code, the tools professionals actually use. Tool use, RAG, MCP, context engineering, memory, the Claude Agent SDK, multi-agent orchestration, evals, security, and production deployment — every lesson read, built, and shipped in a real editor, ending in benchmarked capstones.",
+  "description": "120 hands-on articles across 13 modules: build real AI agents inside Cursor and Claude Code, the tools professionals actually use. Tool use, RAG, MCP, context engineering, memory, the Claude Agent SDK, multi-agent orchestration, evals, security, and production deployment. Every lesson read, built, and shipped in a real editor, ending in benchmarked capstones.",
   "difficulty": "advanced",
   "lessonCount": 120,
   "href": "/paths/inside-the-agent",
   "colorClass": "bg-accent",
-  "totalTimeLabel": "25–35 hrs",
+  "totalTimeLabel": "25-35 hrs",
   "outcomeLabel": "A portfolio of shipped agents",
-  "curriculumHint": "Every article runs concept → build → ship — the idea, a hands-on lab in Cursor or Claude Code, and a graded task you keep. Where a lesson needs a prerequisite it links to Getting Started or Beyond the Prompt instead of repeating it.",
+  "curriculumHint": "Every article runs concept → build → ship: the idea, a hands-on lab in Cursor or Claude Code, and a graded task you keep. Where a lesson needs a prerequisite it links to Getting Started or Beyond the Prompt instead of repeating it.",
   "topicFooterLabel": "hands-on lab",
   "faqs": [
     {
       "q": "Is this path for beginners?",
-      "a": "It's the flagship — intermediate to advanced. The first two modules onboard you to Cursor and Claude Code from zero, but from Module 3 on you build with Python, APIs, and databases. Brand new to coding? Do Getting Started first. New to prompting? Do Beyond the Prompt first."
+      "a": "It's the flagship: intermediate to advanced. The first two modules onboard you to Cursor and Claude Code from zero, but from Module 3 on you build with Python, APIs, and databases. Brand new to coding? Do Getting Started first. New to prompting? Do Beyond the Prompt first."
     },
     {
       "q": "What should I know before starting?",
@@ -22,28 +22,28 @@
     },
     {
       "q": "What tools does it use?",
-      "a": "Everything is built inside Cursor and Claude Code — the environment professionals actually use — plus the Claude Agent SDK and MCP, with a light, honest tour of orchestration frameworks. The concepts (RAG, MCP, memory, evals, deployment) are universal and transfer to any stack."
+      "a": "Everything is built inside Cursor and Claude Code, the environment professionals actually use, plus the Claude Agent SDK and MCP, with a light, honest tour of orchestration frameworks. The concepts (RAG, MCP, memory, evals, deployment) are universal and transfer to any stack."
     },
     {
       "q": "How long does it take?",
-      "a": "Roughly 25–35 hours of focused, hands-on work, fully self-paced — there's no deadline."
+      "a": "Roughly 25-35 hours of focused, hands-on work, fully self-paced, there's no deadline."
     },
     {
       "q": "What will I be able to do by the end?",
-      "a": "Design, build, evaluate, secure, and deploy real autonomous agents — and ship a portfolio of them, finishing with four benchmarked capstones you can show an employer."
+      "a": "Design, build, evaluate, secure, and deploy real autonomous agents, and ship a portfolio of them, finishing with four benchmarked capstones you can show an employer."
     },
     {
       "q": "Is it free?",
-      "a": "Yes — the entire path is completely free."
+      "a": "Yes. The entire path is completely free."
     }
   ],
   "modules": [
     {
       "id": "14",
       "title": "Orientation: Your Agentic Workshop",
-      "description": "Stand up Cursor + Claude Code as the workshop the whole path lives in — modes, context, and safe defaults — even if you've never touched an AI code editor.",
+      "description": "Stand up Cursor + Claude Code as the workshop the whole path lives in: modes, context, and safe defaults, even if you've never touched an AI code editor.",
       "topics": [
-        { "id": "14.01", "title": "What This Path Is — and What It Assumes" },
+        { "id": "14.01", "title": "What This Path Is, and What It Assumes" },
         { "id": "14.02", "title": "Installing and Touring Cursor" },
         { "id": "14.03", "title": "Installing Claude Code" },
         { "id": "14.04", "title": "Cursor's Modes and Inline Edits" },
@@ -56,7 +56,7 @@
     {
       "id": "15",
       "title": "Foundations: From Passive Prompting to Agentic Workflows",
-      "description": "The conceptual leap from one-shot prompting to iterative, tool-using, multi-step agents — grounded in Anthropic's own definitions and felt through Claude Code's loop.",
+      "description": "The conceptual leap from one-shot prompting to iterative, tool-using, multi-step agents, grounded in Anthropic's own definitions and felt through Claude Code's loop.",
       "topics": [
         { "id": "15.01", "title": "Prompting vs Agentic Workflows" },
         { "id": "15.02", "title": "The Augmented LLM" },
@@ -70,7 +70,7 @@
     {
       "id": "16",
       "title": "Core Agent Concepts & Single-Agent Patterns",
-      "description": "The reasoning patterns that power a single agent — ReAct, plan-and-execute, reflection, reasoning models — plus spec-driven development and decision journaling.",
+      "description": "The reasoning patterns that power a single agent: ReAct, plan-and-execute, reflection, reasoning models, plus spec-driven development and decision journaling.",
       "topics": [
         { "id": "16.01", "title": "Chain-of-Thought, Revisited for Agents" },
         { "id": "16.02", "title": "ReAct: Reason + Act" },
@@ -86,7 +86,7 @@
     {
       "id": "17",
       "title": "Tools, APIs, Databases & RAG",
-      "description": "Give agents hands and knowledge — tool and function calling, external APIs, databases, structured outputs, and retrieval, including the modern CodeAct-vs-JSON decision.",
+      "description": "Give agents hands and knowledge: tool and function calling, external APIs, databases, structured outputs, and retrieval, including the modern CodeAct-vs-JSON decision.",
       "topics": [
         { "id": "17.01", "title": "How Tool and Function Calling Actually Works" },
         { "id": "17.02", "title": "Designing Good Tools" },
@@ -103,7 +103,7 @@
     {
       "id": "18",
       "title": "The Model Context Protocol (MCP) Deep Dive",
-      "description": "The open standard for connecting agents to tools and data — the \"USB-C for AI\" — built hands-on in Cursor and Claude Code, including authorization and security.",
+      "description": "The open standard for connecting agents to tools and data, the \"USB-C for AI\", built hands-on in Cursor and Claude Code, including authorization and security.",
       "topics": [
         { "id": "18.01", "title": "Why MCP Exists" },
         { "id": "18.02", "title": "MCP Architecture" },
@@ -122,7 +122,7 @@
     {
       "id": "19",
       "title": "Context Engineering & Memory",
-      "description": "Curating the tokens an agent sees and giving it durable memory — the difference between a demo and an agent that survives 40+ turns. The deepest, most-current module.",
+      "description": "Curating the tokens an agent sees and giving it durable memory: the difference between a demo and an agent that survives 40+ turns. The deepest, most-current module.",
       "topics": [
         { "id": "19.01", "title": "The Statelessness Problem" },
         { "id": "19.02", "title": "Context Rot and \"Lost in the Middle\"" },
@@ -140,7 +140,7 @@
     {
       "id": "20",
       "title": "Claude Code & Anthropic Deep-Dive",
-      "description": "Master Claude Code's full extensibility stack — commands, skills, subagents, hooks, plugins, marketplaces — and Anthropic's long-running-agent harness patterns.",
+      "description": "Master Claude Code's full extensibility stack: commands, skills, subagents, hooks, plugins, marketplaces, and Anthropic's long-running-agent harness patterns.",
       "topics": [
         { "id": "20.01", "title": "The Extensibility Stack, Mapped" },
         { "id": "20.02", "title": "Slash Commands" },
@@ -159,7 +159,7 @@
     {
       "id": "21",
       "title": "Building Agents in Code: The Claude Agent SDK",
-      "description": "Move from using agents to programming them with the same harness that powers Claude Code — then make them cheap and reliable enough for production.",
+      "description": "Move from using agents to programming them with the same harness that powers Claude Code, then make them cheap and reliable enough for production.",
       "topics": [
         { "id": "21.01", "title": "Agent SDK vs the Messages API" },
         { "id": "21.02", "title": "Install and First Query" },
@@ -177,7 +177,7 @@
     {
       "id": "22",
       "title": "Planning & Multi-Agent Orchestration",
-      "description": "From a single agent to coordinated teams — Anthropic's workflow patterns, Claude-native subagents, and a light, honest tour of LangGraph, CrewAI, and AutoGen.",
+      "description": "From a single agent to coordinated teams: Anthropic's workflow patterns, Claude-native subagents, and a light, honest tour of LangGraph, CrewAI, and AutoGen.",
       "topics": [
         { "id": "22.01", "title": "Multi-Step Planning" },
         { "id": "22.02", "title": "The Five Workflow Patterns" },
@@ -192,7 +192,7 @@
     {
       "id": "23",
       "title": "Evaluation, Guardrails & Security",
-      "description": "The discipline that separates demos from production — evals-first, with modern eval vocabulary, the lethal trifecta, real CVEs, and deterministic enforcement.",
+      "description": "The discipline that separates demos from production: evals-first, with modern eval vocabulary, the lethal trifecta, real CVEs, and deterministic enforcement.",
       "topics": [
         { "id": "23.01", "title": "Why Evals First" },
         { "id": "23.02", "title": "Objective vs Subjective Evals" },
@@ -211,7 +211,7 @@
     {
       "id": "24",
       "title": "Deployment, AgentOps & Scaling",
-      "description": "Take agents from a working repo to a monitored, cost-controlled production service — containers, CI/CD, observability, durable state, and secure hosting.",
+      "description": "Take agents from a working repo to a monitored, cost-controlled production service: containers, CI/CD, observability, durable state, and secure hosting.",
       "topics": [
         { "id": "24.01", "title": "From Notebook to Service" },
         { "id": "24.02", "title": "Containerizing Agents with Docker" },
@@ -226,7 +226,7 @@
     {
       "id": "25",
       "title": "MCP Governance & Cross-Tool Standards",
-      "description": "The durable, already-adopted interoperability layer — MCP governance and the registry, plus the portable AGENTS.md standard that works across every agent.",
+      "description": "The durable, already-adopted interoperability layer: MCP governance and the registry, plus the portable AGENTS.md standard that works across every agent.",
       "topics": [
         { "id": "25.01", "title": "MCP Governance and the Registry" },
         { "id": "25.02", "title": "AGENTS.md as a Cross-Tool Standard" }

@@ -2,19 +2,19 @@
   "slug": "beyond-the-prompt",
   "title": "Beyond the Prompt",
   "subtitle": "from first prompt to production system",
-  "description": "31 dense articles across three tiers — Foundations, Builder, and Production & Frontier — covering modern prompting from the ground up: patterns, reasoning models, context engineering, RAG, agents, evals, and shipping prompt systems that hold up in real products.",
+  "description": "31 dense articles across three tiers (Foundations, Builder, and Production & Frontier) covering modern prompting from the ground up: patterns, reasoning models, context engineering, RAG, agents, evals, and shipping prompt systems that hold up in real products.",
   "difficulty": "advanced",
   "lessonCount": 31,
   "href": "/paths/beyond-the-prompt",
   "colorClass": "bg-teal-500",
   "totalTimeLabel": "10–14 hrs",
   "outcomeLabel": "Production-grade prompt system",
-  "curriculumHint": "Every article runs principle → pattern → production — the idea, the pattern, and how it plays out in a real system, on one page.",
+  "curriculumHint": "Every article runs principle → pattern → production: the idea, the pattern, and how it plays out in a real system, on one page.",
   "topicFooterLabel": "written exercise",
   "faqs": [
     {
       "q": "Is this path for beginners?",
-      "a": "No — Beyond the Prompt is aimed at intermediate-to-advanced learners. You should be comfortable with the basics of prompting and working with AI models before starting."
+      "a": "No. Beyond the Prompt is aimed at intermediate-to-advanced learners. You should be comfortable with the basics of prompting and working with AI models before starting."
     },
     {
       "q": "What should I know before starting?",
@@ -22,7 +22,7 @@
     },
     {
       "q": "How long does it take?",
-      "a": "Roughly 10–14 hours of focused work, fully self-paced — there's no deadline."
+      "a": "Roughly 10-14 hours of focused work, fully self-paced, there's no deadline."
     },
     {
       "q": "What will I be able to do by the end?",
@@ -30,16 +30,16 @@
     },
     {
       "q": "Is it free?",
-      "a": "Yes — the entire path is completely free."
+      "a": "Yes. The entire path is completely free."
     }
   ],
   "modules": [
     {
       "id": "11",
       "title": "Foundations",
-      "description": "The mental model, the anatomy of a prompt, and the core skills — clarity, roles, examples, formatting, and iteration.",
+      "description": "The mental model, the anatomy of a prompt, and the core skills: clarity, roles, examples, formatting, and iteration.",
       "topics": [
-        { "id": "11.01", "title": "What Prompting Actually Is — and Why It Still Matters in 2026" },
+        { "id": "11.01", "title": "What Prompting Actually Is, and Why It Still Matters in 2026" },
         { "id": "11.02", "title": "The Anatomy of a Prompt" },
         { "id": "11.03", "title": "Clear and Direct: The Core Skill" },
         { "id": "11.04", "title": "Giving the Model a Role and an Audience" },
@@ -59,7 +59,7 @@
         { "id": "12.03", "title": "Self-Consistency and Verification" },
         { "id": "12.04", "title": "Reducing Hallucinations" },
         { "id": "12.05", "title": "Prompting Reasoning Models" },
-        { "id": "12.06", "title": "Context Engineering, Part 1 — Foundations" },
+        { "id": "12.06", "title": "Context Engineering, Part 1: Foundations" },
         { "id": "12.07", "title": "Prompting Over Documents and Data (RAG-Aware Prompting)" },
         { "id": "12.08", "title": "Structured Outputs and Schema-Driven Prompting" },
         { "id": "12.09", "title": "Multimodal Prompting" },
@@ -73,7 +73,7 @@
       "title": "Production & Frontier",
       "description": "Agentic and multi-agent prompting, advanced reasoning frameworks, automatic optimization, evals, and shipping prompt systems in production.",
       "topics": [
-        { "id": "13.01", "title": "Context Engineering, Part 2 — Production Systems" },
+        { "id": "13.01", "title": "Context Engineering, Part 2: Production Systems" },
         { "id": "13.02", "title": "Agentic Prompting" },
         { "id": "13.03", "title": "Multi-Agent Prompting and Orchestration" },
         { "id": "13.04", "title": "Advanced Reasoning Frameworks" },
