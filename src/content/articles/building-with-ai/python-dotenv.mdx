@@ -58,7 +58,7 @@ Four lines. Let's decode each one.
 
 **Line 2:** `import os` imports Python's standard `os` module. You need it for `os.getenv()`, the function that actually reads environment variables.
 
-**Line 3:** `load_dotenv()` opens the `.env` file in your current working directory, reads every `KEY=value` pair inside it, and loads them into your process's environment. If `.env` doesn't exist, this line quietly does nothing, no crash, no warning.
+**Line 3:** `load_dotenv()` opens the `.env` file in your [current working directory](/library/building-with-ai/file-paths-explained), reads every `KEY=value` pair inside it, and loads them into your process's environment. If `.env` doesn't exist, this line quietly does nothing, no crash, no warning.
 
 **Line 4:** `os.getenv("ANTHROPIC_API_KEY")` reads that specific variable. Returns the string value if found, `None` if not. That's it, one function call, one variable assigned.
 

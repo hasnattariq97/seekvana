@@ -67,7 +67,7 @@ The practical rule that shows up across recent MCP guides: **resources for read,
 
 ## What Are Prompts in MCP?
 
-A prompt in MCP is a reusable message template a server exposes, and a person, not the model, chooses when to run it. In a host like Claude Code, these often surface as slash commands: the note-taking server might expose a `/summarize-week` prompt that assembles the last seven days of notes into a single templated request.
+A prompt in MCP is a reusable message template a server exposes, and a person, not the model, chooses when to run it. In a host like Claude Code, these often surface as [slash commands](/library/agentic-ai/slash-commands): the note-taking server might expose a `/summarize-week` prompt that assembles the last seven days of notes into a single templated request.
 
 Prompts are the primitive almost nobody builds. A 2026 review of real MCP deployments put it bluntly: most servers expose tools, a growing number expose resources, and <a href="https://dev.to/aws-heroes/mcp-prompts-and-resources-the-primitives-youre-not-using-3oo1" target="_blank" rel="noopener noreferrer">almost none expose prompts</a>. The stated reason is unglamorous: tools are easy to demo, and most SDKs give prompts weak support for anything beyond a single static template, so teams skip the investment a real multi-step prompt workflow would take.
 
