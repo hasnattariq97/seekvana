@@ -24,7 +24,7 @@ faqs:
 
 It's 2 a.m. and your Claude Code agent is still running. You gave it one instruction, fix the failing test, and came back to find it had called the same tool eleven times in a row, gotten the same error back eleven times, and tried the exact same thing again on the twelfth. Or maybe it never failed loudly at all. It just kept going, tokens ticking up, until the bill showed up the next morning.
 
-**An agent that won't stop is almost always doing one of three things: retrying a failing tool call without adapting, running with no clear stop condition, or dragging around so much accumulated context that it's lost track of what it already tried.** I built a real agent loop from scratch, broke it all three ways on purpose, and fixed each one. Here's the whole thing, plus the exact settings in Claude Code and Cursor that do the same job without the hand-rolling.
+**An agent that won't stop is almost always doing one of three things: retrying a failing tool call without adapting, running with no clear stop condition, or dragging around so much accumulated context that it's lost track of what it already tried.** I built a real agent loop from scratch, broke it all three ways on purpose, and fixed each one. Here's the whole thing, plus the exact settings in [Claude Code and Cursor](/library/agentic-ai/claude-code-inside-cursor) that do the same job without the hand-rolling.
 
 If you've ever [delegated a real multi-step task to an agent](/library/agentic-ai/your-first-agent-felt-not-coded), this is the guide for the day it stops behaving.
 

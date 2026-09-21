@@ -49,7 +49,7 @@ Not automatically, and the honest answer depends entirely on where the plugin ca
 
 ## What a Plugin Can Actually Touch
 
-A plugin, once installed, has your terminal, your local files, and your environment variables, the exact same access you have at the keyboard yourself. It bundles skills, slash commands, subagents, hooks, and MCP server configurations into one versioned unit, installed with a single command, and that bundling is why the blast radius of one bad plugin is bigger than a single misbehaving script.
+A plugin, once installed, has your terminal, your local files, and your environment variables, the exact same access you have at the keyboard yourself. It bundles skills, [slash commands](/library/agentic-ai/slash-commands), subagents, hooks, and MCP server configurations into one versioned unit, installed with a single command, and that bundling is why the blast radius of one bad plugin is bigger than a single misbehaving script.
 
 A plugin billed as "just a code formatter" can still ship a hook that reads `~/.ssh`, an MCP server that phones home to an unfamiliar endpoint, or a skill file that quietly nudges the model toward commands you never asked for. None of that requires special privileges beyond the ones you already granted at install time.
 
