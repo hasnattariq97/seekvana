@@ -4,7 +4,7 @@ description: "Structured outputs force an LLM to emit a schema-validated object 
 pillar: "agentic-ai"
 slug: "structured-outputs-and-schema-validation"
 difficulty: "intermediate"
-readTime: 9
+readTime: 11
 author: "Hasnat Tariq"
 authorSlug: "hasnat-tariq"
 publisher: "Seekvana"
@@ -86,6 +86,39 @@ class Lead(BaseModel):
     email: EmailStr
     wants_demo: bool
 ```
+
+The same contract in TypeScript, written with Zod:
+
+```typescript
+import { z } from "zod";
+
+const Lead = z.object({
+  name: z.string(),
+  email: z.string().email(),
+  wantsDemo: z.boolean(),
+});
+
+type Lead = z.infer<typeof Lead>;
+```
+
+Both compile to the same JSON Schema and both give you a parse step that throws on bad data. The practical difference is the runtime you are already in, not the feature list.
+
+**Pydantic vs Zod at a glance**
+
+| | Pydantic | Zod |
+|---|---|---|
+| Language | Python | TypeScript / JavaScript |
+| Schema is | A class inheriting `BaseModel` | A value built from `z.*` combinators |
+| Static types | Native, from the class itself | Inferred with `z.infer<typeof Schema>` |
+| Validation call | `Lead.model_validate(data)` | `Lead.parse(data)` |
+| On failure | Raises `ValidationError` | Throws `ZodError`, or returns a result with `.safeParse()` |
+| Custom rules | `@field_validator` methods | `.refine()` and `.superRefine()` |
+| JSON Schema export | `Lead.model_json_schema()` | Via `zod-to-json-schema` |
+| Used by | Instructor, most Python LLM SDKs | Vercel AI SDK, most TypeScript LLM SDKs |
+
+Pick the one that matches your stack. There is no meaningful quality gap between them, and choosing the one your codebase is not written in costs you a language boundary for no benefit. The only time the choice is genuinely open is a polyglot service, and even then the library should follow whichever side owns the validation step.
+
+One real asymmetry worth knowing: Zod's `.safeParse()` returns a success flag instead of throwing, which fits a retry loop more naturally than wrapping every call in `try`. Pydantic needs an explicit `try` around `model_validate`, which is a small amount of extra code in the validate-and-retry pattern described above.
 
 That class is the same discipline covered in [designing good tools for an agent](/library/agentic-ai/designing-good-tools) applied to the other side of the conversation: instead of describing what the agent is allowed to send *in*, you're describing exactly what you'll accept *back*. A vague tool description gets the wrong tool called; a vague output contract gets a technically-valid object your code can't actually use.
 
