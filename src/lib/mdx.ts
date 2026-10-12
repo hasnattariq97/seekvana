@@ -11,6 +11,7 @@ export interface ArticleFrontmatter {
   readTime: number
   author: string
   publishedAt: string
+  lastUpdated?: string
   tags: string[]
   featured: boolean
   coverImage?: string

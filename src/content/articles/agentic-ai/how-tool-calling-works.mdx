@@ -1,6 +1,6 @@
 ---
 title: "How Does Tool Calling Work: The tool_use Loop Explained"
-description: "How does tool calling work? The model stops mid-turn, emits a tool_use block naming a tool and its input, and your code runs it and returns a tool_result."
+description: "How does tool calling work? The model stops with stop_reason \"tool_use\", emits a tool_use block naming a tool and its input, and your code runs it and returns a tool_result."
 pillar: "agentic-ai"
 slug: "how-tool-calling-works"
 difficulty: "intermediate"
@@ -16,8 +16,8 @@ featured: false
 lessonModule: "17"
 lessonNumber: "17.01"
 faqs:
-  - q: "What does the tool_use stop reason mean?"
-    a: "stop_reason: \"tool_use\" means the model has paused mid-turn because it wants to call a tool. It isn't finished, it's handing control back to your code with a tool_use block that names the tool and its arguments. Your application runs the tool and sends the result back so the model can continue."
+  - q: "How can you tell if Claude wants to make another tool call?"
+    a: "Look at the stop_reason field in the response. If it is \"tool_use\", Claude wants another tool call: the model has paused mid-turn because it wants to call a tool. It isn't finished, it's handing control back to your code with a tool_use block that names the tool and its arguments. Your application runs the tool and sends the result back so the model can continue."
   - q: "Does the model actually run the tool code itself?"
     a: "No. The model only ever emits a structured request describing which tool it wants and what arguments to pass. Your application, not the model, executes the real operation, whether that's a database query, an HTTP call, or a file write. The model never sees or touches your implementation."
   - q: "What happens if the model calls a tool that doesn't exist?"
@@ -233,8 +233,8 @@ You already practiced labeling raw fields by hand in [your decision log](/librar
 </Note>
 
 <FAQ>
-  <FAQItem question="What does the tool_use stop reason mean?">
-    stop_reason: "tool_use" means the model has paused mid-turn because it wants to call a tool. It isn't finished, it's handing control back to your code with a tool_use block that names the tool and its arguments. Your application runs the tool and sends the result back so the model can continue.
+  <FAQItem question="How can you tell if Claude wants to make another tool call?">
+    Look at the `stop_reason` field in the response. If it is `"tool_use"`, Claude wants another tool call: the model has paused mid-turn because it wants to call a tool. It isn't finished, it's handing control back to your code with a tool_use block that names the tool and its arguments. Your application runs the tool and sends the result back so the model can continue.
   </FAQItem>
   <FAQItem question="Does the model actually run the tool code itself?">
     No. The model only ever emits a structured request describing which tool it wants and what arguments to pass. Your application, not the model, executes the real operation, whether that's a database query, an HTTP call, or a file write. The model never sees or touches your implementation.

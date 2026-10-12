@@ -48,7 +48,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const articleDates = new Map<string, Date | undefined>(
     articles.map((a) => [
       `${a.pillar}/${a.slug}`,
-      parseDate(a.frontmatter.publishedAt),
+      parseDate(a.frontmatter.lastUpdated ?? a.frontmatter.publishedAt),
     ])
   );
 
@@ -146,6 +146,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.6,
     },
+    { url: `${BASE_URL}/about`, changeFrequency: "yearly", priority: 0.4 },
     { url: `${BASE_URL}/privacy`, changeFrequency: "yearly", priority: 0.3 },
     { url: `${BASE_URL}/cookies`, changeFrequency: "yearly", priority: 0.3 },
     { url: `${BASE_URL}/terms`, changeFrequency: "yearly", priority: 0.3 },

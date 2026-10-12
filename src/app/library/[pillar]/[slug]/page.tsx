@@ -57,6 +57,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         title: frontmatter.title,
         description: frontmatter.description,
         publishedTime: frontmatter.publishedAt,
+        modifiedTime: frontmatter.lastUpdated ?? frontmatter.publishedAt,
         authors: [frontmatter.author],
         tags: frontmatter.tags,
         images: [{
@@ -89,6 +90,15 @@ function toIso8601(date: string) {
   return /^\d{4}-\d{2}-\d{2}$/.test(date) ? `${date}T00:00:00+00:00` : date
 }
 
+function formatDate(date: string) {
+  return new Date(date).toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+  })
+}
+
 function buildArticleJsonLd(
   frontmatter: ArticleFrontmatter,
   pillar: string,
@@ -103,11 +113,15 @@ function buildArticleJsonLd(
     '@type': 'Article',
     headline: frontmatter.title,
     description: frontmatter.description,
-    author: {
-      '@type': 'Organization',
-      name: frontmatter.author,
-      url: 'https://seekvana.com',
-    },
+    author:
+      frontmatter.author === 'Seekvana'
+        ? { '@type': 'Organization', name: 'Seekvana', url: 'https://seekvana.com' }
+        : {
+            '@type': 'Person',
+            name: frontmatter.author,
+            url: 'https://seekvana.com/about',
+            worksFor: { '@type': 'Organization', name: 'Seekvana', url: 'https://seekvana.com' },
+          },
     publisher: {
       '@type': 'Organization',
       name: 'Seekvana',
@@ -120,9 +134,9 @@ function buildArticleJsonLd(
       },
     },
     datePublished: toIso8601(frontmatter.publishedAt),
-    // No separate modified date in frontmatter; equal to publishedAt means
-    // "unmodified since publish" — a truthful value Google accepts.
-    dateModified: toIso8601(frontmatter.publishedAt),
+    // lastUpdated is set only when an article is materially revised; absent
+    // means "unmodified since publish".
+    dateModified: toIso8601(frontmatter.lastUpdated ?? frontmatter.publishedAt),
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': url,
@@ -269,15 +283,19 @@ export default async function ArticlePage({ params }: PageProps) {
                 {frontmatter.description}
               </p>
               <div className="flex flex-wrap gap-x-4 gap-y-1 mt-4 text-sm text-secondary">
-                <span>{frontmatter.author}</span>
+                <Link href="/about" rel="author" className="hover:text-accent transition-colors">
+                  {frontmatter.author}
+                </Link>
                 <span aria-hidden="true">·</span>
-                <span>
-                  {new Date(frontmatter.publishedAt).toLocaleDateString('en-US', {
-                    month: 'long',
-                    day: 'numeric',
-                    year: 'numeric',
-                  })}
-                </span>
+                {frontmatter.lastUpdated && frontmatter.lastUpdated > frontmatter.publishedAt ? (
+                  <time dateTime={frontmatter.lastUpdated}>
+                    Updated {formatDate(frontmatter.lastUpdated)}
+                  </time>
+                ) : (
+                  <time dateTime={frontmatter.publishedAt}>
+                    {formatDate(frontmatter.publishedAt)}
+                  </time>
+                )}
                 <span aria-hidden="true">·</span>
                 <span>{frontmatter.readTime} min read</span>
               </div>

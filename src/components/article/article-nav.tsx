@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { getArticlesByPillar, buildLessonArticleMap } from '@/lib/mdx'
+import { getAllArticles, getArticlesByPillar, buildLessonArticleMap } from '@/lib/mdx'
 import fs from 'fs'
 import path from 'path'
 
@@ -19,6 +19,14 @@ interface ArticleNavProps {
   slug: string
   lessonNumber?: string
 }
+
+const STOPWORDS = new Set([
+  'the', 'and', 'for', 'with', 'what', 'how', 'why', 'when', 'your', 'you',
+  'are', 'can', 'from', 'that', 'this', 'its', 'not', 'one', 'use', 'using',
+  'into', 'does', 'explained', 'guide', 'beginners', 'beginner', 'learn',
+  'here', 'which', 'every', 'each', 'all', 'just', 'than', 'they', 'them',
+  'who', 'out', 'get', 'about', 'more', 'most', 'make', 'need',
+])
 
 type PathTopic = {
   id: string
@@ -89,13 +97,41 @@ export function ArticleNav({ pillar, slug, lessonNumber }: ArticleNavProps) {
       : null
   }
 
-  const related: RelatedArticle[] = getArticlesByPillar(pillar)
-    .filter((a) => a.slug !== slug)
+  // Rank by shared vocabulary (title + description + tags), weighting rare
+  // words above common ones, so "Keep reading" links topically related pages
+  // instead of whatever sorts first in the pillar.
+  const all = getAllArticles()
+  const termsOf = (a: (typeof all)[number]) =>
+    new Set(
+      [a.frontmatter.title, a.frontmatter.description, ...(a.frontmatter.tags ?? [])]
+        .join(' ')
+        .toLowerCase()
+        .split(/[^a-z0-9]+/)
+        .filter((w) => w.length > 2 && !STOPWORDS.has(w))
+    )
+  const terms = all.map(termsOf)
+  const docFreq = new Map<string, number>()
+  for (const set of terms) {
+    for (const w of set) docFreq.set(w, (docFreq.get(w) ?? 0) + 1)
+  }
+  const currentIdx = all.findIndex((a) => a.pillar === pillar && a.slug === slug)
+  const currentTerms = currentIdx >= 0 ? terms[currentIdx] : new Set<string>()
+  const related: RelatedArticle[] = all
+    .map((a, i) => ({ a, i }))
+    .filter(({ i }) => i !== currentIdx)
+    .map(({ a, i }) => {
+      let score = a.pillar === pillar ? 0.1 : 0
+      for (const w of terms[i]) {
+        if (currentTerms.has(w)) score += Math.log(all.length / (docFreq.get(w) ?? 1))
+      }
+      return { a, score }
+    })
+    .sort((x, y) => y.score - x.score)
     .slice(0, 3)
-    .map((a) => ({
+    .map(({ a }) => ({
       title: a.frontmatter.title,
       slug: a.slug,
-      pillar,
+      pillar: a.pillar,
       readTime: a.frontmatter.readTime,
     }))
 

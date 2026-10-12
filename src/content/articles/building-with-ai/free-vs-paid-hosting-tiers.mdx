@@ -1,12 +1,13 @@
 ---
-title: "Vercel & Render Free Tier Limits: When Hosting Costs"
-description: "Vercel and Render free tier limits explained: what they cap, when a hobby project hits one, and why a free tier rarely means a surprise bill."
+title: "Vercel & Render Free Tier Limits (2026): What You Get Free"
+description: "Vercel Hobby gives 100 GB bandwidth, 1M function calls and 4 hours of CPU a month; Render gives 750 instance hours. What each cap means and when you pay."
 pillar: "building-with-ai"
 slug: "free-vs-paid-hosting-tiers"
 difficulty: "beginner"
 readTime: 6
 author: "Hasnat Tariq"
 publishedAt: "2026-07-24"
+lastUpdated: "2026-10-12"
 tags: ["free tier limits", "vercel pricing", "render pricing", "hosting costs", "beginners"]
 featured: false
 lessonModule: "09"
@@ -61,6 +62,18 @@ Free tiers don't cap "how good" your project is. They cap three specific resourc
 **Compute time** is how long your backend actively runs. This one matters most for the [Render backend](/library/building-with-ai/deploy-to-render) you deployed earlier. Render's free web services spin down after about 15 minutes of no traffic, which is also why the first request after a quiet spell takes 30 to 60 seconds to wake up. That slow first load looks like a bug, but it's the free tier saving compute, not something breaking or billing you.
 
 **Build minutes** are how much time the platform spends rebuilding your project each time you push. Every deploy runs the [build step](/library/building-with-ai/what-is-a-build-process) from the last lesson, and that time is metered. Render's free tier includes 500 build minutes a month. Since a small project's build takes a minute or two, you'd need to push dozens of times a day to feel it.
+
+Here are the exact Vercel Hobby allowances per month, from <a href="https://vercel.com/docs/limits/fair-use-guidelines" target="_blank" rel="noopener noreferrer">Vercel's fair use guidelines</a> (checked October 2026):
+
+- **Fast Data Transfer (bandwidth):** 100 GB
+- **Function invocations:** 1,000,000
+- **Active CPU:** 4 hours
+- **Fast Origin Transfer:** 10 GB
+- **Image optimization:** 5,000 transformations
+
+<Warning>
+Vercel's Hobby plan is for **non-commercial personal use only**. Per Vercel's own rules, a site that shows ads (including Google AdSense), sells something, or exists mainly for affiliate links needs the Pro plan. A portfolio or learning project is fine on Hobby.
+</Warning>
 
 Skip this section and the numbers on your dashboard are meaningless noise. Know these three, and you can read your usage at a glance.
 
